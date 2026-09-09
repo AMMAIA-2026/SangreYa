@@ -1,0 +1,51 @@
+# Gradle
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Local Android configuration
+/local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+!.env.template
+secrets.properties
+keystore.properties
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+
+# Generated Android packages and reports
+*.apk
+*.aab
+*.aar
+reports/
+
+# Other IDEs and editor temporary files
+.vscode/
+.vs/
+*.swp
+*.swo
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs and crash dumps
+*.log
+*.hprof
