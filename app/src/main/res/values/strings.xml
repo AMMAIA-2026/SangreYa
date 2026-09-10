@@ -24,4 +24,27 @@
     <string name="profile_navigation">Perfil</string>
     <string name="campaign_location_description">Ubicación de la campaña</string>
     <string name="campaign_date_description">Fecha de la campaña</string>
+
+    <!-- Login -->
+    <string name="titulo_login">iniciar sesion</string>
+    <string name="subtitulo_login">ingresa a tu cuenta</string>
+    <string name="hint_email">nombre@correo.com</string>
+    <string name="hint_password">********</string>
+    <string name="btn_ingresar">iniciar sesion</string>
+    <string name="texto_no_tenes_cuenta">¿no tenes cuenta? </string>
+    <string name="link_registrate">registrate</string>
+
+    <!-- Registro -->
+    <string name="RegisterTitle">crear cuenta</string>
+    <string name="hint_nombre">ana gomez</string>
+    <string name="hint_grupo">Seleccionar</string>
+    <string name="btn_crear_cuenta">crear cuenta</string>
+    <string name="texto_ya_tenes_cuenta">¿ya tenes cuenta? </string>
+    <string name="link_iniciar_sesion">iniciar sesion</string>
+
+    <!-- Labels compartidos -->
+    <string name="label_nombre_completo">nombre completo</string>
+    <string name="label_email">email</string>
+    <string name="label_password">contrasena</string>
+    <string name="label_grupo">grupo sanguineo</string>
 </resources>
