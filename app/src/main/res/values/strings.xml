@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">SangreYaMobile</string>
+    <string name="app_name">SangreYa</string>
+    <string name="greeting">Hola, María</string>
+    <string name="campaign_subtitle">Elegí una campaña para donar</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="filter_all">Todas</string>
+    <string name="filter_active">Activas</string>
+    <string name="filter_upcoming">Próximas</string>
+    <string name="registered_count">%1$d inscriptos</string>
+    <string name="registered_detail">%1$d personas ya se inscribieron</string>
+    <string name="capacity">Cupo %1$d</string>
+    <string name="description_title">Descripción</string>
+    <string name="health_center_title">Centro de salud</string>
+    <string name="address">Dirección: %1$s</string>
+    <string name="neighborhood_city">Barrio: %1$s · %2$s</string>
+    <string name="phone">Teléfono: %1$s</string>
+    <string name="website">Web: %1$s</string>
+    <string name="coordinates">Coordenadas: %1$s, %2$s</string>
+    <string name="back_to_campaigns">Volver a campañas</string>
+    <string name="enroll">Inscribirme</string>
+    <string name="offline_enrollment_message">La inscripción estará disponible cuando conectemos el backend.</string>
+    <string name="campaigns_navigation">Campañas</string>
+    <string name="enrollments_navigation">Inscripciones</string>
+    <string name="profile_navigation">Perfil</string>
+    <string name="campaign_location_description">Ubicación de la campaña</string>
+    <string name="campaign_date_description">Fecha de la campaña</string>
 </resources>
