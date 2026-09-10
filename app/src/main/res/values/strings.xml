@@ -35,7 +35,7 @@
     <string name="link_registrate">registrate</string>
 
     <!-- Registro -->
-    <string name="titulo_registro">crear cuenta</string>
+    <string name="RegisterTitle">crear cuenta</string>
     <string name="hint_nombre">ana gomez</string>
     <string name="hint_grupo">Seleccionar</string>
     <string name="btn_crear_cuenta">crear cuenta</string>
