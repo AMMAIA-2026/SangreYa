@@ -8,12 +8,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail;
     private EditText etPassword;
     private Button btnIngresar;
+
+    private TextView tvRegistrate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,16 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnIngresar = findViewById(R.id.btnIngresar);
+
+        tvRegistrate = findViewById(R.id.tvRegistrate);
+
+        tvRegistrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
