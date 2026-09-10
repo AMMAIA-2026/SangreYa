@@ -50,6 +50,12 @@ public class CampaignListActivity extends AppCompatActivity {
         allFilter = findViewById(R.id.filter_all);
         activeFilter = findViewById(R.id.filter_active);
         upcomingFilter = findViewById(R.id.filter_upcoming);
+        Button aboutUsButton = findViewById(R.id.about_us_button);
+
+        aboutUsButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AboutUsActivity.class);
+            startActivity(intent);
+        });
         if (!standardUser) {
             findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
         }
