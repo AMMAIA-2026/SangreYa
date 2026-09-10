@@ -3,7 +3,6 @@ package com.ammaia_ispc.sangreyamobile;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,16 +14,13 @@ import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 
 public class CampaignDetailActivity extends AppCompatActivity {
-    public static final String EXTRA_CAMPAIGN = "extra_campaign";
-    public static final String EXTRA_STANDARD_USER = "extra_standard_user";
-
     private Campaign campaign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        configureSystemBars();
-        campaign = (Campaign) getIntent().getSerializableExtra(EXTRA_CAMPAIGN);
+        CampaignHelper.configureSystemBars(this);
+        campaign = (Campaign) getIntent().getSerializableExtra(ExtraKeys.EXTRA_CAMPAIGN);
         if (campaign == null) {
             finish();
             return;
@@ -33,24 +29,17 @@ public class CampaignDetailActivity extends AppCompatActivity {
         bindViews();
     }
 
-    private void configureSystemBars() {
-        Window window = getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.dark_red));
-        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.white));
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-    }
-
     private void bindViews() {
         findViewById(R.id.back_button).setOnClickListener(view -> finish());
 
         TextView status = findViewById(R.id.detail_status);
-        status.setText(CampaignListActivity.statusText(campaign.calculatedStatus));
-        status.setTextColor(ContextCompat.getColor(this, CampaignListActivity.statusColor(campaign.calculatedStatus)));
-        status.setBackgroundResource(CampaignListActivity.statusBackground(campaign.calculatedStatus));
+        status.setText(CampaignHelper.statusText(campaign.calculatedStatus));
+        status.setTextColor(ContextCompat.getColor(this, CampaignHelper.statusColor(campaign.calculatedStatus)));
+        status.setBackgroundResource(CampaignHelper.statusBackground(campaign.calculatedStatus));
 
         ((TextView) findViewById(R.id.detail_title)).setText(campaign.title);
         ((TextView) findViewById(R.id.detail_location)).setText(campaign.location);
-        ((TextView) findViewById(R.id.detail_dates)).setText(CampaignListActivity.formatLongDate(campaign.startDate, campaign.endDate));
+        ((TextView) findViewById(R.id.detail_dates)).setText(CampaignHelper.formatLongDate(campaign.startDate, campaign.endDate));
         ((TextView) findViewById(R.id.detail_description)).setText(campaign.description);
         ((TextView) findViewById(R.id.detail_registered)).setText(getString(R.string.registered_detail, campaign.totalRegistered));
 
@@ -81,7 +70,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
     }
 
     private void bindEnrollmentAction() {
-        boolean standardUser = getIntent().getBooleanExtra(EXTRA_STANDARD_USER, false);
+        boolean standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
         if (!standardUser || campaign.calculatedStatus.equals("Finalizada")) {
             return;
         }
