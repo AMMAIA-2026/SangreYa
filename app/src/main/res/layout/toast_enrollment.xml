@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_message"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:minHeight="56dp"
+    android:gravity="center"
+    android:paddingStart="20dp"
+    android:paddingTop="14dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="14dp"
+    android:background="@drawable/bg_toast"
+    android:textColor="@color/white"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    android:maxLines="3" />

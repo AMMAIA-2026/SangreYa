@@ -2,4 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary_red">#C51C3B</color>
+    <color name="dark_red">#80182B</color>
+    <color name="app_background">#FDF6F7</color>
+    <color name="primary_text">#262022</color>
+    <color name="secondary_text">#70686B</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="border">#E6E0E1</color>
+    <color name="active_text">#237E4E</color>
+    <color name="active_background">#E0F4E7</color>
+    <color name="upcoming_text">#91631A</color>
+    <color name="upcoming_background">#FAEBC7</color>
+    <color name="finished_background">#ECE9EA</color>
+    <color name="pale_red">#FCEDEF</color>
+    <color name="hero_accent">#9B3A4E</color>
+    <color name="header_subtitle">#FADCE1</color>
+    <color name="center_background">#FAF8F8</color>
+    <color name="button_pressed">#A91431</color>
 </resources>
