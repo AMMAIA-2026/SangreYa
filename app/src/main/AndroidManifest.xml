@@ -36,6 +36,8 @@
         <activity
             android:name=".CampaignDetailActivity"
             android:exported="false" />
+        <activity android:name=".ForgotPasswordActivity" android:exported="false" />
+        <activity android:name=".ResetPasswordActivity" android:exported="false" />
     </application>
 
 </manifest>

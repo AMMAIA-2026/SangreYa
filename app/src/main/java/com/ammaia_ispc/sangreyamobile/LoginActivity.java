@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnIngresar;
 
     private TextView tvRegistrate;
+    private TextView tvOlvidasteContrasena;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +30,20 @@ public class LoginActivity extends AppCompatActivity {
         btnIngresar = findViewById(R.id.btnIngresar);
 
         tvRegistrate = findViewById(R.id.tvRegistrate);
+        tvOlvidasteContrasena = findViewById(R.id.tvOlvidasteContrasena);
 
         tvRegistrate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        tvOlvidasteContrasena.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });
