@@ -6,10 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MockCampaignRepository {
+    private static final List<Campaign> CAMPAIGNS = buildCampaigns();
+
     private MockCampaignRepository() {
     }
 
     public static List<Campaign> getCampaigns() {
+        return CAMPAIGNS;
+    }
+
+    public static void addCampaign(Campaign campaign) {
+        CAMPAIGNS.add(campaign);
+    }
+
+    public static int nextId() {
+        return CAMPAIGNS.size() + 1;
+    }
+
+    private static List<Campaign> buildCampaigns() {
         List<Campaign> campaigns = new ArrayList<>();
 
         HealthCenter centralBloodBank = new HealthCenter(

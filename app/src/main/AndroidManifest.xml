@@ -39,6 +39,12 @@
         <activity
             android:name=".activities.AdminDashboardActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.CreateCampaignActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AdminCampaignListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

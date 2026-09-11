@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.ammaia_ispc.sangreyamobile.activities.AdminCampaignListActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import com.ammaia_ispc.sangreyamobile.R;
@@ -31,9 +32,11 @@ public final class NavigationDrawerHelper {
         TextView greeting = activity.findViewById(R.id.header_greeting);
         TextView subtitle = activity.findViewById(R.id.header_subtitle);
         boolean admin = ExtraKeys.ROLE_ADMIN.equals(role);
-        if ((standardUser || admin) && !TextUtils.isEmpty(user)) {
+        if ((standardUser) && !TextUtils.isEmpty(user)) {
             greeting.setText(activity.getString(R.string.logged_user_greeting, user));
             subtitle.setText(R.string.campaign_subtitle);
+        } else if((admin) && !TextUtils.isEmpty(user)) {
+            greeting.setText(activity.getString(R.string.logged_user_greeting, user));
         } else {
             greeting.setText(R.string.guest_greeting);
             subtitle.setText(R.string.guest_subtitle);
@@ -45,11 +48,16 @@ public final class NavigationDrawerHelper {
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(!standardUser && !admin);
         navigationView.getMenu().findItem(R.id.nav_register).setVisible(!standardUser && !admin);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(standardUser || admin);
+        navigationView.getMenu().findItem(R.id.nav_campaigns).setVisible(admin);
 
         navigationView.setNavigationItemSelectedListener(item -> {
             Intent intent;
             if (item.getItemId() == R.id.nav_about_us) {
                 intent = new Intent(activity, AboutUsActivity.class);
+                activity.startActivity(intent);
+            } else  if (item.getItemId() == R.id.nav_campaigns) {
+                intent = new Intent(activity, AdminCampaignListActivity.class);
+                intent.putExtra(ExtraKeys.EXTRA_USER, user);
                 activity.startActivity(intent);
             } else if (item.getItemId() == R.id.nav_login) {
                 intent = new Intent(activity, LoginActivity.class);

@@ -35,13 +35,18 @@ public class CampaignListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CampaignHelper.configureSystemBars(this);
-        campaigns = MockCampaignRepository.getCampaigns();
         standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
         role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
         setContentView(R.layout.activity_campaign_list);
         bindViews();
         configureFilters();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        campaigns = MockCampaignRepository.getCampaigns();
         showCampaigns("Todas");
     }
 
