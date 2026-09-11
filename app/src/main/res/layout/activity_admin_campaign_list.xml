@@ -89,7 +89,6 @@
             android:contentDescription="@string/add_campaign_description" />
     </LinearLayout>
 
-    <!-- FILTERS -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="@dimen/filter_row_height"
@@ -165,7 +164,6 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- LIST -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -225,7 +223,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_home"
+                android:src="@drawable/ic_calendar"
                 android:tint="@color/primary_red"
                 android:contentDescription="@string/campaigns_navigation" />
             <TextView
