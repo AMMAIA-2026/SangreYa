@@ -54,9 +54,10 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "Por favor, completá todos los campos", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("USUARIO_INGRESADO", email);
+            intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, true);
+            intent.putExtra(ExtraKeys.EXTRA_USER, email);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish();
         }
     }
 }

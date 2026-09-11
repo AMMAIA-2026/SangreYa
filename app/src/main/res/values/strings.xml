@@ -2,7 +2,15 @@
     <string name="app_name">SangreYa</string>
     <string name="greeting">Hola, María</string>
     <string name="campaign_subtitle">Elegí una campaña para donar</string>
+    <string name="logged_user_greeting">Hola, %1$s</string>
+    <string name="guest_greeting">Bienvenido a SangreYa</string>
+    <string name="guest_subtitle">Registrate en la app para donar.</string>
     <string name="notifications">Notificaciones</string>
+    <string name="open_menu">Abrir menú</string>
+    <string name="menu_about_us">Sobre nosotros</string>
+    <string name="menu_login">Iniciar sesión</string>
+    <string name="menu_register">Registrarse</string>
+    <string name="menu_logout">Cerrar sesión</string>
     <string name="filter_all">Todas</string>
     <string name="filter_active">Activas</string>
     <string name="filter_upcoming">Próximas</string>
@@ -19,6 +27,7 @@
     <string name="back_to_campaigns">Volver a campañas</string>
     <string name="enroll">Inscribirme</string>
     <string name="offline_enrollment_message">La inscripción estará disponible cuando conectemos el backend.</string>
+    <string name="login_required_enrollment">Iniciá sesión para inscribirte a la donación.</string>
     <string name="campaigns_navigation">Campañas</string>
     <string name="enrollments_navigation">Inscripciones</string>
     <string name="profile_navigation">Perfil</string>

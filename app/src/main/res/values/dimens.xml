@@ -1,5 +1,7 @@
 <resources>
     <dimen name="header_height">96dp</dimen>
+    <dimen name="header_button_size">56dp</dimen>
+    <dimen name="drawer_width">304dp</dimen>
     <dimen name="bottom_navigation_height">66dp</dimen>
     <dimen name="content_horizontal_padding">16dp</dimen>
     <dimen name="filter_row_height">68dp</dimen>
