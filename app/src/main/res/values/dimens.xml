@@ -20,7 +20,7 @@
     <dimen name="hero_logo_row_height">100dp</dimen>
     <dimen name="hero_status_row_height">60dp</dimen>
     <dimen name="hero_logo_size">82dp</dimen>
-    <dimen name="back_touch_target">64dp</dimen>
+    <dimen name="back_touch_target">48dp</dimen>
     <dimen name="detail_content_padding">15dp</dimen>
     <dimen name="detail_top_padding">16dp</dimen>
     <dimen name="detail_action_height">80dp</dimen>

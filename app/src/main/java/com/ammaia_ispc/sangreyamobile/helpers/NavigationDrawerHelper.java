@@ -1,4 +1,4 @@
-package com.ammaia_ispc.sangreyamobile;
+package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.activities.AboutUsActivity;
+import com.ammaia_ispc.sangreyamobile.activities.LoginActivity;
+import com.ammaia_ispc.sangreyamobile.activities.MainActivity;
+import com.ammaia_ispc.sangreyamobile.activities.RegisterActivity;
+
 public final class NavigationDrawerHelper {
     private NavigationDrawerHelper() {
     }
@@ -20,10 +26,12 @@ public final class NavigationDrawerHelper {
             DrawerLayout drawerLayout,
             NavigationView navigationView,
             boolean standardUser,
-            String user) {
+            String user,
+            String role) {
         TextView greeting = activity.findViewById(R.id.header_greeting);
         TextView subtitle = activity.findViewById(R.id.header_subtitle);
-        if (standardUser && !TextUtils.isEmpty(user)) {
+        boolean admin = ExtraKeys.ROLE_ADMIN.equals(role);
+        if ((standardUser || admin) && !TextUtils.isEmpty(user)) {
             greeting.setText(activity.getString(R.string.logged_user_greeting, user));
             subtitle.setText(R.string.campaign_subtitle);
         } else {
@@ -34,9 +42,9 @@ public final class NavigationDrawerHelper {
         activity.findViewById(R.id.menu_button).setOnClickListener(view ->
                 drawerLayout.openDrawer(GravityCompat.START));
 
-        navigationView.getMenu().findItem(R.id.nav_login).setVisible(!standardUser);
-        navigationView.getMenu().findItem(R.id.nav_register).setVisible(!standardUser);
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(standardUser);
+        navigationView.getMenu().findItem(R.id.nav_login).setVisible(!standardUser && !admin);
+        navigationView.getMenu().findItem(R.id.nav_register).setVisible(!standardUser && !admin);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(standardUser || admin);
 
         navigationView.setNavigationItemSelectedListener(item -> {
             Intent intent;

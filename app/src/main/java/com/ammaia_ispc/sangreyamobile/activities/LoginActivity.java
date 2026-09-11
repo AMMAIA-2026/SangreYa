@@ -1,4 +1,4 @@
-package com.ammaia_ispc.sangreyamobile;
+package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -48,14 +52,26 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validarEIngresar() {
         String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
+        String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(LoginActivity.this, "Por favor, completá todos los campos", Toast.LENGTH_SHORT).show();
+        } else if (AdminDashboardHelper.isMockAdminEmail(email)
+                && !AdminDashboardHelper.isMockAdmin(email, password)) {
+            Toast.makeText(
+                    LoginActivity.this,
+                    R.string.invalid_admin_credentials,
+                    Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, true);
+            boolean admin = AdminDashboardHelper.isMockAdmin(email, password);
+            Intent intent = new Intent(
+                    LoginActivity.this,
+                    admin ? AdminDashboardActivity.class : MainActivity.class);
+            intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, !admin);
             intent.putExtra(ExtraKeys.EXTRA_USER, email);
+            if (admin) {
+                intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
+            }
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
