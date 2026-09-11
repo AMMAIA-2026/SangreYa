@@ -1,4 +1,4 @@
-package com.ammaia_ispc.sangreyamobile;
+package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.ammaia_ispc.sangreyamobile.R;
 
 public class RegisterActivity extends AppCompatActivity {
 

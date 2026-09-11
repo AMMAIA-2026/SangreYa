@@ -1,4 +1,4 @@
-package com.ammaia_ispc.sangreyamobile;
+package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.os.Bundle;
 import android.view.Gravity;
@@ -11,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.google.android.material.navigation.NavigationView;
@@ -19,6 +23,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
     private Campaign campaign;
     private boolean standardUser;
     private String user;
+    private String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
         }
         standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
+        role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
         setContentView(R.layout.activity_campaign_detail);
         bindViews();
     }
@@ -38,7 +44,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
     private void bindViews() {
         DrawerLayout drawerLayout = findViewById(R.id.detail_root);
         NavigationView navigationView = findViewById(R.id.detail_navigation_view);
-        NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user, role);
 
         View backButton = findViewById(R.id.detail_back_button);
         backButton.setVisibility(View.VISIBLE);
@@ -82,7 +88,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
     }
 
     private void bindEnrollmentAction() {
-        if (campaign.calculatedStatus.equals("Finalizada")) {
+        if (campaign.calculatedStatus.equals("Finalizada") || ExtraKeys.ROLE_ADMIN.equals(role)) {
             return;
         }
 
