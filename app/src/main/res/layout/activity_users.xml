@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background"
+    android:padding="24dp">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Volver"
+        android:src="@android:drawable/ic_menu_revert"
+        android:tint="@color/primary_red" />
+
+
+    <TextView
+        android:id="@+id/users_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Usuarios"
+        android:textColor="@color/primary_red"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/users_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Administrá los usuarios registrados"
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp"
+        android:gravity="center" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="24dp">
+
+        <LinearLayout
+            android:id="@+id/users_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+</LinearLayout>
