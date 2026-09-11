@@ -125,10 +125,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void openAllCampaigns() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
+        Intent intent = new Intent(this, AdminCampaignListActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_USER, user);
-        intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
         startActivity(intent);
     }
 }
