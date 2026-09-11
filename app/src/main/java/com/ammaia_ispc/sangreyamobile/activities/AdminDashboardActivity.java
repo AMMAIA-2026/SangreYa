@@ -49,6 +49,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 ExtraKeys.ROLE_ADMIN);
         findViewById(R.id.admin_campaigns_navigation).setOnClickListener(view -> openAllCampaigns());
 
+        findViewById(R.id.admin_users_navigation).setOnClickListener(view -> {
+            Intent intent = new Intent(this, UsersActivity.class);
+            intent.putExtra(ExtraKeys.EXTRA_USER, user);
+            startActivity(intent);
+        });
+
         AdminDashboardData dashboard = MockAdminDashboardRepository.getDashboard();
         bindDonorsChart(dashboard);
         bindStatusChart(dashboard);

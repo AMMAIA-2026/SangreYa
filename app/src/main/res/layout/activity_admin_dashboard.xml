@@ -150,6 +150,7 @@
             </LinearLayout>
         </ScrollView>
 
+        <!-- BARRA INFERIOR CORREGIDA -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_navigation_height"
@@ -158,6 +159,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!-- 1. DASHBOARD -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -180,6 +182,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- 2. CAMPAÑAS -->
             <LinearLayout
                 android:id="@+id/admin_campaigns_navigation"
                 android:layout_width="0dp"
@@ -204,10 +207,14 @@
                     android:textSize="9sp" />
             </LinearLayout>
 
+            <!-- 3. USUARIOS (Con ID y Clickable) -->
             <LinearLayout
+                android:id="@+id/admin_users_navigation"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:orientation="vertical">
                 <ImageView
@@ -224,10 +231,14 @@
                     android:textSize="9sp" />
             </LinearLayout>
 
+            <!-- 4. MENSAJES -->
             <LinearLayout
+                android:id="@+id/admin_messages_navigation"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:orientation="vertical">
                 <ImageView
@@ -243,6 +254,7 @@
                     android:textColor="@color/secondary_text"
                     android:textSize="9sp" />
             </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 
