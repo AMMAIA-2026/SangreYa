@@ -9,9 +9,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
@@ -22,13 +24,15 @@ public class CampaignListActivity extends AppCompatActivity {
     private Button activeFilter;
     private Button upcomingFilter;
     private boolean standardUser;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CampaignHelper.configureSystemBars(this);
         campaigns = MockCampaignRepository.getCampaigns();
-        standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, true);
+        standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
+        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
         setContentView(R.layout.activity_campaign_list);
         bindViews();
         configureFilters();
@@ -40,12 +44,9 @@ public class CampaignListActivity extends AppCompatActivity {
         allFilter = findViewById(R.id.filter_all);
         activeFilter = findViewById(R.id.filter_active);
         upcomingFilter = findViewById(R.id.filter_upcoming);
-        Button aboutUsButton = findViewById(R.id.about_us_button);
-
-        aboutUsButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, AboutUsActivity.class);
-            startActivity(intent);
-        });
+        DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);
+        NavigationView navigationView = findViewById(R.id.campaign_navigation_view);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user);
         if (!standardUser) {
             findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
         }
@@ -103,6 +104,7 @@ public class CampaignListActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
         intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, standardUser);
+        intent.putExtra(ExtraKeys.EXTRA_USER, user);
         startActivity(intent);
     }
 }
