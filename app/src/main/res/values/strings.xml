@@ -152,4 +152,5 @@
     <string name="filter_contact_all">Todos</string>
     <string name="filter_unanswered">Sin responder</string>
     <string name="filter_answered">Respondidos</string>
+    <string name="error_unauthorized_access">Acceso no autorizado</string>
 </resources>
