@@ -98,7 +98,7 @@
 
     <!-- Crear campaña -->
     <string name="create_campaign_title">Nueva campaña</string>
-    <string name="create_campaign_subtitle">Se registrará un log de esta publicación</string>
+    <string name="create_campaign_subtitle">Se registrará una nueva campaña</string>
     <string name="label_campaign_name">Nombre de la campaña</string>
     <string name="hint_campaign_name">Ej: Colecta Solidaria Centro</string>
     <string name="label_health_center">Centro de salud</string>
@@ -134,7 +134,7 @@
     <string name="campaign_updated_message">Campaña actualizada</string>
     <string name="btn_save_changes">Guardar cambios</string>
     <string name="edit_campaign_title">Editar campaña</string>
-    <string name="edit_campaign_subtitle">Los cambios se verán reflejados en la publicación</string>
+    <string name="edit_campaign_subtitle">Los cambios se verán reflejados en la campaña </string>
     <string name="active_campaign_alert">Campaña activa · %1$d personas ya inscritas</string>
     <string name="btn_delete_campaign">Eliminar campaña</string>
     <string name="delete_campaign_confirm_title">Eliminar campaña</string>
