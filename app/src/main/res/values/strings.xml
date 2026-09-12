@@ -101,8 +101,8 @@
     <string name="create_campaign_subtitle">Se registrará un log de esta publicación</string>
     <string name="label_campaign_name">Nombre de la campaña</string>
     <string name="hint_campaign_name">Ej: Colecta Solidaria Centro</string>
-    <string name="label_organizing_institution">Institución organizadora</string>
-    <string name="hint_organizing_institution">Hospital, banco de sangre…</string>
+    <string name="label_health_center">Centro de salud</string>
+    <string name="health_center_none_option">Sin centro asignado</string>
     <string name="label_address">Dirección</string>
     <string name="hint_address">Calle y número</string>
     <string name="label_start_date">Fecha de inicio</string>

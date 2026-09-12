@@ -118,23 +118,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="@string/label_organizing_institution"
+                android:text="@string/label_health_center"
                 android:textColor="@color/secondary_text"
                 android:textSize="13sp" />
 
-            <EditText
-                android:id="@+id/create_campaign_institution"
+            <Spinner
+                android:id="@+id/create_campaign_health_center"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_input_field"
-                android:hint="@string/hint_organizing_institution"
-                android:inputType="text"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/primary_text"
-                android:textColorHint="@color/secondary_text"
-                android:textSize="15sp" />
+                android:paddingEnd="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"

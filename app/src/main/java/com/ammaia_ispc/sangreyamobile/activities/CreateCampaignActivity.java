@@ -5,8 +5,10 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,16 +16,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
+import com.ammaia_ispc.sangreyamobile.data.MockHealthCenterRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class CreateCampaignActivity extends AppCompatActivity {
     private EditText nameInput;
-    private EditText institutionInput;
+    private Spinner healthCenterInput;
+    private final List<HealthCenter> healthCenterOptions = new ArrayList<>();
     private EditText addressInput;
     private EditText startDateInput;
     private EditText endDateInput;
@@ -46,7 +53,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
         findViewById(R.id.create_campaign_back).setOnClickListener(view -> finish());
 
         nameInput = findViewById(R.id.create_campaign_name);
-        institutionInput = findViewById(R.id.create_campaign_institution);
+        healthCenterInput = findViewById(R.id.create_campaign_health_center);
+        setupHealthCenterOptions();
         addressInput = findViewById(R.id.create_campaign_address);
         startDateInput = findViewById(R.id.create_campaign_start_date);
         endDateInput = findViewById(R.id.create_campaign_end_date);
@@ -67,6 +75,31 @@ public class CreateCampaignActivity extends AppCompatActivity {
         }
     }
 
+    private void setupHealthCenterOptions() {
+        healthCenterOptions.clear();
+        healthCenterOptions.add(null);
+
+        List<String> labels = new ArrayList<>();
+        labels.add(getString(R.string.health_center_none_option));
+
+        for (HealthCenter center : MockHealthCenterRepository.getHealthCenters()) {
+            healthCenterOptions.add(center);
+            labels.add(center.name + " — " + center.neighborhood + ", " + center.city);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, labels);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        healthCenterInput.setAdapter(adapter);
+    }
+
+    private HealthCenter selectedHealthCenter() {
+        int position = healthCenterInput.getSelectedItemPosition();
+        if (position < 0 || position >= healthCenterOptions.size()) {
+            return null;
+        }
+        return healthCenterOptions.get(position);
+    }
+
     private void prefillForEdit() {
         ((TextView) findViewById(R.id.create_campaign_header_title)).setText(R.string.edit_campaign_title);
         ((TextView) findViewById(R.id.create_campaign_header_subtitle)).setText(R.string.edit_campaign_subtitle);
@@ -79,6 +112,16 @@ public class CreateCampaignActivity extends AppCompatActivity {
         endDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.endDate));
         if (editingCampaign.maximumCapacity != null) {
             capacityInput.setText(String.valueOf(editingCampaign.maximumCapacity));
+        }
+
+        if (editingCampaign.healthCenter != null) {
+            for (int index = 0; index < healthCenterOptions.size(); index++) {
+                HealthCenter option = healthCenterOptions.get(index);
+                if (option != null && option.id == editingCampaign.healthCenter.id) {
+                    healthCenterInput.setSelection(index);
+                    break;
+                }
+            }
         }
 
         if ("Activa".equals(editingCampaign.calculatedStatus)) {
@@ -119,6 +162,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         String isoStartDate = CampaignHelper.toIsoDate(startDateInput.getText().toString());
         String isoEndDate = CampaignHelper.toIsoDate(endDateInput.getText().toString());
+        HealthCenter selectedCenter = selectedHealthCenter();
+        Integer selectedCenterId = selectedCenter != null ? selectedCenter.id : null;
 
         if (editingCampaign != null) {
             Campaign updated = new Campaign(
@@ -126,8 +171,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
                     nameInput.getText().toString().trim(),
                     descriptionInput.getText().toString().trim(),
                     addressInput.getText().toString().trim(),
-                    editingCampaign.healthCenterId,
-                    editingCampaign.healthCenter,
+                    selectedCenterId,
+                    selectedCenter,
                     isoStartDate,
                     isoEndDate,
                     parseCapacity(),
@@ -145,8 +190,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 nameInput.getText().toString().trim(),
                 descriptionInput.getText().toString().trim(),
                 addressInput.getText().toString().trim(),
-                null,
-                null,
+                selectedCenterId,
+                selectedCenter,
                 isoStartDate,
                 isoEndDate,
                 parseCapacity(),
