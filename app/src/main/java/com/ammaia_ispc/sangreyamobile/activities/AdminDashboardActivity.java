@@ -55,6 +55,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        findViewById(R.id.admin_messages_navigation).setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdminContactListActivity.class);
+            intent.putExtra(ExtraKeys.EXTRA_USER, user);
+            startActivity(intent);
+        });
+
         AdminDashboardData dashboard = MockAdminDashboardRepository.getDashboard();
         bindDonorsChart(dashboard);
         bindStatusChart(dashboard);
@@ -135,4 +141,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         intent.putExtra(ExtraKeys.EXTRA_USER, user);
         startActivity(intent);
     }
+
+
 }
