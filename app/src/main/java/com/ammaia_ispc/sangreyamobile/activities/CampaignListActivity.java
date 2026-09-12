@@ -1,9 +1,9 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +17,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -25,9 +26,9 @@ import java.util.List;
 public class CampaignListActivity extends AppCompatActivity {
     private List<Campaign> campaigns;
     private LinearLayout campaignContainer;
-    private Button allFilter;
-    private Button activeFilter;
-    private Button upcomingFilter;
+    private MaterialButton allFilter;
+    private MaterialButton activeFilter;
+    private MaterialButton upcomingFilter;
     private boolean standardUser;
     private String user;
     private String role;
@@ -93,9 +94,10 @@ public class CampaignListActivity extends AppCompatActivity {
         styleFilter(upcomingFilter, selectedFilter.equals("Próximas"));
     }
 
-    private void styleFilter(Button filter, boolean selected) {
+    private void styleFilter(MaterialButton filter, boolean selected) {
         filter.setTextColor(ContextCompat.getColor(this, selected ? R.color.white : R.color.secondary_text));
-        filter.setBackgroundResource(selected ? R.drawable.bg_filter_selected : R.drawable.bg_filter_unselected);
+        filter.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(this, selected ? R.color.primary_red : R.color.surface)));
     }
 
     private View createCampaignCard(Campaign campaign) {
