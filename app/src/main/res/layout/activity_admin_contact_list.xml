@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/dark_red"
+        android:paddingHorizontal="@dimen/content_horizontal_padding"
+        android:paddingTop="24dp"
+        android:paddingBottom="20dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="-8dp"
+            android:background="@android:color/transparent"
+            android:src="@android:drawable/ic_menu_revert"
+            android:tint="@color/white"
+            android:contentDescription="@string/back"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/manage_contacts_title"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/manage_contacts_subtitle"
+            android:textColor="@color/header_subtitle"
+            android:textSize="13sp"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <!-- Filtros -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/filter_row_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/content_horizontal_padding">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/admin_contact_filter_all"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/filter_height"
+            android:text="@string/filter_contact_all"
+            android:textSize="13sp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/admin_contact_filter_unanswered"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/filter_height"
+            android:layout_marginStart="@dimen/filter_spacing"
+            android:text="@string/filter_unanswered"
+            android:textSize="13sp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/admin_contact_filter_answered"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/filter_height"
+            android:layout_marginStart="@dimen/filter_spacing"
+            android:text="@string/filter_answered"
+            android:textSize="13sp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+    </LinearLayout>
+
+    <!-- Lista -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/admin_contact_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/content_horizontal_padding"
+            android:paddingTop="@dimen/content_horizontal_padding" />
+    </ScrollView>
+
+    <!-- Bottom Nav -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_navigation_height"
+        android:orientation="horizontal"
+        android:background="@color/surface"
+        android:elevation="8dp">
+
+        <LinearLayout
+            android:id="@+id/admin_nav_dashboard"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_dashboard" app:tint="@color/secondary_text" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/dashboard_navigation" android:textColor="@color/secondary_text" android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/admin_nav_campaigns"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_blood_drop" app:tint="@color/secondary_text" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/campaigns_navigation" android:textColor="@color/secondary_text" android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/admin_nav_users"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_profile" app:tint="@color/secondary_text" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/users_navigation" android:textColor="@color/secondary_text" android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/admin_nav_messages"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:src="@drawable/ic_messages" app:tint="@color/primary_red" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/messages_navigation" android:textColor="@color/primary_red" android:textSize="11sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

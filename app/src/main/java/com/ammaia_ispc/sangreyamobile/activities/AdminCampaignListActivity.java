@@ -87,6 +87,12 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                     startActivity(intent);
                 });
 
+        findViewById(R.id.admin_messages_navigation).setOnClickListener(view -> {
+            Intent intent = new Intent(this, AdminContactListActivity.class);
+            intent.putExtra(ExtraKeys.EXTRA_USER, user);
+            startActivity(intent);
+        });
+
         // Flecha reutilizable
         NavigationHelper.configureBackButton(this, R.id.btnBack);
     }

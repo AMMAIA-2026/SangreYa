@@ -145,4 +145,11 @@
     <string name="contact_response_note">Te responderemos a la brevedad a tu correo.</string>
     <string name="error_required_fields">Completá todos los campos</string>
     <string name="contact_sent_message">¡Mensaje enviado!</string>
+
+    <!-- Administración de mensajes/contacto -->
+    <string name="manage_contacts_title">Mensajes de contacto</string>
+    <string name="manage_contacts_subtitle">Consultas recibidas desde el formulario</string>
+    <string name="filter_contact_all">Todos</string>
+    <string name="filter_unanswered">Sin responder</string>
+    <string name="filter_answered">Respondidos</string>
 </resources>
