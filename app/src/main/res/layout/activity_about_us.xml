@@ -14,36 +14,54 @@
         android:paddingBottom="32dp">
 
         <!-- HEADER -->
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:paddingStart="24dp"
-            android:paddingTop="36dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="30dp"
             android:background="@color/dark_red">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="40dp"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="28dp"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_revert"
+                android:tint="@color/white"
+                android:contentDescription="@string/back"
+                android:padding="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SangreYa"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.03" />
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingStart="24dp"
+                android:paddingTop="36dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="30dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Sobre nosotros"
-                android:textColor="@color/header_subtitle"
-                android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SangreYa"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.03" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Sobre nosotros"
+                    android:textColor="@color/header_subtitle"
+                    android:textSize="16sp" />
 
+            </LinearLayout>
+
+        </FrameLayout>
 
         <!-- INTRODUCCIÓN -->
         <LinearLayout
@@ -215,6 +233,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tvContactanos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -222,7 +241,10 @@
                 android:text="Contactanos →"
                 android:textColor="@color/primary_red"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"/>
 
         </LinearLayout>
 
