@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import android.util.Patterns;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        NavigationHelper.configureBackButton(this, R.id.btnBack);
 
         // Enlazamos exactamente con los IDs de tu layout actual
         etEmail = findViewById(R.id.etEmail);
@@ -66,7 +70,15 @@ public class LoginActivity extends AppCompatActivity {
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(LoginActivity.this, "Por favor, completá todos los campos", Toast.LENGTH_SHORT).show();
-        } else if (AdminDashboardHelper.isMockAdminEmail(email)
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(
+                    LoginActivity.this,
+                    "Ingresá un email válido",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+
+        else if (AdminDashboardHelper.isMockAdminEmail(email)
                 && !AdminDashboardHelper.isMockAdmin(email, password)) {
             Toast.makeText(
                     LoginActivity.this,
@@ -85,5 +97,6 @@ public class LoginActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
+
     }
 }
