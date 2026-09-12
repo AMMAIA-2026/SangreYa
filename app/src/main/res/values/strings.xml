@@ -131,4 +131,18 @@
     <string name="edit_campaign_description">Editar campaña</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
+
+    <!-- Contacto -->
+    <string name="menu_contact">Contacto</string>
+    <string name="contact_title">Contacto</string>
+    <string name="contact_subtitle">¿Tenés dudas o sugerencias? Escribinos</string>
+    <string name="label_full_name">Nombre completo</string>
+    <string name="hint_full_name">Tu nombre y apellido</string>
+    <string name="label_reason">Motivo</string>
+    <string name="label_message">Mensaje</string>
+    <string name="hint_message">Contanos en qué te podemos ayudar…</string>
+    <string name="btn_send_message">Enviar mensaje</string>
+    <string name="contact_response_note">Te responderemos a la brevedad a tu correo.</string>
+    <string name="error_required_fields">Completá todos los campos</string>
+    <string name="contact_sent_message">¡Mensaje enviado!</string>
 </resources>
