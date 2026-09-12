@@ -19,6 +19,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.navigation.NavigationView;
 
+
 import java.util.List;
 
 public class CampaignListActivity extends AppCompatActivity {
