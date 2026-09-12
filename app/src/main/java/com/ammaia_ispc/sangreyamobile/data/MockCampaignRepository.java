@@ -32,6 +32,15 @@ public final class MockCampaignRepository {
         return CAMPAIGNS.size() + 1;
     }
 
+    public static void deleteCampaign(int id) {
+        for (int index = 0; index < CAMPAIGNS.size(); index++) {
+            if (CAMPAIGNS.get(index).id == id) {
+                CAMPAIGNS.remove(index);
+                return;
+            }
+        }
+    }
+
     private static List<Campaign> buildCampaigns() {
         List<Campaign> campaigns = new ArrayList<>();
 

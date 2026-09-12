@@ -1,5 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -105,6 +106,10 @@ public class CreateCampaignActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.create_campaign_header_subtitle)).setText(R.string.edit_campaign_subtitle);
         ((Button) findViewById(R.id.create_campaign_publish)).setText(R.string.btn_save_changes);
 
+        View deleteButton = findViewById(R.id.create_campaign_delete);
+        deleteButton.setVisibility(View.VISIBLE);
+        deleteButton.setOnClickListener(view -> confirmDeleteCampaign());
+
         nameInput.setText(editingCampaign.title);
         addressInput.setText(editingCampaign.location);
         descriptionInput.setText(editingCampaign.description);
@@ -129,6 +134,21 @@ public class CreateCampaignActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.create_campaign_active_alert_text)).setText(
                     getString(R.string.active_campaign_alert, editingCampaign.totalRegistered));
         }
+    }
+
+    private void confirmDeleteCampaign() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_campaign_confirm_title)
+                .setMessage(R.string.delete_campaign_confirm_message)
+                .setPositiveButton(R.string.delete_campaign_confirm_action, (dialog, which) -> deleteCampaign())
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show();
+    }
+
+    private void deleteCampaign() {
+        MockCampaignRepository.deleteCampaign(editingCampaign.id);
+        Toast.makeText(this, R.string.campaign_deleted_message, Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     private void showDatePicker(EditText target) {

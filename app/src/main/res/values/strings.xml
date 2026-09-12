@@ -136,6 +136,12 @@
     <string name="edit_campaign_title">Editar campaña</string>
     <string name="edit_campaign_subtitle">Los cambios se verán reflejados en la publicación</string>
     <string name="active_campaign_alert">Campaña activa · %1$d personas ya inscritas</string>
+    <string name="btn_delete_campaign">Eliminar campaña</string>
+    <string name="delete_campaign_confirm_title">Eliminar campaña</string>
+    <string name="delete_campaign_confirm_message">¿Seguro que querés eliminar esta campaña? Esta acción no se puede deshacer.</string>
+    <string name="delete_campaign_confirm_action">Eliminar</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="campaign_deleted_message">Campaña eliminada</string>
 
     <!-- Contacto -->
     <string name="menu_contact">Contacto</string>

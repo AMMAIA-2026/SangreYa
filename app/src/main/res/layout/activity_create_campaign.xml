@@ -409,6 +409,27 @@
                 app:backgroundTint="@color/primary_red"
                 app:cornerRadius="26dp" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/create_campaign_delete"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/btn_delete_campaign"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_red"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:icon="@drawable/ic_delete"
+                app:iconTint="@color/primary_red"
+                app:iconGravity="textStart"
+                app:backgroundTint="@color/surface"
+                app:strokeColor="@color/primary_red"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="26dp" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
