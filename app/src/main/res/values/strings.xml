@@ -2,7 +2,27 @@
     <string name="app_name">SangreYa</string>
     <string name="greeting">Hola, María</string>
     <string name="campaign_subtitle">Elegí una campaña para donar</string>
+    <string name="logged_user_greeting">Hola, %1$s</string>
+    <string name="guest_greeting">Bienvenido a SangreYa</string>
+    <string name="guest_subtitle">Registrate en la app para donar.</string>
     <string name="notifications">Notificaciones</string>
+    <string name="open_menu">Abrir menú</string>
+    <string name="menu_about_us">Sobre nosotros</string>
+    <string name="menu_login">Iniciar sesión</string>
+    <string name="menu_register">Registrarse</string>
+    <string name="menu_logout">Cerrar sesión</string>
+    <string name="admin_role">admin</string>
+    <string name="dashboard_donors_title">Donantes por mes</string>
+    <string name="dashboard_donors_subtitle">Personas que donaron sangre cada mes</string>
+    <string name="dashboard_donors_total">%1$d donantes</string>
+    <string name="dashboard_status_title">Campañas por estado</string>
+    <string name="dashboard_status_legend">%1$s    %2$d%%</string>
+    <string name="dashboard_campaigns_label">campañas</string>
+    <string name="dashboard_recent_title">Campañas recientes</string>
+    <string name="dashboard_campaign_registered">%1$d inscriptos</string>
+    <string name="dashboard_navigation">Dashboard</string>
+    <string name="users_navigation">Usuarios</string>
+    <string name="messages_navigation">Mensajes</string>
     <string name="filter_all">Todas</string>
     <string name="filter_active">Activas</string>
     <string name="filter_upcoming">Próximas</string>
@@ -19,6 +39,7 @@
     <string name="back_to_campaigns">Volver a campañas</string>
     <string name="enroll">Inscribirme</string>
     <string name="offline_enrollment_message">La inscripción estará disponible cuando conectemos el backend.</string>
+    <string name="login_required_enrollment">Iniciá sesión para inscribirte a la donación.</string>
     <string name="campaigns_navigation">Campañas</string>
     <string name="enrollments_navigation">Inscripciones</string>
     <string name="profile_navigation">Perfil</string>
@@ -31,6 +52,7 @@
     <string name="hint_email">nombre@correo.com</string>
     <string name="hint_password">********</string>
     <string name="btn_ingresar">iniciar sesion</string>
+    <string name="invalid_admin_credentials">Credenciales de administrador incorrectas.</string>
     <string name="texto_no_tenes_cuenta">¿no tenes cuenta? </string>
     <string name="link_registrate">registrate</string>
 
@@ -73,4 +95,40 @@
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
 
     <string name="link_olvidaste_contrasena">¿Olvidaste tu contraseña?</string>
+
+    <!-- Crear campaña -->
+    <string name="create_campaign_title">Nueva campaña</string>
+    <string name="create_campaign_subtitle">Se registrará un log de esta publicación</string>
+    <string name="label_campaign_name">Nombre de la campaña</string>
+    <string name="hint_campaign_name">Ej: Colecta Solidaria Centro</string>
+    <string name="label_organizing_institution">Institución organizadora</string>
+    <string name="hint_organizing_institution">Hospital, banco de sangre…</string>
+    <string name="label_address">Dirección</string>
+    <string name="hint_address">Calle y número</string>
+    <string name="label_start_date">Fecha de inicio</string>
+    <string name="label_end_date">Fecha de fin</string>
+    <string name="hint_date">DD/MM/AAAA</string>
+    <string name="label_start_time">Desde</string>
+    <string name="label_end_time">Hasta</string>
+    <string name="hint_start_time">09:00</string>
+    <string name="hint_end_time">17:00</string>
+    <string name="label_max_donors">Cupo máximo de donantes</string>
+    <string name="hint_max_donors">Ej: 60</string>
+    <string name="label_description">Descripción</string>
+    <string name="hint_campaign_description">Contá de qué se trata la campaña…</string>
+    <string name="btn_publish_campaign">Publicar campaña</string>
+    <string name="btn_save_draft">Guardar como borrador</string>
+    <string name="campaign_published_message">Campaña publicada</string>
+    <string name="campaign_draft_saved_message">Guardado como borrador</string>
+    <string name="campaign_required_fields_message">Completá los campos obligatorios</string>
+
+    <!-- Administración de campañas -->
+    <string name="admin_campaigns_title">Campañas</string>
+    <string name="admin_campaigns_subtitle">Gestioná todas las campañas</string>
+    <string name="search_campaign_hint">Buscar campaña…</string>
+    <string name="search_campaign_description">Buscar campaña</string>
+    <string name="add_campaign_description">Agregar nueva campaña</string>
+    <string name="edit_campaign_description">Editar campaña</string>
+    <string name="filter_finished">Finalizadas</string>
+    <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
 </resources>

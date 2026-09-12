@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/admin_campaign_drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/app_background">
+
+        <include layout="@layout/view_campaign_header" />
+
+        <!-- HEADER DE CAMPAÑAS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:background="@color/dark_red">
+
+            <!-- Flecha -->
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="-8dp"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_revert"
+                android:tint="@color/white"
+                android:contentDescription="Volver"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/admin_campaigns_title"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/admin_campaigns_subtitle"
+                android:textColor="@color/header_subtitle"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <!-- SEARCH -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/content_horizontal_padding"
+            android:paddingTop="14dp"
+            android:paddingEnd="@dimen/content_horizontal_padding"
+            android:paddingBottom="10dp">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/search_bar_height"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/admin_campaign_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="@string/search_campaign_hint"
+                    android:inputType="text"
+                    android:paddingStart="42dp"
+                    android:paddingEnd="16dp"
+                    android:singleLine="true"
+                    android:textColor="@color/primary_text"
+                    android:textColorHint="@color/secondary_text"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginStart="14dp"
+                    android:src="@drawable/ic_search"
+                    android:contentDescription="@string/search_campaign_description" />
+            </FrameLayout>
+
+            <ImageView
+                android:id="@+id/admin_campaign_add"
+                android:layout_width="@dimen/search_bar_height"
+                android:layout_height="@dimen/search_bar_height"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_button_square_primary"
+                android:padding="13dp"
+                android:src="@drawable/ic_add"
+                android:contentDescription="@string/add_campaign_description" />
+
+        </LinearLayout>
+
+        <!-- FILTERS -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_row_height"
+            android:scrollbars="none"
+            android:paddingStart="@dimen/content_horizontal_padding"
+            android:paddingEnd="@dimen/content_horizontal_padding">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_filter_all"
+                    android:layout_width="@dimen/filter_all_width"
+                    android:layout_height="@dimen/filter_height"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/filter_all"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/primary_red"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_filter_active"
+                    android:layout_width="@dimen/filter_active_width"
+                    android:layout_height="@dimen/filter_height"
+                    android:layout_marginStart="@dimen/filter_spacing"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/filter_active"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/surface"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_filter_upcoming"
+                    android:layout_width="@dimen/filter_upcoming_width"
+                    android:layout_height="@dimen/filter_height"
+                    android:layout_marginStart="@dimen/filter_spacing"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/filter_upcoming"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/surface"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/admin_filter_finished"
+                    android:layout_width="@dimen/filter_finished_width"
+                    android:layout_height="@dimen/filter_height"
+                    android:layout_marginStart="@dimen/filter_spacing"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/filter_finished"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/surface"
+                    app:cornerRadius="24dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- CAMPAIGNS -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:clipToPadding="false">
+
+            <LinearLayout
+                android:id="@+id/admin_campaign_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/content_horizontal_padding"
+                android:paddingEnd="@dimen/content_horizontal_padding"
+                android:paddingBottom="18dp" />
+
+        </ScrollView>
+
+        <!-- BOTTOM NAVIGATION -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_navigation_height"
+            android:background="@color/surface"
+            android:elevation="5dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/admin_nav_dashboard"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_dashboard"
+                    android:tint="@color/secondary_text"
+                    android:contentDescription="@string/dashboard_navigation" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:gravity="center"
+                    android:text="@string/dashboard_navigation"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="9sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_calendar"
+                    android:tint="@color/primary_red"
+                    android:contentDescription="@string/campaigns_navigation" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:gravity="center"
+                    android:text="@string/campaigns_navigation"
+                    android:textColor="@color/primary_red"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/admin_nav_users"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_profile"
+                    android:contentDescription="@string/users_navigation" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:gravity="center"
+                    android:text="@string/users_navigation"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="9sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_messages"
+                    android:contentDescription="@string/messages_navigation" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:gravity="center"
+                    android:text="@string/messages_navigation"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="9sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/admin_campaign_navigation_view"
+        android:layout_width="@dimen/drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/navigation_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

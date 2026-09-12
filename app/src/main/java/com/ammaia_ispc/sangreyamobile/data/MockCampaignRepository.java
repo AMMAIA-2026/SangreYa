@@ -6,10 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MockCampaignRepository {
+    private static final List<Campaign> CAMPAIGNS = buildCampaigns();
+
     private MockCampaignRepository() {
     }
 
     public static List<Campaign> getCampaigns() {
+        return CAMPAIGNS;
+    }
+
+    public static void addCampaign(Campaign campaign) {
+        CAMPAIGNS.add(campaign);
+    }
+
+    public static int nextId() {
+        return CAMPAIGNS.size() + 1;
+    }
+
+    private static List<Campaign> buildCampaigns() {
         List<Campaign> campaigns = new ArrayList<>();
 
         HealthCenter centralBloodBank = new HealthCenter(
@@ -95,6 +109,32 @@ public final class MockCampaignRepository {
                 41,
                 "Finalizada",
                 "Finalizada"));
+        campaigns.add(new Campaign(
+                5,
+                "Colecta Solidaria Barrio Norte",
+                "Jornada de donación para acompañar las necesidades de los hospitales de la zona norte.",
+                "Club Atlético Norte",
+                centralBloodBank.id,
+                centralBloodBank,
+                "2026-09-12",
+                "2026-09-14",
+                35,
+                12,
+                "Activa",
+                "Activa"));
+        campaigns.add(new Campaign(
+                6,
+                "Donación Solidaria Zona Sur",
+                "Campaña abierta a vecinos de la zona sur para reforzar las reservas de sangre.",
+                "Centro Vecinal Zona Sur",
+                foundationBloodBank.id,
+                foundationBloodBank,
+                "2026-09-28",
+                "2026-09-30",
+                45,
+                8,
+                "Proximamente",
+                "Proximamente"));
 
         return campaigns;
     }

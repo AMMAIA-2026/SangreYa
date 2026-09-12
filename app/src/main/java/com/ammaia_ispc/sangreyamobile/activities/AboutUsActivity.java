@@ -1,8 +1,10 @@
-package com.ammaia_ispc.sangreyamobile;
+package com.ammaia_ispc.sangreyamobile.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.ammaia_ispc.sangreyamobile.R;
 
 public class AboutUsActivity extends AppCompatActivity {
 

@@ -1,10 +1,12 @@
-package com.ammaia_ispc.sangreyamobile;
+package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.app.Activity;
 import android.view.View;
 import android.view.Window;
 
 import androidx.core.content.ContextCompat;
+
+import com.ammaia_ispc.sangreyamobile.R;
 
 public final class CampaignHelper {
     private CampaignHelper() {
