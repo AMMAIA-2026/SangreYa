@@ -54,6 +54,16 @@ public final class CampaignHelper {
         return formatShortDate(start, end) + ", " + end.substring(0, 4);
     }
 
+    public static String toDisplayDate(String isoDate) {
+        String[] parts = isoDate.split("-");
+        return parts[2] + "/" + parts[1] + "/" + parts[0];
+    }
+
+    public static String toIsoDate(String displayDate) {
+        String[] parts = displayDate.split("/");
+        return parts[2] + "-" + parts[1] + "-" + parts[0];
+    }
+
     private static String monthName(int month) {
         String[] months = {"enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
         return months[month - 1];

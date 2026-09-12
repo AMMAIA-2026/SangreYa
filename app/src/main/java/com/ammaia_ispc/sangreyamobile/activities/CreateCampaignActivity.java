@@ -4,7 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,11 +31,13 @@ public class CreateCampaignActivity extends AppCompatActivity {
     private EditText endTimeInput;
     private EditText capacityInput;
     private EditText descriptionInput;
+    private Campaign editingCampaign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CampaignHelper.configureSystemBars(this);
+        editingCampaign = (Campaign) getIntent().getSerializableExtra(ExtraKeys.EXTRA_CAMPAIGN);
         setContentView(R.layout.activity_create_campaign);
         bindViews();
     }
@@ -56,6 +61,31 @@ public class CreateCampaignActivity extends AppCompatActivity {
         endTimeInput.setOnClickListener(view -> showTimePicker(endTimeInput));
 
         findViewById(R.id.create_campaign_publish).setOnClickListener(view -> publishCampaign());
+
+        if (editingCampaign != null) {
+            prefillForEdit();
+        }
+    }
+
+    private void prefillForEdit() {
+        ((TextView) findViewById(R.id.create_campaign_header_title)).setText(R.string.edit_campaign_title);
+        ((TextView) findViewById(R.id.create_campaign_header_subtitle)).setText(R.string.edit_campaign_subtitle);
+        ((Button) findViewById(R.id.create_campaign_publish)).setText(R.string.btn_save_changes);
+
+        nameInput.setText(editingCampaign.title);
+        addressInput.setText(editingCampaign.location);
+        descriptionInput.setText(editingCampaign.description);
+        startDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.startDate));
+        endDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.endDate));
+        if (editingCampaign.maximumCapacity != null) {
+            capacityInput.setText(String.valueOf(editingCampaign.maximumCapacity));
+        }
+
+        if ("Activa".equals(editingCampaign.calculatedStatus)) {
+            findViewById(R.id.create_campaign_active_alert).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.create_campaign_active_alert_text)).setText(
+                    getString(R.string.active_campaign_alert, editingCampaign.totalRegistered));
+        }
     }
 
     private void showDatePicker(EditText target) {
@@ -86,6 +116,30 @@ public class CreateCampaignActivity extends AppCompatActivity {
         if (!validateRequiredFields()) {
             return;
         }
+
+        String isoStartDate = CampaignHelper.toIsoDate(startDateInput.getText().toString());
+        String isoEndDate = CampaignHelper.toIsoDate(endDateInput.getText().toString());
+
+        if (editingCampaign != null) {
+            Campaign updated = new Campaign(
+                    editingCampaign.id,
+                    nameInput.getText().toString().trim(),
+                    descriptionInput.getText().toString().trim(),
+                    addressInput.getText().toString().trim(),
+                    editingCampaign.healthCenterId,
+                    editingCampaign.healthCenter,
+                    isoStartDate,
+                    isoEndDate,
+                    parseCapacity(),
+                    editingCampaign.totalRegistered,
+                    editingCampaign.campaignStatus,
+                    editingCampaign.calculatedStatus);
+            MockCampaignRepository.updateCampaign(updated);
+            Toast.makeText(this, R.string.campaign_updated_message, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         Campaign campaign = new Campaign(
                 MockCampaignRepository.nextId(),
                 nameInput.getText().toString().trim(),
@@ -93,8 +147,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 addressInput.getText().toString().trim(),
                 null,
                 null,
-                toIsoDate(startDateInput.getText().toString()),
-                toIsoDate(endDateInput.getText().toString()),
+                isoStartDate,
+                isoEndDate,
                 parseCapacity(),
                 0,
                 "Proximamente",
@@ -129,8 +183,4 @@ public class CreateCampaignActivity extends AppCompatActivity {
         }
     }
 
-    private String toIsoDate(String displayDate) {
-        String[] parts = displayDate.split("/");
-        return parts[2] + "-" + parts[1] + "-" + parts[0];
-    }
 }

@@ -19,6 +19,15 @@ public final class MockCampaignRepository {
         CAMPAIGNS.add(campaign);
     }
 
+    public static void updateCampaign(Campaign updated) {
+        for (int index = 0; index < CAMPAIGNS.size(); index++) {
+            if (CAMPAIGNS.get(index).id == updated.id) {
+                CAMPAIGNS.set(index, updated);
+                return;
+            }
+        }
+    }
+
     public static int nextId() {
         return CAMPAIGNS.size() + 1;
     }

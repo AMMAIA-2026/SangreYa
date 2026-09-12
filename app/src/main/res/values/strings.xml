@@ -131,6 +131,11 @@
     <string name="edit_campaign_description">Editar campaña</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
+    <string name="campaign_updated_message">Campaña actualizada</string>
+    <string name="btn_save_changes">Guardar cambios</string>
+    <string name="edit_campaign_title">Editar campaña</string>
+    <string name="edit_campaign_subtitle">Los cambios se verán reflejados en la publicación</string>
+    <string name="active_campaign_alert">Campaña activa · %1$d personas ya inscritas</string>
 
     <!-- Contacto -->
     <string name="menu_contact">Contacto</string>

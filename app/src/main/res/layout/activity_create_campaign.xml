@@ -32,6 +32,7 @@
                 android:contentDescription="@string/back_to_campaigns" />
 
             <TextView
+                android:id="@+id/create_campaign_header_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -42,6 +43,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/create_campaign_header_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="44dp"
@@ -62,6 +64,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+
+            <LinearLayout
+                android:id="@+id/create_campaign_active_alert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/bg_active_alert"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_check"
+                    android:contentDescription="@string/active_campaign_alert" />
+
+                <TextView
+                    android:id="@+id/create_campaign_active_alert_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/active_text"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
