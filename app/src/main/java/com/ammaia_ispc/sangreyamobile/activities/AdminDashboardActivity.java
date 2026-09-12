@@ -58,6 +58,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         findViewById(R.id.admin_messages_navigation).setOnClickListener(view -> {
             Intent intent = new Intent(this, AdminContactListActivity.class);
             intent.putExtra(ExtraKeys.EXTRA_USER, user);
+            intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
             startActivity(intent);
         });
 

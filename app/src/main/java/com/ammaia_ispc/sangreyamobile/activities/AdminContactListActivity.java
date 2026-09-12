@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -37,6 +38,15 @@ public class AdminContactListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
+        String role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
+
+        // CA-35: acceso no autorizado (simula el 403 hasta que exista el backend real)
+        if (!ExtraKeys.ROLE_ADMIN.equals(role)) {
+            Toast.makeText(this, getString(R.string.error_unauthorized_access), Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         if (user == null) {
             user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
         }
@@ -65,7 +75,6 @@ public class AdminContactListActivity extends AppCompatActivity {
         findViewById(R.id.admin_nav_dashboard).setOnClickListener(view -> openDashboard());
         findViewById(R.id.admin_nav_campaigns).setOnClickListener(view -> openCampaigns());
         findViewById(R.id.admin_nav_users).setOnClickListener(view -> openUsers());
-        // admin_nav_messages: ya estamos acá, no hace falta navegar
     }
 
     private void configureFilters() {
