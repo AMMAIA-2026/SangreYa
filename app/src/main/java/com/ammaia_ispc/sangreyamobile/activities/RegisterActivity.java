@@ -80,6 +80,9 @@ private void validarRegistro() {
     String password = ((android.widget.EditText) findViewById(R.id.etRegisterPassword))
             .getText().toString();
 
+    String confirmPassword = ((android.widget.EditText) findViewById(R.id.etConfirmPassword))
+            .getText().toString();
+
     String bloodGroup = etBloodGroup.getSelectedItem().toString();
 
     // Campos obligatorios
@@ -87,6 +90,7 @@ private void validarRegistro() {
             TextUtils.isEmpty(dni) ||
             TextUtils.isEmpty(email) ||
             TextUtils.isEmpty(password) ||
+            TextUtils.isEmpty(confirmPassword) ||
             bloodGroup.equals("Select")) {
 
         Toast.makeText(this,
@@ -130,6 +134,12 @@ private void validarRegistro() {
 
         Toast.makeText(this,
                 "La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y símbolo",
+                Toast.LENGTH_SHORT).show();
+        return;
+    }
+    if (!password.equals(confirmPassword)) {
+        Toast.makeText(this,
+                "Las contraseñas no coinciden",
                 Toast.LENGTH_SHORT).show();
         return;
     }
