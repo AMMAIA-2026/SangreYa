@@ -16,116 +16,128 @@ import com.ammaia_ispc.sangreyamobile.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private Button btnCreateAccount;
-    private TextView tvIniciarSesion;
-    private Spinner etBloodGroup;
+private Button btnCreateAccount;
+private TextView tvIniciarSesion;
+private Spinner etBloodGroup;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        NavigationHelper.configureBackButton(this, R.id.btnBack);
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_register);
+    NavigationHelper.configureBackButton(this, R.id.btnBack);
 
-        btnCreateAccount = findViewById(R.id.btnCreateAccount);
-        tvIniciarSesion = findViewById(R.id.tvIniciarSesion);
-        etBloodGroup = findViewById(R.id.etBloodGroup);
+    btnCreateAccount = findViewById(R.id.btnCreateAccount);
+    tvIniciarSesion = findViewById(R.id.tvIniciarSesion);
+    etBloodGroup = findViewById(R.id.etBloodGroup);
 
-        String[] bloodGroups = {
-                "Select",
-                "A+",
-                "A-",
-                "B+",
-                "B-",
-                "AB+",
-                "AB-",
-                "O+",
-                "O-"
-        };
+    String[] bloodGroups = {
+            "Select",
+            "A+",
+            "A-",
+            "B+",
+            "B-",
+            "AB+",
+            "AB-",
+            "O+",
+            "O-"
+    };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                bloodGroups
+    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            this,
+            android.R.layout.simple_spinner_item,
+            bloodGroups
+    );
+
+    adapter.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item
+    );
+
+    etBloodGroup.setAdapter(adapter);
+
+    btnCreateAccount.setOnClickListener(v -> validarRegistro());
+
+    tvIniciarSesion.setOnClickListener(v -> {
+        Intent intent = new Intent(
+                RegisterActivity.this,
+                LoginActivity.class
         );
+        startActivity(intent);
+        finish();
+    });
+}
 
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
+private void validarRegistro() {
 
-        etBloodGroup.setAdapter(adapter);
+    String name = ((android.widget.EditText) findViewById(R.id.etName))
+            .getText().toString().trim();
 
-        btnCreateAccount.setOnClickListener(v -> validarRegistro());
+    String dni = ((android.widget.EditText) findViewById(R.id.etDni))
+            .getText().toString().trim();
 
-        tvIniciarSesion.setOnClickListener(v -> {
-            Intent intent = new Intent(
-                    RegisterActivity.this,
-                    LoginActivity.class
-            );
-            startActivity(intent);
-            finish();
-        });
-    }
+    String email = ((android.widget.EditText) findViewById(R.id.etRegisterEmail))
+            .getText().toString().trim();
 
-    private void validarRegistro() {
+    String password = ((android.widget.EditText) findViewById(R.id.etRegisterPassword))
+            .getText().toString();
 
-        String name = ((android.widget.EditText) findViewById(R.id.etName))
-                .getText().toString().trim();
+    String bloodGroup = etBloodGroup.getSelectedItem().toString();
 
-        String email = ((android.widget.EditText) findViewById(R.id.etRegisterEmail))
-                .getText().toString().trim();
-
-        String password = ((android.widget.EditText) findViewById(R.id.etRegisterPassword))
-                .getText().toString();
-
-        String bloodGroup = etBloodGroup.getSelectedItem().toString();
-
-        // Campos obligatorios
-        if (TextUtils.isEmpty(name) ||
-                TextUtils.isEmpty(email) ||
-                TextUtils.isEmpty(password) ||
-                bloodGroup.equals("Select")) {
-
-            Toast.makeText(this,
-                    "Completá todos los campos",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Email válido
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this,
-                    "Ingresá un email válido",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Email único
-        for (User user : MockUserRepository.getUsers()) {
-            if (user.getEmail().equalsIgnoreCase(email)) {
-                Toast.makeText(this,
-                        "El email ya está registrado",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        // Contraseña
-        if (password.length() < 8 ||
-                !password.matches(".*[A-Z].*") ||
-                !password.matches(".*[a-z].*") ||
-                !password.matches(".*[0-9].*") ||
-                !password.matches(".*[^a-zA-Z0-9].*")) {
-
-            Toast.makeText(this,
-                    "La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y símbolo",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
+    // Campos obligatorios
+    if (TextUtils.isEmpty(name) ||
+            TextUtils.isEmpty(dni) ||
+            TextUtils.isEmpty(email) ||
+            TextUtils.isEmpty(password) ||
+            bloodGroup.equals("Select")) {
 
         Toast.makeText(this,
-                "Cuenta creada correctamente",
+                "Completá todos los campos",
                 Toast.LENGTH_SHORT).show();
+        return;
     }
+
+
+    if (dni.length() < 7 || dni.length() > 8) {
+        Toast.makeText(this,
+                "Ingresá un DNI válido",
+                Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    // Email válido
+    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        Toast.makeText(this,
+                "Ingresá un email válido",
+                Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    // Email único
+    for (User user : MockUserRepository.getUsers()) {
+        if (user.getEmail().equalsIgnoreCase(email)) {
+            Toast.makeText(this,
+                    "El email ya está registrado",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    // Contraseña
+    if (password.length() < 8 ||
+            !password.matches(".*[A-Z].*") ||
+            !password.matches(".*[a-z].*") ||
+            !password.matches(".*[0-9].*") ||
+            !password.matches(".*[^a-zA-Z0-9].*")) {
+
+        Toast.makeText(this,
+                "La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y símbolo",
+                Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    Toast.makeText(this,
+            "Cuenta creada correctamente",
+            Toast.LENGTH_SHORT).show();
+}
 
 }
 

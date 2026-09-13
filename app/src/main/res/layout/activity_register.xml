@@ -70,17 +70,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvNameLabel" />
 
-    <Spinner
-        android:id="@+id/etBloodGroup"
+    <TextView
+        android:id="@+id/tvDniLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="DNI"
+        android:textColor="@color/secondary_text"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etName" />
+
+    <EditText
+        android:id="@+id/etDni"
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/bg_input_field"
+        android:hint="Ingresá tu DNI"
+        android:inputType="number"
+        android:maxLength="8"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text"
+        android:textSize="15sp"
+        android:singleLine="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvBloodGroupLabel" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDniLabel" />
+
 
     <TextView
         android:id="@+id/tvEmailLabel"
@@ -91,7 +110,7 @@
         android:textColor="@color/secondary_text"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etName" />
+        app:layout_constraintTop_toBottomOf="@id/etDni" />
 
     <EditText
         android:id="@+id/etRegisterEmail"
@@ -148,6 +167,18 @@
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etRegisterPassword" />
+
+    <Spinner
+        android:id="@+id/etBloodGroup"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_field"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBloodGroupLabel" />
 
     <Button
         android:id="@+id/btnCreateAccount"
