@@ -195,7 +195,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_calendar"
+                    android:src="@drawable/ic_blood_drop"
                     android:tint="@color/secondary_text"
                     android:contentDescription="@string/campaigns_navigation" />
                 <TextView

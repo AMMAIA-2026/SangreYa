@@ -19,43 +19,34 @@ public final class MockCampaignRepository {
         CAMPAIGNS.add(campaign);
     }
 
+    public static void updateCampaign(Campaign updated) {
+        for (int index = 0; index < CAMPAIGNS.size(); index++) {
+            if (CAMPAIGNS.get(index).id == updated.id) {
+                CAMPAIGNS.set(index, updated);
+                return;
+            }
+        }
+    }
+
     public static int nextId() {
         return CAMPAIGNS.size() + 1;
+    }
+
+    public static void deleteCampaign(int id) {
+        for (int index = 0; index < CAMPAIGNS.size(); index++) {
+            if (CAMPAIGNS.get(index).id == id) {
+                CAMPAIGNS.remove(index);
+                return;
+            }
+        }
     }
 
     private static List<Campaign> buildCampaigns() {
         List<Campaign> campaigns = new ArrayList<>();
 
-        HealthCenter centralBloodBank = new HealthCenter(
-                1,
-                "Banco Central de Sangre de la Provincia de Córdoba",
-                "Rosario de Santa Fe 374",
-                "Centro",
-                "Córdoba",
-                "351 2480189",
-                "https://ministeriodesalud.cba.gov.ar/banco-de-sangre/",
-                "-31.4177671",
-                "-64.1792522");
-        HealthCenter universityBloodBank = new HealthCenter(
-                3,
-                "Banco de Sangre de la Universidad Nacional de Córdoba",
-                "Enfermera Gordillo Gómez s/n",
-                "Ciudad Universitaria",
-                "Córdoba",
-                "0351 4334121/28",
-                "https://bancodesangre.turnos.unc.edu.ar/",
-                "-31.4379571",
-                "-64.1878064");
-        HealthCenter foundationBloodBank = new HealthCenter(
-                4,
-                "Fundación Banco Central de Sangre",
-                "Caseros 1576",
-                "Quinta Santa Ana",
-                "Córdoba",
-                "0351 4807373",
-                "https://www.donarencordoba.com.ar/",
-                "-31.4113956",
-                "-64.2059516");
+        HealthCenter centralBloodBank = MockHealthCenterRepository.findById(1);
+        HealthCenter universityBloodBank = MockHealthCenterRepository.findById(3);
+        HealthCenter foundationBloodBank = MockHealthCenterRepository.findById(4);
 
         campaigns.add(new Campaign(
                 1,

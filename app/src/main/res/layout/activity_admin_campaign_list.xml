@@ -247,7 +247,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_calendar"
+                    android:src="@drawable/ic_blood_drop"
                     android:tint="@color/primary_red"
                     android:contentDescription="@string/campaigns_navigation" />
 
@@ -287,9 +287,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/admin_messages_navigation"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:orientation="vertical">
 

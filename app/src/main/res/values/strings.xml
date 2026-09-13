@@ -98,11 +98,11 @@
 
     <!-- Crear campaña -->
     <string name="create_campaign_title">Nueva campaña</string>
-    <string name="create_campaign_subtitle">Se registrará un log de esta publicación</string>
+    <string name="create_campaign_subtitle">Se registrará una nueva campaña</string>
     <string name="label_campaign_name">Nombre de la campaña</string>
     <string name="hint_campaign_name">Ej: Colecta Solidaria Centro</string>
-    <string name="label_organizing_institution">Institución organizadora</string>
-    <string name="hint_organizing_institution">Hospital, banco de sangre…</string>
+    <string name="label_health_center">Centro de salud</string>
+    <string name="health_center_none_option">Sin centro asignado</string>
     <string name="label_address">Dirección</string>
     <string name="hint_address">Calle y número</string>
     <string name="label_start_date">Fecha de inicio</string>
@@ -131,6 +131,17 @@
     <string name="edit_campaign_description">Editar campaña</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
+    <string name="campaign_updated_message">Campaña actualizada</string>
+    <string name="btn_save_changes">Guardar cambios</string>
+    <string name="edit_campaign_title">Editar campaña</string>
+    <string name="edit_campaign_subtitle">Los cambios se verán reflejados en la campaña </string>
+    <string name="active_campaign_alert">Campaña activa · %1$d personas ya inscritas</string>
+    <string name="btn_delete_campaign">Eliminar campaña</string>
+    <string name="delete_campaign_confirm_title">Eliminar campaña</string>
+    <string name="delete_campaign_confirm_message">¿Seguro que querés eliminar esta campaña? Esta acción no se puede deshacer.</string>
+    <string name="delete_campaign_confirm_action">Eliminar</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="campaign_deleted_message">Campaña eliminada</string>
 
     <!-- Contacto -->
     <string name="menu_contact">Contacto</string>

@@ -30,43 +30,49 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/filter_all"
                 android:layout_width="@dimen/filter_all_width"
                 android:layout_height="@dimen/filter_height"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:text="@string/filter_all"
                 android:textColor="@color/white"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                android:background="@drawable/bg_filter_selected"
-                android:stateListAnimator="@null" />
+                app:backgroundTint="@color/primary_red"
+                app:cornerRadius="24dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/filter_active"
                 android:layout_width="@dimen/filter_active_width"
                 android:layout_height="@dimen/filter_height"
                 android:layout_marginStart="@dimen/filter_spacing"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:text="@string/filter_active"
                 android:textColor="@color/secondary_text"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                android:background="@drawable/bg_filter_unselected"
-                android:stateListAnimator="@null" />
+                app:backgroundTint="@color/surface"
+                app:cornerRadius="24dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/filter_upcoming"
                 android:layout_width="@dimen/filter_upcoming_width"
                 android:layout_height="@dimen/filter_height"
                 android:layout_marginStart="@dimen/filter_spacing"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:text="@string/filter_upcoming"
                 android:textColor="@color/secondary_text"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                android:background="@drawable/bg_filter_unselected"
-                android:stateListAnimator="@null" />
+                app:backgroundTint="@color/surface"
+                app:cornerRadius="24dp" />
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -105,7 +111,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_calendar"
+                android:src="@drawable/ic_blood_drop"
                 android:tint="@color/primary_red"
                 android:contentDescription="@string/campaigns_navigation" />
             <TextView

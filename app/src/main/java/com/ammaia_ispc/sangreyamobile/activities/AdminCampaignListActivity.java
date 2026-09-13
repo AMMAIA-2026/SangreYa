@@ -285,7 +285,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                 card.findViewById(R.id.admin_campaign_edit);
 
         editButton.setOnClickListener(
-                view -> openCampaignDetail(campaign)
+                view -> openCampaignEdit(campaign)
         );
 
         return card;
@@ -318,6 +318,34 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
         Intent intent =
                 new Intent(this, CampaignDetailActivity.class);
+
+        intent.putExtra(
+                ExtraKeys.EXTRA_CAMPAIGN,
+                campaign
+        );
+
+        intent.putExtra(
+                ExtraKeys.EXTRA_STANDARD_USER,
+                false
+        );
+
+        intent.putExtra(
+                ExtraKeys.EXTRA_USER,
+                user
+        );
+
+        intent.putExtra(
+                ExtraKeys.EXTRA_USER_ROLE,
+                ExtraKeys.ROLE_ADMIN
+        );
+
+        startActivity(intent);
+    }
+
+    private void openCampaignEdit(Campaign campaign) {
+
+        Intent intent =
+                new Intent(this, CreateCampaignActivity.class);
 
         intent.putExtra(
                 ExtraKeys.EXTRA_CAMPAIGN,
