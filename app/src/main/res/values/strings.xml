@@ -164,4 +164,6 @@
     <string name="filter_unanswered">Sin responder</string>
     <string name="filter_answered">Respondidos</string>
     <string name="error_unauthorized_access">Acceso no autorizado</string>
+    <string name="splash_tagline">Cada gota cuenta</string>
+    <string name="splash_checking_session">Verificando tu sesión...</string>
 </resources>
