@@ -2,6 +2,8 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 
 public final class ExtraKeys {
     public static final String EXTRA_CAMPAIGN = "extra_campaign";
+    public static final String EXTRA_ACCESS_TOKEN = "extra_access_token";
+    public static final String EXTRA_REMOTE_CAMPAIGN_DETAIL = "extra_remote_campaign_detail";
     public static final String EXTRA_STANDARD_USER = "extra_standard_user";
     public static final String EXTRA_USER = "extra_user";
     public static final String EXTRA_USER_ROLE = "extra_user_role";

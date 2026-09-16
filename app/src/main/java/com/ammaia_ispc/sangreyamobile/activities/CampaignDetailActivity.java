@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
@@ -39,6 +40,30 @@ public class CampaignDetailActivity extends AppCompatActivity {
         role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
         setContentView(R.layout.activity_campaign_detail);
         bindViews();
+
+        if (getIntent().getBooleanExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, false)) {
+            loadCampaignDetails();
+        }
+    }
+
+    private void loadCampaignDetails() {
+        CampaignApiRepository.getCampaign(
+                campaign.id,
+                new CampaignApiRepository.Callback<Campaign>() {
+                    @Override
+                    public void onSuccess(Campaign value) {
+                        campaign = value;
+                        bindViews();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        Toast.makeText(
+                                CampaignDetailActivity.this,
+                                "No se pudo cargar el detalle de la campaña",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void bindViews() {

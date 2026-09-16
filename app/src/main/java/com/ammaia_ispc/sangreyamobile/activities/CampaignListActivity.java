@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
@@ -21,10 +22,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CampaignListActivity extends AppCompatActivity {
-    private List<Campaign> campaigns;
+    private List<Campaign> campaigns = new ArrayList<>();
     private LinearLayout campaignContainer;
     private MaterialButton allFilter;
     private MaterialButton activeFilter;
@@ -48,8 +50,29 @@ public class CampaignListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        campaigns = MockCampaignRepository.getCampaigns();
-        showCampaigns("Todas");
+        loadCampaigns();
+    }
+
+    private void loadCampaigns() {
+        CampaignApiRepository.getCampaigns(new CampaignApiRepository.Callback<List<Campaign>>() {
+            @Override
+            public void onSuccess(List<Campaign> value) {
+                campaigns = value;
+                showCampaigns("Todas");
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                String detail = exception.getMessage();
+                if (detail == null || detail.isEmpty()) {
+                    detail = exception.getClass().getSimpleName();
+                }
+                Toast.makeText(
+                        CampaignListActivity.this,
+                        "No se pudieron cargar las campañas: " + detail,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void bindViews() {
@@ -117,6 +140,7 @@ public class CampaignListActivity extends AppCompatActivity {
     private void openDetails(Campaign campaign) {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
+        intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);
         intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, standardUser);
         intent.putExtra(ExtraKeys.EXTRA_USER, user);
         intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, role);

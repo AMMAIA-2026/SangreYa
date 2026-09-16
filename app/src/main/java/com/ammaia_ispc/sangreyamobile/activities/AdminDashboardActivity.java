@@ -11,7 +11,8 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockAdminDashboardRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
+import com.ammaia_ispc.sangreyamobile.data.DashboardApiRepository;
 import com.ammaia_ispc.sangreyamobile.model.AdminDashboardData;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
@@ -21,6 +22,9 @@ import com.ammaia_ispc.sangreyamobile.helpers.DashboardChartView;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.google.android.material.navigation.NavigationView;
+
+import android.text.TextUtils;
+import android.widget.Toast;
 
 public class AdminDashboardActivity extends AppCompatActivity {
     private String user;
@@ -62,19 +66,38 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        AdminDashboardData dashboard = MockAdminDashboardRepository.getDashboard();
-        bindDonorsChart(dashboard);
-        bindStatusChart(dashboard);
-        bindRecentCampaigns(dashboard);
+        String accessToken = getIntent().getStringExtra(ExtraKeys.EXTRA_ACCESS_TOKEN);
+        if (TextUtils.isEmpty(accessToken)) {
+            Toast.makeText(
+                    this,
+                    "El dashboard requiere un token de administrador",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        DashboardApiRepository.getDashboard(
+                accessToken,
+                new CampaignApiRepository.Callback<AdminDashboardData>() {
+                    @Override
+                    public void onSuccess(AdminDashboardData dashboard) {
+                        bindDonorsChart(dashboard);
+                        bindStatusChart(dashboard);
+                        bindRecentCampaigns(dashboard);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        Toast.makeText(
+                                AdminDashboardActivity.this,
+                                "No se pudo cargar el dashboard: " + exception.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void bindDonorsChart(AdminDashboardData dashboard) {
-        int totalDonors = 0;
-        for (int index = 0; index < dashboard.donantesPorMes.size(); index++) {
-            totalDonors += dashboard.donantesPorMes.get(index).cantidad;
-        }
         ((TextView) findViewById(R.id.dashboard_donors_total))
-                .setText(getString(R.string.dashboard_donors_total, totalDonors));
+                .setText(getString(R.string.dashboard_donors_total, dashboard.totalDonantes));
 
         DashboardChartView chart = findViewById(R.id.dashboard_donors_chart);
         chart.setMonthlyDonors(dashboard.donantesPorMes);
