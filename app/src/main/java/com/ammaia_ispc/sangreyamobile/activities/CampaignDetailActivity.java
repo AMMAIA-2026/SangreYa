@@ -58,9 +58,14 @@ public class CampaignDetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Exception exception) {
+                        int messageRes = CampaignApiRepository.isNotFound(exception)
+                                ? R.string.campaign_not_found_error
+                                : CampaignApiRepository.isNetworkError(exception)
+                                ? R.string.campaign_network_error
+                                : R.string.campaign_detail_error;
                         Toast.makeText(
                                 CampaignDetailActivity.this,
-                                "No se pudo cargar el detalle de la campaña",
+                                messageRes,
                                 Toast.LENGTH_LONG).show();
                     }
                 });
@@ -90,7 +95,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
         if (campaign.maximumCapacity == null) {
             capacity.setVisibility(View.GONE);
         } else {
-            capacity.setText(getString(R.string.capacity, campaign.maximumCapacity));
+            capacity.setText(getString(R.string.maximum_capacity, campaign.maximumCapacity));
         }
 
         bindHealthCenter();

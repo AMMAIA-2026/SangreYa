@@ -167,22 +167,28 @@
                     android:src="@drawable/ic_blood_drop"
                     android:tint="@color/primary_red"
                     android:contentDescription="@string/registered_detail" />
-                <TextView
-                    android:id="@+id/detail_registered"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textColor="@color/primary_text"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/detail_capacity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="9sp" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/detail_registered"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/primary_text"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/detail_capacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="9sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
