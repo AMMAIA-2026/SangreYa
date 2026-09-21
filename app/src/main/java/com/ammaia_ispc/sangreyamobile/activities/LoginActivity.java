@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void performLogin(String email, String password) {
         setLoading(true);
-        ApiClient.getApiService().login(new LoginRequest(email, password)).enqueue(new Callback<LoginResponse>() {
+        ApiClient.getApiService(this).login(new LoginRequest(email, password)).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 setLoading(false);
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleLoginSuccess(LoginResponse body) {
         SessionManager.saveSession(this, body.getAccess(), body.getRefresh(), body.getUser());
-        boolean admin = "Administrador".equals(body.getUser().getRol());
+        boolean admin = SessionManager.isAdmin(this);
         Intent intent = new Intent(
                 LoginActivity.this,
                 admin ? AdminDashboardActivity.class : MainActivity.class);

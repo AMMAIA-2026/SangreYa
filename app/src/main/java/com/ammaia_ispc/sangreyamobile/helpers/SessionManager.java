@@ -1,8 +1,11 @@
 package com.ammaia_ispc.sangreyamobile.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
+import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 
 public final class SessionManager {
@@ -13,6 +16,8 @@ public final class SessionManager {
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_EMAIL = "user_email";
     private static final String KEY_USER_ROLE = "user_role";
+
+    private static final String ROLE_ADMIN = "Administrador";
 
     private SessionManager() {
     }
@@ -33,6 +38,23 @@ public final class SessionManager {
 
     public static String getRefreshToken(Context context) {
         return prefs(context).getString(KEY_REFRESH_TOKEN, null);
+    }
+
+    public static String getUserRole(Context context) {
+        return prefs(context).getString(KEY_USER_ROLE, null);
+    }
+
+    public static boolean isAdmin(Context context) {
+        return ROLE_ADMIN.equals(getUserRole(context));
+    }
+
+    public static boolean requireAdmin(Activity activity) {
+        if (!isAdmin(activity)) {
+            Toast.makeText(activity, R.string.error_unauthorized_access, Toast.LENGTH_SHORT).show();
+            activity.finish();
+            return false;
+        }
+        return true;
     }
 
     public static void clearSession(Context context) {

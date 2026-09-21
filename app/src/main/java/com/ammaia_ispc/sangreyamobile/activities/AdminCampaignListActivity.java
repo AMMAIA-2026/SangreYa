@@ -19,6 +19,7 @@ import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
 
@@ -40,6 +41,9 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!SessionManager.requireAdmin(this)) {
+            return;
+        }
 
         CampaignHelper.configureSystemBars(this);
 

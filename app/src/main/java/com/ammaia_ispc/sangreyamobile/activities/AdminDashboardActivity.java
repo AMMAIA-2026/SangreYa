@@ -20,6 +20,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.DashboardChartView;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.google.android.material.navigation.NavigationView;
 
 public class AdminDashboardActivity extends AppCompatActivity {
@@ -28,6 +29,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!SessionManager.requireAdmin(this)) {
+            return;
+        }
         CampaignHelper.configureSystemBars(this);
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
         if (user == null) {

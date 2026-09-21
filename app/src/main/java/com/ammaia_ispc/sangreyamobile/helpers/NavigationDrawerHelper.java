@@ -70,6 +70,7 @@ public final class NavigationDrawerHelper {
                 intent = new Intent(activity, RegisterActivity.class);
                 activity.startActivity(intent);
             } else if (item.getItemId() == R.id.nav_logout) {
+                SessionManager.clearSession(activity);
                 intent = new Intent(activity, MainActivity.class);
                 intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

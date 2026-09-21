@@ -14,6 +14,7 @@ import com.ammaia_ispc.sangreyamobile.data.MockUserRepository;
 import com.ammaia_ispc.sangreyamobile.model.User;
 import android.widget.ImageButton;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 
 public class UsersActivity extends AppCompatActivity {
 
@@ -22,6 +23,9 @@ private LinearLayout usersContainer;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (!SessionManager.requireAdmin(this)) {
+        return;
+    }
     setContentView(R.layout.activity_users);
 
     NavigationHelper.configureBackButton(this, R.id.btnBack);
