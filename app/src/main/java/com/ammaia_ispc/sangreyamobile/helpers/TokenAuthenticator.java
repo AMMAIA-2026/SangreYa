@@ -27,7 +27,7 @@ public class TokenAuthenticator implements Authenticator {
 
     @Override
     public synchronized Request authenticate(Route route, Response response) throws IOException {
-        // Only one retry per original request, and never retry forever.
+
         if (responseCount(response) >= 2) {
             return null;
         }
@@ -36,9 +36,6 @@ public class TokenAuthenticator implements Authenticator {
         String currentAccessToken = SessionManager.getAccessToken(context);
         String currentAuthHeader = currentAccessToken != null ? "Bearer " + currentAccessToken : null;
 
-        // Another concurrent request already refreshed while we were waiting on the lock:
-        // retry with the token that's now stored instead of refreshing again (reusing the
-        // same refresh token twice gets it rejected as blacklisted).
         if (currentAuthHeader != null && !Objects.equals(currentAuthHeader, failedAuthHeader)) {
             return response.request().newBuilder()
                     .header("Authorization", currentAuthHeader)
@@ -60,13 +57,10 @@ public class TokenAuthenticator implements Authenticator {
                         .header("Authorization", "Bearer " + body.getAccess())
                         .build();
             }
+            SessionManager.expireSession(context);
         } catch (IOException e) {
-            Log.w(TAG, "Token refresh failed", e);
+            Log.w(TAG, "Token refresh failed due to a network error", e);
         }
-
-        // Refresh token invalid/expired/blacklisted, or a network error: the session is
-        // dead, so it's cleared locally to avoid retrying with it on every future request.
-        SessionManager.clearSession(context);
         return null;
     }
 

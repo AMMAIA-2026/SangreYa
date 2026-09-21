@@ -2,10 +2,12 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.activities.LoginActivity;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 
 public final class SessionManager {
@@ -66,6 +68,16 @@ public final class SessionManager {
 
     public static void clearSession(Context context) {
         prefs(context).edit().clear().apply();
+    }
+
+    // Called only when the backend explicitly rejected the refresh (401/400) — a plain
+    // network error while refreshing must NOT end up here (see TokenAuthenticator).
+    public static void expireSession(Context context) {
+        clearSession(context);
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_SESSION_EXPIRED, true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 
     private static SharedPreferences prefs(Context context) {

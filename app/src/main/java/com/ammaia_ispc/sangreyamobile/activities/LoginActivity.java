@@ -61,6 +61,10 @@ public class LoginActivity extends AppCompatActivity {
         tvRegistrate = findViewById(R.id.tvRegistrate);
         tvOlvidasteContrasena = findViewById(R.id.tvOlvidasteContrasena);
 
+        if (getIntent().getBooleanExtra(ExtraKeys.EXTRA_SESSION_EXPIRED, false)) {
+            showMessage(getString(R.string.session_expired_message));
+        }
+
         tvRegistrate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
