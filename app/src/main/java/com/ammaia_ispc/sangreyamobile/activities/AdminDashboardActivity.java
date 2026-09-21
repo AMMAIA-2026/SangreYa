@@ -31,7 +31,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         CampaignHelper.configureSystemBars(this);
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
         if (user == null) {
-            user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
+            user = "";
         }
         setContentView(R.layout.activity_admin_dashboard);
         bindViews();

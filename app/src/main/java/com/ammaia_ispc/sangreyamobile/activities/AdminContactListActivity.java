@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.MockContactRepository;
-import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
@@ -48,7 +47,7 @@ public class AdminContactListActivity extends AppCompatActivity {
         }
 
         if (user == null) {
-            user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
+            user = "";
         }
 
         setContentView(R.layout.activity_admin_contact_list);

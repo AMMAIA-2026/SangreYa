@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
-import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
@@ -47,7 +46,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
 
         if (user == null) {
-            user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
+            user = "";
         }
 
         setContentView(R.layout.activity_admin_campaign_list);
