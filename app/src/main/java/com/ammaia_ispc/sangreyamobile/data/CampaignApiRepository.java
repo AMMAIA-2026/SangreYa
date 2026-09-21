@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -23,15 +24,39 @@ public final class CampaignApiRepository {
     private static final String BASE_URL =
             "https://sangreyaispc.pythonanywhere.com/";
     private static final String CAMPAIGNS_PATH = "campanias/";
-    private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-
     private CampaignApiRepository() {
+    }
+
+    private static Handler mainHandler() {
+        return new Handler(Looper.getMainLooper());
     }
 
     public interface Callback<T> {
         void onSuccess(T value);
 
         void onError(Exception exception);
+    }
+
+    public static final class HttpException extends IOException {
+        private final int statusCode;
+
+        public HttpException(int statusCode, String body) {
+            super("HTTP " + statusCode + (body.isEmpty() ? "" : ": " + body));
+            this.statusCode = statusCode;
+        }
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+    }
+
+    public static boolean isNotFound(Exception exception) {
+        return exception instanceof HttpException
+                && ((HttpException) exception).getStatusCode() == 404;
+    }
+
+    public static boolean isNetworkError(Exception exception) {
+        return exception instanceof IOException && !(exception instanceof HttpException);
     }
 
     public static void getCampaigns(Callback<List<Campaign>> callback) {
@@ -64,13 +89,13 @@ public final class CampaignApiRepository {
             try {
                 String response = executeGet(path);
                 T value = parser.parse(response);
-                MAIN_HANDLER.post(() -> callback.onSuccess(value));
+                mainHandler().post(() -> callback.onSuccess(value));
             } catch (Exception exception) {
                 Log.e(
                         "CampaignApiRepository",
                         "Error al consultar https://sangreyaispc.pythonanywhere.com/" + path,
                         exception);
-                MAIN_HANDLER.post(() -> callback.onError(exception));
+                mainHandler().post(() -> callback.onError(exception));
             }
         }).start();
     }
@@ -93,8 +118,7 @@ public final class CampaignApiRepository {
             String body = readBody(stream);
 
             if (statusCode < 200 || statusCode >= 300) {
-                throw new IllegalStateException(
-                        "HTTP " + statusCode + (body.isEmpty() ? "" : ": " + body));
+                throw new HttpException(statusCode, body);
             }
 
             return body;

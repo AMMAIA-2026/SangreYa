@@ -1,16 +1,5 @@
 <resources>
-    <string name="app_name">SangreYa</string>
-    <string name="greeting">Hola, María</string>
-    <string name="campaign_subtitle">Elegí una campaña para donar</string>
-    <string name="logged_user_greeting">Hola, %1$s</string>
-    <string name="guest_greeting">Bienvenido a SangreYa</string>
-    <string name="guest_subtitle">Registrate en la app para donar.</string>
-    <string name="notifications">Notificaciones</string>
-    <string name="open_menu">Abrir menú</string>
-    <string name="menu_about_us">Sobre nosotros</string>
-    <string name="menu_login">Iniciar sesión</string>
-    <string name="menu_register">Registrarse</string>
-    <string name="menu_logout">Cerrar sesión</string>
+    <!--AdminDashboard & AdminNavbar-->
     <string name="admin_role">admin</string>
     <string name="dashboard_donors_title">Donantes por mes</string>
     <string name="dashboard_donors_subtitle">Personas que donaron sangre cada mes</string>
@@ -23,10 +12,34 @@
     <string name="dashboard_navigation">Dashboard</string>
     <string name="users_navigation">Usuarios</string>
     <string name="messages_navigation">Mensajes</string>
+
+    <!--CampaignList-->
+    <string name="app_name">SangreYa</string>
+    <string name="greeting">Hola, María</string>
+    <string name="campaign_subtitle">Elegí una campaña para donar</string>
+    <string name="logged_user_greeting">Hola, %1$s</string>
+    <string name="guest_greeting">Bienvenido a SangreYa</string>
+    <string name="guest_subtitle">Registrate en la app para donar.</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="open_menu">Abrir menú</string>
+    <string name="menu_about_us">Sobre nosotros</string>
+    <string name="menu_login">Iniciar sesión</string>
+    <string name="menu_register">Registrarse</string>
+    <string name="menu_logout">Cerrar sesión</string>
     <string name="filter_all">Todas</string>
     <string name="filter_active">Activas</string>
     <string name="filter_upcoming">Próximas</string>
     <string name="registered_count">%1$d inscriptos</string>
+    <string name="maximum_capacity">Cupo máximo: %1$d</string>
+    <string name="unlimited_capacity">Cupo máximo: Sin límite</string>
+    <string name="campaigns_navigation">Campañas</string>
+    <string name="enrollments_navigation">Inscripciones</string>
+    <string name="profile_navigation">Perfil</string>
+    <string name="campaign_location_description">Ubicación de la campaña</string>
+    <string name="campaign_date_description">Fecha de la campaña</string>
+    <string name="campaign_loading">Cargando campañas</string>
+
+    <!--CampaignDetail-->
     <string name="registered_detail">%1$d personas ya se inscribieron</string>
     <string name="capacity">Cupo %1$d</string>
     <string name="description_title">Descripción</string>
@@ -40,11 +53,9 @@
     <string name="enroll">Inscribirme</string>
     <string name="offline_enrollment_message">La inscripción estará disponible cuando conectemos el backend.</string>
     <string name="login_required_enrollment">Iniciá sesión para inscribirte a la donación.</string>
-    <string name="campaigns_navigation">Campañas</string>
-    <string name="enrollments_navigation">Inscripciones</string>
-    <string name="profile_navigation">Perfil</string>
-    <string name="campaign_location_description">Ubicación de la campaña</string>
-    <string name="campaign_date_description">Fecha de la campaña</string>
+    <string name="campaign_not_found_error">La campaña solicitada no existe o ya no está disponible.</string>
+    <string name="campaign_network_error">No se pudo cargar la campaña. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="campaign_detail_error">No se pudo cargar el detalle de la campaña.</string>
 
     <!-- Login -->
     <string name="titulo_login">iniciar sesion</string>
