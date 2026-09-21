@@ -133,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra(ExtraKeys.EXTRA_USER, body.getUser().getEmail());
         if (admin) {
             intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
+            intent.putExtra(ExtraKeys.EXTRA_ACCESS_TOKEN, body.getAccess());
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

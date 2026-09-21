@@ -102,5 +102,13 @@
             android:textColor="@color/primary_red"
             android:textSize="10sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/campaign_capacity"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/secondary_text"
+            android:textSize="10sp" />
     </LinearLayout>
 </LinearLayout>

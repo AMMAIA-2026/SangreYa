@@ -1,196 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fillViewport="true"
+android:background="@color/app_background">
+
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:layout_height="wrap_content"
     android:padding="24dp">
 
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="-8dp"
-        android:layout_marginTop="48dp"
-        android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_revert"
-        android:tint="@color/primary_red"
-        android:contentDescription="Volver"
-        android:padding="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<ImageButton
+    android:id="@+id/btnBack"
+    android:layout_width="48dp"
+    android:layout_height="40dp"
+    android:layout_marginStart="-8dp"
+    android:layout_marginTop="48dp"
+    android:background="@android:color/transparent"
+    android:src="@android:drawable/ic_menu_revert"
+    android:tint="@color/primary_red"
+    android:contentDescription="Volver"
+    android:padding="8dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/icBloodDrop"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_blood_drop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnBack" />
+<ImageView
+    android:id="@+id/icBloodDrop"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_marginTop="16dp"
+    android:src="@drawable/ic_blood_drop"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+<TextView
+    android:id="@+id/RegisterTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:text="@string/RegisterTitle"
+    android:textColor="@color/primary_text"
+    android:textSize="26sp"
+    android:textStyle="bold"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/icBloodDrop" />
+
+<TextView
+    android:id="@+id/tvNameLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="28dp"
+    android:text="@string/label_nombre_completo"
+    android:textColor="@color/secondary_text"
+    android:textSize="13sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/RegisterTitle" />
+
+<EditText
+    android:id="@+id/etName"
+    android:layout_width="0dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_input_field"
+    android:hint="@string/hint_nombre"
+    android:inputType="textPersonName"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/primary_text"
+    android:textColorHint="@color/secondary_text"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvNameLabel" />
+
+<TextView
+    android:id="@+id/tvDniLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:text="DNI"
+    android:textColor="@color/secondary_text"
+    android:textSize="13sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/etName" />
+
+<EditText
+    android:id="@+id/etDni"
+    android:layout_width="0dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_input_field"
+    android:hint="Ingresá tu DNI"
+    android:inputType="number"
+    android:maxLength="8"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/primary_text"
+    android:textColorHint="@color/secondary_text"
+    android:textSize="15sp"
+    android:singleLine="true"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvDniLabel" />
+
+
+<TextView
+    android:id="@+id/tvEmailLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:text="@string/label_email"
+    android:textColor="@color/secondary_text"
+    android:textSize="13sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/etDni" />
+
+<EditText
+    android:id="@+id/etRegisterEmail"
+    android:layout_width="0dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_input_field"
+    android:hint="@string/hint_email"
+    android:inputType="textEmailAddress"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/primary_text"
+    android:textColorHint="@color/secondary_text"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvEmailLabel" />
+
+<TextView
+    android:id="@+id/tvPasswordLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:text="@string/label_password"
+    android:textColor="@color/secondary_text"
+    android:textSize="13sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/etRegisterEmail" />
+
+<EditText
+    android:id="@+id/etRegisterPassword"
+    android:layout_width="0dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_input_field"
+    android:hint="@string/hint_password"
+    android:inputType="textPassword"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/primary_text"
+    android:textColorHint="@color/secondary_text"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvPasswordLabel" />
+
+<TextView
+    android:id="@+id/tvConfirmPasswordLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:text="Confirmar contraseña"
+    android:textColor="@color/secondary_text"
+    android:textSize="13sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/etRegisterPassword" />
+
+<EditText
+    android:id="@+id/etConfirmPassword"
+    android:layout_width="0dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_input_field"
+    android:hint="Repetí tu contraseña"
+    android:inputType="textPassword"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/primary_text"
+    android:textColorHint="@color/secondary_text"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvConfirmPasswordLabel" />
+
+<TextView
+    android:id="@+id/tvBloodGroupLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:text="@string/label_grupo"
+    android:textColor="@color/secondary_text"
+    android:textSize="13sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/etConfirmPassword" />
+
+<Spinner
+    android:id="@+id/etBloodGroup"
+    android:layout_width="0dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_input_field"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvBloodGroupLabel" />
+
+<Button
+    android:id="@+id/btnCreateAccount"
+    android:layout_width="0dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="24dp"
+    android:backgroundTint="@color/primary_red"
+    android:text="@string/btn_crear_cuenta"
+    android:textAllCaps="true"
+    android:textColor="@color/white"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/etBloodGroup" />
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/btnCreateAccount">
 
     <TextView
-        android:id="@+id/RegisterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/RegisterTitle"
-        android:textColor="@color/primary_text"
-        android:textSize="26sp"
+        android:text="@string/texto_ya_tenes_cuenta"
+        android:textColor="@color/secondary_text"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvIniciarSesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/link_iniciar_sesion"
+        android:textColor="@color/primary_red"
+        android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/icBloodDrop" />
-
-    <TextView
-        android:id="@+id/tvNameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/label_nombre_completo"
-        android:textColor="@color/secondary_text"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/RegisterTitle" />
-
-    <EditText
-        android:id="@+id/etName"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_input_field"
-        android:hint="@string/hint_nombre"
-        android:inputType="textPersonName"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColor="@color/primary_text"
-        android:textColorHint="@color/secondary_text"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNameLabel" />
-
-    <Spinner
-        android:id="@+id/etBloodGroup"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_input_field"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvBloodGroupLabel" />
-
-    <TextView
-        android:id="@+id/tvEmailLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="@string/label_email"
-        android:textColor="@color/secondary_text"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etName" />
-
-    <EditText
-        android:id="@+id/etRegisterEmail"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_input_field"
-        android:hint="@string/hint_email"
-        android:inputType="textEmailAddress"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColor="@color/primary_text"
-        android:textColorHint="@color/secondary_text"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvEmailLabel" />
-
-    <TextView
-        android:id="@+id/tvPasswordLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="@string/label_password"
-        android:textColor="@color/secondary_text"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etRegisterEmail" />
-
-    <EditText
-        android:id="@+id/etRegisterPassword"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_input_field"
-        android:hint="@string/hint_password"
-        android:inputType="textPassword"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColor="@color/primary_text"
-        android:textColorHint="@color/secondary_text"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPasswordLabel" />
-
-    <TextView
-        android:id="@+id/tvBloodGroupLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="@string/label_grupo"
-        android:textColor="@color/secondary_text"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etRegisterPassword" />
-
-    <Button
-        android:id="@+id/btnCreateAccount"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/primary_red"
-        android:text="@string/btn_crear_cuenta"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etBloodGroup" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnCreateAccount">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/texto_ya_tenes_cuenta"
-            android:textColor="@color/secondary_text"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvIniciarSesion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/link_iniciar_sesion"
-            android:textColor="@color/primary_red"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:clickable="true"
-            android:focusable="true" />
+        android:clickable="true"
+        android:focusable="true" />
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

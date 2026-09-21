@@ -76,8 +76,18 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <ScrollView
-        android:layout_width="match_parent"
+     <ProgressBar
+         android:id="@+id/campaign_loading"
+         style="?android:attr/progressBarStyleLarge"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_horizontal"
+         android:contentDescription="@string/campaign_loading"
+         android:visibility="gone" />
+
+     <ScrollView
+         android:id="@+id/campaign_scroll"
+         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true"

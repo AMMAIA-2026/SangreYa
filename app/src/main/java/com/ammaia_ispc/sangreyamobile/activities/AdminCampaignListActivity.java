@@ -383,6 +383,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                 user
         );
 
+        intent.putExtra(
+                ExtraKeys.EXTRA_ACCESS_TOKEN,
+                SessionManager.getAccessToken(this)
+        );
+
         intent.addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TOP
         );

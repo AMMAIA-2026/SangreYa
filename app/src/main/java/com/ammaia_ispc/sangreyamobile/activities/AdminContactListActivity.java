@@ -140,6 +140,7 @@ public class AdminContactListActivity extends AppCompatActivity {
     private void openDashboard() {
         Intent intent = new Intent(this, AdminDashboardActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_USER, user);
+        intent.putExtra(ExtraKeys.EXTRA_ACCESS_TOKEN, SessionManager.getAccessToken(this));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
