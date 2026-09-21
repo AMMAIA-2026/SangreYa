@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.activities.LoginActivity;
+import com.ammaia_ispc.sangreyamobile.activities.MainActivity;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 
 public final class SessionManager {
@@ -78,6 +79,14 @@ public final class SessionManager {
         intent.putExtra(ExtraKeys.EXTRA_SESSION_EXPIRED, true);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
+    }
+
+    public static void logout(Activity activity) {
+        clearSession(activity);
+        Intent intent = new Intent(activity, MainActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(intent);
     }
 
     private static SharedPreferences prefs(Context context) {
