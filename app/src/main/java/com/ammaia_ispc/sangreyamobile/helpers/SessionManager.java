@@ -40,6 +40,13 @@ public final class SessionManager {
         return prefs(context).getString(KEY_REFRESH_TOKEN, null);
     }
 
+    public static void updateTokens(Context context, String accessToken, String refreshToken) {
+        prefs(context).edit()
+                .putString(KEY_ACCESS_TOKEN, accessToken)
+                .putString(KEY_REFRESH_TOKEN, refreshToken)
+                .apply();
+    }
+
     public static String getUserRole(Context context) {
         return prefs(context).getString(KEY_USER_ROLE, null);
     }
