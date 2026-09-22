@@ -118,7 +118,7 @@ public class DashboardChartView extends View {
         float density = getResources().getDisplayMetrics().density;
         float left = 14 * density;
         float right = getWidth() - 8 * density;
-        float top = 12 * density;
+        float top = 24 * density;
         float baseline = getHeight() - 28 * density;
         float chartHeight = baseline - top;
         int max = 0;
@@ -152,13 +152,26 @@ public class DashboardChartView extends View {
                     paint);
 
             paint.setColor(ContextCompat.getColor(getContext(), R.color.secondary_text));
-            canvas.drawText(AdminDashboardHelper.monthLabel(donor.mes), center, getHeight() - 8 * density, paint);
-            if (height > 18 * density) {
-                paint.setColor(ContextCompat.getColor(getContext(), R.color.primary_text));
-                paint.setTypeface(Typeface.DEFAULT_BOLD);
-                canvas.drawText(String.valueOf(donor.cantidad), center, baseline - height - 6 * density, paint);
-                paint.setTypeface(Typeface.DEFAULT);
-            }
+            float monthBaseline = getHeight() - 17 * density;
+            float yearBaseline = getHeight() - 5 * density;
+            canvas.drawText(
+                    AdminDashboardHelper.monthLabel(donor.mes),
+                    center,
+                    monthBaseline,
+                    paint);
+            canvas.drawText(
+                    AdminDashboardHelper.yearLabel(donor.anio),
+                    center,
+                    yearBaseline,
+                    paint);
+
+            paint.setColor(ContextCompat.getColor(getContext(), R.color.primary_text));
+            paint.setTypeface(Typeface.DEFAULT_BOLD);
+            float valueBaseline = Math.max(
+                    12 * density,
+                    baseline - height - 6 * density);
+            canvas.drawText(String.valueOf(donor.cantidad), center, valueBaseline, paint);
+            paint.setTypeface(Typeface.DEFAULT);
         }
     }
 }

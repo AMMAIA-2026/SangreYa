@@ -59,7 +59,14 @@
     <string name="coordinates">Coordenadas: %1$s, %2$s</string>
     <string name="back_to_campaigns">Volver a campañas</string>
     <string name="enroll">Inscribirme</string>
-    <string name="offline_enrollment_message">La inscripción estará disponible cuando conectemos el backend.</string>
+    <string name="enrollment_loading">Inscribiendo...</string>
+    <string name="enrollment_success">Inscripción confirmada. Ya hay %1$d personas inscriptas.</string>
+    <string name="enrollment_age_error">Para inscribirte tenés que tener entre 18 y 64 años.</string>
+    <string name="enrollment_duplicate_error">Ya estás inscripto en esta campaña.</string>
+    <string name="enrollment_capacity_error">La campaña ya no tiene cupos disponibles.</string>
+    <string name="enrollment_forbidden_error">No tenés permisos para inscribirte en esta campaña.</string>
+    <string name="enrollment_finished_error">La campaña ya finalizó y no acepta inscripciones.</string>
+    <string name="enrollment_network_error">No se pudo completar la inscripción. Revisá tu conexión e intentá nuevamente.</string>
     <string name="login_required_enrollment">Iniciá sesión para inscribirte a la donación.</string>
     <string name="campaign_not_found_error">La campaña solicitada no existe o ya no está disponible.</string>
     <string name="campaign_unauthorized_error">No tenés permisos para consultar esta campaña.</string>

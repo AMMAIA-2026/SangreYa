@@ -24,6 +24,7 @@ public final class CampaignApiRepository {
     private static final String BASE_URL =
             "https://sangreyaispc.pythonanywhere.com/";
     private static final String CAMPAIGNS_PATH = "campanias/";
+    private static final String ENROLLMENTS_PATH = "inscripciones/campanias/";
     private CampaignApiRepository() {
     }
 
@@ -39,14 +40,21 @@ public final class CampaignApiRepository {
 
     public static final class HttpException extends IOException {
         private final int statusCode;
+        private final String body;
 
         public HttpException(int statusCode, String body) {
-            super("HTTP " + statusCode + (body.isEmpty() ? "" : ": " + body));
+            super("HTTP " + statusCode
+                    + (body == null || body.isEmpty() ? "" : ": " + body));
             this.statusCode = statusCode;
+            this.body = body == null ? "" : body;
         }
 
         public int getStatusCode() {
             return statusCode;
+        }
+
+        public String getBody() {
+            return body;
         }
     }
 
@@ -66,6 +74,20 @@ public final class CampaignApiRepository {
 
     public static boolean isNetworkError(Exception exception) {
         return exception instanceof IOException && !(exception instanceof HttpException);
+    }
+
+    public static String getErrorCode(Exception exception) {
+        if (!(exception instanceof HttpException)) {
+            return null;
+        }
+
+        try {
+            String code = new JSONObject(((HttpException) exception).getBody())
+                    .optString("codigo", "");
+            return code.isEmpty() ? null : code;
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     public static void getCampaigns(Callback<List<Campaign>> callback) {
@@ -97,6 +119,28 @@ public final class CampaignApiRepository {
             Callback<Campaign> callback) {
         request(CAMPAIGNS_PATH + campaignId + "/", accessToken, response ->
                 fromJson(new JSONObject(response)), callback);
+    }
+
+    public static void enrollInCampaign(
+            int campaignId,
+            String accessToken,
+            Callback<Integer> callback) {
+        new Thread(() -> {
+            try {
+                String response = executePost(
+                        ENROLLMENTS_PATH + campaignId + "/",
+                        accessToken);
+                int totalInscriptos = new JSONObject(response)
+                        .getInt("totalInscriptos");
+                mainHandler().post(() -> callback.onSuccess(totalInscriptos));
+            } catch (Exception exception) {
+                Log.e(
+                        "CampaignApiRepository",
+                        "Error al inscribirse en la campaña " + campaignId,
+                        exception);
+                mainHandler().post(() -> callback.onError(exception));
+            }
+        }).start();
     }
 
     private interface Parser<T> {
@@ -133,6 +177,39 @@ public final class CampaignApiRepository {
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(10000);
             connection.setRequestProperty("Accept", "application/json");
+            if (accessToken != null && !accessToken.trim().isEmpty()) {
+                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
+
+            int statusCode = connection.getResponseCode();
+            InputStream stream = statusCode >= 200 && statusCode < 300
+                    ? connection.getInputStream()
+                    : connection.getErrorStream();
+            String body = readBody(stream);
+
+            if (statusCode < 200 || statusCode >= 300) {
+                throw new HttpException(statusCode, body);
+            }
+
+            return body;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    private static String executePost(String path, String accessToken) throws Exception {
+        HttpURLConnection connection = null;
+
+        try {
+            URL url = new URL(BASE_URL + path);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json");
             if (accessToken != null && !accessToken.trim().isEmpty()) {
                 connection.setRequestProperty("Authorization", "Bearer " + accessToken);
             }
