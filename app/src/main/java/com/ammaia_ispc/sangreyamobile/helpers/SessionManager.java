@@ -41,6 +41,10 @@ public final class SessionManager {
         return prefs(context).getString(KEY_ACCESS_TOKEN, null);
     }
 
+    public static int getUserId(Context context) {
+        return prefs(context).getInt(KEY_USER_ID, -1);
+    }
+
     public static String getRefreshToken(Context context) {
         return prefs(context).getString(KEY_REFRESH_TOKEN, null);
     }

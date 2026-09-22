@@ -47,6 +47,39 @@
     <string name="campaign_date_description">Fecha de la campaña</string>
     <string name="campaign_loading">Cargando campañas</string>
 
+    <!--ProfileActivity-->
+    <string name="profile_title">Mi perfil</string>
+    <string name="profile_subtitle">Mantené actualizados tus datos personales</string>
+    <string name="profile_loading">Cargando perfil</string>
+    <string name="profile_username_label">Nombre de usuario</string>
+    <string name="profile_email_label">Correo electrónico</string>
+    <string name="profile_dni_label">DNI</string>
+    <string name="profile_name_label">Nombre</string>
+    <string name="profile_last_name_label">Apellido</string>
+    <string name="profile_birth_date_label">Fecha de nacimiento</string>
+    <string name="profile_birth_date_hint">DD/MM/AAAA</string>
+    <string name="profile_save_button">Guardar cambios</string>
+    <string name="profile_updated_message">Perfil actualizado correctamente.</string>
+    <string name="profile_load_error">No se pudo cargar tu perfil. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="profile_update_error">No se pudieron guardar los cambios. Revisá los datos e intentá nuevamente.</string>
+    <string name="profile_session_error">Tu sesión no está disponible. Iniciá sesión nuevamente.</string>
+    <string name="profile_unauthorized_error">No tenés permisos para modificar este perfil.</string>
+    <string name="profile_not_found_error">No encontramos tu perfil.</string>
+    <string name="profile_required_field">Completá este campo.</string>
+    <string name="profile_username_invalid">Usá hasta 150 caracteres válidos para el nombre de usuario.</string>
+    <string name="profile_username_taken">Ese nombre de usuario ya está en uso.</string>
+    <string name="profile_email_invalid">Ingresá un correo electrónico válido.</string>
+    <string name="profile_email_taken">Ese correo electrónico ya está registrado.</string>
+    <string name="profile_dni_invalid">El DNI debe tener 7 u 8 dígitos.</string>
+    <string name="profile_dni_taken">Ese DNI ya está registrado.</string>
+    <string name="profile_name_invalid">Usá sólo letras, tildes y espacios, con hasta 25 caracteres.</string>
+    <string name="profile_birth_date_invalid">Ingresá una fecha válida con formato DD/MM/AAAA.</string>
+    <string name="profile_generic_validation_error">Revisá los datos ingresados.</string>
+    <string name="profile_age_warning_title">Edad fuera del rango de donación</string>
+    <string name="profile_age_warning_message">La fecha elegida te deja fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrás inscribirte en nuevas campañas. Las inscripciones que ya tenés no se cancelan automáticamente. ¿Querés guardar el cambio?</string>
+    <string name="profile_age_warning_cancel">Cancelar</string>
+    <string name="profile_age_warning_confirm">Guardar de todos modos</string>
+
     <!--CampaignDetail-->
     <string name="registered_detail">%1$d personas ya se inscribieron</string>
     <string name="capacity">Cupo %1$d</string>

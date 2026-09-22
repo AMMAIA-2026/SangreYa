@@ -51,6 +51,9 @@
             android:name=".activities.CampaignDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminDashboardActivity"
             android:exported="false" />
         <activity

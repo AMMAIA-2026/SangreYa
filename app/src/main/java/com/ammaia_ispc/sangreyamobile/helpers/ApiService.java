@@ -5,12 +5,14 @@ import com.ammaia_ispc.sangreyamobile.model.LoginResponse;
 import com.ammaia_ispc.sangreyamobile.model.RefreshRequest;
 import com.ammaia_ispc.sangreyamobile.model.RefreshResponse;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
+import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface ApiService {
 
@@ -22,4 +24,9 @@ public interface ApiService {
 
     @GET("usuarios/{usuarioId}/")
     Call<AuthUser> getUserProfile(@Path("usuarioId") int userId);
+
+    @PUT("usuarios/{usuarioId}/")
+    Call<AuthUser> updateUserProfile(
+            @Path("usuarioId") int userId,
+            @Body UserUpdateRequest request);
 }
