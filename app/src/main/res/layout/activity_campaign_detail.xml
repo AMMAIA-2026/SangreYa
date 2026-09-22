@@ -189,7 +189,22 @@
                         android:textColor="@color/secondary_text"
                         android:textSize="9sp" />
                 </LinearLayout>
-            </LinearLayout>
+                </LinearLayout>
+
+            <Button
+                android:id="@+id/admin_enrollments_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/action_button_height"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_button_primary"
+                android:stateListAnimator="@null"
+                android:text="@string/admin_view_enrollments"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/center_section"

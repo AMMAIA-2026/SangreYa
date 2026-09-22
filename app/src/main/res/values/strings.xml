@@ -47,6 +47,33 @@
     <string name="campaign_date_description">Fecha de la campaña</string>
     <string name="campaign_loading">Cargando campañas</string>
 
+    <!--Enrollments-->
+    <string name="enrollments_title">Mis inscripciones</string>
+    <string name="enrollments_subtitle">Consultá las campañas en las que participás o participaste</string>
+    <string name="enrollments_current_filter">Actuales y próximas</string>
+    <string name="enrollments_history_filter">Historial</string>
+    <string name="enrollment_badge">Inscripto</string>
+    <string name="enrollments_loading">Cargando tus inscripciones</string>
+    <string name="enrollments_empty_current">No tenés inscripciones actuales o próximas.</string>
+    <string name="enrollments_empty_history">Todavía no tenés inscripciones históricas.</string>
+    <string name="enrollments_load_error">No se pudieron cargar tus inscripciones. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="cancel_enrollment">Cancelar inscripción</string>
+    <string name="cancel_enrollment_title">¿Cancelar inscripción?</string>
+    <string name="cancel_enrollment_message">Vas a cancelar tu inscripción a %1$s. Podrás volver a inscribirte mientras la campaña siga disponible y tenga cupo.</string>
+    <string name="cancel_enrollment_confirm">Cancelar inscripción</string>
+    <string name="cancel_enrollment_success">Inscripción cancelada. Podés volver a inscribirte si la campaña sigue disponible y tiene cupo.</string>
+    <string name="cancel_enrollment_finished">La campaña ya finalizó y no se puede cancelar esta inscripción.</string>
+    <string name="cancel_enrollment_error">No se pudo cancelar la inscripción. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="admin_view_enrollments">Ver inscripciones</string>
+    <string name="admin_enrollments_title">Inscripciones</string>
+    <string name="admin_enrollments_subtitle">Personas inscriptas en esta campaña</string>
+    <string name="admin_enrollments_campaign_name">Campaña: %1$s</string>
+    <string name="admin_enrollments_user_name">%1$s, %2$s</string>
+    <string name="admin_enrollments_loading">Cargando inscriptos</string>
+    <string name="admin_enrollments_empty">No hay usuarios inscriptos en esta campaña.</string>
+    <string name="admin_enrollments_error">No se pudieron cargar los inscriptos. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="admin_enrollments_unauthorized">No tenés permisos para consultar las inscripciones.</string>
+
     <!--ProfileActivity-->
     <string name="profile_title">Mi perfil</string>
     <string name="profile_subtitle">Mantené actualizados tus datos personales</string>

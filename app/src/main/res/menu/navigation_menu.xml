@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_blood_drop"
         android:title="@string/campaigns_navigation" />
     <item
+        android:id="@+id/nav_enrollments"
+        android:icon="@drawable/ic_list"
+        android:title="@string/enrollments_navigation" />
+    <item
         android:id="@+id/nav_contact"
         android:icon="@drawable/ic_messages"
         android:title="@string/menu_contact" />
