@@ -6,6 +6,9 @@ import com.ammaia_ispc.sangreyamobile.model.RefreshRequest;
 import com.ammaia_ispc.sangreyamobile.model.RefreshResponse;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
+import com.ammaia_ispc.sangreyamobile.model.HealthCenterResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,4 +32,8 @@ public interface ApiService {
     Call<AuthUser> updateUserProfile(
             @Path("usuarioId") int userId,
             @Body UserUpdateRequest request);
+
+
+    @GET("centros-salud/")
+    Call<List<HealthCenterResponse>> getHealthCenters();
 }
