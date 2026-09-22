@@ -6,6 +6,7 @@ import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public final class AdminDashboardHelper {
 
@@ -45,6 +46,10 @@ public final class AdminDashboardHelper {
     public static String monthLabel(int month) {
         String[] months = {"", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"};
         return month >= 1 && month <= 12 ? months[month] : "";
+    }
+
+    public static String yearLabel(int year) {
+        return String.format(Locale.getDefault(), "%02d", Math.abs(year % 100));
     }
 
 }

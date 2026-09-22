@@ -27,6 +27,9 @@ public class CampaignDetailActivity extends AppCompatActivity {
     private boolean standardUser;
     private String user;
     private String role;
+    private Button enrollButton;
+    private View actionArea;
+    private boolean enrollmentInProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,29 +134,116 @@ public class CampaignDetailActivity extends AppCompatActivity {
     }
 
     private void bindEnrollmentAction() {
-        if (campaign.calculatedStatus.equals("Finalizada") || ExtraKeys.ROLE_ADMIN.equals(role)) {
+        actionArea = findViewById(R.id.action_area);
+        enrollButton = findViewById(R.id.enroll_button);
+        actionArea.setVisibility(View.GONE);
+        boolean adminUser = ExtraKeys.ROLE_ADMIN.equals(role) || SessionManager.isAdmin(this);
+        if ("Finalizada".equals(campaign.calculatedStatus) || adminUser) {
             return;
         }
 
-        View actionArea = findViewById(R.id.action_area);
-        Button enrollButton = findViewById(R.id.enroll_button);
         actionArea.setVisibility(View.VISIBLE);
-        View.OnClickListener enrollmentListener = view -> showEnrollmentMessage();
+        View.OnClickListener enrollmentListener = view -> {
+            if (standardUser) {
+                enroll();
+            } else {
+                showEnrollmentMessage();
+            }
+        };
         actionArea.setOnClickListener(enrollmentListener);
         enrollButton.setOnClickListener(enrollmentListener);
     }
 
+    private void enroll() {
+        if (enrollmentInProgress) {
+            return;
+        }
+
+        String accessToken = SessionManager.getAccessToken(this);
+        if (TextUtils.isEmpty(accessToken)) {
+            showEnrollmentMessage();
+            return;
+        }
+
+        setEnrollmentInProgress(true);
+        CampaignApiRepository.enrollInCampaign(
+                campaign.id,
+                accessToken,
+                new CampaignApiRepository.Callback<Integer>() {
+                    @Override
+                    public void onSuccess(Integer totalInscriptos) {
+                        setEnrollmentInProgress(false);
+                        ((TextView) findViewById(R.id.detail_registered)).setText(
+                                getString(R.string.registered_detail, totalInscriptos));
+                        showEnrollmentToast(
+                                getString(R.string.enrollment_success, totalInscriptos));
+                        loadCampaignDetails();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        setEnrollmentInProgress(false);
+                        showEnrollmentToast(enrollmentErrorMessage(exception));
+                    }
+                });
+    }
+
+    private void setEnrollmentInProgress(boolean inProgress) {
+        enrollmentInProgress = inProgress;
+        if (actionArea != null) {
+            actionArea.setEnabled(!inProgress);
+        }
+        if (enrollButton != null) {
+            enrollButton.setEnabled(!inProgress);
+            enrollButton.setText(inProgress ? R.string.enrollment_loading : R.string.enroll);
+        }
+    }
+
+    private int enrollmentErrorMessage(Exception exception) {
+        String code = CampaignApiRepository.getErrorCode(exception);
+        if ("edad_no_permitida".equals(code)) {
+            return R.string.enrollment_age_error;
+        }
+        if ("inscripcion_duplicada".equals(code)) {
+            return R.string.enrollment_duplicate_error;
+        }
+        if ("cupo_completo".equals(code)) {
+            return R.string.enrollment_capacity_error;
+        }
+        if ("campania_finalizada".equals(code)) {
+            return R.string.enrollment_finished_error;
+        }
+        if (exception instanceof CampaignApiRepository.HttpException) {
+            int statusCode = ((CampaignApiRepository.HttpException) exception).getStatusCode();
+            if (statusCode == 403) {
+                return R.string.enrollment_forbidden_error;
+            }
+            if (statusCode == 401) {
+                return R.string.session_expired_message;
+            }
+            if (statusCode == 404) {
+                return R.string.campaign_not_found_error;
+            }
+        }
+        return R.string.enrollment_network_error;
+    }
+
     private void showEnrollmentMessage() {
-        int messageRes = standardUser
-                ? R.string.offline_enrollment_message
-                : R.string.login_required_enrollment;
+        showEnrollmentToast(R.string.login_required_enrollment);
+    }
+
+    private void showEnrollmentToast(int messageRes) {
+        showEnrollmentToast(getString(messageRes));
+    }
+
+    private void showEnrollmentToast(String message) {
         View toastView = getLayoutInflater().inflate(R.layout.toast_enrollment, null);
         ((TextView) toastView.findViewById(R.id.toast_message))
-                .setText(messageRes);
+                .setText(message);
 
         Toast toast = Toast.makeText(
                 this,
-                messageRes,
+                message,
                 Toast.LENGTH_LONG);
         toast.setGravity(
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
