@@ -3,6 +3,7 @@ package com.ammaia_ispc.sangreyamobile.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,12 +12,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.model.LoginRequest;
+import com.ammaia_ispc.sangreyamobile.model.LoginResponse;
+import android.util.Log;
 import android.util.Patterns;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = "LoginActivity";
 
     private EditText etEmail;
     private EditText etPassword;
@@ -39,6 +60,10 @@ public class LoginActivity extends AppCompatActivity {
 
         tvRegistrate = findViewById(R.id.tvRegistrate);
         tvOlvidasteContrasena = findViewById(R.id.tvOlvidasteContrasena);
+
+        if (getIntent().getBooleanExtra(ExtraKeys.EXTRA_SESSION_EXPIRED, false)) {
+            showMessage(getString(R.string.session_expired_message));
+        }
 
         tvRegistrate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,34 +94,117 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(LoginActivity.this, "Por favor, completá todos los campos", Toast.LENGTH_SHORT).show();
+            showMessage(getString(R.string.error_required_fields));
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(
-                    LoginActivity.this,
-                    "Ingresá un email válido",
-                    Toast.LENGTH_SHORT
-            ).show();
-        }
-
-        else if (AdminDashboardHelper.isMockAdminEmail(email)
-                && !AdminDashboardHelper.isMockAdmin(email, password)) {
-            Toast.makeText(
-                    LoginActivity.this,
-                    R.string.invalid_admin_credentials,
-                    Toast.LENGTH_SHORT).show();
+            showMessage(getString(R.string.error_invalid_email));
         } else {
-            boolean admin = AdminDashboardHelper.isMockAdmin(email, password);
-            Intent intent = new Intent(
-                    LoginActivity.this,
-                    admin ? AdminDashboardActivity.class : MainActivity.class);
-            intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, !admin);
-            intent.putExtra(ExtraKeys.EXTRA_USER, email);
-            if (admin) {
-                intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
+            performLogin(email, password);
+        }
+    }
+
+    private void performLogin(String email, String password) {
+        setLoading(true);
+        ApiClient.getApiService(this).login(new LoginRequest(email, password)).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                setLoading(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    handleLoginSuccess(response.body());
+                } else {
+                    handleLoginError(response.errorBody());
+                }
             }
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                setLoading(false);
+                showMessage(getString(R.string.error_connection));
+            }
+        });
+    }
+
+    private void handleLoginSuccess(LoginResponse body) {
+        SessionManager.saveSession(this, body.getAccess(), body.getRefresh(), body.getUser());
+        boolean admin = SessionManager.isAdmin(this);
+        Intent intent = new Intent(
+                LoginActivity.this,
+                admin ? AdminDashboardActivity.class : MainActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, !admin);
+        intent.putExtra(ExtraKeys.EXTRA_USER, body.getUser().getEmail());
+        if (admin) {
+            intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
+            intent.putExtra(ExtraKeys.EXTRA_ACCESS_TOKEN, body.getAccess());
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void handleLoginError(ResponseBody errorBody) {
+        Map<String, List<String>> errors = parseFieldErrors(errorBody);
+        List<String> messages = new ArrayList<>();
+        if (errors.containsKey("email")) {
+            messages.addAll(errors.get("email"));
+        }
+        if (errors.containsKey("password")) {
+            messages.addAll(errors.get("password"));
+        }
+        if (errors.containsKey("non_field_errors")) {
+            messages.addAll(errors.get("non_field_errors"));
         }
 
+        if (messages.isEmpty()) {
+            showMessage(getString(R.string.error_login_generico));
+        } else {
+            showMessage(TextUtils.join(" ", messages));
+        }
+    }
+
+    private Map<String, List<String>> parseFieldErrors(ResponseBody errorBody) {
+        Map<String, List<String>> errors = new HashMap<>();
+        if (errorBody == null) {
+            return errors;
+        }
+        try {
+            JsonObject json = new JsonParser().parse(errorBody.string()).getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
+                String field = entry.getKey();
+                if ("codigo".equals(field) || "status_code".equals(field)) {
+                    continue;
+                }
+                List<String> messages = new ArrayList<>();
+                JsonElement value = entry.getValue();
+                if (value.isJsonArray()) {
+                    for (JsonElement item : value.getAsJsonArray()) {
+                        messages.add(item.getAsString());
+                    }
+                } else if (value.isJsonPrimitive()) {
+                    messages.add(value.getAsString());
+                }
+                if (!messages.isEmpty()) {
+                    errors.put(field, messages);
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to parse login error body", e);
+        }
+        return errors;
+    }
+
+    private void showMessage(String message) {
+        View toastView = getLayoutInflater().inflate(R.layout.toast_enrollment, null);
+        ((TextView) toastView.findViewById(R.id.toast_message)).setText(message);
+
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.setGravity(
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
+                0,
+                getResources().getDimensionPixelSize(R.dimen.toast_bottom_offset));
+        toast.setView(toastView);
+        toast.show();
+    }
+
+    private void setLoading(boolean loading) {
+        btnIngresar.setEnabled(!loading);
+        btnIngresar.setText(loading ? R.string.ingresando : R.string.btn_ingresar);
     }
 }

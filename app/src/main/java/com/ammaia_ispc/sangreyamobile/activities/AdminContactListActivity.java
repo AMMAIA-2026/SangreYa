@@ -6,16 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.MockContactRepository;
-import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
 import com.google.android.material.button.MaterialButton;
 
@@ -37,18 +36,14 @@ public class AdminContactListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-        String role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
-
-        // CA-35: acceso no autorizado (simula el 403 hasta que exista el backend real)
-        if (!ExtraKeys.ROLE_ADMIN.equals(role)) {
-            Toast.makeText(this, getString(R.string.error_unauthorized_access), Toast.LENGTH_SHORT).show();
-            finish();
+        if (!SessionManager.requireAdmin(this)) {
             return;
         }
 
+        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
+
         if (user == null) {
-            user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
+            user = "";
         }
 
         setContentView(R.layout.activity_admin_contact_list);
@@ -145,6 +140,7 @@ public class AdminContactListActivity extends AppCompatActivity {
     private void openDashboard() {
         Intent intent = new Intent(this, AdminDashboardActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_USER, user);
+        intent.putExtra(ExtraKeys.EXTRA_ACCESS_TOKEN, SessionManager.getAccessToken(this));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

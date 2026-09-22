@@ -15,7 +15,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.activities.AboutUsActivity;
 import com.ammaia_ispc.sangreyamobile.activities.LoginActivity;
-import com.ammaia_ispc.sangreyamobile.activities.MainActivity;
 import com.ammaia_ispc.sangreyamobile.activities.RegisterActivity;
 import com.ammaia_ispc.sangreyamobile.activities.ContactActivity;
 
@@ -70,10 +69,7 @@ public final class NavigationDrawerHelper {
                 intent = new Intent(activity, RegisterActivity.class);
                 activity.startActivity(intent);
             } else if (item.getItemId() == R.id.nav_logout) {
-                intent = new Intent(activity, MainActivity.class);
-                intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                activity.startActivity(intent);
+                SessionManager.logout(activity);
             } else {
                 return false;
             }

@@ -8,19 +8,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public final class AdminDashboardHelper {
-    public static final String MOCK_ADMIN_EMAIL = "admin@unmail.com";
-    public static final String MOCK_ADMIN_PASSWORD = "Qwerty123.";
 
     private AdminDashboardHelper() {
-    }
-
-    public static boolean isMockAdmin(String email, String password) {
-        return MOCK_ADMIN_EMAIL.equals(email)
-                && MOCK_ADMIN_PASSWORD.equals(password);
-    }
-
-    public static boolean isMockAdminEmail(String email) {
-        return MOCK_ADMIN_EMAIL.equals(email);
     }
 
     public static int totalCampaigns(List<DashboardCampaignStatus> statuses) {

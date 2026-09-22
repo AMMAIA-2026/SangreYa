@@ -16,10 +16,10 @@ import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
-import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
 
@@ -41,13 +41,16 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!SessionManager.requireAdmin(this)) {
+            return;
+        }
 
         CampaignHelper.configureSystemBars(this);
 
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
 
         if (user == null) {
-            user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
+            user = "";
         }
 
         setContentView(R.layout.activity_admin_campaign_list);
@@ -378,6 +381,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         intent.putExtra(
                 ExtraKeys.EXTRA_USER,
                 user
+        );
+
+        intent.putExtra(
+                ExtraKeys.EXTRA_ACCESS_TOKEN,
+                SessionManager.getAccessToken(this)
         );
 
         intent.addFlags(

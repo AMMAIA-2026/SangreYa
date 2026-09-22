@@ -63,7 +63,10 @@
     <string name="hint_email">nombre@correo.com</string>
     <string name="hint_password">********</string>
     <string name="btn_ingresar">iniciar sesion</string>
-    <string name="invalid_admin_credentials">Credenciales de administrador incorrectas.</string>
+    <string name="ingresando">Ingresando...</string>
+    <string name="error_connection">No se pudo conectar. Intentá nuevamente.</string>
+    <string name="error_login_generico">No pudimos iniciar sesión. Intentá nuevamente.</string>
+    <string name="session_expired_message">Tu sesión expiró. Iniciá sesión nuevamente.</string>
     <string name="texto_no_tenes_cuenta">¿no tenes cuenta? </string>
     <string name="link_registrate">registrate</string>
 
