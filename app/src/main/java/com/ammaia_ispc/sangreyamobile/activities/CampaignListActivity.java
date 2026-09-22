@@ -73,6 +73,7 @@ public class CampaignListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        refreshNavigation();
         loadCampaigns();
     }
 
@@ -114,12 +115,20 @@ public class CampaignListActivity extends AppCompatActivity {
         activeFilter = findViewById(R.id.filter_active);
         upcomingFilter = findViewById(R.id.filter_upcoming);
         searchInput = findViewById(R.id.campaign_search);
+        refreshNavigation();
+        if (!standardUser) {
+            findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.profile_navigation_item).setOnClickListener(view ->
+                    startActivity(new Intent(this, ProfileActivity.class)));
+        }
+    }
+
+    private void refreshNavigation() {
+        user = SessionManager.getUserName(this);
         DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);
         NavigationView navigationView = findViewById(R.id.campaign_navigation_view);
         NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user, role);
-        if (!standardUser) {
-            findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
-        }
     }
 
     private void configureFilters() {
