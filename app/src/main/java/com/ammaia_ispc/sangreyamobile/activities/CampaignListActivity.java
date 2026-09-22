@@ -119,6 +119,8 @@ public class CampaignListActivity extends AppCompatActivity {
         if (!standardUser) {
             findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
         } else {
+            findViewById(R.id.enrollments_navigation_item).setOnClickListener(view ->
+                    startActivity(new Intent(this, EnrollmentsActivity.class)));
             findViewById(R.id.profile_navigation_item).setOnClickListener(view ->
                     startActivity(new Intent(this, ProfileActivity.class)));
         }

@@ -5,7 +5,11 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
+import com.ammaia_ispc.sangreyamobile.model.Enrollment;
+import com.ammaia_ispc.sangreyamobile.model.EnrollmentUser;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
+import com.ammaia_ispc.sangreyamobile.model.MyEnrollments;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,6 +29,7 @@ public final class CampaignApiRepository {
             "https://sangreyaispc.pythonanywhere.com/";
     private static final String CAMPAIGNS_PATH = "campanias/";
     private static final String ENROLLMENTS_PATH = "inscripciones/campanias/";
+    private static final String MY_ENROLLMENTS_PATH = "inscripciones/mis-inscripciones/";
     private CampaignApiRepository() {
     }
 
@@ -143,6 +148,64 @@ public final class CampaignApiRepository {
         }).start();
     }
 
+    public static void getMyEnrollments(
+            String accessToken,
+            Callback<MyEnrollments> callback) {
+        request(MY_ENROLLMENTS_PATH, accessToken, response -> {
+            JSONObject json = new JSONObject(response);
+            return new MyEnrollments(
+                    parseEnrollments(json.optJSONArray("actuales")),
+                    parseEnrollments(json.optJSONArray("historicas")));
+        }, callback);
+    }
+
+    public static void getCampaignEnrollments(
+            int campaignId,
+            String accessToken,
+            Callback<CampaignEnrollments> callback) {
+        request(ENROLLMENTS_PATH + campaignId + "/", accessToken, response -> {
+            JSONObject json = new JSONObject(response);
+            List<EnrollmentUser> users = new ArrayList<>();
+            JSONArray usersJson = json.optJSONArray("usuarios");
+            if (usersJson != null) {
+                for (int index = 0; index < usersJson.length(); index++) {
+                    JSONObject user = usersJson.optJSONObject(index);
+                    if (user != null) {
+                        users.add(new EnrollmentUser(
+                                user.optInt("id"),
+                                user.optString("nombre", ""),
+                                user.optString("apellido", ""),
+                                user.optString("dni", ""),
+                                user.optString("email", "")));
+                    }
+                }
+            }
+
+            return new CampaignEnrollments(
+                    fromJson(json.optJSONObject("campania")),
+                    json.optInt("total_inscriptos", users.size()),
+                    users);
+        }, callback);
+    }
+
+    public static void cancelEnrollment(
+            int enrollmentId,
+            String accessToken,
+            Callback<Void> callback) {
+        new Thread(() -> {
+            try {
+                executeDelete("inscripciones/" + enrollmentId + "/", accessToken);
+                mainHandler().post(() -> callback.onSuccess(null));
+            } catch (Exception exception) {
+                Log.e(
+                        "CampaignApiRepository",
+                        "Error al cancelar la inscripción " + enrollmentId,
+                        exception);
+                mainHandler().post(() -> callback.onError(exception));
+            }
+        }).start();
+    }
+
     private interface Parser<T> {
         T parse(String response) throws Exception;
     }
@@ -232,6 +295,36 @@ public final class CampaignApiRepository {
         }
     }
 
+    private static void executeDelete(String path, String accessToken) throws Exception {
+        HttpURLConnection connection = null;
+
+        try {
+            URL url = new URL(BASE_URL + path);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("DELETE");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+            connection.setRequestProperty("Accept", "application/json");
+            if (accessToken != null && !accessToken.trim().isEmpty()) {
+                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
+
+            int statusCode = connection.getResponseCode();
+            InputStream stream = statusCode >= 200 && statusCode < 300
+                    ? connection.getInputStream()
+                    : connection.getErrorStream();
+            String body = readBody(stream);
+
+            if (statusCode < 200 || statusCode >= 300) {
+                throw new HttpException(statusCode, body);
+            }
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
     private static String readBody(InputStream stream) throws Exception {
         if (stream == null) {
             return "";
@@ -249,6 +342,10 @@ public final class CampaignApiRepository {
     }
 
     static Campaign fromJson(JSONObject json) {
+        if (json == null) {
+            return null;
+        }
+
         String campaignStatus = normalizeStatus(
                 json.optString("estado_campania", ""));
         String calculatedStatus = normalizeStatus(
@@ -283,6 +380,23 @@ public final class CampaignApiRepository {
                 totalRegistered,
                 campaignStatus,
                 calculatedStatus);
+    }
+
+    private static List<Enrollment> parseEnrollments(JSONArray jsonArray) {
+        List<Enrollment> enrollments = new ArrayList<>();
+        if (jsonArray == null) {
+            return enrollments;
+        }
+
+        for (int index = 0; index < jsonArray.length(); index++) {
+            JSONObject item = jsonArray.optJSONObject(index);
+            if (item != null) {
+                enrollments.add(new Enrollment(
+                        item.optInt("id"),
+                        fromJson(item.optJSONObject("campania"))));
+            }
+        }
+        return enrollments;
     }
 
     private static HealthCenter fromHealthCenter(JSONObject json) {

@@ -54,6 +54,12 @@
             android:name=".activities.ProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.EnrollmentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AdminCampaignEnrollmentsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminDashboardActivity"
             android:exported="false" />
         <activity

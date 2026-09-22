@@ -1,5 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -28,6 +29,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
     private String user;
     private String role;
     private Button enrollButton;
+    private Button adminEnrollmentsButton;
     private View actionArea;
     private boolean enrollmentInProgress;
 
@@ -116,6 +118,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
 
         bindHealthCenter();
         bindEnrollmentAction();
+        bindAdminEnrollmentsAction();
     }
 
     private void bindHealthCenter() {
@@ -152,6 +155,19 @@ public class CampaignDetailActivity extends AppCompatActivity {
         };
         actionArea.setOnClickListener(enrollmentListener);
         enrollButton.setOnClickListener(enrollmentListener);
+    }
+
+    private void bindAdminEnrollmentsAction() {
+        adminEnrollmentsButton = findViewById(R.id.admin_enrollments_button);
+        boolean adminUser = ExtraKeys.ROLE_ADMIN.equals(role) || SessionManager.isAdmin(this);
+        adminEnrollmentsButton.setVisibility(adminUser ? View.VISIBLE : View.GONE);
+        if (adminUser) {
+            adminEnrollmentsButton.setOnClickListener(view -> {
+                Intent intent = new Intent(this, AdminCampaignEnrollmentsActivity.class);
+                intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
+                startActivity(intent);
+            });
+        }
     }
 
     private void enroll() {

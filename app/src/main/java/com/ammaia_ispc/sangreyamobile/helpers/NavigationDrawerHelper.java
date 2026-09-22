@@ -17,6 +17,7 @@ import com.ammaia_ispc.sangreyamobile.activities.AboutUsActivity;
 import com.ammaia_ispc.sangreyamobile.activities.LoginActivity;
 import com.ammaia_ispc.sangreyamobile.activities.RegisterActivity;
 import com.ammaia_ispc.sangreyamobile.activities.ContactActivity;
+import com.ammaia_ispc.sangreyamobile.activities.EnrollmentsActivity;
 
 public final class NavigationDrawerHelper {
     private NavigationDrawerHelper() {
@@ -52,6 +53,7 @@ public final class NavigationDrawerHelper {
         navigationView.getMenu().findItem(R.id.nav_register).setVisible(!standardUser && !admin);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(standardUser || admin);
         navigationView.getMenu().findItem(R.id.nav_campaigns).setVisible(admin);
+        navigationView.getMenu().findItem(R.id.nav_enrollments).setVisible(standardUser);
 
         navigationView.setNavigationItemSelectedListener(item -> {
             Intent intent;
@@ -61,6 +63,9 @@ public final class NavigationDrawerHelper {
             } else  if (item.getItemId() == R.id.nav_campaigns) {
                 intent = new Intent(activity, AdminCampaignListActivity.class);
                 intent.putExtra(ExtraKeys.EXTRA_USER, displayUser);
+                activity.startActivity(intent);
+            } else if (item.getItemId() == R.id.nav_enrollments) {
+                intent = new Intent(activity, EnrollmentsActivity.class);
                 activity.startActivity(intent);
             } else if (item.getItemId() == R.id.nav_contact) {
                 intent = new Intent(activity, ContactActivity.class);
