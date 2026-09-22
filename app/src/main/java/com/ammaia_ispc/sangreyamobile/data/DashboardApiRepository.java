@@ -51,7 +51,9 @@ public final class DashboardApiRepository {
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(10000);
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            if (accessToken != null && !accessToken.trim().isEmpty()) {
+                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
 
             int statusCode = connection.getResponseCode();
             InputStream stream = statusCode >= 200 && statusCode < 300
@@ -60,8 +62,7 @@ public final class DashboardApiRepository {
             String body = readBody(stream);
 
             if (statusCode < 200 || statusCode >= 300) {
-                throw new IllegalStateException(
-                        "HTTP " + statusCode + (body.isEmpty() ? "" : ": " + body));
+                throw new CampaignApiRepository.HttpException(statusCode, body);
             }
 
             return body;
@@ -93,27 +94,28 @@ public final class DashboardApiRepository {
                 json.optInt("total_campanias"),
                 json.optInt("total_inscripciones"),
                 json.optInt("total_donantes"),
-                parseMonthlyDonors(json.optJSONArray("donantes_por_mes")),
+                parseMonthlySeries(json.optJSONArray("donantes_por_mes")),
+                parseMonthlySeries(json.optJSONArray("inscripciones_por_mes")),
                 parseCampaignStatuses(json.optJSONArray("campanias_por_estado")),
                 parseCampaigns(json.optJSONArray("campanias_recientes")));
     }
 
-    private static List<DashboardMonthlyDonors> parseMonthlyDonors(JSONArray jsonArray) {
-        List<DashboardMonthlyDonors> donors = new ArrayList<>();
+    private static List<DashboardMonthlyDonors> parseMonthlySeries(JSONArray jsonArray) {
+        List<DashboardMonthlyDonors> series = new ArrayList<>();
         if (jsonArray == null) {
-            return donors;
+            return series;
         }
 
         for (int index = 0; index < jsonArray.length(); index++) {
             JSONObject item = jsonArray.optJSONObject(index);
             if (item != null) {
-                donors.add(new DashboardMonthlyDonors(
+                series.add(new DashboardMonthlyDonors(
                         item.optInt("anio"),
                         item.optInt("mes"),
                         item.optInt("cantidad")));
             }
         }
-        return donors;
+        return series;
     }
 
     private static List<DashboardCampaignStatus> parseCampaignStatuses(JSONArray jsonArray) {

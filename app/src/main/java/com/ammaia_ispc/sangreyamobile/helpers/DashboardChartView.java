@@ -21,6 +21,7 @@ public class DashboardChartView extends View {
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private List<DashboardMonthlyDonors> monthlyDonors = Collections.emptyList();
     private List<DashboardCampaignStatus> campaignStatuses = Collections.emptyList();
+    private String emptyMessage = "";
     private boolean donutChart;
 
     public DashboardChartView(Context context, AttributeSet attrs) {
@@ -37,6 +38,11 @@ public class DashboardChartView extends View {
     public void setCampaignStatuses(List<DashboardCampaignStatus> campaignStatuses) {
         donutChart = true;
         this.campaignStatuses = campaignStatuses;
+        invalidate();
+    }
+
+    public void setEmptyMessage(String emptyMessage) {
+        this.emptyMessage = emptyMessage == null ? "" : emptyMessage;
         invalidate();
     }
 
@@ -97,6 +103,15 @@ public class DashboardChartView extends View {
 
     private void drawBars(Canvas canvas) {
         if (monthlyDonors.isEmpty()) {
+            if (!emptyMessage.isEmpty()) {
+                float density = getResources().getDisplayMetrics().density;
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(ContextCompat.getColor(getContext(), R.color.secondary_text));
+                paint.setTextAlign(Paint.Align.CENTER);
+                paint.setTypeface(Typeface.DEFAULT);
+                paint.setTextSize(12 * density);
+                canvas.drawText(emptyMessage, getWidth() / 2f, getHeight() / 2f, paint);
+            }
             return;
         }
 

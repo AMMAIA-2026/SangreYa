@@ -3,7 +3,11 @@ package com.ammaia_ispc.sangreyamobile.activities;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -19,6 +23,7 @@ import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
@@ -27,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class CampaignListActivity extends AppCompatActivity {
     private List<Campaign> campaigns = new ArrayList<>();
@@ -36,9 +42,11 @@ public class CampaignListActivity extends AppCompatActivity {
     private MaterialButton allFilter;
     private MaterialButton activeFilter;
     private MaterialButton upcomingFilter;
+    private EditText searchInput;
     private boolean standardUser;
     private String user;
     private String role;
+    private String currentFilter = "Todas";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +55,19 @@ public class CampaignListActivity extends AppCompatActivity {
         standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
         role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
+        if (TextUtils.isEmpty(user)) {
+            user = SessionManager.getUserName(this);
+        }
+        if (!standardUser && !TextUtils.isEmpty(user) && !SessionManager.isAdmin(this)) {
+            standardUser = true;
+        }
+        if (TextUtils.isEmpty(role) && SessionManager.isAdmin(this)) {
+            role = ExtraKeys.ROLE_ADMIN;
+        }
         setContentView(R.layout.activity_campaign_list);
         bindViews();
         configureFilters();
+        configureSearch();
     }
 
     @Override
@@ -64,7 +82,7 @@ public class CampaignListActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<Campaign> value) {
                 campaigns = value;
-                showCampaigns("Todas");
+                showCampaigns(currentFilter);
                 setLoading(false);
             }
 
@@ -95,6 +113,7 @@ public class CampaignListActivity extends AppCompatActivity {
         allFilter = findViewById(R.id.filter_all);
         activeFilter = findViewById(R.id.filter_active);
         upcomingFilter = findViewById(R.id.filter_upcoming);
+        searchInput = findViewById(R.id.campaign_search);
         DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);
         NavigationView navigationView = findViewById(R.id.campaign_navigation_view);
         NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user, role);
@@ -104,13 +123,36 @@ public class CampaignListActivity extends AppCompatActivity {
     }
 
     private void configureFilters() {
-        allFilter.setOnClickListener(view -> showCampaigns("Todas"));
-        activeFilter.setOnClickListener(view -> showCampaigns("Activas"));
-        upcomingFilter.setOnClickListener(view -> showCampaigns("Próximas"));
+        allFilter.setOnClickListener(view -> selectFilter("Todas"));
+        activeFilter.setOnClickListener(view -> selectFilter("Activas"));
+        upcomingFilter.setOnClickListener(view -> selectFilter("Próximas"));
+    }
+
+    private void configureSearch() {
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                showCampaigns(currentFilter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private void selectFilter(String filter) {
+        currentFilter = filter;
+        showCampaigns(currentFilter);
     }
 
     private void showCampaigns(String filter) {
         campaignContainer.removeAllViews();
+        String query = searchInput.getText().toString().trim().toLowerCase(Locale.getDefault());
         List<Campaign> orderedCampaigns = new ArrayList<>(campaigns);
         orderedCampaigns.sort(Comparator
                 .comparingInt((Campaign campaign) -> campaignStatusOrder(campaign.calculatedStatus))
@@ -118,14 +160,16 @@ public class CampaignListActivity extends AppCompatActivity {
 
         for (Campaign campaign : orderedCampaigns) {
             if ("Finalizada".equals(campaign.calculatedStatus)) {
-                // TODO: Let administrators see finalized campaigns here. Finalized campaigns are hidden
-                // for guests and standard users, but administrators must be able to view them.
                 continue;
             }
             if (filter.equals("Activas") && !campaign.calculatedStatus.equals("Activa")) {
                 continue;
             }
             if (filter.equals("Próximas") && !campaign.calculatedStatus.equals("Proximamente")) {
+                continue;
+            }
+            if (!query.isEmpty()
+                    && !campaign.title.toLowerCase(Locale.getDefault()).contains(query)) {
                 continue;
             }
             View card = createCampaignCard(campaign);

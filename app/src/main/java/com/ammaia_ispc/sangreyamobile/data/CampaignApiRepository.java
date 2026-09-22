@@ -55,12 +55,27 @@ public final class CampaignApiRepository {
                 && ((HttpException) exception).getStatusCode() == 404;
     }
 
+    public static boolean isUnauthorized(Exception exception) {
+        if (!(exception instanceof HttpException)) {
+            return false;
+        }
+
+        int statusCode = ((HttpException) exception).getStatusCode();
+        return statusCode == 401 || statusCode == 403;
+    }
+
     public static boolean isNetworkError(Exception exception) {
         return exception instanceof IOException && !(exception instanceof HttpException);
     }
 
     public static void getCampaigns(Callback<List<Campaign>> callback) {
-        request(CAMPAIGNS_PATH, response -> {
+        getCampaigns(null, callback);
+    }
+
+    public static void getCampaigns(
+            String accessToken,
+            Callback<List<Campaign>> callback) {
+        request(CAMPAIGNS_PATH, accessToken, response -> {
             JSONArray jsonArray = new JSONArray(response);
             List<Campaign> campaigns = new ArrayList<>();
 
@@ -73,7 +88,14 @@ public final class CampaignApiRepository {
     }
 
     public static void getCampaign(int campaignId, Callback<Campaign> callback) {
-        request(CAMPAIGNS_PATH + campaignId + "/", response ->
+        getCampaign(campaignId, null, callback);
+    }
+
+    public static void getCampaign(
+            int campaignId,
+            String accessToken,
+            Callback<Campaign> callback) {
+        request(CAMPAIGNS_PATH + campaignId + "/", accessToken, response ->
                 fromJson(new JSONObject(response)), callback);
     }
 
@@ -83,11 +105,12 @@ public final class CampaignApiRepository {
 
     private static <T> void request(
             String path,
+            String accessToken,
             Parser<T> parser,
             Callback<T> callback) {
         new Thread(() -> {
             try {
-                String response = executeGet(path);
+                String response = executeGet(path, accessToken);
                 T value = parser.parse(response);
                 mainHandler().post(() -> callback.onSuccess(value));
             } catch (Exception exception) {
@@ -100,7 +123,7 @@ public final class CampaignApiRepository {
         }).start();
     }
 
-    private static String executeGet(String path) throws Exception {
+    private static String executeGet(String path, String accessToken) throws Exception {
         HttpURLConnection connection = null;
 
         try {
@@ -110,6 +133,9 @@ public final class CampaignApiRepository {
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(10000);
             connection.setRequestProperty("Accept", "application/json");
+            if (accessToken != null && !accessToken.trim().isEmpty()) {
+                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
 
             int statusCode = connection.getResponseCode();
             InputStream stream = statusCode >= 200 && statusCode < 300

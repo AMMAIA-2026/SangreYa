@@ -18,6 +18,7 @@ public final class SessionManager {
     private static final String KEY_REFRESH_TOKEN = "refresh_token";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_ROLE = "user_role";
 
     private static final String ROLE_ADMIN = "Administrador";
@@ -31,6 +32,7 @@ public final class SessionManager {
                 .putString(KEY_REFRESH_TOKEN, refreshToken)
                 .putInt(KEY_USER_ID, user.getId())
                 .putString(KEY_USER_EMAIL, user.getEmail())
+                .putString(KEY_USER_NAME, user.getDisplayName())
                 .putString(KEY_USER_ROLE, user.getRol())
                 .apply();
     }
@@ -41,6 +43,16 @@ public final class SessionManager {
 
     public static String getRefreshToken(Context context) {
         return prefs(context).getString(KEY_REFRESH_TOKEN, null);
+    }
+
+    public static String getUserName(Context context) {
+        return prefs(context).getString(KEY_USER_NAME, "");
+    }
+
+    public static void updateUserName(Context context, String userName) {
+        prefs(context).edit()
+                .putString(KEY_USER_NAME, userName == null ? "" : userName)
+                .apply();
     }
 
     public static void updateTokens(Context context, String accessToken, String refreshToken) {
