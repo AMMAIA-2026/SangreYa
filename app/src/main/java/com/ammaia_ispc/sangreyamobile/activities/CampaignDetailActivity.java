@@ -1,6 +1,7 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.google.android.material.navigation.NavigationView;
@@ -38,6 +40,12 @@ public class CampaignDetailActivity extends AppCompatActivity {
         standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
         role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
+        if (TextUtils.isEmpty(user)) {
+            user = SessionManager.getUserName(this);
+        }
+        if (!standardUser && !TextUtils.isEmpty(user) && !SessionManager.isAdmin(this)) {
+            standardUser = true;
+        }
         setContentView(R.layout.activity_campaign_detail);
         bindViews();
 
@@ -49,6 +57,9 @@ public class CampaignDetailActivity extends AppCompatActivity {
     private void loadCampaignDetails() {
         CampaignApiRepository.getCampaign(
                 campaign.id,
+                ExtraKeys.ROLE_ADMIN.equals(role)
+                        ? SessionManager.getAccessToken(this)
+                        : null,
                 new CampaignApiRepository.Callback<Campaign>() {
                     @Override
                     public void onSuccess(Campaign value) {
@@ -60,6 +71,8 @@ public class CampaignDetailActivity extends AppCompatActivity {
                     public void onError(Exception exception) {
                         int messageRes = CampaignApiRepository.isNotFound(exception)
                                 ? R.string.campaign_not_found_error
+                                : CampaignApiRepository.isUnauthorized(exception)
+                                ? R.string.campaign_unauthorized_error
                                 : CampaignApiRepository.isNetworkError(exception)
                                 ? R.string.campaign_network_error
                                 : R.string.campaign_detail_error;

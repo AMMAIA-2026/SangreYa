@@ -32,11 +32,14 @@ public final class NavigationDrawerHelper {
         TextView greeting = activity.findViewById(R.id.header_greeting);
         TextView subtitle = activity.findViewById(R.id.header_subtitle);
         boolean admin = ExtraKeys.ROLE_ADMIN.equals(role);
-        if ((standardUser) && !TextUtils.isEmpty(user)) {
-            greeting.setText(activity.getString(R.string.logged_user_greeting, user));
+        String displayUser = TextUtils.isEmpty(user)
+                ? SessionManager.getUserName(activity)
+                : user;
+        if ((standardUser) && !TextUtils.isEmpty(displayUser)) {
+            greeting.setText(activity.getString(R.string.logged_user_greeting, displayUser));
             subtitle.setText(R.string.campaign_subtitle);
-        } else if((admin) && !TextUtils.isEmpty(user)) {
-            greeting.setText(activity.getString(R.string.logged_user_greeting, user));
+        } else if((admin) && !TextUtils.isEmpty(displayUser)) {
+            greeting.setText(activity.getString(R.string.logged_user_greeting, displayUser));
         } else {
             greeting.setText(R.string.guest_greeting);
             subtitle.setText(R.string.guest_subtitle);
@@ -57,7 +60,7 @@ public final class NavigationDrawerHelper {
                 activity.startActivity(intent);
             } else  if (item.getItemId() == R.id.nav_campaigns) {
                 intent = new Intent(activity, AdminCampaignListActivity.class);
-                intent.putExtra(ExtraKeys.EXTRA_USER, user);
+                intent.putExtra(ExtraKeys.EXTRA_USER, displayUser);
                 activity.startActivity(intent);
             } else if (item.getItemId() == R.id.nav_contact) {
                 intent = new Intent(activity, ContactActivity.class);

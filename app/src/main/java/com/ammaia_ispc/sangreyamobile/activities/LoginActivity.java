@@ -18,6 +18,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.LoginRequest;
 import com.ammaia_ispc.sangreyamobile.model.LoginResponse;
+import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 import android.util.Log;
 import android.util.Patterns;
 
@@ -125,12 +126,35 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleLoginSuccess(LoginResponse body) {
         SessionManager.saveSession(this, body.getAccess(), body.getRefresh(), body.getUser());
+        setLoading(true);
+        ApiClient.getApiService(this)
+                .getUserProfile(body.getUser().getId())
+                .enqueue(new Callback<AuthUser>() {
+                    @Override
+                    public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            SessionManager.updateUserName(
+                                    LoginActivity.this,
+                                    response.body().getDisplayName());
+                        }
+                        continueLogin(body);
+                    }
+
+                    @Override
+                    public void onFailure(Call<AuthUser> call, Throwable t) {
+                        continueLogin(body);
+                    }
+                });
+    }
+
+    private void continueLogin(LoginResponse body) {
+        setLoading(false);
         boolean admin = SessionManager.isAdmin(this);
         Intent intent = new Intent(
                 LoginActivity.this,
                 admin ? AdminDashboardActivity.class : MainActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, !admin);
-        intent.putExtra(ExtraKeys.EXTRA_USER, body.getUser().getEmail());
+        intent.putExtra(ExtraKeys.EXTRA_USER, SessionManager.getUserName(this));
         if (admin) {
             intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
             intent.putExtra(ExtraKeys.EXTRA_ACCESS_TOKEN, body.getAccess());

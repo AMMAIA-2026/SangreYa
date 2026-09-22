@@ -4,6 +4,8 @@ public class AuthUser {
 
     private int id;
     private String email;
+    private String nombre;
+    private String apellido;
     private String rol;
 
     public int getId() {
@@ -12,6 +14,18 @@ public class AuthUser {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getDisplayName() {
+        return nombre == null ? "" : nombre.trim();
     }
 
     public String getRol() {

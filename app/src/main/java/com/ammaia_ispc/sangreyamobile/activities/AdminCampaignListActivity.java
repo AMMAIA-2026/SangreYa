@@ -4,31 +4,37 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class AdminCampaignListActivity extends AppCompatActivity {
 
-    private List<Campaign> campaigns;
+    private List<Campaign> campaigns = new ArrayList<>();
     private LinearLayout campaignContainer;
     private EditText searchInput;
     private MaterialButton allFilter;
@@ -49,8 +55,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
 
-        if (user == null) {
-            user = "";
+        if (TextUtils.isEmpty(user)) {
+            user = SessionManager.getUserName(this);
         }
 
         setContentView(R.layout.activity_admin_campaign_list);
@@ -64,8 +70,39 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        campaigns = MockCampaignRepository.getCampaigns();
-        showCampaigns();
+        loadCampaigns();
+    }
+
+    private void loadCampaigns() {
+        String accessToken = SessionManager.getAccessToken(this);
+        if (accessToken == null || accessToken.trim().isEmpty()) {
+            showCampaignError(new CampaignApiRepository.HttpException(
+                    401,
+                    "No hay un token de administrador"));
+            return;
+        }
+
+        CampaignApiRepository.getCampaigns(
+                accessToken,
+                new CampaignApiRepository.Callback<List<Campaign>>() {
+                    @Override
+                    public void onSuccess(List<Campaign> value) {
+                        campaigns = value;
+                        showCampaigns();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        showCampaignError(exception);
+                    }
+                });
+    }
+
+    private void showCampaignError(Exception exception) {
+        String message = CampaignApiRepository.isUnauthorized(exception)
+                ? "No tenés permisos para consultar las campañas (401/403)."
+                : "No se pudieron cargar las campañas. Revisá tu conexión e intentá nuevamente.";
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void bindViews() {
@@ -76,6 +113,16 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         activeFilter = findViewById(R.id.admin_filter_active);
         upcomingFilter = findViewById(R.id.admin_filter_upcoming);
         finishedFilter = findViewById(R.id.admin_filter_finished);
+
+        DrawerLayout drawerLayout = findViewById(R.id.admin_campaign_drawer);
+        NavigationView navigationView = findViewById(R.id.admin_campaign_navigation_view);
+        NavigationDrawerHelper.configure(
+                this,
+                drawerLayout,
+                navigationView,
+                false,
+                user,
+                ExtraKeys.ROLE_ADMIN);
 
         findViewById(R.id.admin_campaign_add)
                 .setOnClickListener(view -> openCreateCampaign());
@@ -330,6 +377,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         intent.putExtra(
                 ExtraKeys.EXTRA_STANDARD_USER,
                 false
+        );
+
+        intent.putExtra(
+                ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL,
+                true
         );
 
         intent.putExtra(

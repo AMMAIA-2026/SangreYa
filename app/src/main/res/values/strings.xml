@@ -4,11 +4,19 @@
     <string name="dashboard_donors_title">Donantes por mes</string>
     <string name="dashboard_donors_subtitle">Personas que donaron sangre cada mes</string>
     <string name="dashboard_donors_total">%1$d donantes</string>
+    <string name="dashboard_no_donors">Todavía no hay donantes registrados.</string>
+    <string name="dashboard_no_enrollments">Todavía no hay inscripciones registradas.</string>
+    <string name="dashboard_campaigns_total">%1$d campañas</string>
+    <string name="dashboard_enrollments_total">%1$d inscripciones</string>
+    <string name="dashboard_enrollments_title">Inscripciones por mes</string>
     <string name="dashboard_status_title">Campañas por estado</string>
     <string name="dashboard_status_legend">%1$s    %2$d%%</string>
     <string name="dashboard_campaigns_label">campañas</string>
     <string name="dashboard_recent_title">Campañas recientes</string>
     <string name="dashboard_campaign_registered">%1$d inscriptos</string>
+    <string name="dashboard_token_required">El dashboard requiere un token de administrador.</string>
+    <string name="dashboard_unauthorized_error">No tenés permisos para consultar el dashboard (401/403).</string>
+    <string name="dashboard_load_error">No se pudo cargar el dashboard. Revisá tu conexión e intentá nuevamente.</string>
     <string name="dashboard_navigation">Dashboard</string>
     <string name="users_navigation">Usuarios</string>
     <string name="messages_navigation">Mensajes</string>
@@ -54,6 +62,7 @@
     <string name="offline_enrollment_message">La inscripción estará disponible cuando conectemos el backend.</string>
     <string name="login_required_enrollment">Iniciá sesión para inscribirte a la donación.</string>
     <string name="campaign_not_found_error">La campaña solicitada no existe o ya no está disponible.</string>
+    <string name="campaign_unauthorized_error">No tenés permisos para consultar esta campaña.</string>
     <string name="campaign_network_error">No se pudo cargar la campaña. Revisá tu conexión e intentá nuevamente.</string>
     <string name="campaign_detail_error">No se pudo cargar el detalle de la campaña.</string>
 

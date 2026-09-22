@@ -2,6 +2,7 @@ package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,7 +25,6 @@ import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.google.android.material.navigation.NavigationView;
 
-import android.text.TextUtils;
 import android.widget.Toast;
 
 public class AdminDashboardActivity extends AppCompatActivity {
@@ -38,8 +38,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
         }
         CampaignHelper.configureSystemBars(this);
         user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-        if (user == null) {
-            user = "";
+        if (TextUtils.isEmpty(user)) {
+            user = SessionManager.getUserName(this);
         }
         setContentView(R.layout.activity_admin_dashboard);
         bindViews();
@@ -70,11 +70,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        String accessToken = getIntent().getStringExtra(ExtraKeys.EXTRA_ACCESS_TOKEN);
-        if (TextUtils.isEmpty(accessToken)) {
+        String accessToken = SessionManager.getAccessToken(this);
+        if (accessToken == null || accessToken.trim().isEmpty()) {
             Toast.makeText(
                     this,
-                    "El dashboard requiere un token de administrador",
+                    R.string.dashboard_token_required,
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -84,27 +84,43 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 new CampaignApiRepository.Callback<AdminDashboardData>() {
                     @Override
                     public void onSuccess(AdminDashboardData dashboard) {
-                        bindDonorsChart(dashboard);
+                        bindDashboardMetrics(dashboard);
                         bindStatusChart(dashboard);
                         bindRecentCampaigns(dashboard);
                     }
 
                     @Override
                     public void onError(Exception exception) {
+                        String message = CampaignApiRepository.isUnauthorized(exception)
+                                ? getString(R.string.dashboard_unauthorized_error)
+                                : getString(R.string.dashboard_load_error);
                         Toast.makeText(
                                 AdminDashboardActivity.this,
-                                "No se pudo cargar el dashboard: " + exception.getMessage(),
+                                message,
                                 Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
-    private void bindDonorsChart(AdminDashboardData dashboard) {
+    private void bindDashboardMetrics(AdminDashboardData dashboard) {
+        ((TextView) findViewById(R.id.dashboard_campaigns_total))
+                .setText(getString(R.string.dashboard_campaigns_total, dashboard.totalCampanias));
+        ((TextView) findViewById(R.id.dashboard_enrollments_total))
+                .setText(getString(R.string.dashboard_enrollments_total, dashboard.totalInscripciones));
         ((TextView) findViewById(R.id.dashboard_donors_total))
                 .setText(getString(R.string.dashboard_donors_total, dashboard.totalDonantes));
 
-        DashboardChartView chart = findViewById(R.id.dashboard_donors_chart);
-        chart.setMonthlyDonors(dashboard.donantesPorMes);
+        DashboardChartView donorsChart = findViewById(R.id.dashboard_donors_chart);
+        donorsChart.setMonthlyDonors(dashboard.donantesPorMes);
+        donorsChart.setEmptyMessage(dashboard.donantesPorMes.isEmpty()
+                ? getString(R.string.dashboard_no_donors)
+                : "");
+
+        DashboardChartView enrollmentsChart = findViewById(R.id.dashboard_enrollments_chart);
+        enrollmentsChart.setMonthlyDonors(dashboard.inscripcionesPorMes);
+        enrollmentsChart.setEmptyMessage(dashboard.inscripcionesPorMes.isEmpty()
+                ? getString(R.string.dashboard_no_enrollments)
+                : "");
     }
 
     private void bindStatusChart(AdminDashboardData dashboard) {
@@ -112,6 +128,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         chart.setCampaignStatuses(dashboard.campaniasPorEstado);
 
         LinearLayout legend = findViewById(R.id.dashboard_status_legend);
+        legend.removeAllViews();
         int total = AdminDashboardHelper.totalCampaigns(dashboard.campaniasPorEstado);
         for (DashboardCampaignStatus status : dashboard.campaniasPorEstado) {
             TextView item = new TextView(this);
@@ -131,6 +148,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     private void bindRecentCampaigns(AdminDashboardData dashboard) {
         LinearLayout container = findViewById(R.id.dashboard_recent_container);
+        container.removeAllViews();
         for (Campaign campaign : AdminDashboardHelper.orderRecentCampaigns(dashboard.campaniasRecientes)) {
             View item = getLayoutInflater().inflate(
                     R.layout.item_admin_recent_campaign,
@@ -158,6 +176,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private void openCampaign(Campaign campaign) {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
+        intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);
         intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
         intent.putExtra(ExtraKeys.EXTRA_USER, user);
         intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
