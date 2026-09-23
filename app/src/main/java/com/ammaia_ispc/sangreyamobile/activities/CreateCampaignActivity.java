@@ -17,12 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
-import com.ammaia_ispc.sangreyamobile.data.MockHealthCenterRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
+import com.ammaia_ispc.sangreyamobile.data.HealthCenterApiRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +59,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         nameInput = findViewById(R.id.create_campaign_name);
         healthCenterInput = findViewById(R.id.create_campaign_health_center);
-        setupHealthCenterOptions();
+        loadHealthCenters();
         addressInput = findViewById(R.id.create_campaign_address);
         startDateInput = findViewById(R.id.create_campaign_start_date);
         endDateInput = findViewById(R.id.create_campaign_end_date);
@@ -80,14 +80,52 @@ public class CreateCampaignActivity extends AppCompatActivity {
         }
     }
 
-    private void setupHealthCenterOptions() {
+    private void loadHealthCenters() {
+        View publishButton = findViewById(R.id.create_campaign_publish);
+
+        // Mientras carga: solo "sin centro", y bloqueamos selector y botón.
+        populateHealthCenterOptions(new ArrayList<>());
+        healthCenterInput.setEnabled(false);
+        publishButton.setEnabled(false);
+
+        HealthCenterApiRepository.loadHealthCenters(this, new HealthCenterApiRepository.HealthCentersCallback() {
+            @Override
+            public void onSuccess(List<HealthCenter> centers) {
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+                populateHealthCenterOptions(centers);
+                healthCenterInput.setEnabled(true);
+                publishButton.setEnabled(true);
+            }
+
+            @Override
+            public void onError(int messageRes) {
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+                // Si estamos editando y falló la carga, conservamos el centro que ya tenía
+                // la campaña para no borrarlo sin querer al guardar.
+                List<HealthCenter> fallback = new ArrayList<>();
+                if (editingCampaign != null && editingCampaign.healthCenter != null) {
+                    fallback.add(editingCampaign.healthCenter);
+                }
+                populateHealthCenterOptions(fallback);
+                healthCenterInput.setEnabled(true);
+                publishButton.setEnabled(true);
+                Toast.makeText(CreateCampaignActivity.this, messageRes, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void populateHealthCenterOptions(List<HealthCenter> centers) {
         healthCenterOptions.clear();
         healthCenterOptions.add(null);
 
         List<String> labels = new ArrayList<>();
         labels.add(getString(R.string.health_center_none_option));
 
-        for (HealthCenter center : MockHealthCenterRepository.getHealthCenters()) {
+        for (HealthCenter center : centers) {
             healthCenterOptions.add(center);
             labels.add(center.name + " — " + center.neighborhood + ", " + center.city);
         }
@@ -95,6 +133,21 @@ public class CreateCampaignActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, labels);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         healthCenterInput.setAdapter(adapter);
+
+        selectEditingCampaignCenter();
+    }
+
+    private void selectEditingCampaignCenter() {
+        if (editingCampaign == null || editingCampaign.healthCenter == null) {
+            return;
+        }
+        for (int index = 0; index < healthCenterOptions.size(); index++) {
+            HealthCenter option = healthCenterOptions.get(index);
+            if (option != null && option.id == editingCampaign.healthCenter.id) {
+                healthCenterInput.setSelection(index);
+                break;
+            }
+        }
     }
 
     private HealthCenter selectedHealthCenter() {
@@ -121,16 +174,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         endDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.endDate));
         if (editingCampaign.maximumCapacity != null) {
             capacityInput.setText(String.valueOf(editingCampaign.maximumCapacity));
-        }
-
-        if (editingCampaign.healthCenter != null) {
-            for (int index = 0; index < healthCenterOptions.size(); index++) {
-                HealthCenter option = healthCenterOptions.get(index);
-                if (option != null && option.id == editingCampaign.healthCenter.id) {
-                    healthCenterInput.setSelection(index);
-                    break;
-                }
-            }
         }
 
         if ("Activa".equals(editingCampaign.calculatedStatus)) {

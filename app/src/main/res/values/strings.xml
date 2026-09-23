@@ -192,6 +192,8 @@
     <string name="label_campaign_name">Nombre de la campaña</string>
     <string name="hint_campaign_name">Ej: Colecta Solidaria Centro</string>
     <string name="label_health_center">Centro de salud</string>
+    <string name="health_center_load_error_network">No se pudo conectar con el servidor. Revisá tu conexión e intentá de nuevo.</string>
+    <string name="health_center_load_error_server">No se pudieron cargar los centros de salud. Intentá más tarde.</string>
     <string name="health_center_none_option">Sin centro asignado</string>
     <string name="label_address">Dirección</string>
     <string name="hint_address">Calle y número</string>
