@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.appcompat.app.AlertDialog;
+
 public class AdminCampaignListActivity extends AppCompatActivity {
 
     private List<Campaign> campaigns = new ArrayList<>();
@@ -338,7 +340,84 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                 view -> openCampaignEdit(campaign)
         );
 
+        ImageView deleteButton =
+                card.findViewById(R.id.admin_campaign_delete);
+
+        deleteButton.setOnClickListener(
+                view -> confirmDeleteCampaign(campaign)
+        );
+
         return card;
+    }
+
+    private void confirmDeleteCampaign(Campaign campaign) {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar campaña")
+                .setMessage(
+                        "¿Estás seguro de que querés eliminar la campaña \""
+                                + campaign.title
+                                + "\"?"
+                )
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Eliminar", (dialog, which) ->
+                        deleteCampaign(campaign)
+                )
+                .show();
+    }
+
+    private void deleteCampaign(Campaign campaign) {
+
+        String accessToken = SessionManager.getAccessToken(this);
+
+        if (accessToken == null || accessToken.trim().isEmpty()) {
+            Toast.makeText(
+                    this,
+                    "No hay una sesión de administrador activa.",
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+
+        CampaignApiRepository.deleteCampaign(
+                campaign.id,
+                accessToken,
+                new CampaignApiRepository.Callback<Void>() {
+
+                    @Override
+                    public void onSuccess(Void value) {
+                        Toast.makeText(
+                                AdminCampaignListActivity.this,
+                                "Campaña eliminada correctamente.",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        loadCampaigns();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+
+                        String message;
+
+                        if (CampaignApiRepository.isUnauthorized(exception)) {
+                            message = "No tenés permisos para eliminar esta campaña.";
+                        } else if (CampaignApiRepository.isNotFound(exception)) {
+                            message = "La campaña no existe o ya fue eliminada.";
+                        } else if (CampaignApiRepository.isNetworkError(exception)) {
+                            message = "No se pudo conectar con el servidor. Revisá tu conexión.";
+                        } else {
+                            message = "No se pudo eliminar la campaña. Intentá nuevamente.";
+                        }
+
+                        Toast.makeText(
+                                AdminCampaignListActivity.this,
+                                message,
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                }
+        );
     }
 
     private void openCreateCampaign() {

@@ -206,6 +206,30 @@ public final class CampaignApiRepository {
         }).start();
     }
 
+    public static void deleteCampaign(
+            int campaignId,
+            String accessToken,
+            Callback<Void> callback) {
+
+        new Thread(() -> {
+            try {
+                executeDelete(
+                        CAMPAIGNS_PATH + campaignId + "/",
+                        accessToken);
+
+                mainHandler().post(() -> callback.onSuccess(null));
+
+            } catch (Exception exception) {
+                Log.e(
+                        "CampaignApiRepository",
+                        "Error al eliminar la campaña " + campaignId,
+                        exception);
+
+                mainHandler().post(() -> callback.onError(exception));
+            }
+        }).start();
+    }
+
     private interface Parser<T> {
         T parse(String response) throws Exception;
     }
