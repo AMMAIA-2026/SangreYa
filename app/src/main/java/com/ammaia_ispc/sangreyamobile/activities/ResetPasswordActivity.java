@@ -11,19 +11,30 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryRequest;
+import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryResponse;
 
 import java.util.regex.Pattern;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ResetPasswordActivity extends AppCompatActivity {
 
-    // Al menos 8 caracteres, al menos 1 mayúscula, al menos 1 número
     private static final Pattern PASSWORD_PATTERN =
-            Pattern.compile("^(?=.*[A-Z])(?=.*[0-9]).{8,}$");
+            Pattern.compile(
+                    "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])" +
+                            "(?=.*[^A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\\s]).{10,}$"
+            );
 
     private EditText newPasswordInput;
     private EditText confirmPasswordInput;
     private Button saveButton;
     private ImageView backButton;
+
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +46,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.saveButton);
         backButton = findViewById(R.id.backButton);
 
-        // Viene desde ForgotPasswordActivity. No se usa todavía, pero queda
-        // listo para cuando se conecte la llamada real a la API.
-        String email = getIntent().getStringExtra(ForgotPasswordActivity.EMAIL_KEY);
+        email = getIntent().getStringExtra(ForgotPasswordActivity.EMAIL_KEY);
 
         backButton.setOnClickListener(v -> finish());
         saveButton.setOnClickListener(v -> attemptSave());
@@ -47,8 +56,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
         String newPassword = newPasswordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
 
-        // CA-13: contraseña débil -> se informa el error y no se actualiza
-        if (TextUtils.isEmpty(newPassword) || !PASSWORD_PATTERN.matcher(newPassword).matches()) {
+        if (TextUtils.isEmpty(newPassword)
+                || !PASSWORD_PATTERN.matcher(newPassword).matches()) {
+
             newPasswordInput.setError(getString(R.string.error_weak_password));
             newPasswordInput.requestFocus();
             return;
@@ -60,14 +70,75 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: por ahora no hay llamada real a la API. Cuando se conecte
-        // el backend, acá va la llamada Retrofit (ej. POST con la nueva
-        // contraseña) y solo si la respuesta es OK se navega al Login.
-        Toast.makeText(this, "Contraseña guardada (simulado)", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(
+                    this,
+                    "No se pudo recuperar el email.",
+                    Toast.LENGTH_SHORT
+            ).show();
+            finish();
+            return;
+        }
 
-        Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+        saveButton.setEnabled(false);
+
+        PasswordRecoveryRequest request =
+                new PasswordRecoveryRequest(email, newPassword);
+
+        ApiClient.getPlainApiService()
+                .recoverPassword(request)
+                .enqueue(new Callback<PasswordRecoveryResponse>() {
+
+                    @Override
+                    public void onResponse(
+                            Call<PasswordRecoveryResponse> call,
+                            Response<PasswordRecoveryResponse> response) {
+
+                        saveButton.setEnabled(true);
+
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            Toast.makeText(
+                                    ResetPasswordActivity.this,
+                                    response.body().getMessage(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+
+                            Intent intent = new Intent(
+                                    ResetPasswordActivity.this,
+                                    LoginActivity.class
+                            );
+
+                            intent.setFlags(
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                            | Intent.FLAG_ACTIVITY_NEW_TASK
+                            );
+
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            Toast.makeText(
+                                    ResetPasswordActivity.this,
+                                    "No se pudo actualizar la contraseña.",
+                                    Toast.LENGTH_LONG
+                            ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<PasswordRecoveryResponse> call,
+                            Throwable t) {
+
+                        saveButton.setEnabled(true);
+
+                        Toast.makeText(
+                                ResetPasswordActivity.this,
+                                "No se pudo conectar con el servidor.",
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                });
     }
 }

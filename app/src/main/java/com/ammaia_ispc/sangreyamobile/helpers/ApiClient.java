@@ -29,7 +29,8 @@ public final class ApiClient {
         return retrofit.create(ApiService.class);
     }
 
-    static ApiService getPlainApiService() {
+
+    public static ApiService getPlainApiService() {
         if (plainRetrofit == null) {
             plainRetrofit = new Retrofit.Builder()
                     .baseUrl(ApiConfig.BASE_URL)
