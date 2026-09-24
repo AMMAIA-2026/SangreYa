@@ -7,6 +7,7 @@ import com.ammaia_ispc.sangreyamobile.model.RefreshResponse;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenterResponse;
+import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
 
 import java.util.List;
 
@@ -36,4 +37,8 @@ public interface ApiService {
 
     @GET("centros-salud/")
     Call<List<HealthCenterResponse>> getHealthCenters();
+
+
+    @POST("contactos/")
+    Call<Void> sendContact(@Body ContactRequest request);
 }

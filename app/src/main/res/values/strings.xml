@@ -248,6 +248,8 @@
     <string name="contact_response_note">Te responderemos a la brevedad a tu correo.</string>
     <string name="error_required_fields">Completá todos los campos</string>
     <string name="contact_sent_message">¡Mensaje enviado!</string>
+    <string name="contact_send_error_server">No se pudo enviar el mensaje. Inténtalo nuevamente.</string>
+    <string name="contact_send_error_network">No se pudo conectar con el servidor. Verifica tu conexión.</string>
 
     <!-- Administración de mensajes/contacto -->
     <string name="manage_contacts_title">Mensajes de contacto</string>

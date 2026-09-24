@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 
+import com.ammaia_ispc.sangreyamobile.data.ContactApiRepository;
+import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
 
 public class ContactActivity extends AppCompatActivity {
 
@@ -52,6 +54,7 @@ public class ContactActivity extends AppCompatActivity {
         String nombre = etNombre.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String mensaje = etMensaje.getText().toString().trim();
+        String motivo = spinnerMotivo.getSelectedItem().toString();
 
         boolean valido = true;
 
@@ -77,9 +80,33 @@ public class ContactActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO Sprint 2: POST real a /contacto/ (CA-31: se registra con tracked=false)
-        Toast.makeText(this, getString(R.string.contact_sent_message), Toast.LENGTH_SHORT).show();
-        finish();
+        ContactRequest request = new ContactRequest(
+                nombre,
+                email,
+                motivo,
+                mensaje
+        );
+
+        ContactApiRepository.sendContact(this, request, new ContactApiRepository.ContactCallback() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(
+                        ContactActivity.this,
+                        getString(R.string.contact_sent_message),
+                        Toast.LENGTH_SHORT
+                ).show();
+                finish();
+            }
+
+            @Override
+            public void onError(int messageRes) {
+                Toast.makeText(
+                        ContactActivity.this,
+                        getString(messageRes),
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
     }
 }
 
