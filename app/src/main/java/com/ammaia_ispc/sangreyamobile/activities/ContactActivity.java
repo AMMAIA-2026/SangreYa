@@ -25,6 +25,7 @@ public class ContactActivity extends AppCompatActivity {
 
     private EditText etNombre, etEmail, etMensaje;
     private Spinner spinnerMotivo;
+    private Button btnEnviar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class ContactActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etMensaje = findViewById(R.id.etMensaje);
         spinnerMotivo = findViewById(R.id.spinnerMotivo);
-        Button btnEnviar = findViewById(R.id.btnEnviar);
+        btnEnviar = findViewById(R.id.btnEnviar);
 
         etNombre.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_NOMBRE_LENGTH)});
         etMensaje.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_MENSAJE_LENGTH)});
@@ -80,6 +81,8 @@ public class ContactActivity extends AppCompatActivity {
             return;
         }
 
+        btnEnviar.setEnabled(false);
+
         ContactRequest request = new ContactRequest(
                 nombre,
                 email,
@@ -99,12 +102,41 @@ public class ContactActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onValidationError(String field, String message) {
+                switch (field) {
+                    case "correo_electronico":
+                        etEmail.setError(message);
+                        break;
+
+                    case "nombre_completo":
+                        etNombre.setError(message);
+                        break;
+
+                    case "mensaje":
+                        etMensaje.setError(message);
+                        break;
+
+                    default:
+                        Toast.makeText(
+                                ContactActivity.this,
+                                message,
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        break;
+                }
+
+                btnEnviar.setEnabled(true);
+            }
+
+            @Override
             public void onError(int messageRes) {
                 Toast.makeText(
                         ContactActivity.this,
                         getString(messageRes),
                         Toast.LENGTH_SHORT
                 ).show();
+
+                btnEnviar.setEnabled(true);
             }
         });
     }
