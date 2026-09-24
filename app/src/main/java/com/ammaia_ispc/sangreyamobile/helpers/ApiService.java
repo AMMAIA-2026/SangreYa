@@ -8,6 +8,8 @@ import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenterResponse;
 import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
+import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryRequest;
+import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryResponse;
 
 import java.util.List;
 
@@ -41,4 +43,9 @@ public interface ApiService {
 
     @POST("contactos/")
     Call<Void> sendContact(@Body ContactRequest request);
+
+
+    @POST("usuarios/recuperar-password/")
+    Call<PasswordRecoveryResponse> recoverPassword(
+            @Body PasswordRecoveryRequest request);
 }
