@@ -83,5 +83,14 @@
             android:padding="8dp"
             android:src="@drawable/ic_edit"
             android:contentDescription="@string/edit_campaign_description" />
+
+        <ImageView
+            android:id="@+id/admin_campaign_delete"
+            android:layout_width="@dimen/edit_button_size"
+            android:layout_height="@dimen/edit_button_size"
+            android:layout_marginStart="8dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Eliminar campaña" />
     </LinearLayout>
 </LinearLayout>
