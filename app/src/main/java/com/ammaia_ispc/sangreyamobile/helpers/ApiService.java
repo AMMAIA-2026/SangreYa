@@ -16,7 +16,9 @@ import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
 import java.util.List;
 
 import retrofit2.Call;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.POST;
@@ -58,4 +60,25 @@ public interface ApiService {
     @POST("usuarios/recuperar-password/")
     Call<PasswordRecoveryResponse> recoverPassword(
             @Body PasswordRecoveryRequest request);
+
+    @GET("campanias/")
+    Call<ResponseBody> getCampaigns();
+
+    @GET("campanias/{campaignId}/")
+    Call<ResponseBody> getCampaign(@Path("campaignId") int campaignId);
+
+    @POST("inscripciones/campanias/{campaignId}/")
+    Call<ResponseBody> enrollInCampaign(@Path("campaignId") int campaignId);
+
+    @GET("inscripciones/mis-inscripciones/")
+    Call<ResponseBody> getMyEnrollments();
+
+    @GET("inscripciones/campanias/{campaignId}/")
+    Call<ResponseBody> getCampaignEnrollments(@Path("campaignId") int campaignId);
+
+    @DELETE("inscripciones/{enrollmentId}/")
+    Call<Void> cancelEnrollment(@Path("enrollmentId") int enrollmentId);
+
+    @GET("dashboard/")
+    Call<ResponseBody> getDashboard();
 }

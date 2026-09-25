@@ -14,8 +14,8 @@
     <string name="dashboard_campaigns_label">campañas</string>
     <string name="dashboard_recent_title">Campañas recientes</string>
     <string name="dashboard_campaign_registered">%1$d inscriptos</string>
-    <string name="dashboard_token_required">El dashboard requiere un token de administrador.</string>
-    <string name="dashboard_unauthorized_error">No tenés permisos para consultar el dashboard (401/403).</string>
+    <string name="dashboard_token_required">No se pudo verificar tu acceso al panel. Iniciá sesión nuevamente.</string>
+    <string name="dashboard_unauthorized_error">No tenés permisos para consultar la información de administración.</string>
     <string name="dashboard_load_error">No se pudo cargar el dashboard. Revisá tu conexión e intentá nuevamente.</string>
     <string name="dashboard_navigation">Dashboard</string>
     <string name="users_navigation">Usuarios</string>
@@ -46,6 +46,7 @@
     <string name="campaign_location_description">Ubicación de la campaña</string>
     <string name="campaign_date_description">Fecha de la campaña</string>
     <string name="campaign_loading">Cargando campañas</string>
+    <string name="campaigns_load_error">No se pudieron cargar las campañas. Revisá tu conexión e intentá nuevamente.</string>
 
     <!--Enrollments-->
     <string name="enrollments_title">Mis inscripciones</string>
@@ -73,6 +74,8 @@
     <string name="admin_enrollments_empty">No hay usuarios inscriptos en esta campaña.</string>
     <string name="admin_enrollments_error">No se pudieron cargar los inscriptos. Revisá tu conexión e intentá nuevamente.</string>
     <string name="admin_enrollments_unauthorized">No tenés permisos para consultar las inscripciones.</string>
+    <string name="admin_campaigns_session_error">No se pudo verificar tu acceso. Iniciá sesión nuevamente.</string>
+    <string name="admin_campaigns_unauthorized">No tenés permisos para consultar las campañas.</string>
 
     <!--ProfileActivity-->
     <string name="profile_title">Mi perfil</string>
