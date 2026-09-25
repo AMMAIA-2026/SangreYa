@@ -59,8 +59,16 @@ Metodología: **Scrum**, sin roles fijos de desarrollo — todo el equipo trabaj
 
 1. Cloná este repositorio.
 2. Abrilo en Android Studio.
-3. Asegurate de tener el [backend de SangreYa](https://github.com/AMMAIA-2026/Proyecto2026) corriendo en `http://localhost:8000` (ver instrucciones de instalación en ese repositorio).
+3. El backend de SangreYa ya está deployado en `https://sangreyaispc.pythonanywhere.com/`. Si preferís correrlo local, seguí las instrucciones en el [repositorio del backend](https://github.com/AMMAIA-2026/Proyecto2026).
 4. Conectá un dispositivo o emulador y ejecutá la app (▶).
+
+---
+
+## Entrega y release
+
+- **Backend en producción:** `https://sangreyaispc.pythonanywhere.com/`
+- **APK / release:** _pendiente de publicar (ver TK-80)_
+- **Video demo:** _pendiente de grabar (ver TK-79)_
 
 ---
 
@@ -71,3 +79,4 @@ Requerimientos, historias de usuario, diagramas y actas de reunión están dispo
 ---
 
 > Este documento se actualiza a medida que se agregan nuevas funcionalidades.
+
