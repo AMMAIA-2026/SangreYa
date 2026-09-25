@@ -1,5 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -53,6 +54,7 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_campaign_enrollments);
         bindViews();
         configureNavigation();
+        configureBottomNavigation();
         showCampaign();
     }
 
@@ -80,6 +82,21 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
                 this,
                 drawerLayout,
                 navigationView);
+    }
+
+    private void configureBottomNavigation() {
+        findViewById(R.id.admin_enrollments_nav_dashboard)
+                .setOnClickListener(view -> startActivity(
+                        new Intent(this, AdminDashboardActivity.class)));
+        findViewById(R.id.admin_enrollments_nav_campaigns)
+                .setOnClickListener(view -> startActivity(
+                        new Intent(this, AdminCampaignListActivity.class)));
+        findViewById(R.id.admin_enrollments_nav_users)
+                .setOnClickListener(view -> startActivity(
+                        new Intent(this, UsersActivity.class)));
+        findViewById(R.id.admin_enrollments_nav_messages)
+                .setOnClickListener(view -> startActivity(
+                        new Intent(this, AdminContactListActivity.class)));
     }
 
     private void showCampaign() {
