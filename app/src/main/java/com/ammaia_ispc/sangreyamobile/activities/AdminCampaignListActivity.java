@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -44,7 +43,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     private MaterialButton upcomingFilter;
     private MaterialButton finishedFilter;
     private String currentFilter = "Todas";
-    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +52,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         }
 
         CampaignHelper.configureSystemBars(this);
-
-        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-
-        if (TextUtils.isEmpty(user)) {
-            user = SessionManager.getUserName(this);
-        }
 
         setContentView(R.layout.activity_admin_campaign_list);
 
@@ -76,17 +68,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     }
 
     private void loadCampaigns() {
-        String accessToken = SessionManager.getAccessToken(this);
-        if (accessToken == null || accessToken.trim().isEmpty()) {
-            Toast.makeText(
-                    this,
-                    R.string.admin_campaigns_session_error,
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
         CampaignApiRepository.getCampaigns(
-                accessToken,
+                this,
                 new CampaignApiRepository.Callback<List<Campaign>>() {
                     @Override
                     public void onSuccess(List<Campaign> value) {
@@ -122,10 +105,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         NavigationDrawerHelper.configure(
                 this,
                 drawerLayout,
-                navigationView,
-                false,
-                user,
-                ExtraKeys.ROLE_ADMIN);
+                navigationView);
 
         findViewById(R.id.admin_campaign_add)
                 .setOnClickListener(view -> openCreateCampaign());
@@ -136,14 +116,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         findViewById(R.id.admin_nav_users)
                 .setOnClickListener(view -> {
                     Intent intent = new Intent(this, UsersActivity.class);
-                    intent.putExtra(ExtraKeys.EXTRA_USER, user);
                     startActivity(intent);
                 });
 
         findViewById(R.id.admin_messages_navigation).setOnClickListener(view -> {
             Intent intent = new Intent(this, AdminContactListActivity.class);
-            intent.putExtra(ExtraKeys.EXTRA_USER, user);
-            intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
             startActivity(intent);
         });
 
@@ -368,7 +345,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     }
 
     private void deleteCampaign(Campaign campaign) {
-
         String accessToken = SessionManager.getAccessToken(this);
 
         if (accessToken == null || accessToken.trim().isEmpty()) {
@@ -380,6 +356,15 @@ public class AdminCampaignListActivity extends AppCompatActivity {
             return;
         }
 
+        // TODO (refactor pendiente): este flujo queda fuera del alcance actual.
+        // Motivo: hay que centralizar el manejo de jwt y auth.
+        // Aquí todavía usa HttpURLConnection y transporta el accessToken manualmente.
+        // Pasos para aplicarlo:
+        // 1. Agregar el DELETE en ApiService.
+        // 2. Cambiar el repository para recibir Context y usar ApiClient.
+        // 3. Dejar que AuthInterceptor y TokenAuthenticator administren el JWT.
+        // 4. Reemplazar la llamada siguiente por este ejemplo:
+        // CampaignApiRepository.deleteCampaign(this, campaign.id, callback);
         CampaignApiRepository.deleteCampaign(
                 campaign.id,
                 accessToken,
@@ -426,21 +411,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         Intent intent =
                 new Intent(this, CreateCampaignActivity.class);
 
-        intent.putExtra(
-                ExtraKeys.EXTRA_STANDARD_USER,
-                false
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER_ROLE,
-                ExtraKeys.ROLE_ADMIN
-        );
-
         startActivity(intent);
     }
 
@@ -455,23 +425,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         );
 
         intent.putExtra(
-                ExtraKeys.EXTRA_STANDARD_USER,
-                false
-        );
-
-        intent.putExtra(
                 ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL,
                 true
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER_ROLE,
-                ExtraKeys.ROLE_ADMIN
         );
 
         startActivity(intent);
@@ -487,21 +442,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                 campaign
         );
 
-        intent.putExtra(
-                ExtraKeys.EXTRA_STANDARD_USER,
-                false
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER_ROLE,
-                ExtraKeys.ROLE_ADMIN
-        );
-
         startActivity(intent);
     }
 
@@ -509,16 +449,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
         Intent intent =
                 new Intent(this, AdminDashboardActivity.class);
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_ACCESS_TOKEN,
-                SessionManager.getAccessToken(this)
-        );
 
         intent.addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TOP

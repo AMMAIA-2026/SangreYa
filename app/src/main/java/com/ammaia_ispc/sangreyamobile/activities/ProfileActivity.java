@@ -104,14 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void configureNavigation() {
         DrawerLayout drawerLayout = findViewById(R.id.profile_drawer);
         NavigationView navigationView = findViewById(R.id.profile_navigation_view);
-        boolean standardUser = !SessionManager.isAdmin(this);
-        NavigationDrawerHelper.configure(
-                this,
-                drawerLayout,
-                navigationView,
-                standardUser,
-                SessionManager.getUserName(this),
-                SessionManager.getUserRole(this));
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
     }
 
     private void loadProfile() {

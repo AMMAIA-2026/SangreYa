@@ -1,9 +1,11 @@
 package com.ammaia_ispc.sangreyamobile.data;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
 import com.ammaia_ispc.sangreyamobile.model.Enrollment;
@@ -24,12 +26,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
+
 public final class CampaignApiRepository {
     private static final String BASE_URL =
             "https://sangreyaispc.pythonanywhere.com/";
     private static final String CAMPAIGNS_PATH = "campanias/";
-    private static final String ENROLLMENTS_PATH = "inscripciones/campanias/";
-    private static final String MY_ENROLLMENTS_PATH = "inscripciones/mis-inscripciones/";
+
     private CampaignApiRepository() {
     }
 
@@ -95,14 +100,10 @@ public final class CampaignApiRepository {
         }
     }
 
-    public static void getCampaigns(Callback<List<Campaign>> callback) {
-        getCampaigns(null, callback);
-    }
-
     public static void getCampaigns(
-            String accessToken,
+            Context context,
             Callback<List<Campaign>> callback) {
-        request(CAMPAIGNS_PATH, accessToken, response -> {
+        request(ApiClient.getApiService(context).getCampaigns(), response -> {
             JSONArray jsonArray = new JSONArray(response);
             List<Campaign> campaigns = new ArrayList<>();
 
@@ -114,44 +115,26 @@ public final class CampaignApiRepository {
         }, callback);
     }
 
-    public static void getCampaign(int campaignId, Callback<Campaign> callback) {
-        getCampaign(campaignId, null, callback);
-    }
-
     public static void getCampaign(
+            Context context,
             int campaignId,
-            String accessToken,
             Callback<Campaign> callback) {
-        request(CAMPAIGNS_PATH + campaignId + "/", accessToken, response ->
+        request(ApiClient.getApiService(context).getCampaign(campaignId), response ->
                 fromJson(new JSONObject(response)), callback);
     }
 
     public static void enrollInCampaign(
+            Context context,
             int campaignId,
-            String accessToken,
             Callback<Integer> callback) {
-        new Thread(() -> {
-            try {
-                String response = executePost(
-                        ENROLLMENTS_PATH + campaignId + "/",
-                        accessToken);
-                int totalInscriptos = new JSONObject(response)
-                        .getInt("totalInscriptos");
-                mainHandler().post(() -> callback.onSuccess(totalInscriptos));
-            } catch (Exception exception) {
-                Log.e(
-                        "CampaignApiRepository",
-                        "Error al inscribirse en la campaña " + campaignId,
-                        exception);
-                mainHandler().post(() -> callback.onError(exception));
-            }
-        }).start();
+        request(ApiClient.getApiService(context).enrollInCampaign(campaignId), response ->
+                new JSONObject(response).getInt("totalInscriptos"), callback);
     }
 
     public static void getMyEnrollments(
-            String accessToken,
+            Context context,
             Callback<MyEnrollments> callback) {
-        request(MY_ENROLLMENTS_PATH, accessToken, response -> {
+        request(ApiClient.getApiService(context).getMyEnrollments(), response -> {
             JSONObject json = new JSONObject(response);
             return new MyEnrollments(
                     parseEnrollments(json.optJSONArray("actuales")),
@@ -160,10 +143,10 @@ public final class CampaignApiRepository {
     }
 
     public static void getCampaignEnrollments(
+            Context context,
             int campaignId,
-            String accessToken,
             Callback<CampaignEnrollments> callback) {
-        request(ENROLLMENTS_PATH + campaignId + "/", accessToken, response -> {
+        request(ApiClient.getApiService(context).getCampaignEnrollments(campaignId), response -> {
             JSONObject json = new JSONObject(response);
             List<EnrollmentUser> users = new ArrayList<>();
             JSONArray usersJson = json.optJSONArray("usuarios");
@@ -189,28 +172,16 @@ public final class CampaignApiRepository {
     }
 
     public static void cancelEnrollment(
+            Context context,
             int enrollmentId,
-            String accessToken,
             Callback<Void> callback) {
-        new Thread(() -> {
-            try {
-                executeDelete("inscripciones/" + enrollmentId + "/", accessToken);
-                mainHandler().post(() -> callback.onSuccess(null));
-            } catch (Exception exception) {
-                Log.e(
-                        "CampaignApiRepository",
-                        "Error al cancelar la inscripción " + enrollmentId,
-                        exception);
-                mainHandler().post(() -> callback.onError(exception));
-            }
-        }).start();
+        requestVoid(ApiClient.getApiService(context).cancelEnrollment(enrollmentId), callback);
     }
 
     public static void deleteCampaign(
             int campaignId,
             String accessToken,
             Callback<Void> callback) {
-
         new Thread(() -> {
             try {
                 executeDelete(
@@ -235,88 +206,53 @@ public final class CampaignApiRepository {
     }
 
     private static <T> void request(
-            String path,
-            String accessToken,
+            Call<ResponseBody> call,
             Parser<T> parser,
             Callback<T> callback) {
-        new Thread(() -> {
-            try {
-                String response = executeGet(path, accessToken);
-                T value = parser.parse(response);
-                mainHandler().post(() -> callback.onSuccess(value));
-            } catch (Exception exception) {
-                Log.e(
-                        "CampaignApiRepository",
-                        "Error al consultar https://sangreyaispc.pythonanywhere.com/" + path,
-                        exception);
-                mainHandler().post(() -> callback.onError(exception));
+        call.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!response.isSuccessful()) {
+                    callback.onError(httpException(response));
+                    return;
+                }
+
+                ResponseBody body = response.body();
+                if (body == null) {
+                    callback.onError(new IOException("Respuesta vacía del servidor"));
+                    return;
+                }
+
+                try {
+                    callback.onSuccess(parser.parse(body.string()));
+                } catch (Exception exception) {
+                    callback.onError(exception);
+                }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+                callback.onError(asException(throwable));
+            }
+        });
     }
 
-    private static String executeGet(String path, String accessToken) throws Exception {
-        HttpURLConnection connection = null;
-
-        try {
-            URL url = new URL(BASE_URL + path);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
-            connection.setRequestProperty("Accept", "application/json");
-            if (accessToken != null && !accessToken.trim().isEmpty()) {
-                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+    private static void requestVoid(Call<Void> call, Callback<Void> callback) {
+        call.enqueue(new retrofit2.Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onError(httpException(response));
+                }
             }
 
-            int statusCode = connection.getResponseCode();
-            InputStream stream = statusCode >= 200 && statusCode < 300
-                    ? connection.getInputStream()
-                    : connection.getErrorStream();
-            String body = readBody(stream);
-
-            if (statusCode < 200 || statusCode >= 300) {
-                throw new HttpException(statusCode, body);
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                callback.onError(asException(throwable));
             }
-
-            return body;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-    }
-
-    private static String executePost(String path, String accessToken) throws Exception {
-        HttpURLConnection connection = null;
-
-        try {
-            URL url = new URL(BASE_URL + path);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-Type", "application/json");
-            if (accessToken != null && !accessToken.trim().isEmpty()) {
-                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            }
-
-            int statusCode = connection.getResponseCode();
-            InputStream stream = statusCode >= 200 && statusCode < 300
-                    ? connection.getInputStream()
-                    : connection.getErrorStream();
-            String body = readBody(stream);
-
-            if (statusCode < 200 || statusCode >= 300) {
-                throw new HttpException(statusCode, body);
-            }
-
-            return body;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
+        });
     }
 
     private static void executeDelete(String path, String accessToken) throws Exception {
@@ -363,6 +299,25 @@ public final class CampaignApiRepository {
             }
         }
         return body.toString();
+    }
+
+    private static HttpException httpException(Response<?> response) {
+        String body = "";
+        ResponseBody errorBody = response.errorBody();
+        if (errorBody != null) {
+            try {
+                body = errorBody.string();
+            } catch (IOException ignored) {
+                // Keep the status code when the error body cannot be read.
+            }
+        }
+        return new HttpException(response.code(), body);
+    }
+
+    private static Exception asException(Throwable throwable) {
+        return throwable instanceof Exception
+                ? (Exception) throwable
+                : new IOException(throwable);
     }
 
     static Campaign fromJson(JSONObject json) {

@@ -26,21 +26,19 @@ public final class NavigationDrawerHelper {
     public static void configure(
             Activity activity,
             DrawerLayout drawerLayout,
-            NavigationView navigationView,
-            boolean standardUser,
-            String user,
-            String role) {
+            NavigationView navigationView) {
+        boolean admin = SessionManager.isAdmin(activity);
+        boolean standardUser = !admin
+                && !TextUtils.isEmpty(SessionManager.getAccessToken(activity));
+        String displayUser = SessionManager.getUserName(activity);
+
         TextView greeting = activity.findViewById(R.id.header_greeting);
         TextView subtitle = activity.findViewById(R.id.header_subtitle);
-        boolean admin = ExtraKeys.ROLE_ADMIN.equals(role);
-        String displayUser = TextUtils.isEmpty(user)
-                ? SessionManager.getUserName(activity)
-                : user;
-        if ((standardUser) && !TextUtils.isEmpty(displayUser)) {
+        if ((standardUser || admin) && !TextUtils.isEmpty(displayUser)) {
             greeting.setText(activity.getString(R.string.logged_user_greeting, displayUser));
-            subtitle.setText(R.string.campaign_subtitle);
-        } else if((admin) && !TextUtils.isEmpty(displayUser)) {
-            greeting.setText(activity.getString(R.string.logged_user_greeting, displayUser));
+            if (standardUser) {
+                subtitle.setText(R.string.campaign_subtitle);
+            }
         } else {
             greeting.setText(R.string.guest_greeting);
             subtitle.setText(R.string.guest_subtitle);
@@ -60,9 +58,8 @@ public final class NavigationDrawerHelper {
             if (item.getItemId() == R.id.nav_about_us) {
                 intent = new Intent(activity, AboutUsActivity.class);
                 activity.startActivity(intent);
-            } else  if (item.getItemId() == R.id.nav_campaigns) {
+            } else if (item.getItemId() == R.id.nav_campaigns) {
                 intent = new Intent(activity, AdminCampaignListActivity.class);
-                intent.putExtra(ExtraKeys.EXTRA_USER, displayUser);
                 activity.startActivity(intent);
             } else if (item.getItemId() == R.id.nav_enrollments) {
                 intent = new Intent(activity, EnrollmentsActivity.class);
@@ -85,4 +82,5 @@ public final class NavigationDrawerHelper {
             return true;
         });
     }
+
 }
