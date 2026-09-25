@@ -20,6 +20,7 @@ import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.ammaia_ispc.sangreyamobile.data.HealthCenterApiRepository;
@@ -48,7 +49,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
         if (!SessionManager.requireAdmin(this)) {
             return;
         }
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
         editingCampaign = (Campaign) getIntent().getSerializableExtra(ExtraKeys.EXTRA_CAMPAIGN);
         setContentView(R.layout.activity_create_campaign);
         bindViews();

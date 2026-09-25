@@ -1,22 +1,9 @@
 package com.ammaia_ispc.sangreyamobile.helpers;
 
-import android.app.Activity;
-import android.view.View;
-import android.view.Window;
-
-import androidx.core.content.ContextCompat;
-
 import com.ammaia_ispc.sangreyamobile.R;
 
 public final class CampaignHelper {
     private CampaignHelper() {
-    }
-
-    public static void configureSystemBars(Activity activity) {
-        Window window = activity.getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(activity, R.color.dark_red));
-        window.setNavigationBarColor(ContextCompat.getColor(activity, R.color.white));
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
     }
 
     public static String statusText(String status) {

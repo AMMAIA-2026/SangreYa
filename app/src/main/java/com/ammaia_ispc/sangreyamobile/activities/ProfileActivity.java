@@ -68,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
         setContentView(R.layout.activity_profile);
 
         bindViews();

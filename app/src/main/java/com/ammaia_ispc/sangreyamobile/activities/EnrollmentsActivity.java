@@ -50,7 +50,7 @@ public class EnrollmentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
 
         if (SessionManager.isAdmin(this)
                 || TextUtils.isEmpty(SessionManager.getAccessToken(this))) {

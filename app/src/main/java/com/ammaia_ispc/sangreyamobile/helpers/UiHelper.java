@@ -1,10 +1,16 @@
 package com.ammaia_ispc.sangreyamobile.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+
+import com.ammaia_ispc.sangreyamobile.R;
 
 import java.util.Locale;
 
@@ -22,6 +28,14 @@ public final class UiHelper {
             disabledView.setEnabled(!loading);
         }
     }
+
+    public static void configureSystemBars(Activity activity) {
+        Window window = activity.getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(activity, R.color.dark_red));
+        window.setNavigationBarColor(ContextCompat.getColor(activity, R.color.white));
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+    }
+
     public static void showMessage(TextView messageView, int messageResId) {
         messageView.setText(messageResId);
         messageView.setVisibility(View.VISIBLE);

@@ -49,7 +49,7 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
             return;
         }
 
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
         setContentView(R.layout.activity_admin_campaign_enrollments);
         bindViews();
         configureNavigation();
