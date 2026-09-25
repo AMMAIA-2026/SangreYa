@@ -13,10 +13,28 @@ import android.widget.EditText;
 
 import com.ammaia_ispc.sangreyamobile.data.RegisterApiRepository;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
+
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.HideReturnsTransformationMethod;
+import android.widget.ImageButton;
+import android.app.DatePickerDialog;
+import java.util.Calendar;
 public class RegisterActivity extends AppCompatActivity {
 
 private Button btnCreateAccount;
 private TextView tvIniciarSesion;
+private EditText etName;
+private EditText etApellido;
+private EditText etUsername;
+private EditText etDni;
+private EditText etRegisterEmail;
+private EditText etFechaNacimiento;
+private EditText etRegisterPassword;
+private EditText etConfirmPassword;
+private ImageButton btnTogglePassword;
+private ImageButton btnToggleConfirmPassword;
+private boolean passwordVisible = false;
+private boolean confirmPasswordVisible = false;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +44,69 @@ protected void onCreate(Bundle savedInstanceState) {
 
     btnCreateAccount = findViewById(R.id.btnCreateAccount);
     tvIniciarSesion = findViewById(R.id.tvIniciarSesion);
+
+    etName = findViewById(R.id.etName);
+    etApellido = findViewById(R.id.etApellido);
+    etUsername = findViewById(R.id.etUsername);
+    etDni = findViewById(R.id.etDni);
+    etRegisterEmail = findViewById(R.id.etRegisterEmail);
+    etFechaNacimiento = findViewById(R.id.etFechaNacimiento);
+    etRegisterPassword = findViewById(R.id.etRegisterPassword);
+    etConfirmPassword = findViewById(R.id.etConfirmPassword);
+
+    btnTogglePassword = findViewById(R.id.btnTogglePassword);
+    btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
+
+    etFechaNacimiento.setOnClickListener(v -> {
+        Calendar calendario = Calendar.getInstance();
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                RegisterActivity.this,
+                (view, year, month, dayOfMonth) -> {
+                    String fecha = String.format(
+                            "%02d/%02d/%04d",
+                            dayOfMonth,
+                            month + 1,
+                            year
+                    );
+
+                    etFechaNacimiento.setText(fecha);
+                },
+                calendario.get(Calendar.YEAR),
+                calendario.get(Calendar.MONTH),
+                calendario.get(Calendar.DAY_OF_MONTH)
+        );
+
+        datePickerDialog.show();
+    });
+
+    btnTogglePassword.setOnClickListener(v -> {
+        passwordVisible = !passwordVisible;
+
+        if (passwordVisible) {
+            etRegisterPassword.setTransformationMethod(
+                    HideReturnsTransformationMethod.getInstance());
+        } else {
+            etRegisterPassword.setTransformationMethod(
+                    PasswordTransformationMethod.getInstance());
+        }
+
+        etRegisterPassword.setSelection(etRegisterPassword.length());
+    });
+
+    btnToggleConfirmPassword.setOnClickListener(v -> {
+        confirmPasswordVisible = !confirmPasswordVisible;
+
+        if (confirmPasswordVisible) {
+            etConfirmPassword.setTransformationMethod(
+                    HideReturnsTransformationMethod.getInstance());
+        } else {
+            etConfirmPassword.setTransformationMethod(
+                    PasswordTransformationMethod.getInstance());
+        }
+
+        etConfirmPassword.setSelection(etConfirmPassword.length());
+    });
 
     btnCreateAccount.setOnClickListener(v -> validarRegistro());
 
@@ -40,6 +121,15 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 
 private void validarRegistro() {
+
+    etName.setError(null);
+    etApellido.setError(null);
+    etUsername.setError(null);
+    etDni.setError(null);
+    etRegisterEmail.setError(null);
+    etFechaNacimiento.setError(null);
+    etRegisterPassword.setError(null);
+    etConfirmPassword.setError(null);
 
     String name = ((android.widget.EditText) findViewById(R.id.etName))
             .getText().toString().trim();
@@ -156,15 +246,46 @@ private void validarRegistro() {
                 }
 
                 @Override
-                public void onValidationError(
-                        String field,
-                        String message) {
+                public void onValidationError(String field, String message) {
+                    switch (field) {
+                        case "email":
+                            etRegisterEmail.setError(message);
+                            etRegisterEmail.requestFocus();
+                            break;
 
-                    Toast.makeText(
-                            RegisterActivity.this,
-                            message,
-                            Toast.LENGTH_SHORT
-                    ).show();
+                        case "dni":
+                            etDni.setError(message);
+                            etDni.requestFocus();
+                            break;
+
+                        case "username":
+                            etUsername.setError(message);
+                            etUsername.requestFocus();
+                            break;
+
+                        case "nombre":
+                            etName.setError(message);
+                            etName.requestFocus();
+                            break;
+
+                        case "apellido":
+                            etApellido.setError(message);
+                            etApellido.requestFocus();
+                            break;
+
+                        case "fecha_nacimiento":
+                            etFechaNacimiento.setError(message);
+                            etFechaNacimiento.requestFocus();
+                            break;
+
+                        default:
+                            Toast.makeText(
+                                    RegisterActivity.this,
+                                    message,
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            break;
+                    }
                 }
 
                 @Override

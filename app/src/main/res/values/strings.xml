@@ -150,18 +150,18 @@
     <string name="link_registrate">registrate</string>
 
     <!-- Registro -->
-    <string name="RegisterTitle">crear cuenta</string>
-    <string name="hint_nombre">ana gomez</string>
+    <string name="RegisterTitle">Crear cuenta</string>
+    <string name="hint_nombre">Ana gomez</string>
     <string name="hint_grupo">Seleccionar</string>
-    <string name="btn_crear_cuenta">crear cuenta</string>
-    <string name="texto_ya_tenes_cuenta">¿ya tenes cuenta? </string>
-    <string name="link_iniciar_sesion">iniciar sesion</string>
+    <string name="btn_crear_cuenta">Crear cuenta</string>
+    <string name="texto_ya_tenes_cuenta">¿Ya tenes cuenta? </string>
+    <string name="link_iniciar_sesion">Iniciar sesion</string>
 
     <!-- Labels compartidos -->
-    <string name="label_nombre_completo">nombre completo</string>
-    <string name="label_email">email</string>
-    <string name="label_password">contrasena</string>
-    <string name="label_grupo">grupo sanguineo</string>
+    <string name="label_nombre_completo">Nombre completo</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Contraseña</string>
+    <string name="label_grupo">Grupo sanguineo</string>
 
     <string name="back">Volver</string>
 
