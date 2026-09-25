@@ -23,6 +23,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.Enrollment;
 import com.ammaia_ispc.sangreyamobile.model.MyEnrollments;
@@ -115,8 +116,8 @@ public class EnrollmentsActivity extends AppCompatActivity {
     }
 
     private void loadEnrollments() {
-        clearMessage();
-        setLoading(true);
+        UiHelper.clearMessage(messageView);
+        UiHelper.setLoading(loadingIndicator, enrollmentsScroll, true);
         CampaignApiRepository.getMyEnrollments(
                 this,
                 new CampaignApiRepository.Callback<MyEnrollments>() {
@@ -127,17 +128,17 @@ public class EnrollmentsActivity extends AppCompatActivity {
                         currentEnrollments.addAll(value.current);
                         historicalEnrollments.addAll(value.historical);
                         showEnrollments();
-                        setLoading(false);
+                        UiHelper.setLoading(loadingIndicator, enrollmentsScroll, false);
                     }
 
                     @Override
                     public void onError(Exception exception) {
-                        setLoading(false);
+                        UiHelper.setLoading(loadingIndicator, enrollmentsScroll, false);
                         if (isSessionError(exception)) {
                             SessionManager.expireSession(EnrollmentsActivity.this);
                             return;
                         }
-                        showMessage(R.string.enrollments_load_error);
+                        UiHelper.showMessage(messageView, R.string.enrollments_load_error);
                     }
                 });
     }
@@ -273,21 +274,6 @@ public class EnrollmentsActivity extends AppCompatActivity {
         filter.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(
                 this,
                 selected ? R.color.primary_red : R.color.surface)));
-    }
-
-    private void setLoading(boolean loading) {
-        loadingIndicator.setVisibility(loading ? View.VISIBLE : View.GONE);
-        enrollmentsScroll.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
-    }
-
-    private void showMessage(int messageResId) {
-        messageView.setText(messageResId);
-        messageView.setVisibility(View.VISIBLE);
-    }
-
-    private void clearMessage() {
-        messageView.setText("");
-        messageView.setVisibility(View.GONE);
     }
 
     private boolean isSessionError(Exception exception) {

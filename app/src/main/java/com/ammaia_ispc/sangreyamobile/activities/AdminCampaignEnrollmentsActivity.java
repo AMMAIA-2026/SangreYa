@@ -16,6 +16,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
 import com.ammaia_ispc.sangreyamobile.model.EnrollmentUser;
@@ -88,8 +89,8 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
     }
 
     private void loadUsers() {
-        clearMessage();
-        setLoading(true);
+        UiHelper.clearMessage(messageView);
+        UiHelper.setLoading(loadingIndicator, usersScroll, true);
         CampaignApiRepository.getCampaignEnrollments(
                 this,
                 campaign.id,
@@ -101,12 +102,12 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
                             showCampaign();
                         }
                         showUsers(value.users);
-                        setLoading(false);
+                        UiHelper.setLoading(loadingIndicator, usersScroll, false);
                     }
 
                     @Override
                     public void onError(Exception exception) {
-                        setLoading(false);
+                        UiHelper.setLoading(loadingIndicator, usersScroll, false);
                         if (exception instanceof CampaignApiRepository.HttpException
                                 && ((CampaignApiRepository.HttpException) exception)
                                 .getStatusCode() == 401) {
@@ -116,10 +117,12 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
                         if (exception instanceof CampaignApiRepository.HttpException
                                 && ((CampaignApiRepository.HttpException) exception)
                                 .getStatusCode() == 403) {
-                            showMessage(R.string.admin_enrollments_unauthorized);
+                            UiHelper.showMessage(
+                                    messageView,
+                                    R.string.admin_enrollments_unauthorized);
                             return;
                         }
-                        showMessage(R.string.admin_enrollments_error);
+                        UiHelper.showMessage(messageView, R.string.admin_enrollments_error);
                     }
                 });
     }
@@ -134,8 +137,8 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
 
         List<EnrollmentUser> orderedUsers = new ArrayList<>(users);
         orderedUsers.sort(Comparator
-                .comparing((EnrollmentUser user) -> normalized(user.lastName))
-                .thenComparing(user -> normalized(user.firstName)));
+                .comparing((EnrollmentUser user) -> UiHelper.normalized(user.lastName, Locale.getDefault()))
+                .thenComparing(user -> UiHelper.normalized(user.firstName, Locale.getDefault())));
 
         for (EnrollmentUser user : orderedUsers) {
             View row = getLayoutInflater().inflate(
@@ -158,22 +161,4 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
         }
     }
 
-    private String normalized(String value) {
-        return value == null ? "" : value.trim().toLowerCase(Locale.getDefault());
-    }
-
-    private void setLoading(boolean loading) {
-        loadingIndicator.setVisibility(loading ? View.VISIBLE : View.GONE);
-        usersScroll.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
-    }
-
-    private void showMessage(int messageResId) {
-        messageView.setText(messageResId);
-        messageView.setVisibility(View.VISIBLE);
-    }
-
-    private void clearMessage() {
-        messageView.setText("");
-        messageView.setVisibility(View.GONE);
-    }
 }

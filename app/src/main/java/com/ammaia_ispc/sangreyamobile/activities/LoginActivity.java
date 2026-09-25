@@ -54,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
 
         NavigationHelper.configureBackButton(this, R.id.btnBack);
 
-        // Enlazamos exactamente con los IDs de tu layout actual
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnIngresar = findViewById(R.id.btnIngresar);

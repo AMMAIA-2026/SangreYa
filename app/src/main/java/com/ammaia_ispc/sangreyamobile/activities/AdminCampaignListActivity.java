@@ -23,6 +23,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
@@ -88,7 +89,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         String message = CampaignApiRepository.isUnauthorized(exception)
                 ? getString(R.string.admin_campaigns_unauthorized)
                 : getString(R.string.campaigns_load_error);
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        UiHelper.showToast(this, message, Toast.LENGTH_LONG);
     }
 
     private void bindViews() {
@@ -172,7 +173,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                 .getText()
                 .toString()
                 .trim()
-                .toLowerCase(Locale.getDefault());
+                .toLowerCase(Locale.getDefault()); //TODO. Aplicar el UiHelper.normalized
 
         campaignContainer.removeAllViews();
 
@@ -348,6 +349,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         String accessToken = SessionManager.getAccessToken(this);
 
         if (accessToken == null || accessToken.trim().isEmpty()) {
+            //TODO. Este toast se puede pasar a helper, Toast.makeText
             Toast.makeText(
                     this,
                     "No hay una sesión de administrador activa.",
@@ -372,6 +374,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(Void value) {
+                        //TODO. Este toast se puede pasar a helper, Toast.makeText
                         Toast.makeText(
                                 AdminCampaignListActivity.this,
                                 "Campaña eliminada correctamente.",
@@ -396,6 +399,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                             message = "No se pudo eliminar la campaña. Intentá nuevamente.";
                         }
 
+                        //TODO. Este toast se puede pasar a helper, Toast.makeText
                         Toast.makeText(
                                 AdminCampaignListActivity.this,
                                 message,

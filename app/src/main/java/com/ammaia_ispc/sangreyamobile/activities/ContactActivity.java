@@ -93,6 +93,7 @@ public class ContactActivity extends AppCompatActivity {
         ContactApiRepository.sendContact(this, request, new ContactApiRepository.ContactCallback() {
             @Override
             public void onSuccess() {
+                //TODO. Este toast se puede pasar a helper, Toast.makeText
                 Toast.makeText(
                         ContactActivity.this,
                         getString(R.string.contact_sent_message),
@@ -117,6 +118,7 @@ public class ContactActivity extends AppCompatActivity {
                         break;
 
                     default:
+                        //TODO. Este toast se puede pasar a helper, Toast.makeText
                         Toast.makeText(
                                 ContactActivity.this,
                                 message,
@@ -130,6 +132,7 @@ public class ContactActivity extends AppCompatActivity {
 
             @Override
             public void onError(int messageRes) {
+                //TODO. Este toast se puede pasar a helper, Toast.makeText
                 Toast.makeText(
                         ContactActivity.this,
                         getString(messageRes),

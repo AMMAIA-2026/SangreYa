@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import android.widget.Toast;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
@@ -69,11 +70,10 @@ public class AdminContactListActivity extends AppCompatActivity {
                             contacts = response.body();
                             showContacts();
                         } else {
-                            Toast.makeText(
+                            UiHelper.showToast(
                                     AdminContactListActivity.this,
                                     "No se pudieron cargar los contactos.",
-                                    Toast.LENGTH_SHORT
-                            ).show();
+                                    Toast.LENGTH_SHORT);
                         }
                     }
 
@@ -82,11 +82,10 @@ public class AdminContactListActivity extends AppCompatActivity {
                             Call<List<ContactMessage>> call,
                             Throwable t) {
 
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 AdminContactListActivity.this,
                                 "No se pudo conectar con el servidor.",
-                                Toast.LENGTH_SHORT
-                        ).show();
+                                Toast.LENGTH_SHORT);
                     }
                 });
     }
@@ -155,6 +154,8 @@ public class AdminContactListActivity extends AppCompatActivity {
         styleFilter(answeredFilter, currentFilter.equals("Respondidos"));
     }
 
+    // TODO: Si se extrae un helper comun para styleFilter en campanias e inscripciones,
+    // aplicar tambien aqui cuando el refactor alcance la bandeja de contactos.
     private void styleFilter(MaterialButton filter, boolean selected) {
         filter.setTextColor(ContextCompat.getColor(this, selected ? R.color.white : R.color.secondary_text));
         filter.setBackgroundTintList(ColorStateList.valueOf(
@@ -206,11 +207,10 @@ public class AdminContactListActivity extends AppCompatActivity {
                             contacts.add(response.body());
                             showContacts();
                         } else {
-                            Toast.makeText(
+                            UiHelper.showToast(
                                     AdminContactListActivity.this,
                                     "No se pudo actualizar el seguimiento.",
-                                    Toast.LENGTH_SHORT
-                            ).show();
+                                    Toast.LENGTH_SHORT);
                         }
                     }
 
@@ -219,11 +219,10 @@ public class AdminContactListActivity extends AppCompatActivity {
                             Call<ContactMessage> call,
                             Throwable t) {
 
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 AdminContactListActivity.this,
                                 "No se pudo conectar con el servidor.",
-                                Toast.LENGTH_SHORT
-                        ).show();
+                                Toast.LENGTH_SHORT);
                     }
                 });
     }

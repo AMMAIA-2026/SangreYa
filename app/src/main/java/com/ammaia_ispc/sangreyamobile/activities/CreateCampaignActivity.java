@@ -113,6 +113,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 populateHealthCenterOptions(fallback);
                 healthCenterInput.setEnabled(true);
                 publishButton.setEnabled(true);
+                //TODO. Este toast se puede pasar a helper, Toast.makeText
                 Toast.makeText(CreateCampaignActivity.this, messageRes, Toast.LENGTH_LONG).show();
             }
         });
@@ -194,6 +195,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
     private void deleteCampaign() {
         MockCampaignRepository.deleteCampaign(editingCampaign.id);
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this, R.string.campaign_deleted_message, Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -247,6 +249,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                     editingCampaign.campaignStatus,
                     editingCampaign.calculatedStatus);
             MockCampaignRepository.updateCampaign(updated);
+            //TODO. Este toast se puede pasar a helper, Toast.makeText
             Toast.makeText(this, R.string.campaign_updated_message, Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -266,11 +269,13 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 "Proximamente",
                 "Proximamente");
         MockCampaignRepository.addCampaign(campaign);
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this, R.string.campaign_published_message, Toast.LENGTH_SHORT).show();
         finish();
     }
 
     private void saveDraft() {
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this, R.string.campaign_draft_saved_message, Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -281,6 +286,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 || TextUtils.isEmpty(startDateInput.getText())
                 || TextUtils.isEmpty(endDateInput.getText())
                 || TextUtils.isEmpty(capacityInput.getText())) {
+            //TODO. Este toast se puede pasar a helper, Toast.makeText
             Toast.makeText(this, R.string.campaign_required_fields_message, Toast.LENGTH_SHORT).show();
             return false;
         }

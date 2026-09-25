@@ -22,6 +22,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.DashboardChartView;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.google.android.material.navigation.NavigationView;
 
 import android.widget.Toast;
@@ -72,10 +73,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
                         String message = CampaignApiRepository.isUnauthorized(exception)
                                 ? getString(R.string.dashboard_unauthorized_error)
                                 : getString(R.string.dashboard_load_error);
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 AdminDashboardActivity.this,
                                 message,
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                     }
                 });
     }
