@@ -33,6 +33,7 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
     private ProgressBar loadingIndicator;
     private ScrollView usersScroll;
     private TextView messageView;
+    private TextView emptyView;
     private TextView campaignView;
 
     @Override
@@ -68,6 +69,7 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
         loadingIndicator = findViewById(R.id.admin_enrollments_loading);
         usersScroll = findViewById(R.id.admin_enrollments_scroll);
         messageView = findViewById(R.id.admin_enrollments_message);
+        emptyView = findViewById(R.id.admin_enrollments_empty);
         campaignView = findViewById(R.id.admin_enrollments_campaign);
     }
 
@@ -134,6 +136,12 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
 
     private void showUsers(List<EnrollmentUser> users) {
         usersContainer.removeAllViews();
+        boolean empty = users == null || users.isEmpty();
+        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        if (empty) {
+            return;
+        }
+
         List<EnrollmentUser> orderedUsers = new ArrayList<>(users);
         orderedUsers.sort(Comparator
                 .comparing((EnrollmentUser user) -> normalized(user.lastName))
