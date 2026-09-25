@@ -253,6 +253,8 @@
     <string name="contact_sent_message">¡Mensaje enviado!</string>
     <string name="contact_send_error_server">No se pudo enviar el mensaje. Inténtalo nuevamente.</string>
     <string name="contact_send_error_network">No se pudo conectar con el servidor. Verifica tu conexión.</string>
+    <string name="register_error_server">Ocurrió un error en el servidor.</string>
+    <string name="register_error_network">No se pudo conectar con el servidor. Revisá tu conexión e intentá nuevamente.</string>
 
     <!-- Administración de mensajes/contacto -->
     <string name="manage_contacts_title">Mensajes de contacto</string>
