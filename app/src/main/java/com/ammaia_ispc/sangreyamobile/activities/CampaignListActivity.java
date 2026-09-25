@@ -50,7 +50,7 @@ public class CampaignListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
         standardUser = isStandardUser();
         setContentView(R.layout.activity_campaign_list);
         bindViews();

@@ -34,7 +34,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         if (!SessionManager.requireAdmin(this)) {
             return;
         }
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
         setContentView(R.layout.activity_admin_dashboard);
         bindViews();
     }

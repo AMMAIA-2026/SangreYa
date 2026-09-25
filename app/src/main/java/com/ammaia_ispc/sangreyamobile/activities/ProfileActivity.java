@@ -2,6 +2,7 @@ package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -68,11 +69,12 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
         setContentView(R.layout.activity_profile);
 
         bindViews();
         configureNavigation();
+        configureBottomNavigation();
         birthDateInput.setOnTouchListener((view, event) -> {
             boolean onCalendarIcon = event.getX()
                     >= birthDateInput.getWidth() - birthDateInput.getCompoundPaddingRight();
@@ -106,6 +108,19 @@ public class ProfileActivity extends AppCompatActivity {
         DrawerLayout drawerLayout = findViewById(R.id.profile_drawer);
         NavigationView navigationView = findViewById(R.id.profile_navigation_view);
         NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
+    }
+
+    private void configureBottomNavigation() {
+        findViewById(R.id.profile_campaigns_navigation_item)
+                .setOnClickListener(view -> {
+                    startActivity(new Intent(this, CampaignListActivity.class));
+                    finish();
+                });
+        findViewById(R.id.profile_enrollments_navigation_item)
+                .setOnClickListener(view -> {
+                    startActivity(new Intent(this, EnrollmentsActivity.class));
+                    finish();
+                });
     }
 
     private void loadProfile() {

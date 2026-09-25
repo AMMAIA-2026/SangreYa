@@ -30,6 +30,9 @@ protected void onCreate(Bundle savedInstanceState) {
 
     NavigationHelper.configureBackButton(this, R.id.btnBack);
 
+    // TODO. Conectar el componente admin bottom navigation, como en las otras
+    // activities principales de Admin.
+
 
 
     usersContainer = findViewById(R.id.users_container);
