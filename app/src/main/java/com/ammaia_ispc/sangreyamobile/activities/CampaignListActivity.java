@@ -24,6 +24,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
@@ -65,29 +66,24 @@ public class CampaignListActivity extends AppCompatActivity {
     }
 
     private void loadCampaigns() {
-        setLoading(true);
+        UiHelper.setLoading(loadingIndicator, campaignScroll, true);
         CampaignApiRepository.getCampaigns(this, new CampaignApiRepository.Callback<List<Campaign>>() {
             @Override
             public void onSuccess(List<Campaign> value) {
                 campaigns = value;
                 showCampaigns(currentFilter);
-                setLoading(false);
+                UiHelper.setLoading(loadingIndicator, campaignScroll, false);
             }
 
             @Override
             public void onError(Exception exception) {
-                setLoading(false);
+                UiHelper.setLoading(loadingIndicator, campaignScroll, false);
                 Toast.makeText(
                         CampaignListActivity.this,
                         R.string.campaigns_load_error,
                         Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private void setLoading(boolean loading) {
-        loadingIndicator.setVisibility(loading ? View.VISIBLE : View.GONE);
-        campaignScroll.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void bindViews() {
@@ -146,7 +142,9 @@ public class CampaignListActivity extends AppCompatActivity {
 
     private void showCampaigns(String filter) {
         campaignContainer.removeAllViews();
-        String query = searchInput.getText().toString().trim().toLowerCase(Locale.getDefault());
+        String query = UiHelper.normalized(
+                searchInput.getText().toString(),
+                Locale.getDefault());
         List<Campaign> orderedCampaigns = new ArrayList<>(campaigns);
         orderedCampaigns.sort(Comparator
                 .comparingInt((Campaign campaign) -> campaignStatusOrder(campaign.calculatedStatus))
@@ -163,7 +161,7 @@ public class CampaignListActivity extends AppCompatActivity {
                 continue;
             }
             if (!query.isEmpty()
-                    && !campaign.title.toLowerCase(Locale.getDefault()).contains(query)) {
+                    && !UiHelper.normalized(campaign.title, Locale.getDefault()).contains(query)) {
                 continue;
             }
             View card = createCampaignCard(campaign);

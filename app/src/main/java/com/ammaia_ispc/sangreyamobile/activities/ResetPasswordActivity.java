@@ -71,6 +71,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(email)) {
+            //TODO. Este toast se puede pasar a helper, Toast.makeText
             Toast.makeText(
                     this,
                     "No se pudo recuperar el email.",
@@ -98,6 +99,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
                         if (response.isSuccessful() && response.body() != null) {
 
+                            //TODO. Este toast se puede pasar a helper, Toast.makeText
                             Toast.makeText(
                                     ResetPasswordActivity.this,
                                     response.body().getMessage(),
@@ -118,6 +120,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             finish();
 
                         } else {
+                            //TODO. Este toast se puede pasar a helper, Toast.makeText
                             Toast.makeText(
                                     ResetPasswordActivity.this,
                                     "No se pudo actualizar la contraseña.",
@@ -133,6 +136,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
                         saveButton.setEnabled(true);
 
+                        //TODO. Este toast se puede pasar a helper, Toast.makeText
                         Toast.makeText(
                                 ResetPasswordActivity.this,
                                 "No se pudo conectar con el servidor.",

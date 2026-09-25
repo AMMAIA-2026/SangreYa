@@ -23,6 +23,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
 import com.google.android.material.navigation.NavigationView;
@@ -110,18 +111,18 @@ public class ProfileActivity extends AppCompatActivity {
     private void loadProfile() {
         userId = SessionManager.getUserId(this);
         if (userId < 1) {
-            showMessage(R.string.profile_session_error);
+            UiHelper.showMessage(messageView, R.string.profile_session_error);
             return;
         }
 
-        setLoading(true);
+        UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);
         ApiClient.getApiService(this).getUserProfile(userId).enqueue(new Callback<AuthUser>() {
             @Override
             public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
-                setLoading(false);
+                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
                 if (response.isSuccessful() && response.body() != null) {
                     populateProfile(response.body());
-                    clearMessage();
+                    UiHelper.clearMessage(messageView);
                 } else {
                     handleResponseError(response, false);
                 }
@@ -129,8 +130,8 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AuthUser> call, Throwable throwable) {
-                setLoading(false);
-                showMessage(R.string.profile_load_error);
+                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                UiHelper.showMessage(messageView, R.string.profile_load_error);
             }
         });
     }
@@ -187,7 +188,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void saveProfile() {
         syncBirthDateFromInput();
         clearFieldErrors();
-        clearMessage();
+        UiHelper.clearMessage(messageView);
 
         if (!validateForm()) {
             return;
@@ -222,13 +223,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void submitProfile(UserUpdateRequest request) {
-        setLoading(true);
+        UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);
 
         ApiClient.getApiService(this).updateUserProfile(userId, request)
                 .enqueue(new Callback<AuthUser>() {
                     @Override
                     public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
-                        setLoading(false);
+                        UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
                         if (response.isSuccessful() && response.body() != null) {
                             populateProfile(response.body());
                             SessionManager.updateUserName(
@@ -246,8 +247,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<AuthUser> call, Throwable throwable) {
-                        setLoading(false);
-                        showMessage(R.string.profile_update_error);
+                        UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                        UiHelper.showMessage(messageView, R.string.profile_update_error);
                     }
                 });
     }
@@ -312,18 +313,20 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
         if (statusCode == 403) {
-            showMessage(R.string.profile_unauthorized_error);
+            UiHelper.showMessage(messageView, R.string.profile_unauthorized_error);
             return;
         }
         if (statusCode == 404) {
-            showMessage(R.string.profile_not_found_error);
+            UiHelper.showMessage(messageView, R.string.profile_not_found_error);
             return;
         }
         if (statusCode == 400 && applyServerErrors(response.errorBody())) {
-            showMessage(R.string.profile_generic_validation_error);
+            UiHelper.showMessage(messageView, R.string.profile_generic_validation_error);
             return;
         }
-        showMessage(update ? R.string.profile_update_error : R.string.profile_load_error);
+        UiHelper.showMessage(
+                messageView,
+                update ? R.string.profile_update_error : R.string.profile_load_error);
     }
 
     private boolean applyServerErrors(ResponseBody errorBody) {
@@ -359,7 +362,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private int serverMessageFor(String key, String detail) {
-        String normalized = detail.toLowerCase(Locale.ROOT);
+        String normalized = UiHelper.normalized(detail, Locale.ROOT);
         if (normalized.contains("required")
                 || normalized.contains("blank")
                 || normalized.contains("obligatorio")) {
@@ -394,12 +397,6 @@ public class ProfileActivity extends AppCompatActivity {
         return value == null ? "" : String.valueOf(value);
     }
 
-    private void setLoading(boolean loading) {
-        loadingIndicator.setVisibility(loading ? View.VISIBLE : View.GONE);
-        profileForm.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
-        saveButton.setEnabled(!loading);
-    }
-
     private void clearFieldErrors() {
         usernameInput.setError(null);
         emailInput.setError(null);
@@ -407,16 +404,6 @@ public class ProfileActivity extends AppCompatActivity {
         nameInput.setError(null);
         lastNameInput.setError(null);
         birthDateInput.setError(null);
-    }
-
-    private void showMessage(int messageResId) {
-        messageView.setText(messageResId);
-        messageView.setVisibility(View.VISIBLE);
-    }
-
-    private void clearMessage() {
-        messageView.setText("");
-        messageView.setVisibility(View.GONE);
     }
 
     private String valueOf(EditText field) {

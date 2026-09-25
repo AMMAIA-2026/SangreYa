@@ -93,6 +93,7 @@ private void validarRegistro() {
             TextUtils.isEmpty(confirmPassword) ||
             bloodGroup.equals("Select")) {
 
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this,
                 "Completá todos los campos",
                 Toast.LENGTH_SHORT).show();
@@ -101,6 +102,7 @@ private void validarRegistro() {
 
 
     if (dni.length() < 7 || dni.length() > 8) {
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this,
                 "Ingresá un DNI válido",
                 Toast.LENGTH_SHORT).show();
@@ -109,6 +111,7 @@ private void validarRegistro() {
 
     // Email válido
     if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this,
                 "Ingresá un email válido",
                 Toast.LENGTH_SHORT).show();
@@ -118,6 +121,7 @@ private void validarRegistro() {
     // Email único
     for (User user : MockUserRepository.getUsers()) {
         if (user.getEmail().equalsIgnoreCase(email)) {
+            //TODO. Este toast se puede pasar a helper, Toast.makeText
             Toast.makeText(this,
                     "El email ya está registrado",
                     Toast.LENGTH_SHORT).show();
@@ -132,18 +136,21 @@ private void validarRegistro() {
             !password.matches(".*[0-9].*") ||
             !password.matches(".*[^a-zA-Z0-9].*")) {
 
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this,
                 "La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y símbolo",
                 Toast.LENGTH_SHORT).show();
         return;
     }
     if (!password.equals(confirmPassword)) {
+        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this,
                 "Las contraseñas no coinciden",
                 Toast.LENGTH_SHORT).show();
         return;
     }
 
+    //TODO. Este toast se puede pasar a helper, Toast.makeText
     Toast.makeText(this,
             "Cuenta creada correctamente",
             Toast.LENGTH_SHORT).show();
