@@ -2,23 +2,18 @@ package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import androidx.appcompat.app.AppCompatActivity;
 import com.ammaia_ispc.sangreyamobile.R;
 import android.text.TextUtils;
-import com.ammaia_ispc.sangreyamobile.data.MockUserRepository;
-import com.ammaia_ispc.sangreyamobile.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
 private Button btnCreateAccount;
 private TextView tvIniciarSesion;
-private Spinner etBloodGroup;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -28,31 +23,6 @@ protected void onCreate(Bundle savedInstanceState) {
 
     btnCreateAccount = findViewById(R.id.btnCreateAccount);
     tvIniciarSesion = findViewById(R.id.tvIniciarSesion);
-    etBloodGroup = findViewById(R.id.etBloodGroup);
-
-    String[] bloodGroups = {
-            "Select",
-            "A+",
-            "A-",
-            "B+",
-            "B-",
-            "AB+",
-            "AB-",
-            "O+",
-            "O-"
-    };
-
-    ArrayAdapter<String> adapter = new ArrayAdapter<>(
-            this,
-            android.R.layout.simple_spinner_item,
-            bloodGroups
-    );
-
-    adapter.setDropDownViewResource(
-            android.R.layout.simple_spinner_dropdown_item
-    );
-
-    etBloodGroup.setAdapter(adapter);
 
     btnCreateAccount.setOnClickListener(v -> validarRegistro());
 
@@ -83,15 +53,14 @@ private void validarRegistro() {
     String confirmPassword = ((android.widget.EditText) findViewById(R.id.etConfirmPassword))
             .getText().toString();
 
-    String bloodGroup = etBloodGroup.getSelectedItem().toString();
 
     // Campos obligatorios
     if (TextUtils.isEmpty(name) ||
             TextUtils.isEmpty(dni) ||
             TextUtils.isEmpty(email) ||
             TextUtils.isEmpty(password) ||
-            TextUtils.isEmpty(confirmPassword) ||
-            bloodGroup.equals("Select")) {
+            TextUtils.isEmpty(confirmPassword))
+             {
 
         //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this,
@@ -118,19 +87,9 @@ private void validarRegistro() {
         return;
     }
 
-    // Email único
-    for (User user : MockUserRepository.getUsers()) {
-        if (user.getEmail().equalsIgnoreCase(email)) {
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(this,
-                    "El email ya está registrado",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-    }
 
     // Contraseña
-    if (password.length() < 8 ||
+    if (password.length() < 10 ||
             !password.matches(".*[A-Z].*") ||
             !password.matches(".*[a-z].*") ||
             !password.matches(".*[0-9].*") ||
@@ -138,7 +97,7 @@ private void validarRegistro() {
 
         //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this,
-                "La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y símbolo",
+                "La contraseña debe tener 10 caracteres, mayúscula, minúscula, número y símbolo",
                 Toast.LENGTH_SHORT).show();
         return;
     }

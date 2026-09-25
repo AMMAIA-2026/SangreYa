@@ -52,59 +52,112 @@ android:background="@color/app_background">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="28dp"
-    android:text="@string/label_nombre_completo"
+    android:text="Nombre"
     android:textColor="@color/secondary_text"
     android:textSize="13sp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/RegisterTitle" />
 
-<EditText
-    android:id="@+id/etName"
-    android:layout_width="0dp"
-    android:layout_height="52dp"
-    android:layout_marginTop="8dp"
-    android:background="@drawable/bg_input_field"
-    android:hint="@string/hint_nombre"
-    android:inputType="textPersonName"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:textColor="@color/primary_text"
-    android:textColorHint="@color/secondary_text"
-    android:textSize="15sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/tvNameLabel" />
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_field"
+        android:hint="Ingresá tu nombre"
+        android:inputType="textPersonName"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNameLabel" />
 
-<TextView
-    android:id="@+id/tvDniLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="18dp"
-    android:text="DNI"
-    android:textColor="@color/secondary_text"
-    android:textSize="13sp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/etName" />
+    <TextView
+        android:id="@+id/tvApellidoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Apellido"
+        android:textColor="@color/secondary_text"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etName" />
 
-<EditText
-    android:id="@+id/etDni"
-    android:layout_width="0dp"
-    android:layout_height="52dp"
-    android:layout_marginTop="8dp"
-    android:background="@drawable/bg_input_field"
-    android:hint="Ingresá tu DNI"
-    android:inputType="number"
-    android:maxLength="8"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:textColor="@color/primary_text"
-    android:textColorHint="@color/secondary_text"
-    android:textSize="15sp"
-    android:singleLine="true"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/tvDniLabel" />
+    <EditText
+        android:id="@+id/etApellido"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_field"
+        android:hint="Ingresá tu apellido"
+        android:inputType="textPersonName"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvApellidoLabel" />
 
+    <TextView
+        android:id="@+id/tvUsernameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Usuario"
+        android:textColor="@color/secondary_text"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etApellido" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_field"
+        android:hint="Ingresá tu usuario"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvUsernameLabel" />
+
+    <TextView
+        android:id="@+id/tvDniLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="DNI"
+        android:textColor="@color/secondary_text"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etUsername" />
+
+    <EditText
+        android:id="@+id/etDni"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_field"
+        android:hint="Ingresá tu DNI"
+        android:inputType="number"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDniLabel" />
 
 <TextView
     android:id="@+id/tvEmailLabel"
@@ -134,6 +187,34 @@ android:background="@color/app_background">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/tvEmailLabel" />
 
+    <TextView
+        android:id="@+id/tvFechaNacimientoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Fecha de nacimiento"
+        android:textColor="@color/secondary_text"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etRegisterEmail" />
+
+    <EditText
+        android:id="@+id/etFechaNacimiento"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_field"
+        android:hint="DD/MM/AAAA"
+        android:inputType="date"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvFechaNacimientoLabel" />
+
 <TextView
     android:id="@+id/tvPasswordLabel"
     android:layout_width="wrap_content"
@@ -143,7 +224,7 @@ android:background="@color/app_background">
     android:textColor="@color/secondary_text"
     android:textSize="13sp"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/etRegisterEmail" />
+    app:layout_constraintTop_toBottomOf="@id/etFechaNacimiento" />
 
 <EditText
     android:id="@+id/etRegisterPassword"
@@ -190,29 +271,6 @@ android:background="@color/app_background">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/tvConfirmPasswordLabel" />
 
-<TextView
-    android:id="@+id/tvBloodGroupLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="18dp"
-    android:text="@string/label_grupo"
-    android:textColor="@color/secondary_text"
-    android:textSize="13sp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/etConfirmPassword" />
-
-<Spinner
-    android:id="@+id/etBloodGroup"
-    android:layout_width="0dp"
-    android:layout_height="52dp"
-    android:layout_marginTop="8dp"
-    android:background="@drawable/bg_input_field"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/tvBloodGroupLabel" />
-
 <Button
     android:id="@+id/btnCreateAccount"
     android:layout_width="0dp"
@@ -226,7 +284,7 @@ android:background="@color/app_background">
     android:textStyle="bold"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/etBloodGroup" />
+    app:layout_constraintTop_toBottomOf="@id/etConfirmPassword" />
 
 <LinearLayout
     android:layout_width="wrap_content"
