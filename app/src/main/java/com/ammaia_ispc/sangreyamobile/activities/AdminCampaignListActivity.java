@@ -78,9 +78,10 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     private void loadCampaigns() {
         String accessToken = SessionManager.getAccessToken(this);
         if (accessToken == null || accessToken.trim().isEmpty()) {
-            showCampaignError(new CampaignApiRepository.HttpException(
-                    401,
-                    "No hay un token de administrador"));
+            Toast.makeText(
+                    this,
+                    R.string.admin_campaigns_session_error,
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -102,8 +103,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
     private void showCampaignError(Exception exception) {
         String message = CampaignApiRepository.isUnauthorized(exception)
-                ? "No tenés permisos para consultar las campañas (401/403)."
-                : "No se pudieron cargar las campañas. Revisá tu conexión e intentá nuevamente.";
+                ? getString(R.string.admin_campaigns_unauthorized)
+                : getString(R.string.campaigns_load_error);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 

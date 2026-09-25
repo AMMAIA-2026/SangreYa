@@ -90,13 +90,9 @@ public class CampaignListActivity extends AppCompatActivity {
             @Override
             public void onError(Exception exception) {
                 setLoading(false);
-                String detail = exception.getMessage();
-                if (detail == null || detail.isEmpty()) {
-                    detail = exception.getClass().getSimpleName();
-                }
                 Toast.makeText(
                         CampaignListActivity.this,
-                        "No se pudieron cargar las campañas: " + detail,
+                        R.string.campaigns_load_error,
                         Toast.LENGTH_LONG).show();
             }
         });
