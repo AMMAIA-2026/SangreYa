@@ -39,6 +39,9 @@ public interface ApiService {
     @GET("usuarios/{usuarioId}/")
     Call<AuthUser> getUserProfile(@Path("usuarioId") int userId);
 
+    @GET("usuarios/")
+    Call<List<AuthUser>> getUsers();
+
     @PUT("usuarios/{usuarioId}/")
     Call<AuthUser> updateUserProfile(
             @Path("usuarioId") int userId,
