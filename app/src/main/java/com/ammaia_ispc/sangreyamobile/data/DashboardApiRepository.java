@@ -1,8 +1,8 @@
 package com.ammaia_ispc.sangreyamobile.data;
 
-import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
-import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.model.AdminDashboardData;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
@@ -11,70 +11,82 @@ import com.ammaia_ispc.sangreyamobile.model.DashboardMonthlyDonors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
-
 public final class DashboardApiRepository {
+    private static final String DASHBOARD_URL =
+            "https://sangreyaispc.pythonanywhere.com/dashboard/";
+    private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
+
     private DashboardApiRepository() {
     }
 
     public static void getDashboard(
-            Context context,
+            String accessToken,
             CampaignApiRepository.Callback<AdminDashboardData> callback) {
-        ApiClient.getApiService(context).getDashboard().enqueue(
-                new retrofit2.Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(
-                            Call<ResponseBody> call,
-                            Response<ResponseBody> response) {
-                        if (!response.isSuccessful()) {
-                            callback.onError(httpException(response));
-                            return;
-                        }
-
-                        ResponseBody body = response.body();
-                        if (body == null) {
-                            callback.onError(new IOException("Respuesta vacía del servidor"));
-                            return;
-                        }
-
-                        try {
-                            callback.onSuccess(fromJson(new JSONObject(body.string())));
-                        } catch (Exception exception) {
-                            callback.onError(exception);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable throwable) {
-                        callback.onError(asException(throwable));
-                    }
-                });
+        new Thread(() -> {
+            try {
+                String response = executeGet(accessToken);
+                AdminDashboardData dashboard = fromJson(new JSONObject(response));
+                MAIN_HANDLER.post(() -> callback.onSuccess(dashboard));
+            } catch (Exception exception) {
+                MAIN_HANDLER.post(() -> callback.onError(exception));
+            }
+        }).start();
     }
 
-    private static CampaignApiRepository.HttpException httpException(
-            Response<?> response) {
-        String body = "";
-        ResponseBody errorBody = response.errorBody();
-        if (errorBody != null) {
-            try {
-                body = errorBody.string();
-            } catch (IOException ignored) {
-                // Keep the status code when the error body cannot be read.
+    private static String executeGet(String accessToken) throws Exception {
+        HttpURLConnection connection = null;
+
+        try {
+            connection = (HttpURLConnection) new URL(DASHBOARD_URL).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+            connection.setRequestProperty("Accept", "application/json");
+            if (accessToken != null && !accessToken.trim().isEmpty()) {
+                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
+
+            int statusCode = connection.getResponseCode();
+            InputStream stream = statusCode >= 200 && statusCode < 300
+                    ? connection.getInputStream()
+                    : connection.getErrorStream();
+            String body = readBody(stream);
+
+            if (statusCode < 200 || statusCode >= 300) {
+                throw new CampaignApiRepository.HttpException(statusCode, body);
+            }
+
+            return body;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
             }
         }
-        return new CampaignApiRepository.HttpException(response.code(), body);
     }
 
-    private static Exception asException(Throwable throwable) {
-        return throwable instanceof Exception
-                ? (Exception) throwable
-                : new IOException(throwable);
+    private static String readBody(InputStream stream) throws Exception {
+        if (stream == null) {
+            return "";
+        }
+
+        StringBuilder body = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                body.append(line);
+            }
+        }
+        return body.toString();
     }
 
     private static AdminDashboardData fromJson(JSONObject json) {

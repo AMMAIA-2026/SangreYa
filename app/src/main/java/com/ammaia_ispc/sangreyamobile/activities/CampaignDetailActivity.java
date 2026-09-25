@@ -26,6 +26,8 @@ import com.google.android.material.navigation.NavigationView;
 public class CampaignDetailActivity extends AppCompatActivity {
     private Campaign campaign;
     private boolean standardUser;
+    private String user;
+    private String role;
     private Button enrollButton;
     private Button adminEnrollmentsButton;
     private View actionArea;
@@ -40,8 +42,15 @@ public class CampaignDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
-        standardUser = !SessionManager.isAdmin(this)
-                && !TextUtils.isEmpty(SessionManager.getAccessToken(this));
+        standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
+        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
+        role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
+        if (TextUtils.isEmpty(user)) {
+            user = SessionManager.getUserName(this);
+        }
+        if (!standardUser && !TextUtils.isEmpty(user) && !SessionManager.isAdmin(this)) {
+            standardUser = true;
+        }
         setContentView(R.layout.activity_campaign_detail);
         bindViews();
 
@@ -52,8 +61,10 @@ public class CampaignDetailActivity extends AppCompatActivity {
 
     private void loadCampaignDetails() {
         CampaignApiRepository.getCampaign(
-                this,
                 campaign.id,
+                ExtraKeys.ROLE_ADMIN.equals(role)
+                        ? SessionManager.getAccessToken(this)
+                        : null,
                 new CampaignApiRepository.Callback<Campaign>() {
                     @Override
                     public void onSuccess(Campaign value) {
@@ -81,7 +92,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
     private void bindViews() {
         DrawerLayout drawerLayout = findViewById(R.id.detail_root);
         NavigationView navigationView = findViewById(R.id.detail_navigation_view);
-        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user, role);
 
         View backButton = findViewById(R.id.detail_back_button);
         backButton.setVisibility(View.VISIBLE);
@@ -129,7 +140,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
         actionArea = findViewById(R.id.action_area);
         enrollButton = findViewById(R.id.enroll_button);
         actionArea.setVisibility(View.GONE);
-        boolean adminUser = SessionManager.isAdmin(this);
+        boolean adminUser = ExtraKeys.ROLE_ADMIN.equals(role) || SessionManager.isAdmin(this);
         if ("Finalizada".equals(campaign.calculatedStatus) || adminUser) {
             return;
         }
@@ -148,7 +159,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
 
     private void bindAdminEnrollmentsAction() {
         adminEnrollmentsButton = findViewById(R.id.admin_enrollments_button);
-        boolean adminUser = SessionManager.isAdmin(this);
+        boolean adminUser = ExtraKeys.ROLE_ADMIN.equals(role) || SessionManager.isAdmin(this);
         adminEnrollmentsButton.setVisibility(adminUser ? View.VISIBLE : View.GONE);
         if (adminUser) {
             adminEnrollmentsButton.setOnClickListener(view -> {
@@ -172,8 +183,8 @@ public class CampaignDetailActivity extends AppCompatActivity {
 
         setEnrollmentInProgress(true);
         CampaignApiRepository.enrollInCampaign(
-                this,
                 campaign.id,
+                accessToken,
                 new CampaignApiRepository.Callback<Integer>() {
                     @Override
                     public void onSuccess(Integer totalInscriptos) {

@@ -100,6 +100,7 @@ public final class SessionManager {
     public static void logout(Activity activity) {
         clearSession(activity);
         Intent intent = new Intent(activity, MainActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }

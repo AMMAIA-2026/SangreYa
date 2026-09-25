@@ -2,6 +2,7 @@ package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ import com.google.android.material.navigation.NavigationView;
 import android.widget.Toast;
 
 public class AdminDashboardActivity extends AppCompatActivity {
+    private String user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
             return;
         }
         CampaignHelper.configureSystemBars(this);
+        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
+        if (TextUtils.isEmpty(user)) {
+            user = SessionManager.getUserName(this);
+        }
         setContentView(R.layout.activity_admin_dashboard);
         bindViews();
     }
@@ -44,21 +51,36 @@ public class AdminDashboardActivity extends AppCompatActivity {
         NavigationDrawerHelper.configure(
                 this,
                 drawerLayout,
-                navigationView);
+                navigationView,
+                false,
+                user,
+                ExtraKeys.ROLE_ADMIN);
         findViewById(R.id.admin_campaigns_navigation).setOnClickListener(view -> openAllCampaigns());
 
         findViewById(R.id.admin_users_navigation).setOnClickListener(view -> {
             Intent intent = new Intent(this, UsersActivity.class);
+            intent.putExtra(ExtraKeys.EXTRA_USER, user);
             startActivity(intent);
         });
 
         findViewById(R.id.admin_messages_navigation).setOnClickListener(view -> {
             Intent intent = new Intent(this, AdminContactListActivity.class);
+            intent.putExtra(ExtraKeys.EXTRA_USER, user);
+            intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
             startActivity(intent);
         });
 
+        String accessToken = SessionManager.getAccessToken(this);
+        if (accessToken == null || accessToken.trim().isEmpty()) {
+            Toast.makeText(
+                    this,
+                    R.string.dashboard_token_required,
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
         DashboardApiRepository.getDashboard(
-                this,
+                accessToken,
                 new CampaignApiRepository.Callback<AdminDashboardData>() {
                     @Override
                     public void onSuccess(AdminDashboardData dashboard) {
@@ -155,11 +177,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
         intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);
+        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
+        intent.putExtra(ExtraKeys.EXTRA_USER, user);
+        intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
         startActivity(intent);
     }
 
     private void openAllCampaigns() {
         Intent intent = new Intent(this, AdminCampaignListActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_USER, user);
         startActivity(intent);
     }
 

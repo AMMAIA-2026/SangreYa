@@ -1,6 +1,7 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -78,7 +79,10 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
         NavigationDrawerHelper.configure(
                 this,
                 drawerLayout,
-                navigationView);
+                navigationView,
+                false,
+                SessionManager.getUserName(this),
+                ExtraKeys.ROLE_ADMIN);
     }
 
     private void showCampaign() {
@@ -88,11 +92,17 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
     }
 
     private void loadUsers() {
+        String accessToken = SessionManager.getAccessToken(this);
+        if (TextUtils.isEmpty(accessToken)) {
+            showMessage(R.string.admin_enrollments_unauthorized);
+            return;
+        }
+
         clearMessage();
         setLoading(true);
         CampaignApiRepository.getCampaignEnrollments(
-                this,
                 campaign.id,
+                accessToken,
                 new CampaignApiRepository.Callback<CampaignEnrollments>() {
                     @Override
                     public void onSuccess(CampaignEnrollments value) {

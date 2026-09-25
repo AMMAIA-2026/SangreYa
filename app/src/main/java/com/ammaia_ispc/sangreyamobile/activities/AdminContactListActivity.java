@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.MockContactRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
@@ -29,6 +30,7 @@ public class AdminContactListActivity extends AppCompatActivity {
     private MaterialButton unansweredFilter;
     private MaterialButton answeredFilter;
     private String currentFilter = "Todos";
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,12 @@ public class AdminContactListActivity extends AppCompatActivity {
 
         if (!SessionManager.requireAdmin(this)) {
             return;
+        }
+
+        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
+
+        if (user == null) {
+            user = "";
         }
 
         setContentView(R.layout.activity_admin_contact_list);
@@ -131,6 +139,8 @@ public class AdminContactListActivity extends AppCompatActivity {
 
     private void openDashboard() {
         Intent intent = new Intent(this, AdminDashboardActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_USER, user);
+        intent.putExtra(ExtraKeys.EXTRA_ACCESS_TOKEN, SessionManager.getAccessToken(this));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
@@ -138,11 +148,13 @@ public class AdminContactListActivity extends AppCompatActivity {
 
     private void openCampaigns() {
         Intent intent = new Intent(this, AdminCampaignListActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_USER, user);
         startActivity(intent);
     }
 
     private void openUsers() {
         Intent intent = new Intent(this, UsersActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_USER, user);
         startActivity(intent);
     }
 }

@@ -87,11 +87,17 @@ public class EnrollmentsActivity extends AppCompatActivity {
         NavigationDrawerHelper.configure(
                 this,
                 drawerLayout,
-                navigationView);
+                navigationView,
+                true,
+                SessionManager.getUserName(this),
+                SessionManager.getUserRole(this));
 
         findViewById(R.id.enrollments_campaigns_navigation_item)
                 .setOnClickListener(view -> {
                     Intent intent = new Intent(this, CampaignListActivity.class);
+                    intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, true);
+                    intent.putExtra(ExtraKeys.EXTRA_USER, SessionManager.getUserName(this));
+                    intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, SessionManager.getUserRole(this));
                     startActivity(intent);
                     finish();
                 });
@@ -118,7 +124,7 @@ public class EnrollmentsActivity extends AppCompatActivity {
         clearMessage();
         setLoading(true);
         CampaignApiRepository.getMyEnrollments(
-                this,
+                SessionManager.getAccessToken(this),
                 new CampaignApiRepository.Callback<MyEnrollments>() {
                     @Override
                     public void onSuccess(MyEnrollments value) {
@@ -222,8 +228,8 @@ public class EnrollmentsActivity extends AppCompatActivity {
 
         cancellationInProgress = true;
         CampaignApiRepository.cancelEnrollment(
-                this,
                 enrollment.id,
+                SessionManager.getAccessToken(this),
                 new CampaignApiRepository.Callback<Void>() {
                     @Override
                     public void onSuccess(Void value) {
@@ -258,6 +264,9 @@ public class EnrollmentsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
         intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);
+        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, true);
+        intent.putExtra(ExtraKeys.EXTRA_USER, SessionManager.getUserName(this));
+        intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, SessionManager.getUserRole(this));
         startActivity(intent);
     }
 
