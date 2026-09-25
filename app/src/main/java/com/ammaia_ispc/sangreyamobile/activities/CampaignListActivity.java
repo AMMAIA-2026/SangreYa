@@ -44,26 +44,13 @@ public class CampaignListActivity extends AppCompatActivity {
     private MaterialButton upcomingFilter;
     private EditText searchInput;
     private boolean standardUser;
-    private String user;
-    private String role;
     private String currentFilter = "Todas";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CampaignHelper.configureSystemBars(this);
-        standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
-        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-        role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
-        if (TextUtils.isEmpty(user)) {
-            user = SessionManager.getUserName(this);
-        }
-        if (!standardUser && !TextUtils.isEmpty(user) && !SessionManager.isAdmin(this)) {
-            standardUser = true;
-        }
-        if (TextUtils.isEmpty(role) && SessionManager.isAdmin(this)) {
-            role = ExtraKeys.ROLE_ADMIN;
-        }
+        standardUser = isStandardUser();
         setContentView(R.layout.activity_campaign_list);
         bindViews();
         configureFilters();
@@ -79,7 +66,7 @@ public class CampaignListActivity extends AppCompatActivity {
 
     private void loadCampaigns() {
         setLoading(true);
-        CampaignApiRepository.getCampaigns(new CampaignApiRepository.Callback<List<Campaign>>() {
+        CampaignApiRepository.getCampaigns(this, new CampaignApiRepository.Callback<List<Campaign>>() {
             @Override
             public void onSuccess(List<Campaign> value) {
                 campaigns = value;
@@ -123,10 +110,10 @@ public class CampaignListActivity extends AppCompatActivity {
     }
 
     private void refreshNavigation() {
-        user = SessionManager.getUserName(this);
+        standardUser = isStandardUser();
         DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);
         NavigationView navigationView = findViewById(R.id.campaign_navigation_view);
-        NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user, role);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
     }
 
     private void configureFilters() {
@@ -233,9 +220,11 @@ public class CampaignListActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
         intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);
-        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, standardUser);
-        intent.putExtra(ExtraKeys.EXTRA_USER, user);
-        intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, role);
         startActivity(intent);
+    }
+
+    private boolean isStandardUser() {
+        return !SessionManager.isAdmin(this)
+                && !TextUtils.isEmpty(SessionManager.getAccessToken(this));
     }
 }
