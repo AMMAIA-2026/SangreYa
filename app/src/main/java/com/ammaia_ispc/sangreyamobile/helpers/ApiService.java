@@ -12,6 +12,7 @@ import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryRequest;
 import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryResponse;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
 import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
+import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
 
 import java.util.List;
 
@@ -28,6 +29,9 @@ public interface ApiService {
 
     @POST("api/token/")
     Call<LoginResponse> login(@Body LoginRequest request);
+
+    @POST("usuarios/registro/")
+    Call<Void> register(@Body RegisterRequest request);
 
     @POST("api/token/refresh/")
     Call<RefreshResponse> refreshToken(@Body RefreshRequest request);
