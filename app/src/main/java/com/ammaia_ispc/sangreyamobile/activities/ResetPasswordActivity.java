@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryRequest;
 import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryResponse;
 
@@ -71,12 +72,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(email)) {
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(
+            UiHelper.showToast(
                     this,
                     "No se pudo recuperar el email.",
                     Toast.LENGTH_SHORT
-            ).show();
+            );
             finish();
             return;
         }
@@ -99,12 +99,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
                         if (response.isSuccessful() && response.body() != null) {
 
-                            //TODO. Este toast se puede pasar a helper, Toast.makeText
-                            Toast.makeText(
+                            UiHelper.showToast(
                                     ResetPasswordActivity.this,
                                     response.body().getMessage(),
                                     Toast.LENGTH_LONG
-                            ).show();
+                            );
 
                             Intent intent = new Intent(
                                     ResetPasswordActivity.this,
@@ -120,12 +119,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             finish();
 
                         } else {
-                            //TODO. Este toast se puede pasar a helper, Toast.makeText
-                            Toast.makeText(
+                            UiHelper.showToast(
                                     ResetPasswordActivity.this,
                                     "No se pudo actualizar la contraseña.",
                                     Toast.LENGTH_LONG
-                            ).show();
+                            );
                         }
                     }
 
@@ -136,12 +134,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
                         saveButton.setEnabled(true);
 
-                        //TODO. Este toast se puede pasar a helper, Toast.makeText
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 ResetPasswordActivity.this,
                                 "No se pudo conectar con el servidor.",
                                 Toast.LENGTH_LONG
-                        ).show();
+                        );
                     }
                 });
     }
