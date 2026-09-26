@@ -25,6 +25,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -177,6 +179,30 @@ public final class CampaignApiRepository {
             Callback<Void> callback) {
         requestVoid(ApiClient.getApiService(context).cancelEnrollment(enrollmentId), callback);
     }
+
+    public static void createCampaign(
+            Context context,
+            String title,
+            String description,
+            String location,
+            Integer healthCenterId,
+            String startDate,
+            String endDate,
+            Integer maximumCapacity,
+            Callback<Campaign> callback) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("titulo", title);
+        body.put("descripcion", description);
+        body.put("ubicacion", location);
+        body.put("centro_salud", healthCenterId);
+        body.put("fecha_inicio", startDate);
+        body.put("fecha_fin", endDate);
+        body.put("cupo_maximo", maximumCapacity);
+
+        request(ApiClient.getApiService(context).createCampaign(body), response ->
+                fromJson(new JSONObject(response)), callback);
+    }
+
 
     public static void deleteCampaign(
             int campaignId,

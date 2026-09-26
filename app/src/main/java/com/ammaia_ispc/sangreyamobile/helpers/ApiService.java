@@ -15,6 +15,7 @@ import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import okhttp3.ResponseBody;
@@ -70,6 +71,9 @@ public interface ApiService {
 
     @GET("campanias/")
     Call<ResponseBody> getCampaigns();
+
+    @POST("campanias/")
+    Call<ResponseBody> createCampaign(@Body Map<String, Object> request);
 
     @GET("campanias/{campaignId}/")
     Call<ResponseBody> getCampaign(@Path("campaignId") int campaignId);

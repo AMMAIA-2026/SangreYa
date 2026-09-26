@@ -223,6 +223,7 @@
     <string name="search_campaign_hint">Buscar campaña…</string>
     <string name="search_campaign_description">Buscar campaña</string>
     <string name="add_campaign_description">Agregar nueva campaña</string>
+    <string name="campaign_create_server_error">No se pudo publicar la campaña. Intentá más tarde.</string>
     <string name="edit_campaign_description">Editar campaña</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
