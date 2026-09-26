@@ -275,23 +275,50 @@ public class CreateCampaignActivity extends AppCompatActivity {
         Integer selectedCenterId = selectedCenter != null ? selectedCenter.id : null;
 
         if (editingCampaign != null) {
-            Campaign updated = new Campaign(
+            setFormEnabled(false);
+            clearFieldErrors();
+
+            CampaignApiRepository.updateCampaign(
+                    this,
                     editingCampaign.id,
                     nameInput.getText().toString().trim(),
                     descriptionInput.getText().toString().trim(),
                     addressInput.getText().toString().trim(),
                     selectedCenterId,
-                    selectedCenter,
                     isoStartDate,
                     isoEndDate,
                     parseCapacity(),
-                    editingCampaign.totalRegistered,
-                    editingCampaign.campaignStatus,
-                    editingCampaign.calculatedStatus);
-            MockCampaignRepository.updateCampaign(updated);
+                    new CampaignApiRepository.Callback<Campaign>() {
+                        @Override
+                        public void onSuccess(Campaign campaign) {
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    R.string.campaign_updated_message, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
 
-            Toast.makeText(this, R.string.campaign_updated_message, Toast.LENGTH_SHORT).show();
-            finish();
+                        @Override
+                        public void onError(Exception exception) {
+                            setFormEnabled(true);
+
+                            if (CampaignApiRepository.isUnauthorized(exception)) {
+                                Toast.makeText(CreateCampaignActivity.this,
+                                        R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            if (CampaignApiRepository.isNetworkError(exception)) {
+                                Toast.makeText(CreateCampaignActivity.this,
+                                        R.string.campaign_create_network_error, Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            String friendlyMessage = extractValidationMessage(exception);
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    friendlyMessage != null ? friendlyMessage
+                                            : getString(R.string.campaign_create_server_error),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
             return;
         }
 

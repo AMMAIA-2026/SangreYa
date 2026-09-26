@@ -78,6 +78,11 @@ public interface ApiService {
     @GET("campanias/{campaignId}/")
     Call<ResponseBody> getCampaign(@Path("campaignId") int campaignId);
 
+    @PUT("campanias/{campaignId}/")
+    Call<ResponseBody> updateCampaign(
+            @Path("campaignId") int campaignId,
+            @Body Map<String, Object> request);
+
     @POST("inscripciones/campanias/{campaignId}/")
     Call<ResponseBody> enrollInCampaign(@Path("campaignId") int campaignId);
 

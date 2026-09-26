@@ -203,6 +203,30 @@ public final class CampaignApiRepository {
                 fromJson(new JSONObject(response)), callback);
     }
 
+    public static void updateCampaign(
+            Context context,
+            int campaignId,
+            String title,
+            String description,
+            String location,
+            Integer healthCenterId,
+            String startDate,
+            String endDate,
+            Integer maximumCapacity,
+            Callback<Campaign> callback) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("titulo", title);
+        body.put("descripcion", description);
+        body.put("ubicacion", location);
+        body.put("centro_salud", healthCenterId);
+        body.put("fecha_inicio", startDate);
+        body.put("fecha_fin", endDate);
+        body.put("cupo_maximo", maximumCapacity);
+
+        request(ApiClient.getApiService(context).updateCampaign(campaignId, body), response ->
+                fromJson(new JSONObject(response)), callback);
+    }
+
 
     public static void deleteCampaign(
             int campaignId,
