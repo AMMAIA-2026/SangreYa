@@ -223,6 +223,8 @@
     <string name="search_campaign_hint">Buscar campaña…</string>
     <string name="search_campaign_description">Buscar campaña</string>
     <string name="add_campaign_description">Agregar nueva campaña</string>
+    <string name="campaign_create_network_error">No se pudo publicar la campaña. Revisá tu conexión e intentá de nuevo.</string>
+    <string name="campaign_create_unauthorized_error">No tenés permisos para crear campañas.</string>
     <string name="campaign_create_server_error">No se pudo publicar la campaña. Intentá más tarde.</string>
     <string name="edit_campaign_description">Editar campaña</string>
     <string name="filter_finished">Finalizadas</string>

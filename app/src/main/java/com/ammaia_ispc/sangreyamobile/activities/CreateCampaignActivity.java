@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -61,8 +62,18 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         nameInput = findViewById(R.id.create_campaign_name);
         healthCenterInput = findViewById(R.id.create_campaign_health_center);
-        loadHealthCenters();
         addressInput = findViewById(R.id.create_campaign_address);
+        loadHealthCenters();
+        healthCenterInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                autofillAddressFromSelectedCenter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         startDateInput = findViewById(R.id.create_campaign_start_date);
         endDateInput = findViewById(R.id.create_campaign_end_date);
         startTimeInput = findViewById(R.id.create_campaign_start_time);
@@ -156,6 +167,36 @@ public class CreateCampaignActivity extends AppCompatActivity {
             return null;
         }
         return healthCenterOptions.get(position);
+    }
+
+    private void autofillAddressFromSelectedCenter() {
+        if (!TextUtils.isEmpty(addressInput.getText())) {
+            return;
+        }
+        HealthCenter selected = selectedHealthCenter();
+        if (selected != null && !TextUtils.isEmpty(selected.address)) {
+            addressInput.setText(selected.address);
+        }
+    }
+
+    private String extractValidationMessage(Exception exception) {
+        if (!(exception instanceof CampaignApiRepository.HttpException)) {
+            return null;
+        }
+        try {
+            String body = ((CampaignApiRepository.HttpException) exception).getBody();
+            org.json.JSONObject json = new org.json.JSONObject(body);
+            java.util.Iterator<String> keys = json.keys();
+            if (keys.hasNext()) {
+                String firstKey = keys.next();
+                Object value = json.get(firstKey);
+                if (value instanceof org.json.JSONArray && ((org.json.JSONArray) value).length() > 0) {
+                    return ((org.json.JSONArray) value).getString(0);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     private void prefillForEdit() {
@@ -277,8 +318,24 @@ public class CreateCampaignActivity extends AppCompatActivity {
                     @Override
                     public void onError(Exception exception) {
                         setFormEnabled(true);
+
+                        if (CampaignApiRepository.isUnauthorized(exception)) {
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (CampaignApiRepository.isNetworkError(exception)) {
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        String friendlyMessage = extractValidationMessage(exception);
                         Toast.makeText(CreateCampaignActivity.this,
-                                R.string.campaign_create_server_error, Toast.LENGTH_LONG).show();
+                                friendlyMessage != null ? friendlyMessage
+                                        : getString(R.string.campaign_create_server_error),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }
