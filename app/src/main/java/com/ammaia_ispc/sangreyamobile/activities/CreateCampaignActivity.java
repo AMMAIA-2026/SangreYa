@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +25,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.ammaia_ispc.sangreyamobile.data.HealthCenterApiRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,8 +62,18 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         nameInput = findViewById(R.id.create_campaign_name);
         healthCenterInput = findViewById(R.id.create_campaign_health_center);
-        loadHealthCenters();
         addressInput = findViewById(R.id.create_campaign_address);
+        loadHealthCenters();
+        healthCenterInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                autofillAddressFromSelectedCenter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         startDateInput = findViewById(R.id.create_campaign_start_date);
         endDateInput = findViewById(R.id.create_campaign_end_date);
         startTimeInput = findViewById(R.id.create_campaign_start_time);
@@ -84,7 +96,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
     private void loadHealthCenters() {
         View publishButton = findViewById(R.id.create_campaign_publish);
 
-        // Mientras carga: solo "sin centro", y bloqueamos selector y botón.
         populateHealthCenterOptions(new ArrayList<>());
         healthCenterInput.setEnabled(false);
         publishButton.setEnabled(false);
@@ -105,8 +116,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 if (isFinishing() || isDestroyed()) {
                     return;
                 }
-                // Si estamos editando y falló la carga, conservamos el centro que ya tenía
-                // la campaña para no borrarlo sin querer al guardar.
+
                 List<HealthCenter> fallback = new ArrayList<>();
                 if (editingCampaign != null && editingCampaign.healthCenter != null) {
                     fallback.add(editingCampaign.healthCenter);
@@ -114,7 +124,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 populateHealthCenterOptions(fallback);
                 healthCenterInput.setEnabled(true);
                 publishButton.setEnabled(true);
-                //TODO. Este toast se puede pasar a helper, Toast.makeText
                 Toast.makeText(CreateCampaignActivity.this, messageRes, Toast.LENGTH_LONG).show();
             }
         });
@@ -158,6 +167,36 @@ public class CreateCampaignActivity extends AppCompatActivity {
             return null;
         }
         return healthCenterOptions.get(position);
+    }
+
+    private void autofillAddressFromSelectedCenter() {
+        if (!TextUtils.isEmpty(addressInput.getText())) {
+            return;
+        }
+        HealthCenter selected = selectedHealthCenter();
+        if (selected != null && !TextUtils.isEmpty(selected.address)) {
+            addressInput.setText(selected.address);
+        }
+    }
+
+    private String extractValidationMessage(Exception exception) {
+        if (!(exception instanceof CampaignApiRepository.HttpException)) {
+            return null;
+        }
+        try {
+            String body = ((CampaignApiRepository.HttpException) exception).getBody();
+            org.json.JSONObject json = new org.json.JSONObject(body);
+            java.util.Iterator<String> keys = json.keys();
+            if (keys.hasNext()) {
+                String firstKey = keys.next();
+                Object value = json.get(firstKey);
+                if (value instanceof org.json.JSONArray && ((org.json.JSONArray) value).length() > 0) {
+                    return ((org.json.JSONArray) value).getString(0);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     private void prefillForEdit() {
@@ -250,33 +289,71 @@ public class CreateCampaignActivity extends AppCompatActivity {
                     editingCampaign.campaignStatus,
                     editingCampaign.calculatedStatus);
             MockCampaignRepository.updateCampaign(updated);
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
+
             Toast.makeText(this, R.string.campaign_updated_message, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        Campaign campaign = new Campaign(
-                MockCampaignRepository.nextId(),
+        setFormEnabled(false);
+        clearFieldErrors();
+
+        CampaignApiRepository.createCampaign(
+                this,
                 nameInput.getText().toString().trim(),
                 descriptionInput.getText().toString().trim(),
                 addressInput.getText().toString().trim(),
                 selectedCenterId,
-                selectedCenter,
                 isoStartDate,
                 isoEndDate,
                 parseCapacity(),
-                0,
-                "Proximamente",
-                "Proximamente");
-        MockCampaignRepository.addCampaign(campaign);
-        //TODO. Este toast se puede pasar a helper, Toast.makeText
-        Toast.makeText(this, R.string.campaign_published_message, Toast.LENGTH_SHORT).show();
-        finish();
+                new CampaignApiRepository.Callback<Campaign>() {
+                    @Override
+                    public void onSuccess(Campaign campaign) {
+                        Toast.makeText(CreateCampaignActivity.this,
+                                R.string.campaign_published_message, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        setFormEnabled(true);
+
+                        if (CampaignApiRepository.isUnauthorized(exception)) {
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (CampaignApiRepository.isNetworkError(exception)) {
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        String friendlyMessage = extractValidationMessage(exception);
+                        Toast.makeText(CreateCampaignActivity.this,
+                                friendlyMessage != null ? friendlyMessage
+                                        : getString(R.string.campaign_create_server_error),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void setFormEnabled(boolean enabled) {
+        findViewById(R.id.create_campaign_publish).setEnabled(enabled);
+    }
+
+    private void clearFieldErrors() {
+        nameInput.setError(null);
+        descriptionInput.setError(null);
+        addressInput.setError(null);
+        startDateInput.setError(null);
+        endDateInput.setError(null);
+        capacityInput.setError(null);
     }
 
     private void saveDraft() {
-        //TODO. Este toast se puede pasar a helper, Toast.makeText
         Toast.makeText(this, R.string.campaign_draft_saved_message, Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -287,7 +364,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 || TextUtils.isEmpty(startDateInput.getText())
                 || TextUtils.isEmpty(endDateInput.getText())
                 || TextUtils.isEmpty(capacityInput.getText())) {
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
             Toast.makeText(this, R.string.campaign_required_fields_message, Toast.LENGTH_SHORT).show();
             return false;
         }
