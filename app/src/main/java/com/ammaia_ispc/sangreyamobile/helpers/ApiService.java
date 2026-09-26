@@ -15,6 +15,7 @@ import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import okhttp3.ResponseBody;
@@ -38,6 +39,9 @@ public interface ApiService {
 
     @GET("usuarios/{usuarioId}/")
     Call<AuthUser> getUserProfile(@Path("usuarioId") int userId);
+
+    @GET("usuarios/")
+    Call<List<AuthUser>> getUsers();
 
     @PUT("usuarios/{usuarioId}/")
     Call<AuthUser> updateUserProfile(
@@ -68,8 +72,16 @@ public interface ApiService {
     @GET("campanias/")
     Call<ResponseBody> getCampaigns();
 
+    @POST("campanias/")
+    Call<ResponseBody> createCampaign(@Body Map<String, Object> request);
+
     @GET("campanias/{campaignId}/")
     Call<ResponseBody> getCampaign(@Path("campaignId") int campaignId);
+
+    @PUT("campanias/{campaignId}/")
+    Call<ResponseBody> updateCampaign(
+            @Path("campaignId") int campaignId,
+            @Body Map<String, Object> request);
 
     @POST("inscripciones/campanias/{campaignId}/")
     Call<ResponseBody> enrollInCampaign(@Path("campaignId") int campaignId);

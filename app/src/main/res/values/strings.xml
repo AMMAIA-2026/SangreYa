@@ -150,18 +150,18 @@
     <string name="link_registrate">registrate</string>
 
     <!-- Registro -->
-    <string name="RegisterTitle">crear cuenta</string>
-    <string name="hint_nombre">ana gomez</string>
+    <string name="RegisterTitle">Crear cuenta</string>
+    <string name="hint_nombre">Ana gomez</string>
     <string name="hint_grupo">Seleccionar</string>
-    <string name="btn_crear_cuenta">crear cuenta</string>
-    <string name="texto_ya_tenes_cuenta">¿ya tenes cuenta? </string>
-    <string name="link_iniciar_sesion">iniciar sesion</string>
+    <string name="btn_crear_cuenta">Crear cuenta</string>
+    <string name="texto_ya_tenes_cuenta">¿Ya tenes cuenta? </string>
+    <string name="link_iniciar_sesion">Iniciar sesion</string>
 
     <!-- Labels compartidos -->
-    <string name="label_nombre_completo">nombre completo</string>
-    <string name="label_email">email</string>
-    <string name="label_password">contrasena</string>
-    <string name="label_grupo">grupo sanguineo</string>
+    <string name="label_nombre_completo">Nombre completo</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Contraseña</string>
+    <string name="label_grupo">Grupo sanguineo</string>
 
     <string name="back">Volver</string>
 
@@ -223,6 +223,9 @@
     <string name="search_campaign_hint">Buscar campaña…</string>
     <string name="search_campaign_description">Buscar campaña</string>
     <string name="add_campaign_description">Agregar nueva campaña</string>
+    <string name="campaign_create_network_error">No se pudo publicar la campaña. Revisá tu conexión e intentá de nuevo.</string>
+    <string name="campaign_create_unauthorized_error">No tenés permisos para crear campañas.</string>
+    <string name="campaign_create_server_error">No se pudo publicar la campaña. Intentá más tarde.</string>
     <string name="edit_campaign_description">Editar campaña</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
