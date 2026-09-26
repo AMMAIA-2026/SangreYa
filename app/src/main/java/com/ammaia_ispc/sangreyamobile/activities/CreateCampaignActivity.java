@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
@@ -25,7 +25,6 @@ import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.ammaia_ispc.sangreyamobile.data.HealthCenterApiRepository;
-import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -234,10 +233,34 @@ public class CreateCampaignActivity extends AppCompatActivity {
     }
 
     private void deleteCampaign() {
-        MockCampaignRepository.deleteCampaign(editingCampaign.id);
-        //TODO. Este toast se puede pasar a helper, Toast.makeText
-        Toast.makeText(this, R.string.campaign_deleted_message, Toast.LENGTH_SHORT).show();
-        finish();
+        String accessToken = SessionManager.getAccessToken(this);
+        CampaignApiRepository.deleteCampaign(editingCampaign.id, accessToken,
+                new CampaignApiRepository.Callback<Void>() {
+                    @Override
+                    public void onSuccess(Void value) {
+                        Toast.makeText(CreateCampaignActivity.this,
+                                R.string.campaign_deleted_message, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        if (CampaignApiRepository.isUnauthorized(exception)) {
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (CampaignApiRepository.isNetworkError(exception)) {
+                            Toast.makeText(CreateCampaignActivity.this,
+                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        Toast.makeText(CreateCampaignActivity.this,
+                                R.string.campaign_create_server_error, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void showDatePicker(EditText target) {
