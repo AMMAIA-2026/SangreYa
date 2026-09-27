@@ -19,6 +19,9 @@
             android:name=".activities.AdminContactListActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ContactDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ContactActivity"
             android:exported="false" />
         <activity
