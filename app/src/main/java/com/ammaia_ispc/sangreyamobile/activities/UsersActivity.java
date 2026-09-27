@@ -1,4 +1,4 @@
-package com.ammaia_ispc.sangreyamobile.activities;
+        package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -8,9 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import com.ammaia_ispc.sangreyamobile.R;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
@@ -21,40 +22,38 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 import android.widget.ImageButton;
+
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 
 public class UsersActivity extends AppCompatActivity {
 
-private LinearLayout usersContainer;
+    private LinearLayout usersContainer;
 
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    if (!SessionManager.requireAdmin(this)) {
-        return;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (!SessionManager.requireAdmin(this)) {
+            return;
+        }
+
+        setContentView(R.layout.activity_users);
+
+        NavigationHelper.configureBackButton(this, R.id.btnBack);
+
+        // TODO. Conectar el componente admin bottom navigation, como en las otras
+        // activities principales de Admin.
+
+        usersContainer = findViewById(R.id.users_container);
+
+        loadUsers();
     }
-    setContentView(R.layout.activity_users);
-
-    NavigationHelper.configureBackButton(this, R.id.btnBack);
-
-    // TODO. Conectar el componente admin bottom navigation, como en las otras
-    // activities principales de Admin.
-
-
-
-    usersContainer = findViewById(R.id.users_container);
-
-    loadUsers();
-}
 
     private void loadUsers() {
 
-
         ApiService apiService = ApiClient.getApiService(this);
-
 
         apiService.getUsers().enqueue(new Callback<List<AuthUser>>() {
 
@@ -134,6 +133,61 @@ protected void onCreate(Bundle savedInstanceState) {
                                         "Cerrar",
                                         null
                                 )
+                                .setNegativeButton(
+                                        "Eliminar",
+                                        (dialog, which) -> {
+
+                                            new android.app.AlertDialog.Builder(
+                                                    UsersActivity.this
+                                            )
+                                                    .setTitle("Eliminar usuario")
+                                                    .setMessage(
+                                                            "¿Estás seguro de que querés eliminar a "
+                                                                    + user.getNombre()
+                                                                    + " "
+                                                                    + user.getApellido()
+                                                                    + "?"
+                                                    )
+                                                    .setNegativeButton(
+                                                            "Cancelar",
+                                                            null
+                                                    )
+                                                    .setPositiveButton(
+                                                            "Eliminar",
+                                                            (confirmDialog, confirmWhich) -> {
+
+                                                                ApiService apiService =
+                                                                        ApiClient.getApiService(
+                                                                                UsersActivity.this
+                                                                        );
+
+                                                                apiService.deleteUser(
+                                                                        user.getId()
+                                                                ).enqueue(new Callback<Void>() {
+
+                                                                    @Override
+                                                                    public void onResponse(
+                                                                            Call<Void> call,
+                                                                            Response<Void> response
+                                                                    ) {
+                                                                        if (response.isSuccessful()) {
+                                                                            loadUsers();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onFailure(
+                                                                            Call<Void> call,
+                                                                            Throwable t
+                                                                    ) {
+                                                                        // La conexión con la API falló.
+                                                                    }
+                                                                });
+                                                            }
+                                                    )
+                                                    .show();
+                                        }
+                                )
                                 .show();
                     });
 
@@ -161,11 +215,5 @@ protected void onCreate(Bundle savedInstanceState) {
             }
         });
     }
-
-
-
-
-
 }
-
 

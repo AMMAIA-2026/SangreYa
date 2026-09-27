@@ -48,6 +48,8 @@ public interface ApiService {
             @Path("usuarioId") int userId,
             @Body UserUpdateRequest request);
 
+    @DELETE("usuarios/{usuarioId}/")
+    Call<Void> deleteUser(@Path("usuarioId") int userId);
 
     @GET("centros-salud/")
     Call<List<HealthCenterResponse>> getHealthCenters();
