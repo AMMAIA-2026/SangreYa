@@ -17,7 +17,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
 import com.google.android.material.button.MaterialButton;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
-import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
+
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -185,46 +185,13 @@ public class AdminContactListActivity extends AppCompatActivity {
         ((TextView) card.findViewById(R.id.contact_message))
                 .setText(contact.getMessage());
 
-        card.setOnClickListener(view -> updateContactTracked(contact));
+        card.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ContactDetailActivity.class);
+            intent.putExtra("contact_id", contact.getId());
+            startActivity(intent);
+        });
 
         return card;
-    }
-
-    private void updateContactTracked(ContactMessage contact) {
-        ContactTrackedRequest request = new ContactTrackedRequest(true);
-
-        ApiClient.getApiService(this)
-                .updateContactTracked(contact.getId(), request)
-                .enqueue(new Callback<ContactMessage>() {
-
-                    @Override
-                    public void onResponse(
-                            Call<ContactMessage> call,
-                            Response<ContactMessage> response) {
-
-                        if (response.isSuccessful() && response.body() != null) {
-                            contacts.remove(contact);
-                            contacts.add(response.body());
-                            showContacts();
-                        } else {
-                            UiHelper.showToast(
-                                    AdminContactListActivity.this,
-                                    "No se pudo actualizar el seguimiento.",
-                                    Toast.LENGTH_SHORT);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-                            Call<ContactMessage> call,
-                            Throwable t) {
-
-                        UiHelper.showToast(
-                                AdminContactListActivity.this,
-                                "No se pudo conectar con el servidor.",
-                                Toast.LENGTH_SHORT);
-                    }
-                });
     }
 
 
