@@ -8,28 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
-    // TODO opcional: evaluar mover EMAIL_KEY a ExtraKeys como EXTRA_EMAIL.
-    // Parte exacta a mover: esta constante y sus dos usos del flujo de recuperación.
-    // Pasos si se decide centralizarla:
-    // 1. Agregar en ExtraKeys: public static final String EXTRA_EMAIL = "email";
-    // 2. Reemplazar putExtra(EMAIL_KEY, email) por putExtra(ExtraKeys.EXTRA_EMAIL, email).
-    // 3. Reemplazar getStringExtra(ForgotPasswordActivity.EMAIL_KEY) por
-    //    getStringExtra(ExtraKeys.EXTRA_EMAIL) en ResetPasswordActivity.
-    // 4. Eliminar EMAIL_KEY de esta Activity.
-    // Razones para moverla: centraliza los contratos entre Activities, evita duplicar
-    // nombres y deja todas las keys de navegación en un único lugar.
-    // Razones para mantenerla aquí: sólo la comparten este flujo y su destino, por lo
-    // que su ubicación local expresa suficientemente bien el alcance.
-    // Elija y borre este TODO, jaja.
-    public static final String EMAIL_KEY = "email";
 
     private EditText emailInput;
     private Button continueButton;
@@ -66,7 +52,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 ResetPasswordActivity.class
         );
 
-        intent.putExtra(EMAIL_KEY, email);
+        intent.putExtra(ExtraKeys.EXTRA_EMAIL, email);
         startActivity(intent);
     }
 }

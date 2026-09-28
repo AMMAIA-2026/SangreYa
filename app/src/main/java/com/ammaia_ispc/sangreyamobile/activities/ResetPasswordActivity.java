@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryRequest;
 import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryResponse;
@@ -47,7 +48,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.saveButton);
         backButton = findViewById(R.id.backButton);
 
-        email = getIntent().getStringExtra(ForgotPasswordActivity.EMAIL_KEY);
+        email = getIntent().getStringExtra(ExtraKeys.EXTRA_EMAIL);
 
         backButton.setOnClickListener(v -> finish());
         saveButton.setOnClickListener(v -> attemptSave());
