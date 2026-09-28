@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 
 import com.ammaia_ispc.sangreyamobile.data.ContactApiRepository;
 import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
@@ -93,12 +94,12 @@ public class ContactActivity extends AppCompatActivity {
         ContactApiRepository.sendContact(this, request, new ContactApiRepository.ContactCallback() {
             @Override
             public void onSuccess() {
-                //TODO. Este toast se puede pasar a helper, Toast.makeText
-                Toast.makeText(
+
+                UiHelper.showToast(
                         ContactActivity.this,
                         getString(R.string.contact_sent_message),
                         Toast.LENGTH_SHORT
-                ).show();
+                );
                 finish();
             }
 
@@ -118,12 +119,12 @@ public class ContactActivity extends AppCompatActivity {
                         break;
 
                     default:
-                        //TODO. Este toast se puede pasar a helper, Toast.makeText
-                        Toast.makeText(
+
+                        UiHelper.showToast(
                                 ContactActivity.this,
                                 message,
                                 Toast.LENGTH_SHORT
-                        ).show();
+                        );
                         break;
                 }
 
@@ -132,12 +133,12 @@ public class ContactActivity extends AppCompatActivity {
 
             @Override
             public void onError(int messageRes) {
-                //TODO. Este toast se puede pasar a helper, Toast.makeText
-                Toast.makeText(
+
+                UiHelper.showToast(
                         ContactActivity.this,
                         getString(messageRes),
                         Toast.LENGTH_SHORT
-                ).show();
+                );
 
                 btnEnviar.setEnabled(true);
             }
