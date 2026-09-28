@@ -1,13 +1,11 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import android.widget.Toast;
 
 import com.ammaia_ispc.sangreyamobile.R;
@@ -149,18 +147,11 @@ public class AdminContactListActivity extends AppCompatActivity {
     }
 
     private void updateFilterStyles() {
-        styleFilter(allFilter, currentFilter.equals("Todos"));
-        styleFilter(unansweredFilter, currentFilter.equals("Sin responder"));
-        styleFilter(answeredFilter, currentFilter.equals("Respondidos"));
+        UiHelper.styleFilter(this, allFilter, currentFilter.equals("Todos"));
+        UiHelper.styleFilter(this, unansweredFilter, currentFilter.equals("Sin responder"));
+        UiHelper.styleFilter(this, answeredFilter, currentFilter.equals("Respondidos"));
     }
 
-    // TODO: Si se extrae un helper comun para styleFilter en campanias e inscripciones,
-    // aplicar tambien aqui cuando el refactor alcance la bandeja de contactos.
-    private void styleFilter(MaterialButton filter, boolean selected) {
-        filter.setTextColor(ContextCompat.getColor(this, selected ? R.color.white : R.color.secondary_text));
-        filter.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(this, selected ? R.color.primary_red : R.color.surface)));
-    }
 
     private View createContactCard(ContactMessage contact) {
         View card = getLayoutInflater().inflate(

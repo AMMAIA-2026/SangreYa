@@ -7,12 +7,15 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.res.ColorStateList;
 
 import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.Locale;
+
 
 public final class UiHelper {
     private UiHelper() {
@@ -52,6 +55,27 @@ public final class UiHelper {
         Toast.makeText(context, message, duration).show();
     }
 
+    public static void styleFilter(
+            Context context,
+            MaterialButton filter,
+            boolean selected) {
+
+        filter.setTextColor(
+                ContextCompat.getColor(
+                        context,
+                        selected ? R.color.white : R.color.secondary_text
+                )
+        );
+
+        filter.setBackgroundTintList(
+                ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                                context,
+                                selected ? R.color.primary_red : R.color.surface
+                        )
+                )
+        );
+    }
     /*
      * TODO: completar la centralizacion de Toast.makeText.
      * Pendiente:
