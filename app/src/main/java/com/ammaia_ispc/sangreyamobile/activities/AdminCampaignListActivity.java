@@ -349,12 +349,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         String accessToken = SessionManager.getAccessToken(this);
 
         if (accessToken == null || accessToken.trim().isEmpty()) {
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(
+            UiHelper.showToast(
                     this,
                     "No hay una sesión de administrador activa.",
                     Toast.LENGTH_LONG
-            ).show();
+            );
             return;
         }
 
@@ -374,12 +373,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(Void value) {
-                        //TODO. Este toast se puede pasar a helper, Toast.makeText
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 AdminCampaignListActivity.this,
                                 "Campaña eliminada correctamente.",
                                 Toast.LENGTH_SHORT
-                        ).show();
+                        );
 
                         loadCampaigns();
                     }
@@ -399,12 +397,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                             message = "No se pudo eliminar la campaña. Intentá nuevamente.";
                         }
 
-                        //TODO. Este toast se puede pasar a helper, Toast.makeText
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 AdminCampaignListActivity.this,
                                 message,
                                 Toast.LENGTH_LONG
-                        ).show();
+                        );
                     }
                 }
         );
