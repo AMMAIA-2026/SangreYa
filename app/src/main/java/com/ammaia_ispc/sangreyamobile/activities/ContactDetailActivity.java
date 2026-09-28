@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
 import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
 
@@ -73,11 +74,11 @@ public class ContactDetailActivity extends AppCompatActivity {
                             updateButton();
 
                         } else {
-                            Toast.makeText(
+                            UiHelper.showToast(
                                     ContactDetailActivity.this,
                                     "No se pudo cargar el contacto.",
                                     Toast.LENGTH_SHORT
-                            ).show();
+                            );
                             finish();
                         }
                     }
@@ -87,11 +88,11 @@ public class ContactDetailActivity extends AppCompatActivity {
                             Call<ContactMessage> call,
                             Throwable t) {
 
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 ContactDetailActivity.this,
                                 "No se pudo conectar con el servidor.",
                                 Toast.LENGTH_SHORT
-                        ).show();
+                        );
                         finish();
                     }
                 });
@@ -116,11 +117,11 @@ public class ContactDetailActivity extends AppCompatActivity {
                             tracked = response.body().isTracked();
                             updateButton();
                         } else {
-                            Toast.makeText(
+                            UiHelper.showToast(
                                     ContactDetailActivity.this,
                                     "No se pudo actualizar el seguimiento.",
                                     Toast.LENGTH_SHORT
-                            ).show();
+                            );
                         }
                     }
 
@@ -129,11 +130,11 @@ public class ContactDetailActivity extends AppCompatActivity {
                             Call<ContactMessage> call,
                             Throwable t) {
 
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 ContactDetailActivity.this,
                                 "No se pudo conectar con el servidor.",
                                 Toast.LENGTH_SHORT
-                        ).show();
+                        );
                     }
                 });
     }
