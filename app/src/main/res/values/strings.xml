@@ -111,6 +111,15 @@
     <string name="profile_age_warning_message">La fecha elegida te deja fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrás inscribirte en nuevas campañas. Las inscripciones que ya tenés no se cancelan automáticamente. ¿Querés guardar el cambio?</string>
     <string name="profile_age_warning_cancel">Cancelar</string>
     <string name="profile_age_warning_confirm">Guardar de todos modos</string>
+    <string name="admin_edit_user_title">Editar usuario</string>
+    <string name="admin_edit_user_subtitle">Actualizá los datos personales del usuario</string>
+    <string name="admin_user_updated_message">Usuario actualizado correctamente.</string>
+    <string name="admin_user_load_error">No se pudo cargar el usuario. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="admin_user_update_error">No se pudieron guardar los cambios del usuario. Revisá los datos e intentá nuevamente.</string>
+    <string name="admin_user_unauthorized_error">No tenés permisos para modificar este usuario.</string>
+    <string name="admin_user_not_found_error">No encontramos el usuario seleccionado.</string>
+    <string name="admin_user_age_warning_title">Edad fuera del rango de donación</string>
+    <string name="admin_user_age_warning_message">La fecha elegida deja al usuario fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrá inscribirse en nuevas campañas. ¿Querés guardar el cambio?</string>
 
     <!--CampaignDetail-->
     <string name="registered_detail">%1$d personas ya se inscribieron</string>

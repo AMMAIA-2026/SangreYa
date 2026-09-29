@@ -1,5 +1,6 @@
-        package com.ammaia_ispc.sangreyamobile.activities;
+package com.ammaia_ispc.sangreyamobile.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 
 import java.util.List;
@@ -29,6 +31,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 
 public class UsersActivity extends AppCompatActivity {
 
+    private static final int REQUEST_EDIT_USER = 1001;
     private LinearLayout usersContainer;
 
     @Override
@@ -45,15 +48,6 @@ public class UsersActivity extends AppCompatActivity {
 
         // TODO. Conectar el componente admin bottom navigation, como en las otras
         // activities principales de Admin.
-        // TODO(date-input): todavía no existe formulario de edición de usuario admin.
-        // Cuando se agregue:
-        // 1. Declarar y enlazar el EditText adminBirthDateInput.
-        // 2. Configurar su XML como campo editable con
-        //    android:drawableEnd="@drawable/ic_calendar".
-        // 3. Importar DateHelper y llamar después de findViewById:
-        //    DateHelper.configureDateInput(this, adminBirthDateInput);
-        // 4. Convertir el valor antes de crear UserUpdateRequest con
-        //    DateHelper.toIsoDate(adminBirthDateInput.getText().toString()).
 
         usersContainer = findViewById(R.id.users_container);
 
@@ -137,10 +131,14 @@ public class UsersActivity extends AppCompatActivity {
                                                 + user.getDni()
                                                 + "\n\nRol: "
                                                 + user.getRol()
-                                )
-                                .setPositiveButton(
-                                        "Cerrar",
-                                        null
+                                 )
+                                 .setNeutralButton(
+                                         "Editar",
+                                         (dialog, which) -> openEditUser(user)
+                                 )
+                                 .setPositiveButton(
+                                         "Cerrar",
+                                         null
                                 )
                                 .setNegativeButton(
                                         "Eliminar",
@@ -223,6 +221,20 @@ public class UsersActivity extends AppCompatActivity {
                 // La conexión con la API falló.
             }
         });
+    }
+
+    private void openEditUser(AuthUser user) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID, user.getId());
+        startActivityForResult(intent, REQUEST_EDIT_USER);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EDIT_USER && resultCode == RESULT_OK) {
+            loadUsers();
+        }
     }
 }
 
