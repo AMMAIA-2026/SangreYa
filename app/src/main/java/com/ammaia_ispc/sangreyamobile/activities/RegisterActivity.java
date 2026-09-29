@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,8 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etConfirmPassword;
     private ImageButton btnTogglePassword;
     private ImageButton btnToggleConfirmPassword;
-    private boolean passwordVisible = false;
-    private boolean confirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
 
+        UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);
+        UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);
+
         etFechaNacimiento.setOnClickListener(v -> {
             Calendar calendario = Calendar.getInstance();
 
@@ -81,34 +80,6 @@ public class RegisterActivity extends AppCompatActivity {
             );
 
             datePickerDialog.show();
-        });
-
-        btnTogglePassword.setOnClickListener(v -> {
-            passwordVisible = !passwordVisible;
-
-            if (passwordVisible) {
-                etRegisterPassword.setTransformationMethod(
-                        HideReturnsTransformationMethod.getInstance());
-            } else {
-                etRegisterPassword.setTransformationMethod(
-                        PasswordTransformationMethod.getInstance());
-            }
-
-            etRegisterPassword.setSelection(etRegisterPassword.length());
-        });
-
-        btnToggleConfirmPassword.setOnClickListener(v -> {
-            confirmPasswordVisible = !confirmPasswordVisible;
-
-            if (confirmPasswordVisible) {
-                etConfirmPassword.setTransformationMethod(
-                        HideReturnsTransformationMethod.getInstance());
-            } else {
-                etConfirmPassword.setTransformationMethod(
-                        PasswordTransformationMethod.getInstance());
-            }
-
-            etConfirmPassword.setSelection(etConfirmPassword.length());
         });
 
         btnCreateAccount.setOnClickListener(v -> validarRegistro());

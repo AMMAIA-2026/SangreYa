@@ -2,8 +2,12 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +57,23 @@ public final class UiHelper {
 
     public static void showToast(Context context, CharSequence message, int duration) {
         Toast.makeText(context, message, duration).show();
+    }
+
+    public static void configurePasswordToggle(
+            EditText passwordInput,
+            ImageButton toggleButton) {
+        toggleButton.setContentDescription(
+                toggleButton.getContext().getString(R.string.show_password));
+        toggleButton.setOnClickListener(view -> {
+            boolean passwordVisible = !toggleButton.isSelected();
+            toggleButton.setSelected(passwordVisible);
+            passwordInput.setTransformationMethod(passwordVisible
+                    ? HideReturnsTransformationMethod.getInstance()
+                    : PasswordTransformationMethod.getInstance());
+            passwordInput.setSelection(passwordInput.length());
+            toggleButton.setContentDescription(toggleButton.getContext().getString(
+                    passwordVisible ? R.string.hide_password : R.string.show_password));
+        });
     }
 
     public static void styleFilter(

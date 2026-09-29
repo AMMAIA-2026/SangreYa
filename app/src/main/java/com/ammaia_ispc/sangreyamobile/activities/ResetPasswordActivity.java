@@ -48,6 +48,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.saveButton);
         backButton = findViewById(R.id.backButton);
 
+        // TODO(password-toggle): después de agregar los ImageButton btnToggleNewPassword y
+        // btnToggleConfirmPassword en activity_reset_password.xml, enlazarlos aquí y llamar:
+        // UiHelper.configurePasswordToggle(newPasswordInput, btnToggleNewPassword);
+        // UiHelper.configurePasswordToggle(confirmPasswordInput, btnToggleConfirmPassword);
+
         email = getIntent().getStringExtra(ExtraKeys.EXTRA_EMAIL);
 
         backButton.setOnClickListener(v -> finish());
