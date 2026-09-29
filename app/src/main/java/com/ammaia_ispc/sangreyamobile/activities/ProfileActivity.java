@@ -1,15 +1,12 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -22,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
@@ -50,7 +48,6 @@ public class ProfileActivity extends AppCompatActivity {
     private static final Pattern NAME_PATTERN = Pattern.compile(
             "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$");
     private static final String API_DATE_FORMAT = "yyyy-MM-dd";
-    private static final String DISPLAY_DATE_FORMAT = "dd/MM/yyyy";
 
     private EditText usernameInput;
     private EditText emailInput;
@@ -75,18 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
         bindViews();
         configureNavigation();
         configureBottomNavigation();
-        birthDateInput.setOnTouchListener((view, event) -> {
-            boolean onCalendarIcon = event.getX()
-                    >= birthDateInput.getWidth() - birthDateInput.getCompoundPaddingRight();
-            if (onCalendarIcon) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    syncBirthDateFromInput();
-                    openDatePicker();
-                }
-                return true;
-            }
-            return false;
-        });
+        DateHelper.configureDateInput(this, birthDateInput);
         saveButton.setOnClickListener(view -> saveProfile());
         loadProfile();
     }
@@ -164,40 +150,10 @@ public class ProfileActivity extends AppCompatActivity {
     private void setBirthDate(String isoDate) {
         birthDate = isoDate;
         if (isValidIsoDate(isoDate)) {
-            birthDateInput.setText(formatDate(isoDate, API_DATE_FORMAT, DISPLAY_DATE_FORMAT));
+            birthDateInput.setText(DateHelper.toDisplayDate(isoDate));
         } else {
             birthDateInput.setText("");
         }
-    }
-
-    private void openDatePicker() {
-        Calendar selectedDate = Calendar.getInstance();
-        Date parsedDate = parseDate(birthDate, API_DATE_FORMAT);
-        if (parsedDate != null) {
-            selectedDate.setTime(parsedDate);
-        }
-
-        DatePickerDialog dialog = new DatePickerDialog(
-                this,
-                (DatePicker view, int year, int month, int dayOfMonth) -> {
-                    birthDate = String.format(
-                            Locale.US,
-                            "%04d-%02d-%02d",
-                            year,
-                            month + 1,
-                            dayOfMonth);
-                    birthDateInput.setText(String.format(
-                            Locale.getDefault(),
-                            "%02d/%02d/%04d",
-                            dayOfMonth,
-                            month + 1,
-                            year));
-                    birthDateInput.setError(null);
-                },
-                selectedDate.get(Calendar.YEAR),
-                selectedDate.get(Calendar.MONTH),
-                selectedDate.get(Calendar.DAY_OF_MONTH));
-        dialog.show();
     }
 
     private void saveProfile() {
@@ -430,7 +386,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private boolean isValidIsoDate(String value) {
-        return parseDate(value, API_DATE_FORMAT) != null;
+        return DateHelper.isValidIsoDate(value);
     }
 
     private void syncBirthDateFromInput() {
@@ -440,10 +396,7 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        Date parsedDate = parseDate(displayDate, DISPLAY_DATE_FORMAT);
-        birthDate = parsedDate == null
-                ? null
-                : new SimpleDateFormat(API_DATE_FORMAT, Locale.US).format(parsedDate);
+        birthDate = DateHelper.toIsoDate(displayDate);
     }
 
     private boolean isEnrollmentAgeAllowed(String value) {
@@ -477,11 +430,4 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private String formatDate(String value, String inputPattern, String outputPattern) {
-        Date date = parseDate(value, inputPattern);
-        if (date == null) {
-            return "";
-        }
-        return new SimpleDateFormat(outputPattern, Locale.getDefault()).format(date);
-    }
 }

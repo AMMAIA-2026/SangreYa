@@ -1,6 +1,5 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,11 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.RegisterApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
-
-import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -59,28 +57,13 @@ public class RegisterActivity extends AppCompatActivity {
         UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);
         UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);
 
-        etFechaNacimiento.setOnClickListener(v -> {
-            Calendar calendario = Calendar.getInstance();
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    RegisterActivity.this,
-                    (view, year, month, dayOfMonth) -> {
-                        String fecha = String.format(
-                                "%02d/%02d/%04d",
-                                dayOfMonth,
-                                month + 1,
-                                year
-                        );
-
-                        etFechaNacimiento.setText(fecha);
-                    },
-                    calendario.get(Calendar.YEAR),
-                    calendario.get(Calendar.MONTH),
-                    calendario.get(Calendar.DAY_OF_MONTH)
-            );
-
-            datePickerDialog.show();
-        });
+        etFechaNacimiento.setOnClickListener(
+                view -> DateHelper.showDatePicker(this, etFechaNacimiento));
+        // TODO(date-input): habilitar escritura manual en etFechaNacimiento.
+        // 1. En activity_register.xml, quitar android:focusable="false" del EditText.
+        // 2. Agregar android:drawableEnd="@drawable/ic_calendar" al mismo EditText.
+        // 3. Reemplazar este setOnClickListener por:
+        //    DateHelper.configureDateInput(this, etFechaNacimiento);
 
         btnCreateAccount.setOnClickListener(v -> validarRegistro());
 
@@ -114,16 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
         String username = ((EditText) findViewById(R.id.etUsername))
                 .getText().toString().trim();
 
-        String fechaNacimiento = ((EditText) findViewById(R.id.etFechaNacimiento))
+        String fechaNacimientoDisplay = ((EditText) findViewById(R.id.etFechaNacimiento))
                 .getText().toString().trim();
-
-        String[] partesFecha = fechaNacimiento.split("/");
-
-        if (partesFecha.length == 3) {
-            fechaNacimiento = partesFecha[2] + "-"
-                    + partesFecha[1] + "-"
-                    + partesFecha[0];
-        }
+        String fechaNacimiento = DateHelper.toIsoDate(fechaNacimientoDisplay);
 
         String dni = ((EditText) findViewById(R.id.etDni))
                 .getText().toString().trim();
@@ -145,13 +121,19 @@ public class RegisterActivity extends AppCompatActivity {
                 TextUtils.isEmpty(confirmPassword) ||
                 TextUtils.isEmpty(apellido) ||
                 TextUtils.isEmpty(username) ||
-                TextUtils.isEmpty(fechaNacimiento)) {
+                TextUtils.isEmpty(fechaNacimientoDisplay)) {
 
             UiHelper.showToast(
                     this,
                     "Completá todos los campos",
                     Toast.LENGTH_SHORT
             );
+            return;
+        }
+
+        if (TextUtils.isEmpty(fechaNacimiento)) {
+            etFechaNacimiento.setError(getString(R.string.profile_birth_date_invalid));
+            etFechaNacimiento.requestFocus();
             return;
         }
 

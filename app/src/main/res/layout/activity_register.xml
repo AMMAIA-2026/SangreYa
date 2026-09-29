@@ -198,6 +198,11 @@ android:background="@color/app_background">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etRegisterEmail" />
 
+    <!-- TODO(date-input): habilitar escritura manual en etFechaNacimiento.
+         1. Quitar android:focusable="false".
+         2. Agregar android:drawableEnd="@drawable/ic_calendar".
+         3. Reemplazar el listener de RegisterActivity por
+            DateHelper.configureDateInput(this, etFechaNacimiento). -->
     <EditText
         android:id="@+id/etFechaNacimiento"
         android:layout_width="0dp"

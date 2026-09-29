@@ -58,9 +58,12 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnIngresar = findViewById(R.id.btnIngresar);
 
-        // TODO(password-toggle): después de agregar un ImageButton con id btnTogglePassword
-        // en activity_login.xml, enlazarlo aquí y llamar:
-        // UiHelper.configurePasswordToggle(etPassword, btnTogglePassword);
+        // TODO(password-toggle): agregar el toggle de contraseña en LoginActivity.
+        // 1. En activity_login.xml, agregar un ImageButton con id btnTogglePassword,
+        //    ubicado sobre el extremo derecho de etPassword (como hace register.xml).
+        // 2. Declarar ImageButton btnTogglePassword y enlazarlo después de etPassword.
+        // 3. Llamar después de findViewById:
+        //    UiHelper.configurePasswordToggle(etPassword, btnTogglePassword);
 
         tvRegistrate = findViewById(R.id.tvRegistrate);
         tvOlvidasteContrasena = findViewById(R.id.tvOlvidasteContrasena);
