@@ -45,6 +45,15 @@ public class UsersActivity extends AppCompatActivity {
 
         // TODO. Conectar el componente admin bottom navigation, como en las otras
         // activities principales de Admin.
+        // TODO(date-input): todavía no existe formulario de edición de usuario admin.
+        // Cuando se agregue:
+        // 1. Declarar y enlazar el EditText adminBirthDateInput.
+        // 2. Configurar su XML como campo editable con
+        //    android:drawableEnd="@drawable/ic_calendar".
+        // 3. Importar DateHelper y llamar después de findViewById:
+        //    DateHelper.configureDateInput(this, adminBirthDateInput);
+        // 4. Convertir el valor antes de crear UserUpdateRequest con
+        //    DateHelper.toIsoDate(adminBirthDateInput.getText().toString()).
 
         usersContainer = findViewById(R.id.users_container);
 

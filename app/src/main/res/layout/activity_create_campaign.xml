@@ -201,6 +201,12 @@
                     android:layout_height="52dp"
                     android:layout_weight="1">
 
+                    <!-- TODO(date-input): aplicar a ambos EditText de fecha.
+                         1. Quitar android:focusable="false" y android:cursorVisible="false".
+                         2. Agregar android:drawableEnd="@drawable/ic_calendar".
+                         3. En CreateCampaignActivity, reemplazar los listeners por:
+                            DateHelper.configureDateInput(this, startDateInput);
+                            DateHelper.configureDateInput(this, endDateInput); -->
                     <EditText
                         android:id="@+id/create_campaign_start_date"
                         android:layout_width="match_parent"
