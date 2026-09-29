@@ -72,7 +72,9 @@ public final class SessionManager {
 
     public static void updateTokens(Context context, String accessToken, String refreshToken) {
         SessionManager.accessToken = accessToken;
-        putRefreshToken(context, refreshToken);
+        if (refreshToken != null && !refreshToken.isEmpty()) {
+            putRefreshToken(context, refreshToken);
+        }
     }
 
     private static void putRefreshToken(Context context, String refreshToken) {
