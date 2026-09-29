@@ -20,6 +20,7 @@ import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
@@ -62,16 +63,34 @@ public class ProfileActivity extends AppCompatActivity {
     private String birthDate;
     private String originalBirthDate;
     private int userId;
+    private boolean adminEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        adminEditMode = getIntent().hasExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID);
+        if (adminEditMode) {
+            if (!SessionManager.requireAdmin(this)) {
+                return;
+            }
+            userId = getIntent().getIntExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID, -1);
+            if (userId < 1) {
+                finish();
+                return;
+            }
+        }
+
         UiHelper.configureSystemBars(this);
         setContentView(R.layout.activity_profile);
 
         bindViews();
         configureNavigation();
-        configureBottomNavigation();
+        if (adminEditMode) {
+            configureAdminEditMode();
+        } else {
+            configureBottomNavigation();
+        }
         DateHelper.configureDateInput(this, birthDateInput);
         saveButton.setOnClickListener(view -> saveProfile());
         loadProfile();
@@ -96,6 +115,14 @@ public class ProfileActivity extends AppCompatActivity {
         NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
     }
 
+    private void configureAdminEditMode() {
+        ((TextView) findViewById(R.id.profile_title_view))
+                .setText(R.string.admin_edit_user_title);
+        ((TextView) findViewById(R.id.profile_subtitle_view))
+                .setText(R.string.admin_edit_user_subtitle);
+        findViewById(R.id.profile_bottom_navigation).setVisibility(View.GONE);
+    }
+
     private void configureBottomNavigation() {
         findViewById(R.id.profile_campaigns_navigation_item)
                 .setOnClickListener(view -> {
@@ -110,7 +137,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadProfile() {
-        userId = SessionManager.getUserId(this);
+        if (!adminEditMode) {
+            userId = SessionManager.getUserId(this);
+        }
         if (userId < 1) {
             UiHelper.showMessage(messageView, R.string.profile_session_error);
             return;
@@ -132,7 +161,11 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<AuthUser> call, Throwable throwable) {
                 UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
-                UiHelper.showMessage(messageView, R.string.profile_load_error);
+                UiHelper.showMessage(
+                        messageView,
+                        adminEditMode
+                                ? R.string.admin_user_load_error
+                                : R.string.profile_load_error);
             }
         });
     }
@@ -184,8 +217,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showAgeWarning(UserUpdateRequest request) {
         new AlertDialog.Builder(this)
-                .setTitle(R.string.profile_age_warning_title)
-                .setMessage(R.string.profile_age_warning_message)
+                .setTitle(adminEditMode
+                        ? R.string.admin_user_age_warning_title
+                        : R.string.profile_age_warning_title)
+                .setMessage(adminEditMode
+                        ? R.string.admin_user_age_warning_message
+                        : R.string.profile_age_warning_message)
                 .setNegativeButton(R.string.profile_age_warning_cancel, null)
                 .setPositiveButton(
                         R.string.profile_age_warning_confirm,
@@ -203,14 +240,22 @@ public class ProfileActivity extends AppCompatActivity {
                         UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
                         if (response.isSuccessful() && response.body() != null) {
                             populateProfile(response.body());
-                            SessionManager.updateUserName(
-                                    ProfileActivity.this,
-                                    response.body().getDisplayName());
-                            configureNavigation();
+                            if (userId == SessionManager.getUserId(ProfileActivity.this)) {
+                                SessionManager.updateUserName(
+                                        ProfileActivity.this,
+                                        response.body().getDisplayName());
+                                configureNavigation();
+                            }
                             Toast.makeText(
                                     ProfileActivity.this,
-                                    R.string.profile_updated_message,
+                                    adminEditMode
+                                            ? R.string.admin_user_updated_message
+                                            : R.string.profile_updated_message,
                                     Toast.LENGTH_SHORT).show();
+                            if (adminEditMode) {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
                         } else {
                             handleResponseError(response, true);
                         }
@@ -219,7 +264,11 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<AuthUser> call, Throwable throwable) {
                         UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
-                        UiHelper.showMessage(messageView, R.string.profile_update_error);
+                        UiHelper.showMessage(
+                                messageView,
+                                adminEditMode
+                                        ? R.string.admin_user_update_error
+                                        : R.string.profile_update_error);
                     }
                 });
     }
@@ -284,11 +333,19 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
         if (statusCode == 403) {
-            UiHelper.showMessage(messageView, R.string.profile_unauthorized_error);
+            UiHelper.showMessage(
+                    messageView,
+                    adminEditMode
+                            ? R.string.admin_user_unauthorized_error
+                            : R.string.profile_unauthorized_error);
             return;
         }
         if (statusCode == 404) {
-            UiHelper.showMessage(messageView, R.string.profile_not_found_error);
+            UiHelper.showMessage(
+                    messageView,
+                    adminEditMode
+                            ? R.string.admin_user_not_found_error
+                            : R.string.profile_not_found_error);
             return;
         }
         if (statusCode == 400 && applyServerErrors(response.errorBody())) {
@@ -297,7 +354,13 @@ public class ProfileActivity extends AppCompatActivity {
         }
         UiHelper.showMessage(
                 messageView,
-                update ? R.string.profile_update_error : R.string.profile_load_error);
+                update
+                        ? (adminEditMode
+                        ? R.string.admin_user_update_error
+                        : R.string.profile_update_error)
+                        : (adminEditMode
+                        ? R.string.admin_user_load_error
+                        : R.string.profile_load_error));
     }
 
     private boolean applyServerErrors(ResponseBody errorBody) {
