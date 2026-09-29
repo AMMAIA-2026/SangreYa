@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiConfig;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
 import com.ammaia_ispc.sangreyamobile.model.Enrollment;
@@ -33,8 +34,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public final class CampaignApiRepository {
-    private static final String BASE_URL =
-            "https://sangreyaispc.pythonanywhere.com/";
     private static final String CAMPAIGNS_PATH = "campanias/";
 
     private CampaignApiRepository() {
@@ -309,7 +308,7 @@ public final class CampaignApiRepository {
         HttpURLConnection connection = null;
 
         try {
-            URL url = new URL(BASE_URL + path);
+            URL url = new URL(ApiConfig.BASE_URL + path);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("DELETE");
             connection.setConnectTimeout(10000);
