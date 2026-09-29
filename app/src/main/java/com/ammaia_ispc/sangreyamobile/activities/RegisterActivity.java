@@ -57,8 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
         UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);
         UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);
 
-        etFechaNacimiento.setOnClickListener(
-                view -> DateHelper.showDatePicker(this, etFechaNacimiento));
+
         // TODO(date-input): habilitar escritura manual en etFechaNacimiento.
         // 1. En activity_register.xml, quitar android:focusable="false" del EditText.
         // 2. Agregar android:drawableEnd="@drawable/ic_calendar" al mismo EditText.
