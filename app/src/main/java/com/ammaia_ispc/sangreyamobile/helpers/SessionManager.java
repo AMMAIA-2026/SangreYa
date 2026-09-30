@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.security.crypto.EncryptedSharedPreferences;
@@ -94,6 +95,11 @@ public final class SessionManager {
 
     public static boolean isAdmin(Context context) {
         return ROLE_ADMIN.equals(getUserRole(context));
+    }
+
+    public static boolean isStandardUser(Context context) {
+        return !isAdmin(context)
+                && !TextUtils.isEmpty(getAccessToken(context));
     }
 
     public static boolean requireAdmin(Activity activity) {

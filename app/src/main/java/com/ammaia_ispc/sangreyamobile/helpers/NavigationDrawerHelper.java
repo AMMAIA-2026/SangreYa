@@ -28,8 +28,7 @@ public final class NavigationDrawerHelper {
             DrawerLayout drawerLayout,
             NavigationView navigationView) {
         boolean admin = SessionManager.isAdmin(activity);
-        boolean standardUser = !admin
-                && !TextUtils.isEmpty(SessionManager.getAccessToken(activity));
+        boolean standardUser = SessionManager.isStandardUser(activity);
         String displayUser = SessionManager.getUserName(activity);
 
         TextView greeting = activity.findViewById(R.id.header_greeting);

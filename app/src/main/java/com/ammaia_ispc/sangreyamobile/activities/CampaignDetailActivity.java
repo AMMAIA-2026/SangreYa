@@ -41,8 +41,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
-        standardUser = !SessionManager.isAdmin(this)
-                && !TextUtils.isEmpty(SessionManager.getAccessToken(this));
+        standardUser = SessionManager.isStandardUser(this);
         setContentView(R.layout.activity_campaign_detail);
         bindViews();
 
