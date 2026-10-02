@@ -6,14 +6,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.widget.Toast;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
-import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 
 
@@ -96,7 +98,9 @@ public class AdminContactListActivity extends AppCompatActivity {
         unansweredFilter = findViewById(R.id.admin_contact_filter_unanswered);
         answeredFilter = findViewById(R.id.admin_contact_filter_answered);
 
-        NavigationHelper.configureBackButton(this, R.id.btnBack);
+        DrawerLayout drawerLayout = findViewById(R.id.admin_contact_drawer);
+        NavigationView navigationView = findViewById(R.id.admin_contact_navigation_view);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
 
         findViewById(R.id.admin_nav_dashboard).setOnClickListener(view -> openDashboard());
         findViewById(R.id.admin_nav_campaigns).setOnClickListener(view -> openCampaigns());

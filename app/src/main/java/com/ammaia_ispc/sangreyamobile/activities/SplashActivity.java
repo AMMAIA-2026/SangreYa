@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +28,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        updateSessionStatus(getSplashUserName());
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             restoreSession();
@@ -81,6 +83,27 @@ public class SplashActivity extends AppCompatActivity {
                 });
     }
 
+    private String getSplashUserName() {
+        try {
+            if (TextUtils.isEmpty(SessionManager.getRefreshToken(this))) {
+                return null;
+            }
+            return SessionManager.getUserName(this);
+        } catch (RuntimeException exception) {
+            Log.e(TAG, "No se pudo leer el nombre de la sesión persistida", exception);
+            return null;
+        }
+    }
+
+    private void updateSessionStatus(String userName) {
+        TextView status = findViewById(R.id.tvSessionStatus);
+        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(userName.trim())) {
+            status.setText(R.string.splash_guest_status);
+        } else {
+            status.setText(getString(R.string.splash_checking_session, userName.trim()));
+        }
+    }
+
     private void openAuthenticatedHome() {
         Class<?> destination = SessionManager.isAdmin(this)
                 ? AdminDashboardActivity.class
@@ -89,6 +112,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void openGuestHome() {
+        updateSessionStatus(null);
         open(MainActivity.class);
     }
 
