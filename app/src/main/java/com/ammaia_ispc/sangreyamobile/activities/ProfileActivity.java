@@ -174,9 +174,9 @@ public class ProfileActivity extends AppCompatActivity {
         usernameInput.setText(safeValue(user.getUsername()));
         emailInput.setText(safeValue(user.getEmail()));
         dniInput.setText(safeValue(user.getDni()));
-        nameInput.setText(safeValue(user.getNombre()));
-        lastNameInput.setText(safeValue(user.getApellido()));
-        setBirthDate(user.getFechaNacimiento());
+        nameInput.setText(safeValue(user.getName()));
+        lastNameInput.setText(safeValue(user.getLastName()));
+        setBirthDate(user.getBirthDate());
         originalBirthDate = birthDate;
     }
 

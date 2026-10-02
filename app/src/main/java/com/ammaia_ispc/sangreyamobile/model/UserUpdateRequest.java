@@ -1,25 +1,30 @@
 package com.ammaia_ispc.sangreyamobile.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class UserUpdateRequest {
     private final String username;
     private final String email;
     private final String dni;
-    private final String nombre;
-    private final String apellido;
-    private final String fecha_nacimiento;
+    @SerializedName("nombre")
+    private final String name;
+    @SerializedName("apellido")
+    private final String lastName;
+    @SerializedName("fecha_nacimiento")
+    private final String birthDate;
 
     public UserUpdateRequest(
             String username,
             String email,
             String dni,
-            String nombre,
-            String apellido,
-            String fecha_nacimiento) {
+            String name,
+            String lastName,
+            String birthDate) {
         this.username = username;
         this.email = email;
         this.dni = dni;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.fecha_nacimiento = fecha_nacimiento;
+        this.name = name;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
     }
 }

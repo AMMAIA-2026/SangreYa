@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class DashboardMonthlyDonors implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public final int anio;
-    public final int mes;
-    public final int cantidad;
+    public final int year;
+    public final int month;
+    public final int count;
 
-    public DashboardMonthlyDonors(int anio, int mes, int cantidad) {
-        this.anio = anio;
-        this.mes = mes;
-        this.cantidad = cantidad;
+    public DashboardMonthlyDonors(int year, int month, int count) {
+        this.year = year;
+        this.month = month;
+        this.count = count;
     }
 }
