@@ -278,5 +278,6 @@
     <string name="filter_answered">Respondidos</string>
     <string name="error_unauthorized_access">Acceso no autorizado</string>
     <string name="splash_tagline">Cada gota cuenta</string>
-    <string name="splash_checking_session">Verificando tu sesión...</string>
+    <string name="splash_checking_session">Hola, %1$s. Estamos cargando tu sesión</string>
+    <string name="splash_guest_status">Ingresando a SangreYa como Invitado.</string>
 </resources>

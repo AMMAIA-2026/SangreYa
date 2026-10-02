@@ -20,7 +20,6 @@ import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
-import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
@@ -125,8 +124,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Flecha reutilizable
-        NavigationHelper.configureBackButton(this, R.id.btnBack);
     }
 
     private void configureFilters() {

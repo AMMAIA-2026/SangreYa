@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
 import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
@@ -27,6 +28,7 @@ public class ContactDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_detail);
+        NavigationHelper.configureBackButton(this, R.id.contact_detail_back_button);
 
         contactId = getIntent().getIntExtra("contact_id", -1);
 

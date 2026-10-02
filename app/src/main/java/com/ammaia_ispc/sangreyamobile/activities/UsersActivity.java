@@ -11,12 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
@@ -24,9 +27,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.widget.ImageButton;
-
-import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 
 public class UsersActivity extends AppCompatActivity {
@@ -44,10 +44,13 @@ public class UsersActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_users);
 
-        NavigationHelper.configureBackButton(this, R.id.btnBack);
+        DrawerLayout drawerLayout = findViewById(R.id.admin_users_drawer);
+        NavigationView navigationView = findViewById(R.id.admin_users_navigation_view);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
 
-        // TODO. Conectar el componente admin bottom navigation, como en las otras
-        // activities principales de Admin.
+        findViewById(R.id.admin_nav_dashboard).setOnClickListener(view -> openDashboard());
+        findViewById(R.id.admin_nav_campaigns).setOnClickListener(view -> openCampaigns());
+        findViewById(R.id.admin_nav_messages).setOnClickListener(view -> openMessages());
 
         usersContainer = findViewById(R.id.users_container);
 
@@ -227,6 +230,28 @@ public class UsersActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID, user.getId());
         startActivityForResult(intent, REQUEST_EDIT_USER);
+    }
+
+    private void openDashboard() {
+        Intent intent = new Intent(this, AdminDashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    private void openCampaigns() {
+        navigateTo(AdminCampaignListActivity.class);
+    }
+
+    private void openMessages() {
+        navigateTo(AdminContactListActivity.class);
+    }
+
+    private void navigateTo(Class<?> destination) {
+        Intent intent = new Intent(this, destination);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     @Override

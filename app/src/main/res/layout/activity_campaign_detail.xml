@@ -49,18 +49,6 @@
                     android:singleLine="true"
                     android:textSize="10sp"
                     android:textStyle="bold" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-                <ImageButton
-                    android:id="@+id/detail_back_button"
-                     android:layout_width="@dimen/back_touch_target"
-                     android:layout_height="@dimen/back_touch_target"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/back_to_campaigns"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_back" />
             </LinearLayout>
         </LinearLayout>
 
