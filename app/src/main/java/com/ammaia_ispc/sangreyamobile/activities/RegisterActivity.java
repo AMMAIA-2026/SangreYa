@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
 
+import android.app.AlertDialog;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private Button btnCreateAccount;
@@ -30,8 +33,24 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etFechaNacimiento;
     private EditText etRegisterPassword;
     private EditText etConfirmPassword;
+    private CheckBox cbAceptarTerminos;
     private ImageButton btnTogglePassword;
     private ImageButton btnToggleConfirmPassword;
+
+    private static final String TEXTO_TERMINOS =
+            "Términos y Condiciones y Política de Privacidad de SangreYa\n\n" +
+                    "1. Datos que recolectamos: al registrarte, almacenamos tu nombre, apellido, " +
+                    "DNI, email, fecha de nacimiento y grupo sanguíneo (si lo indicás), con el único " +
+                    "fin de gestionar tu participación en campañas de donación de sangre.\n\n" +
+                    "2. Uso de tus datos: tus datos no se comparten con terceros ajenos al proyecto " +
+                    "ni se utilizan con fines comerciales. Solo se usan para identificarte y " +
+                    "gestionar tus inscripciones a campañas.\n\n" +
+                    "3. Tus derechos (Ley 25.326 de Protección de Datos Personales): podés acceder, " +
+                    "rectificar o solicitar la eliminación de tus datos personales en cualquier " +
+                    "momento desde la opción correspondiente en tu perfil.\n\n" +
+                    "4. Seguridad: tu contraseña se almacena de forma cifrada y nunca es visible " +
+                    "para el equipo de SangreYa ni se comparte por ningún medio.\n\n" +
+                    "Al aceptar, confirmás que leíste y entendés estos términos.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         etFechaNacimiento = findViewById(R.id.etFechaNacimiento);
         etRegisterPassword = findViewById(R.id.etRegisterPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
+        cbAceptarTerminos = findViewById(R.id.cbAceptarTerminos);
 
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
@@ -57,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
         UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);
         UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);
 
+        cbAceptarTerminos.setOnClickListener(v -> mostrarTerminos());
 
         // TODO(date-input): habilitar escritura manual en etFechaNacimiento.
         // 1. En activity_register.xml, quitar android:focusable="false" del EditText.
@@ -74,6 +95,14 @@ public class RegisterActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    private void mostrarTerminos() {
+        new AlertDialog.Builder(this)
+                .setTitle("Términos y Condiciones")
+                .setMessage(TEXTO_TERMINOS)
+                .setPositiveButton("Cerrar", null)
+                .show();
     }
 
     private void validarRegistro() {
@@ -125,6 +154,15 @@ public class RegisterActivity extends AppCompatActivity {
             UiHelper.showToast(
                     this,
                     "Completá todos los campos",
+                    Toast.LENGTH_SHORT
+            );
+            return;
+        }
+
+        if (!cbAceptarTerminos.isChecked()) {
+            UiHelper.showToast(
+                    this,
+                    "Tenés que aceptar los Términos y Condiciones para continuar",
                     Toast.LENGTH_SHORT
             );
             return;
@@ -272,4 +310,3 @@ public class RegisterActivity extends AppCompatActivity {
         etConfirmPassword.setText("");
     }
 }
-
