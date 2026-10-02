@@ -198,6 +198,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess() {
+                        clearForm();
                         UiHelper.showToast(
                                 RegisterActivity.this,
                                 "Cuenta creada correctamente",
@@ -258,6 +259,17 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void clearForm() {
+        etName.setText("");
+        etApellido.setText("");
+        etUsername.setText("");
+        etDni.setText("");
+        etRegisterEmail.setText("");
+        etFechaNacimiento.setText("");
+        etRegisterPassword.setText("");
+        etConfirmPassword.setText("");
     }
 }
 

@@ -89,7 +89,7 @@ public class UsersActivity extends AppCompatActivity {
 
                     TextView name = new TextView(UsersActivity.this);
                     name.setText(
-                            user.getNombre() + " " + user.getApellido()
+                            user.getName() + " " + user.getLastName()
                     );
                     name.setTextSize(18);
                     name.setTextColor(Color.parseColor("#262022"));
@@ -122,15 +122,15 @@ public class UsersActivity extends AppCompatActivity {
                                 .setTitle("Datos del usuario")
                                 .setMessage(
                                         "Nombre: "
-                                                + user.getNombre()
+                                                + user.getName()
                                                 + " "
-                                                + user.getApellido()
+                                                + user.getLastName()
                                                 + "\n\nEmail: "
                                                 + user.getEmail()
                                                 + "\n\nDNI: "
                                                 + user.getDni()
                                                 + "\n\nRol: "
-                                                + user.getRol()
+                                                + user.getRole()
                                  )
                                  .setNeutralButton(
                                          "Editar",
@@ -150,9 +150,9 @@ public class UsersActivity extends AppCompatActivity {
                                                     .setTitle("Eliminar usuario")
                                                     .setMessage(
                                                             "¿Estás seguro de que querés eliminar a "
-                                                                    + user.getNombre()
+                                                                    + user.getName()
                                                                     + " "
-                                                                    + user.getApellido()
+                                                                    + user.getLastName()
                                                                     + "?"
                                                     )
                                                     .setNegativeButton(

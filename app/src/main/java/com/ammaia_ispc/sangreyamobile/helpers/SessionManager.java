@@ -44,7 +44,7 @@ public final class SessionManager {
                 .putInt(KEY_USER_ID, user.getId())
                 .putString(KEY_USER_EMAIL, user.getEmail())
                 .putString(KEY_USER_NAME, user.getDisplayName())
-                .putString(KEY_USER_ROLE, user.getRol())
+                .putString(KEY_USER_ROLE, user.getRole())
                 .apply();
     }
 

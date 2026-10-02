@@ -1,16 +1,23 @@
 package com.ammaia_ispc.sangreyamobile.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class AuthUser {
 
     private int id;
     private String username;
     private String email;
     private String dni;
-    private String nombre;
-    private String apellido;
-    private String fecha_nacimiento;
-    private String fecha_registro;
-    private String rol;
+    @SerializedName("nombre")
+    private String name;
+    @SerializedName("apellido")
+    private String lastName;
+    @SerializedName("fecha_nacimiento")
+    private String birthDate;
+    @SerializedName("fecha_registro")
+    private String registrationDate;
+    @SerializedName("rol")
+    private String role;
 
     public int getId() {
         return id;
@@ -28,27 +35,27 @@ public class AuthUser {
         return dni;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public String getApellido() {
-        return apellido;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getFechaNacimiento() {
-        return fecha_nacimiento;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public String getFechaRegistro() {
-        return fecha_registro;
+    public String getRegistrationDate() {
+        return registrationDate;
     }
 
     public String getDisplayName() {
-        return nombre == null ? "" : nombre.trim();
+        return name == null ? "" : name.trim();
     }
 
-    public String getRol() {
-        return rol;
+    public String getRole() {
+        return role;
     }
 }

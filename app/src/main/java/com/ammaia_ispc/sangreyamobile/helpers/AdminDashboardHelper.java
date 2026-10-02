@@ -16,7 +16,7 @@ public final class AdminDashboardHelper {
     public static int totalCampaigns(List<DashboardCampaignStatus> statuses) {
         int total = 0;
         for (DashboardCampaignStatus status : statuses) {
-            total += status.cantidad;
+            total += status.count;
         }
         return total;
     }
