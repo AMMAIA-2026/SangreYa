@@ -48,6 +48,8 @@ public interface ApiService {
             @Path("usuarioId") int userId,
             @Body UserUpdateRequest request);
 
+    @DELETE("usuarios/{usuarioId}/")
+    Call<Void> deleteUser(@Path("usuarioId") int userId);
 
     @GET("centros-salud/")
     Call<List<HealthCenterResponse>> getHealthCenters();
@@ -58,6 +60,10 @@ public interface ApiService {
 
     @GET("contactos/")
     Call<List<ContactMessage>> getContacts();
+
+    @GET("contactos/{contactoId}/")
+    Call<ContactMessage> getContact(
+            @Path("contactoId") int contactId);
 
     @PUT("contactos/{contactoId}/")
     Call<ContactMessage> updateContactTracked(

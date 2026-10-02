@@ -1,7 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
@@ -80,8 +80,17 @@ public class CreateCampaignActivity extends AppCompatActivity {
         capacityInput = findViewById(R.id.create_campaign_capacity);
         descriptionInput = findViewById(R.id.create_campaign_description);
 
-        startDateInput.setOnClickListener(view -> showDatePicker(startDateInput));
-        endDateInput.setOnClickListener(view -> showDatePicker(endDateInput));
+        startDateInput.setOnClickListener(
+                view -> DateHelper.showDatePicker(this, startDateInput));
+        endDateInput.setOnClickListener(
+                view -> DateHelper.showDatePicker(this, endDateInput));
+        // TODO(date-input): este formulario se usa para crear y editar campañas.
+        // 1. En activity_create_campaign.xml, aplicar a ambos EditText de fecha:
+        //    quitar focusable="false", quitar cursorVisible="false" y agregar
+        //    drawableEnd="@drawable/ic_calendar".
+        // 2. Reemplazar estos listeners por:
+        // DateHelper.configureDateInput(this, startDateInput);
+        // DateHelper.configureDateInput(this, endDateInput);
         startTimeInput.setOnClickListener(view -> showTimePicker(startTimeInput));
         endTimeInput.setOnClickListener(view -> showTimePicker(endTimeInput));
 
@@ -210,8 +219,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
         nameInput.setText(editingCampaign.title);
         addressInput.setText(editingCampaign.location);
         descriptionInput.setText(editingCampaign.description);
-        startDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.startDate));
-        endDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.endDate));
+        startDateInput.setText(DateHelper.toDisplayDate(editingCampaign.startDate));
+        endDateInput.setText(DateHelper.toDisplayDate(editingCampaign.endDate));
         if (editingCampaign.maximumCapacity != null) {
             capacityInput.setText(String.valueOf(editingCampaign.maximumCapacity));
         }
@@ -263,18 +272,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 });
     }
 
-    private void showDatePicker(EditText target) {
-        Calendar calendar = Calendar.getInstance();
-        new DatePickerDialog(
-                this,
-                (picker, year, month, dayOfMonth) -> target.setText(
-                        String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, month + 1, year)),
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        ).show();
-    }
-
     private void showTimePicker(EditText target) {
         Calendar calendar = Calendar.getInstance();
         new TimePickerDialog(
@@ -292,8 +289,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
             return;
         }
 
-        String isoStartDate = CampaignHelper.toIsoDate(startDateInput.getText().toString());
-        String isoEndDate = CampaignHelper.toIsoDate(endDateInput.getText().toString());
+        String isoStartDate = DateHelper.toIsoDate(startDateInput.getText().toString());
+        String isoEndDate = DateHelper.toIsoDate(endDateInput.getText().toString());
         HealthCenter selectedCenter = selectedHealthCenter();
         Integer selectedCenterId = selectedCenter != null ? selectedCenter.id : null;
 

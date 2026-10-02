@@ -83,41 +83,41 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     private void bindDashboardMetrics(AdminDashboardData dashboard) {
         ((TextView) findViewById(R.id.dashboard_campaigns_total))
-                .setText(getString(R.string.dashboard_campaigns_total, dashboard.totalCampanias));
+                .setText(getString(R.string.dashboard_campaigns_total, dashboard.totalCampaigns));
         ((TextView) findViewById(R.id.dashboard_enrollments_total))
-                .setText(getString(R.string.dashboard_enrollments_total, dashboard.totalInscripciones));
+                .setText(getString(R.string.dashboard_enrollments_total, dashboard.totalEnrollments));
         ((TextView) findViewById(R.id.dashboard_donors_total))
-                .setText(getString(R.string.dashboard_donors_total, dashboard.totalDonantes));
+                .setText(getString(R.string.dashboard_donors_total, dashboard.totalDonors));
 
         DashboardChartView donorsChart = findViewById(R.id.dashboard_donors_chart);
-        donorsChart.setMonthlyDonors(dashboard.donantesPorMes);
-        donorsChart.setEmptyMessage(dashboard.donantesPorMes.isEmpty()
+        donorsChart.setMonthlyDonors(dashboard.monthlyDonors);
+        donorsChart.setEmptyMessage(dashboard.monthlyDonors.isEmpty()
                 ? getString(R.string.dashboard_no_donors)
                 : "");
 
         DashboardChartView enrollmentsChart = findViewById(R.id.dashboard_enrollments_chart);
-        enrollmentsChart.setMonthlyDonors(dashboard.inscripcionesPorMes);
-        enrollmentsChart.setEmptyMessage(dashboard.inscripcionesPorMes.isEmpty()
+        enrollmentsChart.setMonthlyDonors(dashboard.monthlyEnrollments);
+        enrollmentsChart.setEmptyMessage(dashboard.monthlyEnrollments.isEmpty()
                 ? getString(R.string.dashboard_no_enrollments)
                 : "");
     }
 
     private void bindStatusChart(AdminDashboardData dashboard) {
         DashboardChartView chart = findViewById(R.id.dashboard_status_chart);
-        chart.setCampaignStatuses(dashboard.campaniasPorEstado);
+        chart.setCampaignStatuses(dashboard.campaignsByStatus);
 
         LinearLayout legend = findViewById(R.id.dashboard_status_legend);
         legend.removeAllViews();
-        int total = AdminDashboardHelper.totalCampaigns(dashboard.campaniasPorEstado);
-        for (DashboardCampaignStatus status : dashboard.campaniasPorEstado) {
+        int total = AdminDashboardHelper.totalCampaigns(dashboard.campaignsByStatus);
+        for (DashboardCampaignStatus status : dashboard.campaignsByStatus) {
             TextView item = new TextView(this);
             item.setText(getString(
                     R.string.dashboard_status_legend,
-                    status.estado,
-                    AdminDashboardHelper.percentage(status.cantidad, total)));
+                    status.status,
+                    AdminDashboardHelper.percentage(status.count, total)));
             item.setTextColor(ContextCompat.getColor(
                     this,
-                    CampaignHelper.statusColor(status.estado)));
+                    CampaignHelper.statusColor(status.status)));
             item.setTextSize(10);
             item.setTypeface(item.getTypeface(), android.graphics.Typeface.BOLD);
             item.setPadding(0, 8, 0, 8);
@@ -128,7 +128,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private void bindRecentCampaigns(AdminDashboardData dashboard) {
         LinearLayout container = findViewById(R.id.dashboard_recent_container);
         container.removeAllViews();
-        for (Campaign campaign : AdminDashboardHelper.orderRecentCampaigns(dashboard.campaniasRecientes)) {
+        for (Campaign campaign : AdminDashboardHelper.orderRecentCampaigns(dashboard.recentCampaigns)) {
             View item = getLayoutInflater().inflate(
                     R.layout.item_admin_recent_campaign,
                     container,

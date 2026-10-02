@@ -92,6 +92,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etEmail" />
 
+    <!-- TODO(password-toggle): agregar un ImageButton id="btnTogglePassword" sobre el
+         extremo derecho de etPassword, con contentDescription="@string/show_password".
+         Agregar paddingEnd="48dp" a etPassword y constraints End/Top/Bottom vinculadas
+         a etPassword. Luego enlazarlo en LoginActivity y llamar
+         UiHelper.configurePasswordToggle(etPassword, btnTogglePassword). -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="0dp"

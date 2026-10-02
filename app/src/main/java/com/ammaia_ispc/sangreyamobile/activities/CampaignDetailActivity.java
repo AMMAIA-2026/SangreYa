@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +42,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
-        standardUser = !SessionManager.isAdmin(this)
-                && !TextUtils.isEmpty(SessionManager.getAccessToken(this));
+        standardUser = SessionManager.isStandardUser(this);
         setContentView(R.layout.activity_campaign_detail);
         bindViews();
 
@@ -83,9 +83,12 @@ public class CampaignDetailActivity extends AppCompatActivity {
         DrawerLayout drawerLayout = findViewById(R.id.detail_root);
         NavigationView navigationView = findViewById(R.id.detail_navigation_view);
         NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        View backButton = findViewById(R.id.detail_back_button);
-        backButton.setVisibility(View.VISIBLE);
+        ImageButton backButton = findViewById(R.id.menu_button);
+        backButton.setImageResource(android.R.drawable.ic_menu_revert);
+        backButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+        backButton.setContentDescription(getString(R.string.back));
         backButton.setOnClickListener(view -> finish());
 
         TextView status = findViewById(R.id.detail_status);

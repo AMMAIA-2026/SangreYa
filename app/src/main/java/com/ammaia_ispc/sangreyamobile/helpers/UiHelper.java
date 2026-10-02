@@ -2,17 +2,24 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.res.ColorStateList;
 
 import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.Locale;
+
 
 public final class UiHelper {
     private UiHelper() {
@@ -52,6 +59,44 @@ public final class UiHelper {
         Toast.makeText(context, message, duration).show();
     }
 
+    public static void configurePasswordToggle(
+            EditText passwordInput,
+            ImageButton toggleButton) {
+        toggleButton.setContentDescription(
+                toggleButton.getContext().getString(R.string.show_password));
+        toggleButton.setOnClickListener(view -> {
+            boolean passwordVisible = !toggleButton.isSelected();
+            toggleButton.setSelected(passwordVisible);
+            passwordInput.setTransformationMethod(passwordVisible
+                    ? HideReturnsTransformationMethod.getInstance()
+                    : PasswordTransformationMethod.getInstance());
+            passwordInput.setSelection(passwordInput.length());
+            toggleButton.setContentDescription(toggleButton.getContext().getString(
+                    passwordVisible ? R.string.hide_password : R.string.show_password));
+        });
+    }
+
+    public static void styleFilter(
+            Context context,
+            MaterialButton filter,
+            boolean selected) {
+
+        filter.setTextColor(
+                ContextCompat.getColor(
+                        context,
+                        selected ? R.color.white : R.color.secondary_text
+                )
+        );
+
+        filter.setBackgroundTintList(
+                ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                                context,
+                                selected ? R.color.primary_red : R.color.surface
+                        )
+                )
+        );
+    }
     /*
      * TODO: completar la centralizacion de Toast.makeText.
      * Pendiente:

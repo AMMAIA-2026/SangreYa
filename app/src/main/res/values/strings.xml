@@ -43,6 +43,8 @@
     <string name="campaigns_navigation">Campañas</string>
     <string name="enrollments_navigation">Inscripciones</string>
     <string name="profile_navigation">Perfil</string>
+    <string name="show_password">Mostrar contraseña</string>
+    <string name="hide_password">Ocultar contraseña</string>
     <string name="campaign_location_description">Ubicación de la campaña</string>
     <string name="campaign_date_description">Fecha de la campaña</string>
     <string name="campaign_loading">Cargando campañas</string>
@@ -109,6 +111,15 @@
     <string name="profile_age_warning_message">La fecha elegida te deja fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrás inscribirte en nuevas campañas. Las inscripciones que ya tenés no se cancelan automáticamente. ¿Querés guardar el cambio?</string>
     <string name="profile_age_warning_cancel">Cancelar</string>
     <string name="profile_age_warning_confirm">Guardar de todos modos</string>
+    <string name="admin_edit_user_title">Editar usuario</string>
+    <string name="admin_edit_user_subtitle">Actualizá los datos personales del usuario</string>
+    <string name="admin_user_updated_message">Usuario actualizado correctamente.</string>
+    <string name="admin_user_load_error">No se pudo cargar el usuario. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="admin_user_update_error">No se pudieron guardar los cambios del usuario. Revisá los datos e intentá nuevamente.</string>
+    <string name="admin_user_unauthorized_error">No tenés permisos para modificar este usuario.</string>
+    <string name="admin_user_not_found_error">No encontramos el usuario seleccionado.</string>
+    <string name="admin_user_age_warning_title">Edad fuera del rango de donación</string>
+    <string name="admin_user_age_warning_message">La fecha elegida deja al usuario fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrá inscribirse en nuevas campañas. ¿Querés guardar el cambio?</string>
 
     <!--CampaignDetail-->
     <string name="registered_detail">%1$d personas ya se inscribieron</string>
@@ -267,5 +278,6 @@
     <string name="filter_answered">Respondidos</string>
     <string name="error_unauthorized_access">Acceso no autorizado</string>
     <string name="splash_tagline">Cada gota cuenta</string>
-    <string name="splash_checking_session">Verificando tu sesión...</string>
+    <string name="splash_checking_session">Hola, %1$s. Estamos cargando tu sesión</string>
+    <string name="splash_guest_status">Ingresando a SangreYa como Invitado.</string>
 </resources>

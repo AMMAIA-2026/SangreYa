@@ -77,10 +77,10 @@ public class DashboardChartView extends View {
         } else {
             float startAngle = -90;
             for (DashboardCampaignStatus status : campaignStatuses) {
-                float sweep = total == 0 ? 0 : status.cantidad * 360f / total;
+                float sweep = total == 0 ? 0 : status.count * 360f / total;
                 paint.setColor(ContextCompat.getColor(
                         getContext(),
-                        CampaignHelper.statusColor(status.estado)));
+                        CampaignHelper.statusColor(status.status)));
                 canvas.drawArc(bounds, startAngle, sweep, false, paint);
                 startAngle += sweep;
             }
@@ -123,7 +123,7 @@ public class DashboardChartView extends View {
         float chartHeight = baseline - top;
         int max = 0;
         for (DashboardMonthlyDonors donor : monthlyDonors) {
-            max = Math.max(max, donor.cantidad);
+            max = Math.max(max, donor.count);
         }
 
         paint.setStyle(Paint.Style.STROKE);
@@ -139,7 +139,7 @@ public class DashboardChartView extends View {
         float barWidth = Math.min(27 * density, slotWidth * 0.58f);
         for (int index = 0; index < monthlyDonors.size(); index++) {
             DashboardMonthlyDonors donor = monthlyDonors.get(index);
-            float height = max == 0 ? 0 : chartHeight * donor.cantidad / max;
+            float height = max == 0 ? 0 : chartHeight * donor.count / max;
             float center = left + slotWidth * index + slotWidth / 2;
             paint.setColor(ContextCompat.getColor(getContext(), R.color.primary_red));
             canvas.drawRoundRect(
@@ -155,12 +155,12 @@ public class DashboardChartView extends View {
             float monthBaseline = getHeight() - 17 * density;
             float yearBaseline = getHeight() - 5 * density;
             canvas.drawText(
-                    AdminDashboardHelper.monthLabel(donor.mes),
+                    AdminDashboardHelper.monthLabel(donor.month),
                     center,
                     monthBaseline,
                     paint);
             canvas.drawText(
-                    AdminDashboardHelper.yearLabel(donor.anio),
+                    AdminDashboardHelper.yearLabel(donor.year),
                     center,
                     yearBaseline,
                     paint);
@@ -170,7 +170,7 @@ public class DashboardChartView extends View {
             float valueBaseline = Math.max(
                     12 * density,
                     baseline - height - 6 * density);
-            canvas.drawText(String.valueOf(donor.cantidad), center, valueBaseline, paint);
+            canvas.drawText(String.valueOf(donor.count), center, valueBaseline, paint);
             paint.setTypeface(Typeface.DEFAULT);
         }
     }

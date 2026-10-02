@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -51,7 +50,7 @@ public class CampaignListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UiHelper.configureSystemBars(this);
-        standardUser = isStandardUser();
+        standardUser = SessionManager.isStandardUser(this);
         setContentView(R.layout.activity_campaign_list);
         bindViews();
         configureFilters();
@@ -106,7 +105,7 @@ public class CampaignListActivity extends AppCompatActivity {
     }
 
     private void refreshNavigation() {
-        standardUser = isStandardUser();
+        standardUser = SessionManager.isStandardUser(this);
         DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);
         NavigationView navigationView = findViewById(R.id.campaign_navigation_view);
         NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
@@ -221,8 +220,4 @@ public class CampaignListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private boolean isStandardUser() {
-        return !SessionManager.isAdmin(this)
-                && !TextUtils.isEmpty(SessionManager.getAccessToken(this));
-    }
 }

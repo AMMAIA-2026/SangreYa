@@ -2,25 +2,25 @@ package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
-import androidx.appcompat.app.AppCompatActivity;
-import com.ammaia_ispc.sangreyamobile.R;
-import android.text.TextUtils;
-import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.RegisterApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
 
-import android.text.method.PasswordTransformationMethod;
-import android.text.method.HideReturnsTransformationMethod;
-import android.widget.ImageButton;
-import android.app.DatePickerDialog;
 import android.app.AlertDialog;
-import java.util.Calendar;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private Button btnCreateAccount;
@@ -36,8 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
     private CheckBox cbAceptarTerminos;
     private ImageButton btnTogglePassword;
     private ImageButton btnToggleConfirmPassword;
-    private boolean passwordVisible = false;
-    private boolean confirmPasswordVisible = false;
 
     private static final String TEXTO_TERMINOS =
             "Términos y Condiciones y Política de Privacidad de SangreYa\n\n" +
@@ -76,58 +74,16 @@ public class RegisterActivity extends AppCompatActivity {
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
 
+        UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);
+        UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);
+
         cbAceptarTerminos.setOnClickListener(v -> mostrarTerminos());
 
-        etFechaNacimiento.setOnClickListener(v -> {
-            Calendar calendario = Calendar.getInstance();
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    RegisterActivity.this,
-                    (view, year, month, dayOfMonth) -> {
-                        String fecha = String.format(
-                                "%02d/%02d/%04d",
-                                dayOfMonth,
-                                month + 1,
-                                year
-                        );
-
-                        etFechaNacimiento.setText(fecha);
-                    },
-                    calendario.get(Calendar.YEAR),
-                    calendario.get(Calendar.MONTH),
-                    calendario.get(Calendar.DAY_OF_MONTH)
-            );
-
-            datePickerDialog.show();
-        });
-
-        btnTogglePassword.setOnClickListener(v -> {
-            passwordVisible = !passwordVisible;
-
-            if (passwordVisible) {
-                etRegisterPassword.setTransformationMethod(
-                        HideReturnsTransformationMethod.getInstance());
-            } else {
-                etRegisterPassword.setTransformationMethod(
-                        PasswordTransformationMethod.getInstance());
-            }
-
-            etRegisterPassword.setSelection(etRegisterPassword.length());
-        });
-
-        btnToggleConfirmPassword.setOnClickListener(v -> {
-            confirmPasswordVisible = !confirmPasswordVisible;
-
-            if (confirmPasswordVisible) {
-                etConfirmPassword.setTransformationMethod(
-                        HideReturnsTransformationMethod.getInstance());
-            } else {
-                etConfirmPassword.setTransformationMethod(
-                        PasswordTransformationMethod.getInstance());
-            }
-
-            etConfirmPassword.setSelection(etConfirmPassword.length());
-        });
+        // TODO(date-input): habilitar escritura manual en etFechaNacimiento.
+        // 1. En activity_register.xml, quitar android:focusable="false" del EditText.
+        // 2. Agregar android:drawableEnd="@drawable/ic_calendar" al mismo EditText.
+        // 3. Reemplazar este setOnClickListener por:
+        //    DateHelper.configureDateInput(this, etFechaNacimiento);
 
         btnCreateAccount.setOnClickListener(v -> validarRegistro());
 
@@ -160,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         etRegisterPassword.setError(null);
         etConfirmPassword.setError(null);
 
-        String name = ((android.widget.EditText) findViewById(R.id.etName))
+        String name = ((EditText) findViewById(R.id.etName))
                 .getText().toString().trim();
 
         String apellido = ((EditText) findViewById(R.id.etApellido))
@@ -169,29 +125,21 @@ public class RegisterActivity extends AppCompatActivity {
         String username = ((EditText) findViewById(R.id.etUsername))
                 .getText().toString().trim();
 
-        String fechaNacimiento = ((EditText) findViewById(R.id.etFechaNacimiento))
+        String fechaNacimientoDisplay = ((EditText) findViewById(R.id.etFechaNacimiento))
+                .getText().toString().trim();
+        String fechaNacimiento = DateHelper.toIsoDate(fechaNacimientoDisplay);
+
+        String dni = ((EditText) findViewById(R.id.etDni))
                 .getText().toString().trim();
 
-        String[] partesFecha = fechaNacimiento.split("/");
-
-        if (partesFecha.length == 3) {
-            fechaNacimiento = partesFecha[2] + "-"
-                    + partesFecha[1] + "-"
-                    + partesFecha[0];
-        }
-
-        String dni = ((android.widget.EditText) findViewById(R.id.etDni))
+        String email = ((EditText) findViewById(R.id.etRegisterEmail))
                 .getText().toString().trim();
 
-        String email = ((android.widget.EditText) findViewById(R.id.etRegisterEmail))
-                .getText().toString().trim();
-
-        String password = ((android.widget.EditText) findViewById(R.id.etRegisterPassword))
+        String password = ((EditText) findViewById(R.id.etRegisterPassword))
                 .getText().toString();
 
-        String confirmPassword = ((android.widget.EditText) findViewById(R.id.etConfirmPassword))
+        String confirmPassword = ((EditText) findViewById(R.id.etConfirmPassword))
                 .getText().toString();
-
 
         // Campos obligatorios
         if (TextUtils.isEmpty(name) ||
@@ -201,40 +149,50 @@ public class RegisterActivity extends AppCompatActivity {
                 TextUtils.isEmpty(confirmPassword) ||
                 TextUtils.isEmpty(apellido) ||
                 TextUtils.isEmpty(username) ||
-                TextUtils.isEmpty(fechaNacimiento)) {
+                TextUtils.isEmpty(fechaNacimientoDisplay)) {
 
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(this,
+            UiHelper.showToast(
+                    this,
                     "Completá todos los campos",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            );
             return;
         }
 
         if (!cbAceptarTerminos.isChecked()) {
-            Toast.makeText(this,
+            UiHelper.showToast(
+                    this,
                     "Tenés que aceptar los Términos y Condiciones para continuar",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            );
             return;
         }
 
+        if (TextUtils.isEmpty(fechaNacimiento)) {
+            etFechaNacimiento.setError(getString(R.string.profile_birth_date_invalid));
+            etFechaNacimiento.requestFocus();
+            return;
+        }
 
+        // DNI válido
         if (dni.length() < 7 || dni.length() > 8) {
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(this,
+            UiHelper.showToast(
+                    this,
                     "Ingresá un DNI válido",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            );
             return;
         }
 
         // Email válido
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(this,
+            UiHelper.showToast(
+                    this,
                     "Ingresá un email válido",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            );
             return;
         }
-
 
         // Contraseña
         if (password.length() < 10 ||
@@ -243,17 +201,21 @@ public class RegisterActivity extends AppCompatActivity {
                 !password.matches(".*[0-9].*") ||
                 !password.matches(".*[^a-zA-Z0-9].*")) {
 
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(this,
+            UiHelper.showToast(
+                    this,
                     "La contraseña debe tener 10 caracteres, mayúscula, minúscula, número y símbolo",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            );
             return;
         }
+
+        // Confirmación de contraseña
         if (!password.equals(confirmPassword)) {
-            //TODO. Este toast se puede pasar a helper, Toast.makeText
-            Toast.makeText(this,
+            UiHelper.showToast(
+                    this,
                     "Las contraseñas no coinciden",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            );
             return;
         }
 
@@ -274,11 +236,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(
+                        clearForm();
+                        UiHelper.showToast(
                                 RegisterActivity.this,
                                 "Cuenta creada correctamente",
                                 Toast.LENGTH_SHORT
-                        ).show();
+                        );
                     }
 
                     @Override
@@ -315,25 +278,35 @@ public class RegisterActivity extends AppCompatActivity {
                                 break;
 
                             default:
-                                Toast.makeText(
+                                UiHelper.showToast(
                                         RegisterActivity.this,
                                         message,
                                         Toast.LENGTH_SHORT
-                                ).show();
+                                );
                                 break;
                         }
                     }
 
                     @Override
                     public void onError(int messageRes) {
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 RegisterActivity.this,
-                                messageRes,
+                                getString(messageRes),
                                 Toast.LENGTH_SHORT
-                        ).show();
+                        );
                     }
                 }
         );
     }
 
+    private void clearForm() {
+        etName.setText("");
+        etApellido.setText("");
+        etUsername.setText("");
+        etDni.setText("");
+        etRegisterEmail.setText("");
+        etFechaNacimiento.setText("");
+        etRegisterPassword.setText("");
+        etConfirmPassword.setText("");
+    }
 }

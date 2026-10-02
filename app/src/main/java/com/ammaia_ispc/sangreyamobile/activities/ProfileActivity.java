@@ -1,15 +1,12 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -22,6 +19,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
@@ -50,7 +49,6 @@ public class ProfileActivity extends AppCompatActivity {
     private static final Pattern NAME_PATTERN = Pattern.compile(
             "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$");
     private static final String API_DATE_FORMAT = "yyyy-MM-dd";
-    private static final String DISPLAY_DATE_FORMAT = "dd/MM/yyyy";
 
     private EditText usernameInput;
     private EditText emailInput;
@@ -65,28 +63,35 @@ public class ProfileActivity extends AppCompatActivity {
     private String birthDate;
     private String originalBirthDate;
     private int userId;
+    private boolean adminEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        adminEditMode = getIntent().hasExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID);
+        if (adminEditMode) {
+            if (!SessionManager.requireAdmin(this)) {
+                return;
+            }
+            userId = getIntent().getIntExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID, -1);
+            if (userId < 1) {
+                finish();
+                return;
+            }
+        }
+
         UiHelper.configureSystemBars(this);
         setContentView(R.layout.activity_profile);
 
         bindViews();
         configureNavigation();
-        configureBottomNavigation();
-        birthDateInput.setOnTouchListener((view, event) -> {
-            boolean onCalendarIcon = event.getX()
-                    >= birthDateInput.getWidth() - birthDateInput.getCompoundPaddingRight();
-            if (onCalendarIcon) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    syncBirthDateFromInput();
-                    openDatePicker();
-                }
-                return true;
-            }
-            return false;
-        });
+        if (adminEditMode) {
+            configureAdminEditMode();
+        } else {
+            configureBottomNavigation();
+        }
+        DateHelper.configureDateInput(this, birthDateInput);
         saveButton.setOnClickListener(view -> saveProfile());
         loadProfile();
     }
@@ -110,6 +115,14 @@ public class ProfileActivity extends AppCompatActivity {
         NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
     }
 
+    private void configureAdminEditMode() {
+        ((TextView) findViewById(R.id.profile_title_view))
+                .setText(R.string.admin_edit_user_title);
+        ((TextView) findViewById(R.id.profile_subtitle_view))
+                .setText(R.string.admin_edit_user_subtitle);
+        findViewById(R.id.profile_bottom_navigation).setVisibility(View.GONE);
+    }
+
     private void configureBottomNavigation() {
         findViewById(R.id.profile_campaigns_navigation_item)
                 .setOnClickListener(view -> {
@@ -124,7 +137,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadProfile() {
-        userId = SessionManager.getUserId(this);
+        if (!adminEditMode) {
+            userId = SessionManager.getUserId(this);
+        }
         if (userId < 1) {
             UiHelper.showMessage(messageView, R.string.profile_session_error);
             return;
@@ -146,7 +161,11 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<AuthUser> call, Throwable throwable) {
                 UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
-                UiHelper.showMessage(messageView, R.string.profile_load_error);
+                UiHelper.showMessage(
+                        messageView,
+                        adminEditMode
+                                ? R.string.admin_user_load_error
+                                : R.string.profile_load_error);
             }
         });
     }
@@ -155,49 +174,19 @@ public class ProfileActivity extends AppCompatActivity {
         usernameInput.setText(safeValue(user.getUsername()));
         emailInput.setText(safeValue(user.getEmail()));
         dniInput.setText(safeValue(user.getDni()));
-        nameInput.setText(safeValue(user.getNombre()));
-        lastNameInput.setText(safeValue(user.getApellido()));
-        setBirthDate(user.getFechaNacimiento());
+        nameInput.setText(safeValue(user.getName()));
+        lastNameInput.setText(safeValue(user.getLastName()));
+        setBirthDate(user.getBirthDate());
         originalBirthDate = birthDate;
     }
 
     private void setBirthDate(String isoDate) {
         birthDate = isoDate;
         if (isValidIsoDate(isoDate)) {
-            birthDateInput.setText(formatDate(isoDate, API_DATE_FORMAT, DISPLAY_DATE_FORMAT));
+            birthDateInput.setText(DateHelper.toDisplayDate(isoDate));
         } else {
             birthDateInput.setText("");
         }
-    }
-
-    private void openDatePicker() {
-        Calendar selectedDate = Calendar.getInstance();
-        Date parsedDate = parseDate(birthDate, API_DATE_FORMAT);
-        if (parsedDate != null) {
-            selectedDate.setTime(parsedDate);
-        }
-
-        DatePickerDialog dialog = new DatePickerDialog(
-                this,
-                (DatePicker view, int year, int month, int dayOfMonth) -> {
-                    birthDate = String.format(
-                            Locale.US,
-                            "%04d-%02d-%02d",
-                            year,
-                            month + 1,
-                            dayOfMonth);
-                    birthDateInput.setText(String.format(
-                            Locale.getDefault(),
-                            "%02d/%02d/%04d",
-                            dayOfMonth,
-                            month + 1,
-                            year));
-                    birthDateInput.setError(null);
-                },
-                selectedDate.get(Calendar.YEAR),
-                selectedDate.get(Calendar.MONTH),
-                selectedDate.get(Calendar.DAY_OF_MONTH));
-        dialog.show();
     }
 
     private void saveProfile() {
@@ -228,8 +217,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showAgeWarning(UserUpdateRequest request) {
         new AlertDialog.Builder(this)
-                .setTitle(R.string.profile_age_warning_title)
-                .setMessage(R.string.profile_age_warning_message)
+                .setTitle(adminEditMode
+                        ? R.string.admin_user_age_warning_title
+                        : R.string.profile_age_warning_title)
+                .setMessage(adminEditMode
+                        ? R.string.admin_user_age_warning_message
+                        : R.string.profile_age_warning_message)
                 .setNegativeButton(R.string.profile_age_warning_cancel, null)
                 .setPositiveButton(
                         R.string.profile_age_warning_confirm,
@@ -247,14 +240,22 @@ public class ProfileActivity extends AppCompatActivity {
                         UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
                         if (response.isSuccessful() && response.body() != null) {
                             populateProfile(response.body());
-                            SessionManager.updateUserName(
-                                    ProfileActivity.this,
-                                    response.body().getDisplayName());
-                            configureNavigation();
+                            if (userId == SessionManager.getUserId(ProfileActivity.this)) {
+                                SessionManager.updateUserName(
+                                        ProfileActivity.this,
+                                        response.body().getDisplayName());
+                                configureNavigation();
+                            }
                             Toast.makeText(
                                     ProfileActivity.this,
-                                    R.string.profile_updated_message,
+                                    adminEditMode
+                                            ? R.string.admin_user_updated_message
+                                            : R.string.profile_updated_message,
                                     Toast.LENGTH_SHORT).show();
+                            if (adminEditMode) {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
                         } else {
                             handleResponseError(response, true);
                         }
@@ -263,7 +264,11 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<AuthUser> call, Throwable throwable) {
                         UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
-                        UiHelper.showMessage(messageView, R.string.profile_update_error);
+                        UiHelper.showMessage(
+                                messageView,
+                                adminEditMode
+                                        ? R.string.admin_user_update_error
+                                        : R.string.profile_update_error);
                     }
                 });
     }
@@ -328,11 +333,19 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
         if (statusCode == 403) {
-            UiHelper.showMessage(messageView, R.string.profile_unauthorized_error);
+            UiHelper.showMessage(
+                    messageView,
+                    adminEditMode
+                            ? R.string.admin_user_unauthorized_error
+                            : R.string.profile_unauthorized_error);
             return;
         }
         if (statusCode == 404) {
-            UiHelper.showMessage(messageView, R.string.profile_not_found_error);
+            UiHelper.showMessage(
+                    messageView,
+                    adminEditMode
+                            ? R.string.admin_user_not_found_error
+                            : R.string.profile_not_found_error);
             return;
         }
         if (statusCode == 400 && applyServerErrors(response.errorBody())) {
@@ -341,7 +354,13 @@ public class ProfileActivity extends AppCompatActivity {
         }
         UiHelper.showMessage(
                 messageView,
-                update ? R.string.profile_update_error : R.string.profile_load_error);
+                update
+                        ? (adminEditMode
+                        ? R.string.admin_user_update_error
+                        : R.string.profile_update_error)
+                        : (adminEditMode
+                        ? R.string.admin_user_load_error
+                        : R.string.profile_load_error));
     }
 
     private boolean applyServerErrors(ResponseBody errorBody) {
@@ -430,7 +449,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private boolean isValidIsoDate(String value) {
-        return parseDate(value, API_DATE_FORMAT) != null;
+        return DateHelper.isValidIsoDate(value);
     }
 
     private void syncBirthDateFromInput() {
@@ -440,10 +459,7 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        Date parsedDate = parseDate(displayDate, DISPLAY_DATE_FORMAT);
-        birthDate = parsedDate == null
-                ? null
-                : new SimpleDateFormat(API_DATE_FORMAT, Locale.US).format(parsedDate);
+        birthDate = DateHelper.toIsoDate(displayDate);
     }
 
     private boolean isEnrollmentAgeAllowed(String value) {
@@ -477,11 +493,4 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private String formatDate(String value, String inputPattern, String outputPattern) {
-        Date date = parseDate(value, inputPattern);
-        if (date == null) {
-            return "";
-        }
-        return new SimpleDateFormat(outputPattern, Locale.getDefault()).format(date);
-    }
 }

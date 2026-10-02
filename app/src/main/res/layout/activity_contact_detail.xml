@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height"
+        android:background="@color/dark_red"
+        android:paddingStart="4dp"
+        android:paddingEnd="8dp">
+
+        <ImageButton
+            android:id="@+id/contact_detail_back_button"
+            android:layout_width="@dimen/header_button_size"
+            android:layout_height="@dimen/header_button_size"
+            android:layout_gravity="start|center_vertical"
+            android:background="@drawable/bg_menu_button"
+            android:contentDescription="@string/back"
+            android:padding="14dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:tint="@color/white" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/contact_detail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/contact_detail_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/contact_detail_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/contact_detail_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/contact_detail_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/contact_detail_tracked_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Marcar como seguido" />
+
+    </LinearLayout>
+
+</LinearLayout>

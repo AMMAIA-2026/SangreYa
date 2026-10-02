@@ -21,7 +21,7 @@ Se desarrolla en el marco de la materia **Programación de Aplicaciones Móviles
 
 **Backend** (reutilizado del proyecto anterior)
 - Python + Django + Django REST Framework
-- MySQL
+- SQLite (producción)
 - Autenticación JWT
 
 ---
