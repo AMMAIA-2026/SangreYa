@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ContactDateTimeHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
@@ -71,7 +72,8 @@ public class ContactDetailActivity extends AppCompatActivity {
                                     .setText(contact.getMessage());
 
                             ((TextView) findViewById(R.id.contact_detail_date))
-                                    .setText(contact.getCreatedAt());
+                                    .setText(ContactDateTimeHelper.formatForAdmin(
+                                            contact.getCreatedAt()));
 
                             updateButton();
 

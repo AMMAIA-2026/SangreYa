@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.widget.Toast;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.ContactDateTimeHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
@@ -172,7 +173,7 @@ public class AdminContactListActivity extends AppCompatActivity {
                 .setText(contact.getName());
 
         ((TextView) card.findViewById(R.id.contact_time))
-                .setText(contact.getCreatedAt());
+                .setText(ContactDateTimeHelper.formatForAdmin(contact.getCreatedAt()));
 
         ((TextView) card.findViewById(R.id.contact_reason))
                 .setText(contact.getReason());
