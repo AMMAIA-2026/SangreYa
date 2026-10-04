@@ -54,8 +54,7 @@ public final class CampaignApiRepository {
         private final String body;
 
         public HttpException(int statusCode, String body) {
-            super("HTTP " + statusCode
-                    + (body == null || body.isEmpty() ? "" : ": " + body));
+            super("HTTP " + statusCode);
             this.statusCode = statusCode;
             this.body = body == null ? "" : body;
         }
