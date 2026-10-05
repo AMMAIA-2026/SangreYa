@@ -20,11 +20,7 @@ public final class ApiClient {
                     .addInterceptor(new AuthInterceptor(context))
                     .authenticator(new TokenAuthenticator(context))
                     .build();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(ApiConfig.BASE_URL)
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            retrofit = createRetrofit(ApiConfig.BASE_URL, client);
         }
         return retrofit.create(ApiService.class);
     }
@@ -32,11 +28,20 @@ public final class ApiClient {
 
     public static ApiService getPlainApiService() {
         if (plainRetrofit == null) {
-            plainRetrofit = new Retrofit.Builder()
-                    .baseUrl(ApiConfig.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            plainRetrofit = createRetrofit(ApiConfig.BASE_URL, new OkHttpClient());
         }
         return plainRetrofit.create(ApiService.class);
+    }
+
+    public static ApiService createApiService(String baseUrl, OkHttpClient client) {
+        return createRetrofit(baseUrl, client).create(ApiService.class);
+    }
+
+    private static Retrofit createRetrofit(String baseUrl, OkHttpClient client) {
+        return new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
     }
 }

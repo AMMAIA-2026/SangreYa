@@ -1,0 +1,15 @@
+{
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.Zml4dHVyZS1hY2Nlc3M",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJ0b2tlbl90eXBlIjoicmVmcmVzaCJ9.Zml4dHVyZS1yZWZyZXNo",
+  "user": {
+    "id": 7,
+    "username": "donante_prueba",
+    "email": "donante@example.test",
+    "dni": "30123456",
+    "nombre": "Ana",
+    "apellido": "Perez",
+    "fecha_nacimiento": "1990-01-15",
+    "fecha_registro": "2026-09-01",
+    "rol": "donante"
+  }
+}

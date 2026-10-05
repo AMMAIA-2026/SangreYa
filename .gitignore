@@ -21,6 +21,11 @@ captures/
 !.env.example
 !.env.template
 secrets.properties
+*.private.postman_environment.json
+*.private.json
+**/__pycache__/
+*.sqlite3
+*.sqlite3-*
 keystore.properties
 *.jks
 *.keystore
@@ -29,11 +34,10 @@ keystore.properties
 *.pem
 *.key
 
-# Generated Android packages and reports
+# Generated Android packages
 *.apk
 *.aab
 *.aar
-reports/
 
 # Other IDEs and editor temporary files
 .vscode/

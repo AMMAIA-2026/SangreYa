@@ -1,0 +1,7 @@
+*.private.postman_environment.json
+*.private.json
+__pycache__/
+.postman/
+postman/
+!reportes/**/*.log
+!reports/**/*.log
