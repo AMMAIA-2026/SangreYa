@@ -199,7 +199,7 @@ public class RegisterActivity extends AppCompatActivity {
                 !password.matches(".*[A-Z].*") ||
                 !password.matches(".*[a-z].*") ||
                 !password.matches(".*[0-9].*") ||
-                !password.matches(".*[^a-zA-Z0-9].*")) {
+                !password.matches(".*[^A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\\s].*")) {
 
             UiHelper.showToast(
                     this,

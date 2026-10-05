@@ -187,15 +187,15 @@
 
     <string name="reset_password_title">Nueva contraseña</string>
     <string name="reset_password_subtitle">Elegí una nueva contraseña para tu cuenta</string>
-    <string name="identity_verified">Identidad verificada</string>
     <string name="new_password_label">Nueva contraseña</string>
-    <string name="password_policy_hint">Mínimo 8 caracteres, con una mayúscula y un número</string>
+    <string name="identity_verified">Identidad verificada</string>
+    <string name="password_policy_hint">Mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo</string>
     <string name="confirm_password_label">Confirmar contraseña</string>
     <string name="save_password_button">Guardar contraseña</string>
 
     <string name="error_invalid_email">Ingresá un email válido</string>
     <string name="error_invalid_dni">Ingresá un DNI válido (7 u 8 dígitos)</string>
-    <string name="error_weak_password">Mínimo 8 caracteres, con una mayúscula y un número</string>
+    <string name="error_weak_password">Mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
 
     <string name="link_olvidaste_contrasena">¿Olvidaste tu contraseña?</string>
