@@ -1,0 +1,1427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup)" tests="139" time="55.902">
+  <testsuite name="00 - Preparación de ejecución / Login administrador" id="1c029e96-a55f-43fb-a581-a4584e74ecbc" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="1" errors="0" time="1.776">
+    <testcase name="TC-PERF-01 | login HTTP 200" time="1.776" classname="00PreparacionDeEjecucionLoginAdministrador"/>
+    <testcase name="Login | Content-Type JSON y SLA &lt; 800 ms" time="1.776" classname="00PreparacionDeEjecucionLoginAdministrador">
+      <failure type="AssertionFailure" message="expected 1776 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: 00 - Preparación de ejecución / Login administrador.]]>
+        <![CDATA[Test description: Login | Content-Type JSON y SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1776 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1776 to be below 800
+   at Object.eval sandbox-script.js:2:1).]]>
+      </failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / AUT-API-AUTH-01 | Registro de usuario estándar descartable (TC-AUTH-01)" id="d091085e-f610-41b4-9fbe-ff6119bbe0ae" timestamp="2026-10-05T21:08:46.140Z" tests="4" failures="1" errors="0" time="1.638">
+    <testcase name="TC-AUTH-01 | no expone password raíz" time="1.638" classname="00PreparacionDeEjecucionAutApiAuth01RegistroDeUsuarioEstandarDescartableTcAuth01"/>
+    <testcase name="TC-AUTH-01 | Registro HTTP 201" time="1.638" classname="00PreparacionDeEjecucionAutApiAuth01RegistroDeUsuarioEstandarDescartableTcAuth01"/>
+    <testcase name="TC-AUTH-01 | JSON y SLA &lt; 800 ms" time="1.638" classname="00PreparacionDeEjecucionAutApiAuth01RegistroDeUsuarioEstandarDescartableTcAuth01">
+      <failure type="AssertionFailure" message="expected 1638 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: 00 - Preparación de ejecución / AUT-API-AUTH-01 | Registro de usuario estándar descartable (TC-AUTH-01).]]>
+        <![CDATA[Test description: TC-AUTH-01 | JSON y SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1638 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1638 to be below 800
+   at Object.eval sandbox-script.js:2:2).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-01 | no se devuelve contraseña" time="1.638" classname="00PreparacionDeEjecucionAutApiAuth01RegistroDeUsuarioEstandarDescartableTcAuth01"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / Login usuario de pruebas" id="2555bb68-c6d9-4e54-a513-f31d55019a40" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="1" errors="0" time="1.130">
+    <testcase name="TC-AUTH-01 | login HTTP 200" time="1.130" classname="00PreparacionDeEjecucionLoginUsuarioDePruebas"/>
+    <testcase name="Login | Content-Type JSON y SLA &lt; 800 ms" time="1.130" classname="00PreparacionDeEjecucionLoginUsuarioDePruebas">
+      <failure type="AssertionFailure" message="expected 1130 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: 00 - Preparación de ejecución / Login usuario de pruebas.]]>
+        <![CDATA[Test description: Login | Content-Type JSON y SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1130 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1130 to be below 800
+   at Object.eval sandbox-script.js:2:3).]]>
+      </failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Crear segundo usuario estándar descartable (runId)" id="d64e1118-4e3b-452d-a848-8a71b1a9f7f5" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="1.243">
+    <testcase name="SETUP otherUser | HTTP 201" time="1.243" classname="00PreparacionDeEjecucionSetupCrearSegundoUsuarioEstandarDescartableRunId"/>
+    <testcase name="SETUP otherUser | no password in response" time="1.243" classname="00PreparacionDeEjecucionSetupCrearSegundoUsuarioEstandarDescartableRunId"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Login segundo usuario estándar descartable" id="612e61d6-8891-45fb-bad5-70ce80d4de97" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.201">
+    <testcase name="SETUP otherUser | login HTTP 200" time="1.201" classname="00PreparacionDeEjecucionSetupLoginSegundoUsuarioEstandarDescartable"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Crear usuario menor de 18 descartable (runId)" id="904181a6-4025-4a07-ba0d-068c5c8d7df0" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="1.314">
+    <testcase name="SETUP underAgeUser | HTTP 201" time="1.314" classname="00PreparacionDeEjecucionSetupCrearUsuarioMenorDe18DescartableRunId"/>
+    <testcase name="SETUP underAgeUser | no password in response" time="1.314" classname="00PreparacionDeEjecucionSetupCrearUsuarioMenorDe18DescartableRunId"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Login usuario menor de 18 descartable" id="26b759bb-3759-4198-9f32-0cea73b92f2d" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.216">
+    <testcase name="SETUP underAgeUser | login HTTP 200" time="1.216" classname="00PreparacionDeEjecucionSetupLoginUsuarioMenorDe18Descartable"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Crear usuario de 65 o más descartable (runId)" id="9a7cfbac-1876-44fb-bf74-15fd19077d91" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="1.184">
+    <testcase name="SETUP overAgeUser | HTTP 201" time="1.184" classname="00PreparacionDeEjecucionSetupCrearUsuarioDe65OMasDescartableRunId"/>
+    <testcase name="SETUP overAgeUser | no password in response" time="1.184" classname="00PreparacionDeEjecucionSetupCrearUsuarioDe65OMasDescartableRunId"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Login usuario de 65 o más descartable" id="a501fda0-7f19-45fe-a313-f7337bb9c747" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.366">
+    <testcase name="SETUP overAgeUser | login HTTP 200" time="1.366" classname="00PreparacionDeEjecucionSetupLoginUsuarioDe65OMasDescartable"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Seleccionar centro de salud para campañas QA" id="97b8e09f-d260-419c-a024-7cc749a0bd1e" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.203">
+    <testcase name="SETUP healthCenterId | HTTP 200" time="0.203" classname="00PreparacionDeEjecucionSetupSeleccionarCentroDeSaludParaCampanasQa"/>
+    <testcase name="SETUP healthCenterId | existe un centro para campañas" time="0.203" classname="00PreparacionDeEjecucionSetupSeleccionarCentroDeSaludParaCampanasQa"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Crear campaña QA cupo lleno al llegar al límite (runId)" id="44d1a870-80b1-4614-b28b-5dc472fa3ecf" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="0.259">
+    <testcase name="SETUP fullCampaignId | HTTP 201" time="0.259" classname="00PreparacionDeEjecucionSetupCrearCampanaQaCupoLlenoAlLlegarAlLimiteRunId"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Crear campaña QA último cupo concurrente (runId)" id="942ef747-a463-48d6-85e6-a611652cc185" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="0.227">
+    <testcase name="SETUP lastSeatCampaignId | HTTP 201" time="0.227" classname="00PreparacionDeEjecucionSetupCrearCampanaQaUltimoCupoConcurrenteRunId"/>
+  </testsuite>
+  <testsuite name="00 - Preparación de ejecución / SETUP | Crear campaña QA exclusiva para AUT-API-ENR-01" id="bd807080-6cd9-4b63-94cb-318d3ea700c6" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="0.232">
+    <testcase name="SETUP enrollmentContractCampaignId | HTTP 201" time="0.232" classname="00PreparacionDeEjecucionSetupCrearCampanaQaExclusivaParaAutApiEnr01"/>
+  </testsuite>
+  <testsuite name="01 - Fixtures de edad (runId) / SETUP | Crear usuario de 18 años" id="bc2d10ef-b7cf-42c1-8d3d-b0a1b0cb52b9" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.336">
+    <testcase name="SETUP edad 18 | HTTP 201" time="1.336" classname="01FixturesDeEdadRunIdSetupCrearUsuarioDe18Anos"/>
+  </testsuite>
+  <testsuite name="01 - Fixtures de edad (runId) / SETUP | Login usuario de 18 años" id="eeed3808-44c6-44cf-9129-59dabcbf27a3" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.806">
+    <testcase name="SETUP edad 18 | login HTTP 200" time="1.806" classname="01FixturesDeEdadRunIdSetupLoginUsuarioDe18Anos"/>
+  </testsuite>
+  <testsuite name="01 - Fixtures de edad (runId) / SETUP | Crear usuario de 64 años" id="dd5cfbb5-122a-4c63-9728-b44d8c535320" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.235">
+    <testcase name="SETUP edad 64 | HTTP 201" time="1.235" classname="01FixturesDeEdadRunIdSetupCrearUsuarioDe64Anos"/>
+  </testsuite>
+  <testsuite name="01 - Fixtures de edad (runId) / SETUP | Login usuario de 64 años" id="42fbec90-e1ef-4031-ac9b-1562f27041ec" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.232">
+    <testcase name="SETUP edad 64 | login HTTP 200" time="1.232" classname="01FixturesDeEdadRunIdSetupLoginUsuarioDe64Anos"/>
+  </testsuite>
+  <testsuite name="01 - Fixtures de edad (runId) / SETUP | Usuario para inspección de hash AUTH-14" id="45d509aa-b41e-4789-9b5a-25d8715d81ca" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="1.233">
+    <testcase name="SETUP hash | HTTP 201" time="1.233" classname="01FixturesDeEdadRunIdSetupUsuarioParaInspeccionDeHashAuth14"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-12 | Registro - email ya registrado" id="be52d9dc-6374-4cdc-b77f-2e9af447b2fc" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.197">
+    <testcase name="TC-AUTH-12 | mensaje estructurado de primer nivel" time="0.197" classname="AuthAutApiAuth12RegistroEmailYaRegistrado"/>
+    <testcase name="TC-AUTH-12 | no expone password raíz" time="0.197" classname="AuthAutApiAuth12RegistroEmailYaRegistrado"/>
+    <testcase name="TC-AUTH-12 | HTTP status" time="0.197" classname="AuthAutApiAuth12RegistroEmailYaRegistrado"/>
+    <testcase name="TC-AUTH-12 | SLA &lt; 800 ms" time="0.197" classname="AuthAutApiAuth12RegistroEmailYaRegistrado"/>
+    <testcase name="TC-AUTH-12 | Content-Type JSON" time="0.197" classname="AuthAutApiAuth12RegistroEmailYaRegistrado"/>
+    <testcase name="TC-AUTH-12 | Error response is structured JSON" time="0.197" classname="AuthAutApiAuth12RegistroEmailYaRegistrado"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-14 | Registro - hash de contraseña" id="c49e50f0-0421-418c-b90e-20339713844c" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="1" errors="0" time="1.152">
+    <testcase name="TC-AUTH-14 | no expone password raíz" time="1.152" classname="AuthAutApiAuth14RegistroHashDeContrasena"/>
+    <testcase name="TC-AUTH-14 | HTTP status" time="1.152" classname="AuthAutApiAuth14RegistroHashDeContrasena"/>
+    <testcase name="TC-AUTH-14 | SLA &lt; 800 ms" time="1.152" classname="AuthAutApiAuth14RegistroHashDeContrasena">
+      <failure type="AssertionFailure" message="expected 1152 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth / AUT-API-AUTH-14 | Registro - hash de contraseña.]]>
+        <![CDATA[Test description: TC-AUTH-14 | SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1152 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1152 to be below 800
+   at Object.eval sandbox-script.js:2:20).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-14 | Content-Type JSON" time="1.152" classname="AuthAutApiAuth14RegistroHashDeContrasena"/>
+    <testcase name="TC-AUTH-14 | JWT contract" time="1.152" classname="AuthAutApiAuth14RegistroHashDeContrasena"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-20 | Login - operación exitosa" id="9947e0b2-049e-4ee9-85f7-0218eefabe00" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="1" errors="0" time="1.156">
+    <testcase name="TC-AUTH-20 | no expone password raíz" time="1.156" classname="AuthAutApiAuth20LoginOperacionExitosa"/>
+    <testcase name="TC-AUTH-20 | HTTP status" time="1.156" classname="AuthAutApiAuth20LoginOperacionExitosa"/>
+    <testcase name="TC-AUTH-20 | SLA &lt; 800 ms" time="1.156" classname="AuthAutApiAuth20LoginOperacionExitosa">
+      <failure type="AssertionFailure" message="expected 1156 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth / AUT-API-AUTH-20 | Login - operación exitosa.]]>
+        <![CDATA[Test description: TC-AUTH-20 | SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1156 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1156 to be below 800
+   at Object.eval sandbox-script.js:2:21).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-20 | Content-Type JSON" time="1.156" classname="AuthAutApiAuth20LoginOperacionExitosa"/>
+    <testcase name="TC-AUTH-20 | JWT contract" time="1.156" classname="AuthAutApiAuth20LoginOperacionExitosa"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-21 | Login - credenciales inválidas" id="bd4b3a61-83d7-4a08-bb4f-91abfba155aa" timestamp="2026-10-05T21:08:46.140Z" tests="7" failures="1" errors="0" time="1.311">
+    <testcase name="TC-AUTH-21 | mensaje estructurado de primer nivel" time="1.311" classname="AuthAutApiAuth21LoginCredencialesInvalidas"/>
+    <testcase name="TC-AUTH-21 | no expone password raíz" time="1.311" classname="AuthAutApiAuth21LoginCredencialesInvalidas"/>
+    <testcase name="TC-AUTH-21 | no emite tokens ante error" time="1.311" classname="AuthAutApiAuth21LoginCredencialesInvalidas"/>
+    <testcase name="TC-AUTH-21 | HTTP status" time="1.311" classname="AuthAutApiAuth21LoginCredencialesInvalidas"/>
+    <testcase name="TC-AUTH-21 | SLA &lt; 800 ms" time="1.311" classname="AuthAutApiAuth21LoginCredencialesInvalidas">
+      <failure type="AssertionFailure" message="expected 1311 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth / AUT-API-AUTH-21 | Login - credenciales inválidas.]]>
+        <![CDATA[Test description: TC-AUTH-21 | SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1311 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1311 to be below 800
+   at Object.eval sandbox-script.js:2:22).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-21 | Content-Type JSON" time="1.311" classname="AuthAutApiAuth21LoginCredencialesInvalidas"/>
+    <testcase name="TC-AUTH-21 | Error response is structured JSON" time="1.311" classname="AuthAutApiAuth21LoginCredencialesInvalidas"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-22 | Login - claims del token JWT" id="e69d83c5-540c-4eec-83b2-e049fdbe1295" timestamp="2026-10-05T21:08:46.140Z" tests="16" failures="1" errors="0" time="0.510">
+    <testcase name="TC-AUTH-22 | no expone password raíz" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 | claims y fechas access" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 | claims y fechas refresh" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 access emitido aceptado | transporte" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 access emitido aceptado | HTTP" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 access emitido aceptado | Content-Type y SLA" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 access emitido aceptado | contrato raíz" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 firma alterada rechazada | transporte" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 firma alterada rechazada | HTTP" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 firma alterada rechazada | Content-Type y SLA" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 firma alterada rechazada | contrato raíz" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 | HTTP status" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 | SLA &lt; 800 ms" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt">
+      <failure type="AssertionFailure" message="expected 2256 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth / AUT-API-AUTH-22 | Login - claims del token JWT.]]>
+        <![CDATA[Test description: TC-AUTH-22 | SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 2256 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 2256 to be below 800
+   at Object.eval sandbox-script.js:2:23).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-22 | Content-Type JSON" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 | JWT contract" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+    <testcase name="TC-AUTH-22 | JWT claims match response user" time="0.510" classname="AuthAutApiAuth22LoginClaimsDelTokenJwt"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-25 | Restablecer contraseña - email inexistente" id="114a3a4a-ba5a-448f-a242-126dfcf8f848" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.193">
+    <testcase name="TC-AUTH-25 | no expone password raíz" time="0.193" classname="AuthAutApiAuth25RestablecerContrasenaEmailInexistente"/>
+    <testcase name="TC-AUTH-25 | HTTP status" time="0.193" classname="AuthAutApiAuth25RestablecerContrasenaEmailInexistente"/>
+    <testcase name="TC-AUTH-25 | SLA &lt; 800 ms" time="0.193" classname="AuthAutApiAuth25RestablecerContrasenaEmailInexistente"/>
+    <testcase name="TC-AUTH-25 | Content-Type JSON" time="0.193" classname="AuthAutApiAuth25RestablecerContrasenaEmailInexistente"/>
+    <testcase name="TC-AUTH-25 | recovery response is generic and has no tokens" time="0.193" classname="AuthAutApiAuth25RestablecerContrasenaEmailInexistente"/>
+    <testcase name="TC-AUTH-25 | respuesta neutral sin enumerar email" time="0.193" classname="AuthAutApiAuth25RestablecerContrasenaEmailInexistente"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-27 | Sesión - renovación con refresh válido" id="cf9b783e-0305-4ac0-a564-c60dc470859f" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.230">
+    <testcase name="TC-AUTH-27 | no expone password raíz" time="0.230" classname="AuthAutApiAuth27SesionRenovacionConRefreshValido"/>
+    <testcase name="TC-AUTH-27 | HTTP status" time="0.230" classname="AuthAutApiAuth27SesionRenovacionConRefreshValido"/>
+    <testcase name="TC-AUTH-27 | SLA &lt; 800 ms" time="0.230" classname="AuthAutApiAuth27SesionRenovacionConRefreshValido"/>
+    <testcase name="TC-AUTH-27 | Content-Type JSON" time="0.230" classname="AuthAutApiAuth27SesionRenovacionConRefreshValido"/>
+    <testcase name="TC-AUTH-27 | Refresh contract" time="0.230" classname="AuthAutApiAuth27SesionRenovacionConRefreshValido"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-28 | Sesión - renovación con refresh inválido" id="513bbacd-b14e-4478-b709-f87342ec8440" timestamp="2026-10-05T21:08:46.140Z" tests="11" failures="0" errors="0" time="0.175">
+    <testcase name="TC-AUTH-28 | mensaje estructurado de primer nivel" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 | no expone password raíz" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 | no emite tokens ante error" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 firma adulterada | transporte" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 firma adulterada | HTTP" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 firma adulterada | Content-Type y SLA" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 firma adulterada | contrato raíz" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 | HTTP status" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 | SLA &lt; 800 ms" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 | Content-Type JSON" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+    <testcase name="TC-AUTH-28 | Error response is structured JSON" time="0.175" classname="AuthAutApiAuth28SesionRenovacionConRefreshInvalido"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-29 | Sesión - revocación de refresh token rotado" id="f045475e-85d4-4dbf-ad28-702858ed8027" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.189">
+    <testcase name="TC-AUTH-29 | no expone password raíz" time="0.189" classname="AuthAutApiAuth29SesionRevocacionDeRefreshTokenRotado"/>
+    <testcase name="TC-AUTH-29 | HTTP status" time="0.189" classname="AuthAutApiAuth29SesionRevocacionDeRefreshTokenRotado"/>
+    <testcase name="TC-AUTH-29 | SLA &lt; 800 ms" time="0.189" classname="AuthAutApiAuth29SesionRevocacionDeRefreshTokenRotado"/>
+    <testcase name="TC-AUTH-29 | Content-Type JSON" time="0.189" classname="AuthAutApiAuth29SesionRevocacionDeRefreshTokenRotado"/>
+    <testcase name="TC-AUTH-29 | Refresh contract" time="0.189" classname="AuthAutApiAuth29SesionRevocacionDeRefreshTokenRotado"/>
+    <testcase name="TC-AUTH-29 | reusing rotated token is rejected" time="0.189" classname="AuthAutApiAuth29SesionRevocacionDeRefreshTokenRotado"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-30 | Autorización - acceso del usuario a su propio recurso" id="609792a4-b3ae-4e98-a5ee-c57bb8f1e252" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.203">
+    <testcase name="TC-AUTH-30 | no expone password raíz" time="0.203" classname="AuthAutApiAuth30AutorizacionAccesoDelUsuarioASuPropioRecurso"/>
+    <testcase name="TC-AUTH-30 | modelo usuario de primer nivel" time="0.203" classname="AuthAutApiAuth30AutorizacionAccesoDelUsuarioASuPropioRecurso"/>
+    <testcase name="TC-AUTH-30 | HTTP status" time="0.203" classname="AuthAutApiAuth30AutorizacionAccesoDelUsuarioASuPropioRecurso"/>
+    <testcase name="TC-AUTH-30 | SLA &lt; 800 ms" time="0.203" classname="AuthAutApiAuth30AutorizacionAccesoDelUsuarioASuPropioRecurso"/>
+    <testcase name="TC-AUTH-30 | Content-Type JSON" time="0.203" classname="AuthAutApiAuth30AutorizacionAccesoDelUsuarioASuPropioRecurso"/>
+    <testcase name="TC-AUTH-30 | User contract and no credential leakage" time="0.203" classname="AuthAutApiAuth30AutorizacionAccesoDelUsuarioASuPropioRecurso"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-31 | Autorización - acceso a recurso de otro usuario" id="01db3aa1-7f34-4ec0-b3f4-5bbc70361087" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.214">
+    <testcase name="TC-AUTH-31 | mensaje estructurado de primer nivel" time="0.214" classname="AuthAutApiAuth31AutorizacionAccesoARecursoDeOtroUsuario"/>
+    <testcase name="TC-AUTH-31 | no expone password raíz" time="0.214" classname="AuthAutApiAuth31AutorizacionAccesoARecursoDeOtroUsuario"/>
+    <testcase name="TC-AUTH-31 | HTTP status" time="0.214" classname="AuthAutApiAuth31AutorizacionAccesoARecursoDeOtroUsuario"/>
+    <testcase name="TC-AUTH-31 | SLA &lt; 800 ms" time="0.214" classname="AuthAutApiAuth31AutorizacionAccesoARecursoDeOtroUsuario"/>
+    <testcase name="TC-AUTH-31 | Content-Type JSON" time="0.214" classname="AuthAutApiAuth31AutorizacionAccesoARecursoDeOtroUsuario"/>
+    <testcase name="TC-AUTH-31 | Error response is structured JSON" time="0.214" classname="AuthAutApiAuth31AutorizacionAccesoARecursoDeOtroUsuario"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-32 | Seguridad - intento de inyección SQL" id="6317a36e-c4aa-4469-bcd9-73f858dbf6e1" timestamp="2026-10-05T21:08:46.140Z" tests="7" failures="1" errors="0" time="1.148">
+    <testcase name="TC-AUTH-32 | mensaje estructurado de primer nivel" time="1.148" classname="AuthAutApiAuth32SeguridadIntentoDeInyeccionSql"/>
+    <testcase name="TC-AUTH-32 | no expone password raíz" time="1.148" classname="AuthAutApiAuth32SeguridadIntentoDeInyeccionSql"/>
+    <testcase name="TC-AUTH-32 | no emite tokens ante error" time="1.148" classname="AuthAutApiAuth32SeguridadIntentoDeInyeccionSql"/>
+    <testcase name="TC-AUTH-32 | HTTP status" time="1.148" classname="AuthAutApiAuth32SeguridadIntentoDeInyeccionSql"/>
+    <testcase name="TC-AUTH-32 | SLA &lt; 800 ms" time="1.148" classname="AuthAutApiAuth32SeguridadIntentoDeInyeccionSql">
+      <failure type="AssertionFailure" message="expected 1148 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth / AUT-API-AUTH-32 | Seguridad - intento de inyección SQL.]]>
+        <![CDATA[Test description: TC-AUTH-32 | SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1148 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1148 to be below 800
+   at Object.eval sandbox-script.js:2:30).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-32 | Content-Type JSON" time="1.148" classname="AuthAutApiAuth32SeguridadIntentoDeInyeccionSql"/>
+    <testcase name="TC-AUTH-32 | Error response is structured JSON" time="1.148" classname="AuthAutApiAuth32SeguridadIntentoDeInyeccionSql"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-33 | Registro - nombre, apellido y username inválidos" id="f4357a9a-81a5-498f-8007-cba1148c6831" timestamp="2026-10-05T21:08:46.140Z" tests="30" failures="0" errors="0" time="0.205">
+    <testcase name="TC-AUTH-33 | mensaje estructurado de primer nivel" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 | no expone password raíz" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 1 nombre | transporte" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 1 nombre | HTTP" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 1 nombre | Content-Type y SLA" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 1 nombre | contrato raíz" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 2 apellido | transporte" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 2 apellido | HTTP" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 2 apellido | Content-Type y SLA" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 2 apellido | contrato raíz" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 3 username | transporte" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 3 username | HTTP" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 3 username | Content-Type y SLA" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 3 username | contrato raíz" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 4 nombre | transporte" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 4 nombre | HTTP" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 4 nombre | Content-Type y SLA" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 4 nombre | contrato raíz" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 5 apellido | transporte" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 5 apellido | HTTP" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 5 apellido | Content-Type y SLA" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 5 apellido | contrato raíz" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 6 username | transporte" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 6 username | HTTP" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 6 username | Content-Type y SLA" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 variante 6 username | contrato raíz" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 | HTTP status" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 | SLA &lt; 800 ms" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 | Content-Type JSON" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+    <testcase name="TC-AUTH-33 | Error response is structured JSON" time="0.205" classname="AuthAutApiAuth33RegistroNombreApellidoYUsernameInvalidos"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-34 | Registro - DNI duplicado" id="3a754219-d658-4d29-8842-a0f36eb24e04" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.191">
+    <testcase name="TC-AUTH-34 | mensaje estructurado de primer nivel" time="0.191" classname="AuthAutApiAuth34RegistroDniDuplicado"/>
+    <testcase name="TC-AUTH-34 | no expone password raíz" time="0.191" classname="AuthAutApiAuth34RegistroDniDuplicado"/>
+    <testcase name="TC-AUTH-34 | HTTP status" time="0.191" classname="AuthAutApiAuth34RegistroDniDuplicado"/>
+    <testcase name="TC-AUTH-34 | SLA &lt; 800 ms" time="0.191" classname="AuthAutApiAuth34RegistroDniDuplicado"/>
+    <testcase name="TC-AUTH-34 | Content-Type JSON" time="0.191" classname="AuthAutApiAuth34RegistroDniDuplicado"/>
+    <testcase name="TC-AUTH-34 | Error response is structured JSON" time="0.191" classname="AuthAutApiAuth34RegistroDniDuplicado"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-35 | Registro - contraseña exactamente en el mínimo" id="00d2718f-3231-4862-9420-fe7f57f57837" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="1" errors="0" time="0.312">
+    <testcase name="TC-AUTH-35 | no expone password raíz" time="0.312" classname="AuthAutApiAuth35RegistroContrasenaExactamenteEnElMinimo"/>
+    <testcase name="TC-AUTH-35 | HTTP status" time="0.312" classname="AuthAutApiAuth35RegistroContrasenaExactamenteEnElMinimo"/>
+    <testcase name="TC-AUTH-35 | SLA &lt; 800 ms" time="0.312" classname="AuthAutApiAuth35RegistroContrasenaExactamenteEnElMinimo">
+      <failure type="AssertionFailure" message="expected 1975 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth / AUT-API-AUTH-35 | Registro - contraseña exactamente en el mínimo.]]>
+        <![CDATA[Test description: TC-AUTH-35 | SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1975 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1975 to be below 800
+   at Object.eval sandbox-script.js:2:33).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-35 | Content-Type JSON" time="0.312" classname="AuthAutApiAuth35RegistroContrasenaExactamenteEnElMinimo"/>
+    <testcase name="TC-AUTH-35 | password below 10 chars is rejected" time="0.312" classname="AuthAutApiAuth35RegistroContrasenaExactamenteEnElMinimo"/>
+    <testcase name="TC-AUTH-35 | cleanup of disposable registration" time="0.312" classname="AuthAutApiAuth35RegistroContrasenaExactamenteEnElMinimo"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-36 | Registro - campos obligatorios backend" id="ab96aca2-db6a-4f48-bc05-f0f528741d14" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.209">
+    <testcase name="TC-AUTH-36 | mensaje estructurado de primer nivel" time="0.209" classname="AuthAutApiAuth36RegistroCamposObligatoriosBackend"/>
+    <testcase name="TC-AUTH-36 | no expone password raíz" time="0.209" classname="AuthAutApiAuth36RegistroCamposObligatoriosBackend"/>
+    <testcase name="TC-AUTH-36 | HTTP status" time="0.209" classname="AuthAutApiAuth36RegistroCamposObligatoriosBackend"/>
+    <testcase name="TC-AUTH-36 | SLA &lt; 800 ms" time="0.209" classname="AuthAutApiAuth36RegistroCamposObligatoriosBackend"/>
+    <testcase name="TC-AUTH-36 | Content-Type JSON" time="0.209" classname="AuthAutApiAuth36RegistroCamposObligatoriosBackend"/>
+    <testcase name="TC-AUTH-36 | Error response is structured JSON" time="0.209" classname="AuthAutApiAuth36RegistroCamposObligatoriosBackend"/>
+  </testsuite>
+  <testsuite name="Auth / AUT-API-AUTH-37 | Refresh - payload ausente o método no permitido" id="bcc90379-6f02-45d7-8c32-ca7c3bce6473" timestamp="2026-10-05T21:08:46.140Z" tests="8" failures="0" errors="0" time="0.184">
+    <testcase name="TC-AUTH-37 | mensaje estructurado de primer nivel" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+    <testcase name="TC-AUTH-37 | no expone password raíz" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+    <testcase name="TC-AUTH-37 | no emite tokens ante error" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+    <testcase name="TC-AUTH-37 | HTTP status" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+    <testcase name="TC-AUTH-37 | SLA &lt; 800 ms" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+    <testcase name="TC-AUTH-37 | Content-Type JSON" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+    <testcase name="TC-AUTH-37 | Error response is structured JSON" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+    <testcase name="TC-AUTH-37 | GET method not allowed" time="0.184" classname="AuthAutApiAuth37RefreshPayloadAusenteOMetodoNoPermitido"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-01 | Listado de campañas público" id="32585b1f-5599-4f77-926f-f708c8856bb8" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.202">
+    <testcase name="TC-CAMP-01 | no expone password raíz" time="0.202" classname="CampanasAutApiCamp01ListadoDeCampanasPublico"/>
+    <testcase name="TC-CAMP-01 | modelo campaña de primer nivel" time="0.202" classname="CampanasAutApiCamp01ListadoDeCampanasPublico"/>
+    <testcase name="TC-CAMP-01 | HTTP status" time="0.202" classname="CampanasAutApiCamp01ListadoDeCampanasPublico"/>
+    <testcase name="TC-CAMP-01 | SLA &lt; 800 ms" time="0.202" classname="CampanasAutApiCamp01ListadoDeCampanasPublico"/>
+    <testcase name="TC-CAMP-01 | Content-Type JSON" time="0.202" classname="CampanasAutApiCamp01ListadoDeCampanasPublico"/>
+    <testcase name="TC-CAMP-01 | Campaign contract" time="0.202" classname="CampanasAutApiCamp01ListadoDeCampanasPublico"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-04 | Alta de campaña con datos válidos" id="594c255a-7248-4c50-a53a-dd2375125fc2" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.230">
+    <testcase name="TC-CAMP-04 | no expone password raíz" time="0.230" classname="CampanasAutApiCamp04AltaDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-04 | modelo campaña de primer nivel" time="0.230" classname="CampanasAutApiCamp04AltaDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-04 | HTTP status" time="0.230" classname="CampanasAutApiCamp04AltaDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-04 | SLA &lt; 800 ms" time="0.230" classname="CampanasAutApiCamp04AltaDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-04 | Content-Type JSON" time="0.230" classname="CampanasAutApiCamp04AltaDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-04 | Campaign contract" time="0.230" classname="CampanasAutApiCamp04AltaDeCampanaConDatosValidos"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-02 | Detalle de campaña existente" id="bdea9ff0-781d-41f8-bd42-2bc0183094bb" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.198">
+    <testcase name="TC-CAMP-02 | no expone password raíz" time="0.198" classname="CampanasAutApiCamp02DetalleDeCampanaExistente"/>
+    <testcase name="TC-CAMP-02 | modelo campaña de primer nivel" time="0.198" classname="CampanasAutApiCamp02DetalleDeCampanaExistente"/>
+    <testcase name="TC-CAMP-02 | HTTP status" time="0.198" classname="CampanasAutApiCamp02DetalleDeCampanaExistente"/>
+    <testcase name="TC-CAMP-02 | SLA &lt; 800 ms" time="0.198" classname="CampanasAutApiCamp02DetalleDeCampanaExistente"/>
+    <testcase name="TC-CAMP-02 | Content-Type JSON" time="0.198" classname="CampanasAutApiCamp02DetalleDeCampanaExistente"/>
+    <testcase name="TC-CAMP-02 | Campaign contract" time="0.198" classname="CampanasAutApiCamp02DetalleDeCampanaExistente"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-19 | Estructura y exposición de datos de respuesta (campaña)" id="d98de2aa-46b1-4f6f-b268-6208ac247249" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.189">
+    <testcase name="TC-CAMP-19 | no expone password raíz" time="0.189" classname="CampanasAutApiCamp19EstructuraYExposicionDeDatosDeRespuestaCampana"/>
+    <testcase name="TC-CAMP-19 | modelo campaña de primer nivel" time="0.189" classname="CampanasAutApiCamp19EstructuraYExposicionDeDatosDeRespuestaCampana"/>
+    <testcase name="TC-CAMP-19 | HTTP status" time="0.189" classname="CampanasAutApiCamp19EstructuraYExposicionDeDatosDeRespuestaCampana"/>
+    <testcase name="TC-CAMP-19 | SLA &lt; 800 ms" time="0.189" classname="CampanasAutApiCamp19EstructuraYExposicionDeDatosDeRespuestaCampana"/>
+    <testcase name="TC-CAMP-19 | Content-Type JSON" time="0.189" classname="CampanasAutApiCamp19EstructuraYExposicionDeDatosDeRespuestaCampana"/>
+    <testcase name="TC-CAMP-19 | Campaign contract" time="0.189" classname="CampanasAutApiCamp19EstructuraYExposicionDeDatosDeRespuestaCampana"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-17 | Cálculo de estado por fechas" id="b5796ab4-bfcb-425e-acb1-1a5a7c7d7330" timestamp="2026-10-05T21:08:46.140Z" tests="7" failures="0" errors="0" time="0.192">
+    <testcase name="TC-CAMP-17 | no expone password raíz" time="0.192" classname="CampanasAutApiCamp17CalculoDeEstadoPorFechas"/>
+    <testcase name="TC-CAMP-17 | modelo campaña de primer nivel" time="0.192" classname="CampanasAutApiCamp17CalculoDeEstadoPorFechas"/>
+    <testcase name="TC-CAMP-17 | estado por fechas futuras" time="0.192" classname="CampanasAutApiCamp17CalculoDeEstadoPorFechas"/>
+    <testcase name="TC-CAMP-17 | HTTP status" time="0.192" classname="CampanasAutApiCamp17CalculoDeEstadoPorFechas"/>
+    <testcase name="TC-CAMP-17 | SLA &lt; 800 ms" time="0.192" classname="CampanasAutApiCamp17CalculoDeEstadoPorFechas"/>
+    <testcase name="TC-CAMP-17 | Content-Type JSON" time="0.192" classname="CampanasAutApiCamp17CalculoDeEstadoPorFechas"/>
+    <testcase name="TC-CAMP-17 | Campaign contract" time="0.192" classname="CampanasAutApiCamp17CalculoDeEstadoPorFechas"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-12 | Edición de campaña con datos válidos" id="65d3f14e-54f2-4737-8d45-060a8991334e" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.224">
+    <testcase name="TC-CAMP-12 | no expone password raíz" time="0.224" classname="CampanasAutApiCamp12EdicionDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-12 | modelo campaña de primer nivel" time="0.224" classname="CampanasAutApiCamp12EdicionDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-12 | HTTP status" time="0.224" classname="CampanasAutApiCamp12EdicionDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-12 | SLA &lt; 800 ms" time="0.224" classname="CampanasAutApiCamp12EdicionDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-12 | Content-Type JSON" time="0.224" classname="CampanasAutApiCamp12EdicionDeCampanaConDatosValidos"/>
+    <testcase name="TC-CAMP-12 | Campaign contract" time="0.224" classname="CampanasAutApiCamp12EdicionDeCampanaConDatosValidos"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-03 | Detalle de campaña inexistente" id="53e43517-16b9-4b84-8487-5f15901f36a7" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.192">
+    <testcase name="TC-CAMP-03 | mensaje estructurado de primer nivel" time="0.192" classname="CampanasAutApiCamp03DetalleDeCampanaInexistente"/>
+    <testcase name="TC-CAMP-03 | no expone password raíz" time="0.192" classname="CampanasAutApiCamp03DetalleDeCampanaInexistente"/>
+    <testcase name="TC-CAMP-03 | HTTP status" time="0.192" classname="CampanasAutApiCamp03DetalleDeCampanaInexistente"/>
+    <testcase name="TC-CAMP-03 | SLA &lt; 800 ms" time="0.192" classname="CampanasAutApiCamp03DetalleDeCampanaInexistente"/>
+    <testcase name="TC-CAMP-03 | Content-Type JSON" time="0.192" classname="CampanasAutApiCamp03DetalleDeCampanaInexistente"/>
+    <testcase name="TC-CAMP-03 | Error response is structured JSON" time="0.192" classname="CampanasAutApiCamp03DetalleDeCampanaInexistente"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-05 | Alta de campaña sin permisos de administrador" id="9343d341-3027-40b2-a1b9-3b959c48e051" timestamp="2026-10-05T21:08:46.140Z" tests="7" failures="0" errors="0" time="0.181">
+    <testcase name="TC-CAMP-05 | mensaje estructurado de primer nivel" time="0.181" classname="CampanasAutApiCamp05AltaDeCampanaSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-05 | no expone password raíz" time="0.181" classname="CampanasAutApiCamp05AltaDeCampanaSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-05 | HTTP status" time="0.181" classname="CampanasAutApiCamp05AltaDeCampanaSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-05 | SLA &lt; 800 ms" time="0.181" classname="CampanasAutApiCamp05AltaDeCampanaSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-05 | Content-Type JSON" time="0.181" classname="CampanasAutApiCamp05AltaDeCampanaSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-05 | Error response is structured JSON" time="0.181" classname="CampanasAutApiCamp05AltaDeCampanaSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-05 | unauthenticated write is rejected" time="0.181" classname="CampanasAutApiCamp05AltaDeCampanaSinPermisosDeAdministrador"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-06 | Alta con campos obligatorios faltantes" id="fb7da42b-eaa7-4c32-8de4-9ea154cd3c86" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.183">
+    <testcase name="TC-CAMP-06 | mensaje estructurado de primer nivel" time="0.183" classname="CampanasAutApiCamp06AltaConCamposObligatoriosFaltantes"/>
+    <testcase name="TC-CAMP-06 | no expone password raíz" time="0.183" classname="CampanasAutApiCamp06AltaConCamposObligatoriosFaltantes"/>
+    <testcase name="TC-CAMP-06 | HTTP status" time="0.183" classname="CampanasAutApiCamp06AltaConCamposObligatoriosFaltantes"/>
+    <testcase name="TC-CAMP-06 | SLA &lt; 800 ms" time="0.183" classname="CampanasAutApiCamp06AltaConCamposObligatoriosFaltantes"/>
+    <testcase name="TC-CAMP-06 | Content-Type JSON" time="0.183" classname="CampanasAutApiCamp06AltaConCamposObligatoriosFaltantes"/>
+    <testcase name="TC-CAMP-06 | Error response is structured JSON" time="0.183" classname="CampanasAutApiCamp06AltaConCamposObligatoriosFaltantes"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-07 | Alta con fecha de inicio anterior al día actual" id="ddba8c74-3845-48cc-a449-7c04691db026" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.188">
+    <testcase name="TC-CAMP-07 | mensaje estructurado de primer nivel" time="0.188" classname="CampanasAutApiCamp07AltaConFechaDeInicioAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-07 | no expone password raíz" time="0.188" classname="CampanasAutApiCamp07AltaConFechaDeInicioAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-07 | HTTP status" time="0.188" classname="CampanasAutApiCamp07AltaConFechaDeInicioAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-07 | SLA &lt; 800 ms" time="0.188" classname="CampanasAutApiCamp07AltaConFechaDeInicioAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-07 | Content-Type JSON" time="0.188" classname="CampanasAutApiCamp07AltaConFechaDeInicioAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-07 | Error response is structured JSON" time="0.188" classname="CampanasAutApiCamp07AltaConFechaDeInicioAnteriorAlDiaActual"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-08 | Alta con fecha de fin anterior a la fecha de inicio" id="7d4b9cd2-4048-4512-b636-34fa09eaf330" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.189">
+    <testcase name="TC-CAMP-08 | mensaje estructurado de primer nivel" time="0.189" classname="CampanasAutApiCamp08AltaConFechaDeFinAnteriorALaFechaDeInicio"/>
+    <testcase name="TC-CAMP-08 | no expone password raíz" time="0.189" classname="CampanasAutApiCamp08AltaConFechaDeFinAnteriorALaFechaDeInicio"/>
+    <testcase name="TC-CAMP-08 | HTTP status" time="0.189" classname="CampanasAutApiCamp08AltaConFechaDeFinAnteriorALaFechaDeInicio"/>
+    <testcase name="TC-CAMP-08 | SLA &lt; 800 ms" time="0.189" classname="CampanasAutApiCamp08AltaConFechaDeFinAnteriorALaFechaDeInicio"/>
+    <testcase name="TC-CAMP-08 | Content-Type JSON" time="0.189" classname="CampanasAutApiCamp08AltaConFechaDeFinAnteriorALaFechaDeInicio"/>
+    <testcase name="TC-CAMP-08 | Error response is structured JSON" time="0.189" classname="CampanasAutApiCamp08AltaConFechaDeFinAnteriorALaFechaDeInicio"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-09 | Alta con fecha de fin anterior al día actual" id="3a021c8d-5195-404b-95fe-432a5ea1114b" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.205">
+    <testcase name="TC-CAMP-09 | mensaje estructurado de primer nivel" time="0.205" classname="CampanasAutApiCamp09AltaConFechaDeFinAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-09 | no expone password raíz" time="0.205" classname="CampanasAutApiCamp09AltaConFechaDeFinAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-09 | HTTP status" time="0.205" classname="CampanasAutApiCamp09AltaConFechaDeFinAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-09 | SLA &lt; 800 ms" time="0.205" classname="CampanasAutApiCamp09AltaConFechaDeFinAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-09 | Content-Type JSON" time="0.205" classname="CampanasAutApiCamp09AltaConFechaDeFinAnteriorAlDiaActual"/>
+    <testcase name="TC-CAMP-09 | Error response is structured JSON" time="0.205" classname="CampanasAutApiCamp09AltaConFechaDeFinAnteriorAlDiaActual"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-10 | Alta con cupo máximo inválido" id="c1d0e2b9-5365-4dd9-b367-ce80958ba344" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.206">
+    <testcase name="TC-CAMP-10 | mensaje estructurado de primer nivel" time="0.206" classname="CampanasAutApiCamp10AltaConCupoMaximoInvalido"/>
+    <testcase name="TC-CAMP-10 | no expone password raíz" time="0.206" classname="CampanasAutApiCamp10AltaConCupoMaximoInvalido"/>
+    <testcase name="TC-CAMP-10 | HTTP status" time="0.206" classname="CampanasAutApiCamp10AltaConCupoMaximoInvalido"/>
+    <testcase name="TC-CAMP-10 | SLA &lt; 800 ms" time="0.206" classname="CampanasAutApiCamp10AltaConCupoMaximoInvalido"/>
+    <testcase name="TC-CAMP-10 | Content-Type JSON" time="0.206" classname="CampanasAutApiCamp10AltaConCupoMaximoInvalido"/>
+    <testcase name="TC-CAMP-10 | Error response is structured JSON" time="0.206" classname="CampanasAutApiCamp10AltaConCupoMaximoInvalido"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-11 | Alta con centro de salud inexistente" id="d5f0b8aa-1616-4860-a16f-3c391a365341" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.188">
+    <testcase name="TC-CAMP-11 | mensaje estructurado de primer nivel" time="0.188" classname="CampanasAutApiCamp11AltaConCentroDeSaludInexistente"/>
+    <testcase name="TC-CAMP-11 | no expone password raíz" time="0.188" classname="CampanasAutApiCamp11AltaConCentroDeSaludInexistente"/>
+    <testcase name="TC-CAMP-11 | HTTP status" time="0.188" classname="CampanasAutApiCamp11AltaConCentroDeSaludInexistente"/>
+    <testcase name="TC-CAMP-11 | SLA &lt; 800 ms" time="0.188" classname="CampanasAutApiCamp11AltaConCentroDeSaludInexistente"/>
+    <testcase name="TC-CAMP-11 | Content-Type JSON" time="0.188" classname="CampanasAutApiCamp11AltaConCentroDeSaludInexistente"/>
+    <testcase name="TC-CAMP-11 | Error response is structured JSON" time="0.188" classname="CampanasAutApiCamp11AltaConCentroDeSaludInexistente"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-13 | Edición sin permisos de administrador" id="3f659a14-6ebd-4e6a-bda9-92fe6b47c47d" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.198">
+    <testcase name="TC-CAMP-13 | mensaje estructurado de primer nivel" time="0.198" classname="CampanasAutApiCamp13EdicionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-13 | no expone password raíz" time="0.198" classname="CampanasAutApiCamp13EdicionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-13 | HTTP status" time="0.198" classname="CampanasAutApiCamp13EdicionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-13 | SLA &lt; 800 ms" time="0.198" classname="CampanasAutApiCamp13EdicionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-13 | Content-Type JSON" time="0.198" classname="CampanasAutApiCamp13EdicionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-13 | Error response is structured JSON" time="0.198" classname="CampanasAutApiCamp13EdicionSinPermisosDeAdministrador"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-14 | Edición con rango de fechas inválido" id="13b4532c-16e3-4808-8255-628e0a203454" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.189">
+    <testcase name="TC-CAMP-14 | mensaje estructurado de primer nivel" time="0.189" classname="CampanasAutApiCamp14EdicionConRangoDeFechasInvalido"/>
+    <testcase name="TC-CAMP-14 | no expone password raíz" time="0.189" classname="CampanasAutApiCamp14EdicionConRangoDeFechasInvalido"/>
+    <testcase name="TC-CAMP-14 | HTTP status" time="0.189" classname="CampanasAutApiCamp14EdicionConRangoDeFechasInvalido"/>
+    <testcase name="TC-CAMP-14 | SLA &lt; 800 ms" time="0.189" classname="CampanasAutApiCamp14EdicionConRangoDeFechasInvalido"/>
+    <testcase name="TC-CAMP-14 | Content-Type JSON" time="0.189" classname="CampanasAutApiCamp14EdicionConRangoDeFechasInvalido"/>
+    <testcase name="TC-CAMP-14 | Error response is structured JSON" time="0.189" classname="CampanasAutApiCamp14EdicionConRangoDeFechasInvalido"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-16 | Eliminación sin permisos de administrador" id="c966a9d5-546b-47ef-b167-d4a0979c9f9b" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.179">
+    <testcase name="TC-CAMP-16 | mensaje estructurado de primer nivel" time="0.179" classname="CampanasAutApiCamp16EliminacionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-16 | no expone password raíz" time="0.179" classname="CampanasAutApiCamp16EliminacionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-16 | HTTP status" time="0.179" classname="CampanasAutApiCamp16EliminacionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-16 | SLA &lt; 800 ms" time="0.179" classname="CampanasAutApiCamp16EliminacionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-16 | Content-Type JSON" time="0.179" classname="CampanasAutApiCamp16EliminacionSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-16 | Error response is structured JSON" time="0.179" classname="CampanasAutApiCamp16EliminacionSinPermisosDeAdministrador"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-73 | Listado con formato de respuesta no soportado" id="964582bb-3dea-4c1f-bf56-13e66d95bb1f" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.185">
+    <testcase name="TC-CAMP-73 | mensaje estructurado de primer nivel" time="0.185" classname="CampanasAutApiCamp73ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-CAMP-73 | no expone password raíz" time="0.185" classname="CampanasAutApiCamp73ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-CAMP-73 | HTTP" time="0.185" classname="CampanasAutApiCamp73ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-CAMP-73 | Content-Type y SLA" time="0.185" classname="CampanasAutApiCamp73ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-CAMP-73 | contrato raíz" time="0.185" classname="CampanasAutApiCamp73ListadoConFormatoDeRespuestaNoSoportado"/>
+  </testsuite>
+  <testsuite name="Campañas / AUT-API-CAMP-74 | Alta de campaña sin autenticación" id="a743bf9b-3e58-404c-bb4d-098bb2fb43ce" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.193">
+    <testcase name="TC-CAMP-74 | mensaje estructurado de primer nivel" time="0.193" classname="CampanasAutApiCamp74AltaDeCampanaSinAutenticacion"/>
+    <testcase name="TC-CAMP-74 | no expone password raíz" time="0.193" classname="CampanasAutApiCamp74AltaDeCampanaSinAutenticacion"/>
+    <testcase name="TC-CAMP-74 | HTTP" time="0.193" classname="CampanasAutApiCamp74AltaDeCampanaSinAutenticacion"/>
+    <testcase name="TC-CAMP-74 | Content-Type y SLA" time="0.193" classname="CampanasAutApiCamp74AltaDeCampanaSinAutenticacion"/>
+    <testcase name="TC-CAMP-74 | contrato raíz" time="0.193" classname="CampanasAutApiCamp74AltaDeCampanaSinAutenticacion"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-01 | Alta de contacto público con datos válidos" id="d66de4d7-ede2-4b76-a391-884dd965ae01" timestamp="2026-10-05T21:08:46.140Z" tests="11" failures="0" errors="0" time="0.203">
+    <testcase name="TC-CONTACT-01 | no expone password raíz" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 | HTTP" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 | Content-Type y SLA" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 | contrato raíz" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 | contacto público creado sin seguimiento" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 | campos directos de contacto" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 persistencia | transporte" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 persistencia | HTTP" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 persistencia | Content-Type y SLA" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 persistencia | contrato raíz" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+    <testcase name="TC-CONTACT-01 | id persistido" time="0.203" classname="ContactoAutApiContact01AltaDeContactoPublicoConDatosValidos"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-02 | Campos obligatorios faltantes" id="57250534-df65-4f9b-88c2-77caa74182c9" timestamp="2026-10-05T21:08:46.140Z" tests="22" failures="0" errors="0" time="0.180">
+    <testcase name="TC-CONTACT-02 | mensaje estructurado de primer nivel" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 | no expone password raíz" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 | HTTP" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 | Content-Type y SLA" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 | contrato raíz" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 | cuatro obligatorios" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin nombre_completo | transporte" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin nombre_completo | HTTP" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin nombre_completo | Content-Type y SLA" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin nombre_completo | contrato raíz" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin correo_electronico | transporte" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin correo_electronico | HTTP" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin correo_electronico | Content-Type y SLA" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin correo_electronico | contrato raíz" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin motivo | transporte" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin motivo | HTTP" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin motivo | Content-Type y SLA" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin motivo | contrato raíz" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin mensaje | transporte" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin mensaje | HTTP" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin mensaje | Content-Type y SLA" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+    <testcase name="TC-CONTACT-02 sin mensaje | contrato raíz" time="0.180" classname="ContactoAutApiContact02CamposObligatoriosFaltantes"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-03 | Email inválido" id="0376fa22-2217-4b2d-98bc-af946d4edf74" timestamp="2026-10-05T21:08:46.140Z" tests="9" failures="0" errors="0" time="0.180">
+    <testcase name="TC-CONTACT-03 | mensaje estructurado de primer nivel" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 | no expone password raíz" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 | HTTP" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 | Content-Type y SLA" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 | contrato raíz" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 sin arroba | transporte" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 sin arroba | HTTP" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 sin arroba | Content-Type y SLA" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+    <testcase name="TC-CONTACT-03 sin arroba | contrato raíz" time="0.180" classname="ContactoAutApiContact03EmailInvalido"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-04 | Motivo fuera de catálogo" id="6d2320bc-b05f-4503-88a1-4bcc8bc40aa7" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.177">
+    <testcase name="TC-CONTACT-04 | mensaje estructurado de primer nivel" time="0.177" classname="ContactoAutApiContact04MotivoFueraDeCatalogo"/>
+    <testcase name="TC-CONTACT-04 | no expone password raíz" time="0.177" classname="ContactoAutApiContact04MotivoFueraDeCatalogo"/>
+    <testcase name="TC-CONTACT-04 | HTTP" time="0.177" classname="ContactoAutApiContact04MotivoFueraDeCatalogo"/>
+    <testcase name="TC-CONTACT-04 | Content-Type y SLA" time="0.177" classname="ContactoAutApiContact04MotivoFueraDeCatalogo"/>
+    <testcase name="TC-CONTACT-04 | contrato raíz" time="0.177" classname="ContactoAutApiContact04MotivoFueraDeCatalogo"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-05 | Longitudes máximas y excesos" id="6507e264-0919-48b6-87dd-1d0935e34123" timestamp="2026-10-05T21:08:46.140Z" tests="14" failures="0" errors="0" time="0.208">
+    <testcase name="TC-CONTACT-05 | no expone password raíz" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 | HTTP" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 | Content-Type y SLA" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 | contrato raíz" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 | campos directos de contacto" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 | longitud exacta sin truncamiento" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso nombre_completo | transporte" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso nombre_completo | HTTP" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso nombre_completo | Content-Type y SLA" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso nombre_completo | contrato raíz" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso mensaje | transporte" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso mensaje | HTTP" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso mensaje | Content-Type y SLA" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+    <testcase name="TC-CONTACT-05 exceso mensaje | contrato raíz" time="0.208" classname="ContactoAutApiContact05LongitudesMaximasYExcesos"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-06 | Listado de contactos sólo administrador" id="f401857e-47c3-46d1-b247-c8b649e49919" timestamp="2026-10-05T21:08:46.140Z" tests="7" failures="0" errors="0" time="0.205">
+    <testcase name="TC-CONTACT-06 | no expone password raíz" time="0.205" classname="ContactoAutApiContact06ListadoDeContactosSoloAdministrador"/>
+    <testcase name="TC-CONTACT-06 | HTTP status" time="0.205" classname="ContactoAutApiContact06ListadoDeContactosSoloAdministrador"/>
+    <testcase name="TC-CONTACT-06 | SLA &lt; 800 ms" time="0.205" classname="ContactoAutApiContact06ListadoDeContactosSoloAdministrador"/>
+    <testcase name="TC-CONTACT-06 | Content-Type JSON" time="0.205" classname="ContactoAutApiContact06ListadoDeContactosSoloAdministrador"/>
+    <testcase name="TC-CONTACT-06 | Contact contract" time="0.205" classname="ContactoAutApiContact06ListadoDeContactosSoloAdministrador"/>
+    <testcase name="TC-CONTACT-06 | unauthenticated access denied" time="0.205" classname="ContactoAutApiContact06ListadoDeContactosSoloAdministrador"/>
+    <testcase name="TC-CONTACT-06 | standard user denied" time="0.205" classname="ContactoAutApiContact06ListadoDeContactosSoloAdministrador"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-07 | Detalle de contacto por administrador" id="32a03268-17f9-4ae3-87c6-745587c3cdc3" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.196">
+    <testcase name="TC-CONTACT-07 | no expone password raíz" time="0.196" classname="ContactoAutApiContact07DetalleDeContactoPorAdministrador"/>
+    <testcase name="TC-CONTACT-07 | ID solicitado" time="0.196" classname="ContactoAutApiContact07DetalleDeContactoPorAdministrador"/>
+    <testcase name="TC-CONTACT-07 | HTTP status" time="0.196" classname="ContactoAutApiContact07DetalleDeContactoPorAdministrador"/>
+    <testcase name="TC-CONTACT-07 | SLA &lt; 800 ms" time="0.196" classname="ContactoAutApiContact07DetalleDeContactoPorAdministrador"/>
+    <testcase name="TC-CONTACT-07 | Content-Type JSON" time="0.196" classname="ContactoAutApiContact07DetalleDeContactoPorAdministrador"/>
+    <testcase name="TC-CONTACT-07 | Contact contract" time="0.196" classname="ContactoAutApiContact07DetalleDeContactoPorAdministrador"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-08 | Actualización de tracked por administrador" id="b17abc05-a4e0-4241-a1e1-97eaccf2bacf" timestamp="2026-10-05T21:08:46.140Z" tests="15" failures="0" errors="0" time="0.234">
+    <testcase name="TC-CONTACT-08 | no expone password raíz" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 | HTTP" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 | Content-Type y SLA" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 | contrato raíz" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 | tracked cambiado" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 persistencia | transporte" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 persistencia | HTTP" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 persistencia | Content-Type y SLA" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 persistencia | contrato raíz" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 | tracked persistido" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 restauración | transporte" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 restauración | HTTP" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 restauración | Content-Type y SLA" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 restauración | contrato raíz" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+    <testcase name="TC-CONTACT-08 | contenido original inmutable" time="0.234" classname="ContactoAutApiContact08ActualizacionDeTrackedPorAdministrador"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-09 | Actualización sin permisos" id="2f0bf75c-6182-4a8c-ad9c-1f7db3e53578" timestamp="2026-10-05T21:08:46.140Z" tests="14" failures="0" errors="0" time="0.203">
+    <testcase name="TC-CONTACT-09 | mensaje estructurado de primer nivel" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 | no expone password raíz" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 | HTTP" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 | Content-Type y SLA" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 | contrato raíz" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 sin token | transporte" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 sin token | HTTP" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 sin token | Content-Type y SLA" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 sin token | contrato raíz" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 estado | transporte" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 estado | HTTP" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 estado | Content-Type y SLA" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 estado | contrato raíz" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+    <testcase name="TC-CONTACT-09 | no modificado" time="0.203" classname="ContactoAutApiContact09ActualizacionSinPermisos"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-15 | Detalle denegado a usuario estándar" id="2b4c83ea-f4cd-4f6b-ad50-f8aed71201d6" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.189">
+    <testcase name="TC-CONTACT-15 | mensaje estructurado de primer nivel" time="0.189" classname="ContactoAutApiContact15DetalleDenegadoAUsuarioEstandar"/>
+    <testcase name="TC-CONTACT-15 | no expone password raíz" time="0.189" classname="ContactoAutApiContact15DetalleDenegadoAUsuarioEstandar"/>
+    <testcase name="TC-CONTACT-15 | HTTP" time="0.189" classname="ContactoAutApiContact15DetalleDenegadoAUsuarioEstandar"/>
+    <testcase name="TC-CONTACT-15 | Content-Type y SLA" time="0.189" classname="ContactoAutApiContact15DetalleDenegadoAUsuarioEstandar"/>
+    <testcase name="TC-CONTACT-15 | contrato raíz" time="0.189" classname="ContactoAutApiContact15DetalleDenegadoAUsuarioEstandar"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-16 | Detalle sin autenticación" id="412ab2e6-3990-4c8f-8e11-765452bd2306" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.179">
+    <testcase name="TC-CONTACT-16 | mensaje estructurado de primer nivel" time="0.179" classname="ContactoAutApiContact16DetalleSinAutenticacion"/>
+    <testcase name="TC-CONTACT-16 | no expone password raíz" time="0.179" classname="ContactoAutApiContact16DetalleSinAutenticacion"/>
+    <testcase name="TC-CONTACT-16 | HTTP" time="0.179" classname="ContactoAutApiContact16DetalleSinAutenticacion"/>
+    <testcase name="TC-CONTACT-16 | Content-Type y SLA" time="0.179" classname="ContactoAutApiContact16DetalleSinAutenticacion"/>
+    <testcase name="TC-CONTACT-16 | contrato raíz" time="0.179" classname="ContactoAutApiContact16DetalleSinAutenticacion"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-17 | Detalle inexistente" id="2882169a-36c9-41ee-809e-5b99ae712829" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.184">
+    <testcase name="TC-CONTACT-17 | mensaje estructurado de primer nivel" time="0.184" classname="ContactoAutApiContact17DetalleInexistente"/>
+    <testcase name="TC-CONTACT-17 | no expone password raíz" time="0.184" classname="ContactoAutApiContact17DetalleInexistente"/>
+    <testcase name="TC-CONTACT-17 | HTTP" time="0.184" classname="ContactoAutApiContact17DetalleInexistente"/>
+    <testcase name="TC-CONTACT-17 | Content-Type y SLA" time="0.184" classname="ContactoAutApiContact17DetalleInexistente"/>
+    <testcase name="TC-CONTACT-17 | contrato raíz" time="0.184" classname="ContactoAutApiContact17DetalleInexistente"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-18 | Tracked inválido" id="6a078da2-4e85-408c-b157-304f9590bb88" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.194">
+    <testcase name="TC-CONTACT-18 | mensaje estructurado de primer nivel" time="0.194" classname="ContactoAutApiContact18TrackedInvalido"/>
+    <testcase name="TC-CONTACT-18 | no expone password raíz" time="0.194" classname="ContactoAutApiContact18TrackedInvalido"/>
+    <testcase name="TC-CONTACT-18 | HTTP" time="0.194" classname="ContactoAutApiContact18TrackedInvalido"/>
+    <testcase name="TC-CONTACT-18 | Content-Type y SLA" time="0.194" classname="ContactoAutApiContact18TrackedInvalido"/>
+    <testcase name="TC-CONTACT-18 | contrato raíz" time="0.194" classname="ContactoAutApiContact18TrackedInvalido"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-19 | Actualización inexistente" id="1f1fb4b7-6be4-474e-8228-06fcc6ab3115" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.183">
+    <testcase name="TC-CONTACT-19 | mensaje estructurado de primer nivel" time="0.183" classname="ContactoAutApiContact19ActualizacionInexistente"/>
+    <testcase name="TC-CONTACT-19 | no expone password raíz" time="0.183" classname="ContactoAutApiContact19ActualizacionInexistente"/>
+    <testcase name="TC-CONTACT-19 | HTTP" time="0.183" classname="ContactoAutApiContact19ActualizacionInexistente"/>
+    <testcase name="TC-CONTACT-19 | Content-Type y SLA" time="0.183" classname="ContactoAutApiContact19ActualizacionInexistente"/>
+    <testcase name="TC-CONTACT-19 | contrato raíz" time="0.183" classname="ContactoAutApiContact19ActualizacionInexistente"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-20 | Nombre de 99 caracteres" id="c02eae44-276c-4b9d-8210-56e2bc4790ca" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.210">
+    <testcase name="TC-CONTACT-20 | no expone password raíz" time="0.210" classname="ContactoAutApiContact20NombreDe99Caracteres"/>
+    <testcase name="TC-CONTACT-20 | HTTP" time="0.210" classname="ContactoAutApiContact20NombreDe99Caracteres"/>
+    <testcase name="TC-CONTACT-20 | Content-Type y SLA" time="0.210" classname="ContactoAutApiContact20NombreDe99Caracteres"/>
+    <testcase name="TC-CONTACT-20 | contrato raíz" time="0.210" classname="ContactoAutApiContact20NombreDe99Caracteres"/>
+    <testcase name="TC-CONTACT-20 | campos directos de contacto" time="0.210" classname="ContactoAutApiContact20NombreDe99Caracteres"/>
+    <testcase name="TC-CONTACT-20 | longitud exacta sin truncamiento" time="0.210" classname="ContactoAutApiContact20NombreDe99Caracteres"/>
+  </testsuite>
+  <testsuite name="Contacto / AUT-API-CONTACT-21 | Mensaje de 499 caracteres" id="57df94f4-f801-452b-a682-1cbdf8e1b26c" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.213">
+    <testcase name="TC-CONTACT-21 | no expone password raíz" time="0.213" classname="ContactoAutApiContact21MensajeDe499Caracteres"/>
+    <testcase name="TC-CONTACT-21 | HTTP" time="0.213" classname="ContactoAutApiContact21MensajeDe499Caracteres"/>
+    <testcase name="TC-CONTACT-21 | Content-Type y SLA" time="0.213" classname="ContactoAutApiContact21MensajeDe499Caracteres"/>
+    <testcase name="TC-CONTACT-21 | contrato raíz" time="0.213" classname="ContactoAutApiContact21MensajeDe499Caracteres"/>
+    <testcase name="TC-CONTACT-21 | campos directos de contacto" time="0.213" classname="ContactoAutApiContact21MensajeDe499Caracteres"/>
+    <testcase name="TC-CONTACT-21 | longitud exacta sin truncamiento" time="0.213" classname="ContactoAutApiContact21MensajeDe499Caracteres"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-01 | Listado de usuarios por administrador" id="d5f29aef-3037-4de1-b9c2-e9dd68cb2e35" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.197">
+    <testcase name="TC-PERF-01 | no expone password raíz" time="0.197" classname="PerfilUsuarioAutApiPerf01ListadoDeUsuariosPorAdministrador"/>
+    <testcase name="TC-PERF-01 | modelo usuario de primer nivel" time="0.197" classname="PerfilUsuarioAutApiPerf01ListadoDeUsuariosPorAdministrador"/>
+    <testcase name="TC-PERF-01 | HTTP status" time="0.197" classname="PerfilUsuarioAutApiPerf01ListadoDeUsuariosPorAdministrador"/>
+    <testcase name="TC-PERF-01 | SLA &lt; 800 ms" time="0.197" classname="PerfilUsuarioAutApiPerf01ListadoDeUsuariosPorAdministrador"/>
+    <testcase name="TC-PERF-01 | Content-Type JSON" time="0.197" classname="PerfilUsuarioAutApiPerf01ListadoDeUsuariosPorAdministrador"/>
+    <testcase name="TC-PERF-01 | User contract and no credential leakage" time="0.197" classname="PerfilUsuarioAutApiPerf01ListadoDeUsuariosPorAdministrador"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-02 | Listado de usuarios por usuario estándar" id="01855669-8103-4eff-b7c2-c0119ec15918" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.192">
+    <testcase name="TC-PERF-02 | no expone password raíz" time="0.192" classname="PerfilUsuarioAutApiPerf02ListadoDeUsuariosPorUsuarioEstandar"/>
+    <testcase name="TC-PERF-02 | modelo usuario de primer nivel" time="0.192" classname="PerfilUsuarioAutApiPerf02ListadoDeUsuariosPorUsuarioEstandar"/>
+    <testcase name="TC-PERF-02 | HTTP status" time="0.192" classname="PerfilUsuarioAutApiPerf02ListadoDeUsuariosPorUsuarioEstandar"/>
+    <testcase name="TC-PERF-02 | SLA &lt; 800 ms" time="0.192" classname="PerfilUsuarioAutApiPerf02ListadoDeUsuariosPorUsuarioEstandar"/>
+    <testcase name="TC-PERF-02 | Content-Type JSON" time="0.192" classname="PerfilUsuarioAutApiPerf02ListadoDeUsuariosPorUsuarioEstandar"/>
+    <testcase name="TC-PERF-02 | User contract and no credential leakage" time="0.192" classname="PerfilUsuarioAutApiPerf02ListadoDeUsuariosPorUsuarioEstandar"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-03 | Listado de usuarios sin autenticación" id="3666b758-138e-48f0-a784-9ba6fab15ce2" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.176">
+    <testcase name="TC-PERF-03 | mensaje estructurado de primer nivel" time="0.176" classname="PerfilUsuarioAutApiPerf03ListadoDeUsuariosSinAutenticacion"/>
+    <testcase name="TC-PERF-03 | no expone password raíz" time="0.176" classname="PerfilUsuarioAutApiPerf03ListadoDeUsuariosSinAutenticacion"/>
+    <testcase name="TC-PERF-03 | HTTP status" time="0.176" classname="PerfilUsuarioAutApiPerf03ListadoDeUsuariosSinAutenticacion"/>
+    <testcase name="TC-PERF-03 | SLA &lt; 800 ms" time="0.176" classname="PerfilUsuarioAutApiPerf03ListadoDeUsuariosSinAutenticacion"/>
+    <testcase name="TC-PERF-03 | Content-Type JSON" time="0.176" classname="PerfilUsuarioAutApiPerf03ListadoDeUsuariosSinAutenticacion"/>
+    <testcase name="TC-PERF-03 | Error response is structured JSON" time="0.176" classname="PerfilUsuarioAutApiPerf03ListadoDeUsuariosSinAutenticacion"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-04 | Consulta de perfil propio" id="6a15ffe2-f662-4338-bf49-7ac6051dbfa0" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.186">
+    <testcase name="TC-PERF-04 | no expone password raíz" time="0.186" classname="PerfilUsuarioAutApiPerf04ConsultaDePerfilPropio"/>
+    <testcase name="TC-PERF-04 | modelo usuario de primer nivel" time="0.186" classname="PerfilUsuarioAutApiPerf04ConsultaDePerfilPropio"/>
+    <testcase name="TC-PERF-04 | HTTP status" time="0.186" classname="PerfilUsuarioAutApiPerf04ConsultaDePerfilPropio"/>
+    <testcase name="TC-PERF-04 | SLA &lt; 800 ms" time="0.186" classname="PerfilUsuarioAutApiPerf04ConsultaDePerfilPropio"/>
+    <testcase name="TC-PERF-04 | Content-Type JSON" time="0.186" classname="PerfilUsuarioAutApiPerf04ConsultaDePerfilPropio"/>
+    <testcase name="TC-PERF-04 | User contract and no credential leakage" time="0.186" classname="PerfilUsuarioAutApiPerf04ConsultaDePerfilPropio"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-05 | Consulta de perfil ajeno por estándar" id="78ccf028-205e-4275-b3a4-e815ae5e901b" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.211">
+    <testcase name="TC-PERF-05 | mensaje estructurado de primer nivel" time="0.211" classname="PerfilUsuarioAutApiPerf05ConsultaDePerfilAjenoPorEstandar"/>
+    <testcase name="TC-PERF-05 | no expone password raíz" time="0.211" classname="PerfilUsuarioAutApiPerf05ConsultaDePerfilAjenoPorEstandar"/>
+    <testcase name="TC-PERF-05 | HTTP status" time="0.211" classname="PerfilUsuarioAutApiPerf05ConsultaDePerfilAjenoPorEstandar"/>
+    <testcase name="TC-PERF-05 | SLA &lt; 800 ms" time="0.211" classname="PerfilUsuarioAutApiPerf05ConsultaDePerfilAjenoPorEstandar"/>
+    <testcase name="TC-PERF-05 | Content-Type JSON" time="0.211" classname="PerfilUsuarioAutApiPerf05ConsultaDePerfilAjenoPorEstandar"/>
+    <testcase name="TC-PERF-05 | Error response is structured JSON" time="0.211" classname="PerfilUsuarioAutApiPerf05ConsultaDePerfilAjenoPorEstandar"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-06 | Consulta de perfil ajeno por administrador" id="19b778d9-1766-4765-85ca-113ccd251fde" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.274">
+    <testcase name="TC-PERF-06 | no expone password raíz" time="0.274" classname="PerfilUsuarioAutApiPerf06ConsultaDePerfilAjenoPorAdministrador"/>
+    <testcase name="TC-PERF-06 | modelo usuario de primer nivel" time="0.274" classname="PerfilUsuarioAutApiPerf06ConsultaDePerfilAjenoPorAdministrador"/>
+    <testcase name="TC-PERF-06 | HTTP status" time="0.274" classname="PerfilUsuarioAutApiPerf06ConsultaDePerfilAjenoPorAdministrador"/>
+    <testcase name="TC-PERF-06 | SLA &lt; 800 ms" time="0.274" classname="PerfilUsuarioAutApiPerf06ConsultaDePerfilAjenoPorAdministrador"/>
+    <testcase name="TC-PERF-06 | Content-Type JSON" time="0.274" classname="PerfilUsuarioAutApiPerf06ConsultaDePerfilAjenoPorAdministrador"/>
+    <testcase name="TC-PERF-06 | User contract and no credential leakage" time="0.274" classname="PerfilUsuarioAutApiPerf06ConsultaDePerfilAjenoPorAdministrador"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-07 | Perfil inexistente" id="ccc91046-960d-46c0-8e97-39477f6b0a26" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.194">
+    <testcase name="TC-PERF-07 | mensaje estructurado de primer nivel" time="0.194" classname="PerfilUsuarioAutApiPerf07PerfilInexistente"/>
+    <testcase name="TC-PERF-07 | no expone password raíz" time="0.194" classname="PerfilUsuarioAutApiPerf07PerfilInexistente"/>
+    <testcase name="TC-PERF-07 | HTTP status" time="0.194" classname="PerfilUsuarioAutApiPerf07PerfilInexistente"/>
+    <testcase name="TC-PERF-07 | SLA &lt; 800 ms" time="0.194" classname="PerfilUsuarioAutApiPerf07PerfilInexistente"/>
+    <testcase name="TC-PERF-07 | Content-Type JSON" time="0.194" classname="PerfilUsuarioAutApiPerf07PerfilInexistente"/>
+    <testcase name="TC-PERF-07 | Error response is structured JSON" time="0.194" classname="PerfilUsuarioAutApiPerf07PerfilInexistente"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-08 | Actualización de perfil propio válida" id="3e483f57-21d7-4501-a8cc-bb243fa2d2b9" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.224">
+    <testcase name="TC-PERF-08 | no expone password raíz" time="0.224" classname="PerfilUsuarioAutApiPerf08ActualizacionDePerfilPropioValida"/>
+    <testcase name="TC-PERF-08 | modelo usuario de primer nivel" time="0.224" classname="PerfilUsuarioAutApiPerf08ActualizacionDePerfilPropioValida"/>
+    <testcase name="TC-PERF-08 | HTTP status" time="0.224" classname="PerfilUsuarioAutApiPerf08ActualizacionDePerfilPropioValida"/>
+    <testcase name="TC-PERF-08 | SLA &lt; 800 ms" time="0.224" classname="PerfilUsuarioAutApiPerf08ActualizacionDePerfilPropioValida"/>
+    <testcase name="TC-PERF-08 | Content-Type JSON" time="0.224" classname="PerfilUsuarioAutApiPerf08ActualizacionDePerfilPropioValida"/>
+    <testcase name="TC-PERF-08 | User contract and no credential leakage" time="0.224" classname="PerfilUsuarioAutApiPerf08ActualizacionDePerfilPropioValida"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-09 | Actualización de usuario por administrador" id="f50b1e13-8644-4ea4-a951-92396367ee7d" timestamp="2026-10-05T21:08:46.140Z" tests="7" failures="0" errors="0" time="0.221">
+    <testcase name="TC-PERF-09 | respuesta corresponde al usuario B" time="0.221" classname="PerfilUsuarioAutApiPerf09ActualizacionDeUsuarioPorAdministrador"/>
+    <testcase name="TC-PERF-09 | no expone password raíz" time="0.221" classname="PerfilUsuarioAutApiPerf09ActualizacionDeUsuarioPorAdministrador"/>
+    <testcase name="TC-PERF-09 | modelo usuario de primer nivel" time="0.221" classname="PerfilUsuarioAutApiPerf09ActualizacionDeUsuarioPorAdministrador"/>
+    <testcase name="TC-PERF-09 | HTTP status" time="0.221" classname="PerfilUsuarioAutApiPerf09ActualizacionDeUsuarioPorAdministrador"/>
+    <testcase name="TC-PERF-09 | SLA &lt; 800 ms" time="0.221" classname="PerfilUsuarioAutApiPerf09ActualizacionDeUsuarioPorAdministrador"/>
+    <testcase name="TC-PERF-09 | Content-Type JSON" time="0.221" classname="PerfilUsuarioAutApiPerf09ActualizacionDeUsuarioPorAdministrador"/>
+    <testcase name="TC-PERF-09 | User contract and no credential leakage" time="0.221" classname="PerfilUsuarioAutApiPerf09ActualizacionDeUsuarioPorAdministrador"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-10 | Actualización con campos inválidos" id="a8976498-d6e7-426a-9ff2-448dfcd729d1" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.207">
+    <testcase name="TC-PERF-10 | mensaje estructurado de primer nivel" time="0.207" classname="PerfilUsuarioAutApiPerf10ActualizacionConCamposInvalidos"/>
+    <testcase name="TC-PERF-10 | no expone password raíz" time="0.207" classname="PerfilUsuarioAutApiPerf10ActualizacionConCamposInvalidos"/>
+    <testcase name="TC-PERF-10 | HTTP status" time="0.207" classname="PerfilUsuarioAutApiPerf10ActualizacionConCamposInvalidos"/>
+    <testcase name="TC-PERF-10 | SLA &lt; 800 ms" time="0.207" classname="PerfilUsuarioAutApiPerf10ActualizacionConCamposInvalidos"/>
+    <testcase name="TC-PERF-10 | Content-Type JSON" time="0.207" classname="PerfilUsuarioAutApiPerf10ActualizacionConCamposInvalidos"/>
+    <testcase name="TC-PERF-10 | Error response is structured JSON" time="0.207" classname="PerfilUsuarioAutApiPerf10ActualizacionConCamposInvalidos"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-11 | Intento de escalamiento de rol" id="1f515379-553a-4ec0-90e6-675626737864" timestamp="2026-10-05T21:08:46.140Z" tests="11" failures="0" errors="0" time="0.193">
+    <testcase name="TC-PERF-11 | no expone password raíz" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 | modelo usuario de primer nivel" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 | rol protegido" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 permisos administrativos denegados | transporte" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 permisos administrativos denegados | HTTP" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 permisos administrativos denegados | Content-Type y SLA" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 permisos administrativos denegados | contrato raíz" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 | HTTP status" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 | SLA &lt; 800 ms" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 | Content-Type JSON" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+    <testcase name="TC-PERF-11 | User contract and no credential leakage" time="0.193" classname="PerfilUsuarioAutApiPerf11IntentoDeEscalamientoDeRol"/>
+  </testsuite>
+  <testsuite name="Perfil Usuario / AUT-API-PERF-15 | Baja de usuario ajeno por estándar" id="e5e41c71-601d-4378-82f2-7abadb84d1b7" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.184">
+    <testcase name="TC-PERF-15 | mensaje estructurado de primer nivel" time="0.184" classname="PerfilUsuarioAutApiPerf15BajaDeUsuarioAjenoPorEstandar"/>
+    <testcase name="TC-PERF-15 | no expone password raíz" time="0.184" classname="PerfilUsuarioAutApiPerf15BajaDeUsuarioAjenoPorEstandar"/>
+    <testcase name="TC-PERF-15 | HTTP status" time="0.184" classname="PerfilUsuarioAutApiPerf15BajaDeUsuarioAjenoPorEstandar"/>
+    <testcase name="TC-PERF-15 | SLA &lt; 800 ms" time="0.184" classname="PerfilUsuarioAutApiPerf15BajaDeUsuarioAjenoPorEstandar"/>
+    <testcase name="TC-PERF-15 | Content-Type JSON" time="0.184" classname="PerfilUsuarioAutApiPerf15BajaDeUsuarioAjenoPorEstandar"/>
+    <testcase name="TC-PERF-15 | Error response is structured JSON" time="0.184" classname="PerfilUsuarioAutApiPerf15BajaDeUsuarioAjenoPorEstandar"/>
+  </testsuite>
+  <testsuite name="Auth - recuperación QA y límite superior / AUT-API-AUTH-24 | Restablecer contraseña de cuenta descartable" id="6967c820-46d1-45b2-ac34-8e1b655fda1e" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="1" errors="0" time="1.188">
+    <testcase name="TC-AUTH-24 | no expone password raíz" time="1.188" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth24RestablecerContrasenaDeCuentaDescartable"/>
+    <testcase name="TC-AUTH-24 | HTTP" time="1.188" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth24RestablecerContrasenaDeCuentaDescartable"/>
+    <testcase name="TC-AUTH-24 | Content-Type y SLA" time="1.188" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth24RestablecerContrasenaDeCuentaDescartable">
+      <failure type="AssertionFailure" message="expected 1188 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth - recuperación QA y límite superior / AUT-API-AUTH-24 | Restablecer contraseña de cuenta descartable.]]>
+        <![CDATA[Test description: TC-AUTH-24 | Content-Type y SLA.]]>
+        <![CDATA[Error message: expected 1188 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1188 to be below 800
+   at Object.eval sandbox-script.js:3:83).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-24 | contrato raíz" time="1.188" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth24RestablecerContrasenaDeCuentaDescartable"/>
+    <testcase name="TC-AUTH-24 | respuesta neutral sin tokens" time="1.188" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth24RestablecerContrasenaDeCuentaDescartable"/>
+  </testsuite>
+  <testsuite name="Auth - recuperación QA y límite superior / AUT-API-AUTH-44 | Revocación tras recuperación" id="28bb7bae-3faa-4370-8964-c3a00e81b99e" timestamp="2026-10-05T21:08:46.140Z" tests="13" failures="1" errors="0" time="1.412">
+    <testcase name="TC-AUTH-44 | mensaje estructurado de primer nivel" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 | no expone password raíz" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 | HTTP" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 | Content-Type y SLA" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 | contrato raíz" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 refresh previo | transporte" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 refresh previo | HTTP" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 refresh previo | Content-Type y SLA" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 refresh previo | contrato raíz" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 login posterior | transporte" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 login posterior | HTTP" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+    <testcase name="TC-AUTH-44 login posterior | Content-Type y SLA" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion">
+      <failure type="AssertionFailure" message="expected 1412 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth - recuperación QA y límite superior / AUT-API-AUTH-44 | Revocación tras recuperación.]]>
+        <![CDATA[Test description: TC-AUTH-44 login posterior | Content-Type y SLA.]]>
+        <![CDATA[Error message: expected 1412 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1412 to be below 800
+   at Object.eval sandbox-script.js:12:84).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-44 login posterior | contrato raíz" time="1.412" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth44RevocacionTrasRecuperacion"/>
+  </testsuite>
+  <testsuite name="Auth - recuperación QA y límite superior / AUT-API-AUTH-45 | Bypass email-only en cuenta descartable" id="412751f6-2210-4045-b5a4-92eaba8130ad" timestamp="2026-10-05T21:08:46.140Z" tests="10" failures="3" errors="0" time="1.284">
+    <testcase name="TC-AUTH-45 | no expone password raíz" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable"/>
+    <testcase name="TC-AUTH-45 | HTTP" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable"/>
+    <testcase name="TC-AUTH-45 | Content-Type y SLA" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable">
+      <failure type="AssertionFailure" message="expected 1265 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth - recuperación QA y límite superior / AUT-API-AUTH-45 | Bypass email-only en cuenta descartable.]]>
+        <![CDATA[Test description: TC-AUTH-45 | Content-Type y SLA.]]>
+        <![CDATA[Error message: expected 1265 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1265 to be below 800
+   at Object.eval sandbox-script.js:3:85).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-45 | contrato raíz" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable"/>
+    <testcase name="TC-AUTH-45 | respuesta neutral sin tokens" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable"/>
+    <testcase name="TC-AUTH-45 login posterior | transporte" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable"/>
+    <testcase name="TC-AUTH-45 login posterior | HTTP" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable"/>
+    <testcase name="TC-AUTH-45 login posterior | Content-Type y SLA" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable">
+      <failure type="AssertionFailure" message="expected 1284 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth - recuperación QA y límite superior / AUT-API-AUTH-45 | Bypass email-only en cuenta descartable.]]>
+        <![CDATA[Test description: TC-AUTH-45 login posterior | Content-Type y SLA.]]>
+        <![CDATA[Error message: expected 1284 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1284 to be below 800
+   at Object.eval sandbox-script.js:8:85).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-45 login posterior | contrato raíz" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable"/>
+    <testcase name="TC-AUTH-45 | no cambia clave sin demostrar posesión del email" time="1.284" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth45BypassEmailOnlyEnCuentaDescartable">
+      <failure type="AssertionFailure" message="Bypass email-only reproducido en cuenta descartable; riesgo conocido, no PASS de seguridad.">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth - recuperación QA y límite superior / AUT-API-AUTH-45 | Bypass email-only en cuenta descartable.]]>
+        <![CDATA[Test description: TC-AUTH-45 | no cambia clave sin demostrar posesión del email.]]>
+        <![CDATA[Error message: Bypass email-only reproducido en cuenta descartable; riesgo conocido, no PASS de seguridad..]]>
+        <![CDATA[Stacktrace: AssertionError: Bypass email-only reproducido en cuenta descartable; riesgo conocido, no PASS de seguridad.
+   at Object.eval sandbox-script.js:10:85).]]>
+      </failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Auth - recuperación QA y límite superior / AUT-API-AUTH-46 | Registro con contraseña de 11 caracteres" id="36114727-7b9e-49da-9aa8-81e347327169" timestamp="2026-10-05T21:08:46.140Z" tests="4" failures="1" errors="0" time="1.339">
+    <testcase name="TC-AUTH-46 | no expone password raíz" time="1.339" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth46RegistroConContrasenaDe11Caracteres"/>
+    <testcase name="TC-AUTH-46 | HTTP" time="1.339" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth46RegistroConContrasenaDe11Caracteres"/>
+    <testcase name="TC-AUTH-46 | Content-Type y SLA" time="1.339" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth46RegistroConContrasenaDe11Caracteres">
+      <failure type="AssertionFailure" message="expected 1339 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: Auth - recuperación QA y límite superior / AUT-API-AUTH-46 | Registro con contraseña de 11 caracteres.]]>
+        <![CDATA[Test description: TC-AUTH-46 | Content-Type y SLA.]]>
+        <![CDATA[Error message: expected 1339 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1339 to be below 800
+   at Object.eval sandbox-script.js:3:86).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-AUTH-46 | contrato raíz" time="1.339" classname="AuthRecuperacionQaYLimiteSuperiorAutApiAuth46RegistroConContrasenaDe11Caracteres"/>
+  </testsuite>
+  <testsuite name="Centros Salud / AUT-API-HEALTH-01 | Listado público de centros de salud" id="4e0cdd9c-f38b-41c9-9dc7-152eff73730d" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.207">
+    <testcase name="TC-HEALTH-01 | no expone password raíz" time="0.207" classname="CentrosSaludAutApiHealth01ListadoPublicoDeCentrosDeSalud"/>
+    <testcase name="TC-HEALTH-01 | centros de primer nivel" time="0.207" classname="CentrosSaludAutApiHealth01ListadoPublicoDeCentrosDeSalud"/>
+    <testcase name="TC-HEALTH-01 | HTTP status" time="0.207" classname="CentrosSaludAutApiHealth01ListadoPublicoDeCentrosDeSalud"/>
+    <testcase name="TC-HEALTH-01 | SLA &lt; 800 ms" time="0.207" classname="CentrosSaludAutApiHealth01ListadoPublicoDeCentrosDeSalud"/>
+    <testcase name="TC-HEALTH-01 | Content-Type JSON" time="0.207" classname="CentrosSaludAutApiHealth01ListadoPublicoDeCentrosDeSalud"/>
+    <testcase name="TC-HEALTH-01 | Health-center contract" time="0.207" classname="CentrosSaludAutApiHealth01ListadoPublicoDeCentrosDeSalud"/>
+  </testsuite>
+  <testsuite name="Centros Salud / AUT-API-HEALTH-02 | Estructura y campos opcionales de centro" id="a85fe6ce-b99f-4638-b812-eb5301eeb611" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.201">
+    <testcase name="TC-HEALTH-02 | no expone password raíz" time="0.201" classname="CentrosSaludAutApiHealth02EstructuraYCamposOpcionalesDeCentro"/>
+    <testcase name="TC-HEALTH-02 | centros de primer nivel" time="0.201" classname="CentrosSaludAutApiHealth02EstructuraYCamposOpcionalesDeCentro"/>
+    <testcase name="TC-HEALTH-02 | HTTP status" time="0.201" classname="CentrosSaludAutApiHealth02EstructuraYCamposOpcionalesDeCentro"/>
+    <testcase name="TC-HEALTH-02 | SLA &lt; 800 ms" time="0.201" classname="CentrosSaludAutApiHealth02EstructuraYCamposOpcionalesDeCentro"/>
+    <testcase name="TC-HEALTH-02 | Content-Type JSON" time="0.201" classname="CentrosSaludAutApiHealth02EstructuraYCamposOpcionalesDeCentro"/>
+    <testcase name="TC-HEALTH-02 | Health-center contract" time="0.201" classname="CentrosSaludAutApiHealth02EstructuraYCamposOpcionalesDeCentro"/>
+  </testsuite>
+  <testsuite name="Centros Salud / AUT-API-HEALTH-03 | Métodos de escritura no permitidos" id="befe10f3-d5f9-42b4-8ff2-9bddbf9f21de" timestamp="2026-10-05T21:08:46.140Z" tests="13" failures="0" errors="0" time="0.173">
+    <testcase name="TC-HEALTH-03 | mensaje estructurado de primer nivel" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 | no expone password raíz" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 | HTTP" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 | Content-Type y SLA" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 | contrato raíz" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 PUT | transporte" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 PUT | HTTP" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 PUT | Content-Type y SLA" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 PUT | contrato raíz" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 DELETE | transporte" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 DELETE | HTTP" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 DELETE | Content-Type y SLA" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+    <testcase name="TC-HEALTH-03 DELETE | contrato raíz" time="0.173" classname="CentrosSaludAutApiHealth03MetodosDeEscrituraNoPermitidos"/>
+  </testsuite>
+  <testsuite name="Centros Salud / AUT-API-HEALTH-07 | Listado con formato de respuesta no soportado" id="96c44109-395a-42b2-93f7-37ce861390e3" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.179">
+    <testcase name="TC-HEALTH-07 | mensaje estructurado de primer nivel" time="0.179" classname="CentrosSaludAutApiHealth07ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-HEALTH-07 | no expone password raíz" time="0.179" classname="CentrosSaludAutApiHealth07ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-HEALTH-07 | HTTP" time="0.179" classname="CentrosSaludAutApiHealth07ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-HEALTH-07 | Content-Type y SLA" time="0.179" classname="CentrosSaludAutApiHealth07ListadoConFormatoDeRespuestaNoSoportado"/>
+    <testcase name="TC-HEALTH-07 | contrato raíz" time="0.179" classname="CentrosSaludAutApiHealth07ListadoConFormatoDeRespuestaNoSoportado"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-20 | Inscripción válida a campaña disponible" id="a11fc97c-142c-4ccd-836b-ebc1efcde44c" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.226">
+    <testcase name="TC-CAMP-20 | no expone password raíz" time="0.226" classname="InscripcionesAutApiCamp20InscripcionValidaACampanaDisponible"/>
+    <testcase name="TC-CAMP-20 | HTTP status" time="0.226" classname="InscripcionesAutApiCamp20InscripcionValidaACampanaDisponible"/>
+    <testcase name="TC-CAMP-20 | SLA &lt; 800 ms" time="0.226" classname="InscripcionesAutApiCamp20InscripcionValidaACampanaDisponible"/>
+    <testcase name="TC-CAMP-20 | Content-Type JSON" time="0.226" classname="InscripcionesAutApiCamp20InscripcionValidaACampanaDisponible"/>
+    <testcase name="TC-CAMP-20 | Enrollment contract" time="0.226" classname="InscripcionesAutApiCamp20InscripcionValidaACampanaDisponible"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-26 | Inscripción duplicada" id="1bacfa7e-144a-453f-8b75-95ab948e1899" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.193">
+    <testcase name="TC-CAMP-26 | mensaje estructurado de primer nivel" time="0.193" classname="InscripcionesAutApiCamp26InscripcionDuplicada"/>
+    <testcase name="TC-CAMP-26 | no expone password raíz" time="0.193" classname="InscripcionesAutApiCamp26InscripcionDuplicada"/>
+    <testcase name="TC-CAMP-26 | HTTP status" time="0.193" classname="InscripcionesAutApiCamp26InscripcionDuplicada"/>
+    <testcase name="TC-CAMP-26 | SLA &lt; 800 ms" time="0.193" classname="InscripcionesAutApiCamp26InscripcionDuplicada"/>
+    <testcase name="TC-CAMP-26 | Content-Type JSON" time="0.193" classname="InscripcionesAutApiCamp26InscripcionDuplicada"/>
+    <testcase name="TC-CAMP-26 | Error response is structured JSON" time="0.193" classname="InscripcionesAutApiCamp26InscripcionDuplicada"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-33 | Consulta de mis inscripciones actuales e históricas" id="2b9d41b7-c9a6-4848-80d6-f0da1971a117" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.231">
+    <testcase name="TC-CAMP-33 | no expone password raíz" time="0.231" classname="InscripcionesAutApiCamp33ConsultaDeMisInscripcionesActualesEHistoricas"/>
+    <testcase name="TC-CAMP-33 | arrays raíz de inscripciones" time="0.231" classname="InscripcionesAutApiCamp33ConsultaDeMisInscripcionesActualesEHistoricas"/>
+    <testcase name="TC-CAMP-33 | HTTP status" time="0.231" classname="InscripcionesAutApiCamp33ConsultaDeMisInscripcionesActualesEHistoricas"/>
+    <testcase name="TC-CAMP-33 | SLA &lt; 800 ms" time="0.231" classname="InscripcionesAutApiCamp33ConsultaDeMisInscripcionesActualesEHistoricas"/>
+    <testcase name="TC-CAMP-33 | Content-Type JSON" time="0.231" classname="InscripcionesAutApiCamp33ConsultaDeMisInscripcionesActualesEHistoricas"/>
+    <testcase name="TC-CAMP-33 | Enrollment contract" time="0.231" classname="InscripcionesAutApiCamp33ConsultaDeMisInscripcionesActualesEHistoricas"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-29 | Consulta de inscriptos por administrador" id="ecc14c59-85a8-4a20-834a-94c9b183907b" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.192">
+    <testcase name="TC-CAMP-29 | no expone password raíz" time="0.192" classname="InscripcionesAutApiCamp29ConsultaDeInscriptosPorAdministrador"/>
+    <testcase name="TC-CAMP-29 | listado de inscriptos raíz" time="0.192" classname="InscripcionesAutApiCamp29ConsultaDeInscriptosPorAdministrador"/>
+    <testcase name="TC-CAMP-29 | HTTP status" time="0.192" classname="InscripcionesAutApiCamp29ConsultaDeInscriptosPorAdministrador"/>
+    <testcase name="TC-CAMP-29 | SLA &lt; 800 ms" time="0.192" classname="InscripcionesAutApiCamp29ConsultaDeInscriptosPorAdministrador"/>
+    <testcase name="TC-CAMP-29 | Content-Type JSON" time="0.192" classname="InscripcionesAutApiCamp29ConsultaDeInscriptosPorAdministrador"/>
+    <testcase name="TC-CAMP-29 | Enrollment contract" time="0.192" classname="InscripcionesAutApiCamp29ConsultaDeInscriptosPorAdministrador"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-18 | Estado finalizado al alcanzar el cupo" id="3bc93c72-68b2-4494-b07b-a50b1491f7a7" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.193">
+    <testcase name="TC-CAMP-18 | no expone password raíz" time="0.193" classname="InscripcionesAutApiCamp18EstadoFinalizadoAlAlcanzarElCupo"/>
+    <testcase name="TC-CAMP-18 | HTTP status" time="0.193" classname="InscripcionesAutApiCamp18EstadoFinalizadoAlAlcanzarElCupo"/>
+    <testcase name="TC-CAMP-18 | SLA &lt; 800 ms" time="0.193" classname="InscripcionesAutApiCamp18EstadoFinalizadoAlAlcanzarElCupo"/>
+    <testcase name="TC-CAMP-18 | Content-Type JSON" time="0.193" classname="InscripcionesAutApiCamp18EstadoFinalizadoAlAlcanzarElCupo"/>
+    <testcase name="TC-CAMP-18 | Enrollment contract" time="0.193" classname="InscripcionesAutApiCamp18EstadoFinalizadoAlAlcanzarElCupo"/>
+    <testcase name="TC-CAMP-18 | cupo completo marca la campaña finalizada" time="0.193" classname="InscripcionesAutApiCamp18EstadoFinalizadoAlAlcanzarElCupo"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-21 | Inscripción sin autenticación" id="027cd89e-6b25-4102-926a-5305b26529ac" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.174">
+    <testcase name="TC-CAMP-21 | mensaje estructurado de primer nivel" time="0.174" classname="InscripcionesAutApiCamp21InscripcionSinAutenticacion"/>
+    <testcase name="TC-CAMP-21 | no expone password raíz" time="0.174" classname="InscripcionesAutApiCamp21InscripcionSinAutenticacion"/>
+    <testcase name="TC-CAMP-21 | HTTP status" time="0.174" classname="InscripcionesAutApiCamp21InscripcionSinAutenticacion"/>
+    <testcase name="TC-CAMP-21 | SLA &lt; 800 ms" time="0.174" classname="InscripcionesAutApiCamp21InscripcionSinAutenticacion"/>
+    <testcase name="TC-CAMP-21 | Content-Type JSON" time="0.174" classname="InscripcionesAutApiCamp21InscripcionSinAutenticacion"/>
+    <testcase name="TC-CAMP-21 | Error response is structured JSON" time="0.174" classname="InscripcionesAutApiCamp21InscripcionSinAutenticacion"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-22 | Inscripción con usuario administrador" id="a37a8479-7366-4428-a0ba-cfde47ca2e21" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.184">
+    <testcase name="TC-CAMP-22 | mensaje estructurado de primer nivel" time="0.184" classname="InscripcionesAutApiCamp22InscripcionConUsuarioAdministrador"/>
+    <testcase name="TC-CAMP-22 | no expone password raíz" time="0.184" classname="InscripcionesAutApiCamp22InscripcionConUsuarioAdministrador"/>
+    <testcase name="TC-CAMP-22 | HTTP status" time="0.184" classname="InscripcionesAutApiCamp22InscripcionConUsuarioAdministrador"/>
+    <testcase name="TC-CAMP-22 | SLA &lt; 800 ms" time="0.184" classname="InscripcionesAutApiCamp22InscripcionConUsuarioAdministrador"/>
+    <testcase name="TC-CAMP-22 | Content-Type JSON" time="0.184" classname="InscripcionesAutApiCamp22InscripcionConUsuarioAdministrador"/>
+    <testcase name="TC-CAMP-22 | Error response is structured JSON" time="0.184" classname="InscripcionesAutApiCamp22InscripcionConUsuarioAdministrador"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-23 | Inscripción de usuario menor de 18 años" id="6a2df293-5568-4eb3-a4de-ce9a411237b2" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.200">
+    <testcase name="TC-CAMP-23 | mensaje estructurado de primer nivel" time="0.200" classname="InscripcionesAutApiCamp23InscripcionDeUsuarioMenorDe18Anos"/>
+    <testcase name="TC-CAMP-23 | no expone password raíz" time="0.200" classname="InscripcionesAutApiCamp23InscripcionDeUsuarioMenorDe18Anos"/>
+    <testcase name="TC-CAMP-23 | HTTP status" time="0.200" classname="InscripcionesAutApiCamp23InscripcionDeUsuarioMenorDe18Anos"/>
+    <testcase name="TC-CAMP-23 | SLA &lt; 800 ms" time="0.200" classname="InscripcionesAutApiCamp23InscripcionDeUsuarioMenorDe18Anos"/>
+    <testcase name="TC-CAMP-23 | Content-Type JSON" time="0.200" classname="InscripcionesAutApiCamp23InscripcionDeUsuarioMenorDe18Anos"/>
+    <testcase name="TC-CAMP-23 | Error response is structured JSON" time="0.200" classname="InscripcionesAutApiCamp23InscripcionDeUsuarioMenorDe18Anos"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-24 | Inscripción de usuario de 65 años o más" id="2323e495-692d-4767-bc28-43f45e7e2ecb" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.185">
+    <testcase name="TC-CAMP-24 | mensaje estructurado de primer nivel" time="0.185" classname="InscripcionesAutApiCamp24InscripcionDeUsuarioDe65AnosOMas"/>
+    <testcase name="TC-CAMP-24 | no expone password raíz" time="0.185" classname="InscripcionesAutApiCamp24InscripcionDeUsuarioDe65AnosOMas"/>
+    <testcase name="TC-CAMP-24 | HTTP status" time="0.185" classname="InscripcionesAutApiCamp24InscripcionDeUsuarioDe65AnosOMas"/>
+    <testcase name="TC-CAMP-24 | SLA &lt; 800 ms" time="0.185" classname="InscripcionesAutApiCamp24InscripcionDeUsuarioDe65AnosOMas"/>
+    <testcase name="TC-CAMP-24 | Content-Type JSON" time="0.185" classname="InscripcionesAutApiCamp24InscripcionDeUsuarioDe65AnosOMas"/>
+    <testcase name="TC-CAMP-24 | Error response is structured JSON" time="0.185" classname="InscripcionesAutApiCamp24InscripcionDeUsuarioDe65AnosOMas"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-25 | Inscripción en campaña finalizada" id="27dcee2d-82fa-47c7-9796-803fad0f5fb8" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.186">
+    <testcase name="TC-CAMP-25 | mensaje estructurado de primer nivel" time="0.186" classname="InscripcionesAutApiCamp25InscripcionEnCampanaFinalizada"/>
+    <testcase name="TC-CAMP-25 | no expone password raíz" time="0.186" classname="InscripcionesAutApiCamp25InscripcionEnCampanaFinalizada"/>
+    <testcase name="TC-CAMP-25 | HTTP status" time="0.186" classname="InscripcionesAutApiCamp25InscripcionEnCampanaFinalizada"/>
+    <testcase name="TC-CAMP-25 | SLA &lt; 800 ms" time="0.186" classname="InscripcionesAutApiCamp25InscripcionEnCampanaFinalizada"/>
+    <testcase name="TC-CAMP-25 | Content-Type JSON" time="0.186" classname="InscripcionesAutApiCamp25InscripcionEnCampanaFinalizada"/>
+    <testcase name="TC-CAMP-25 | Error response is structured JSON" time="0.186" classname="InscripcionesAutApiCamp25InscripcionEnCampanaFinalizada"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-27 | Inscripción sin cupo disponible" id="cf1844a8-5634-45c2-be88-8b63e61689f0" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.196">
+    <testcase name="TC-CAMP-27 | mensaje estructurado de primer nivel" time="0.196" classname="InscripcionesAutApiCamp27InscripcionSinCupoDisponible"/>
+    <testcase name="TC-CAMP-27 | no expone password raíz" time="0.196" classname="InscripcionesAutApiCamp27InscripcionSinCupoDisponible"/>
+    <testcase name="TC-CAMP-27 | HTTP status" time="0.196" classname="InscripcionesAutApiCamp27InscripcionSinCupoDisponible"/>
+    <testcase name="TC-CAMP-27 | SLA &lt; 800 ms" time="0.196" classname="InscripcionesAutApiCamp27InscripcionSinCupoDisponible"/>
+    <testcase name="TC-CAMP-27 | Content-Type JSON" time="0.196" classname="InscripcionesAutApiCamp27InscripcionSinCupoDisponible"/>
+    <testcase name="TC-CAMP-27 | Error response is structured JSON" time="0.196" classname="InscripcionesAutApiCamp27InscripcionSinCupoDisponible"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-28 | Protección del último cupo ante solicitudes simultáneas" id="6b267ebb-c62b-4525-b117-93667a1923e0" timestamp="2026-10-05T21:08:46.140Z" tests="9" failures="0" errors="0" time="0.183">
+    <testcase name="TC-CAMP-28 | no expone password raíz" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | modelo campaña de primer nivel" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | HTTP status" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | SLA &lt; 800 ms" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | Content-Type JSON" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | Campaign contract" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | solo una solicitud concurrente ocupa el último lugar" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | todos los registros creados tienen ID de cleanup" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+    <testcase name="TC-CAMP-28 | cupo nunca excedido" time="0.183" classname="InscripcionesAutApiCamp28ProteccionDelUltimoCupoAnteSolicitudesSimultaneas"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-30 | Consulta de inscriptos por usuario estándar" id="5b42a326-d65b-49c3-8a39-c1ff652673c4" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.179">
+    <testcase name="TC-CAMP-30 | mensaje estructurado de primer nivel" time="0.179" classname="InscripcionesAutApiCamp30ConsultaDeInscriptosPorUsuarioEstandar"/>
+    <testcase name="TC-CAMP-30 | no expone password raíz" time="0.179" classname="InscripcionesAutApiCamp30ConsultaDeInscriptosPorUsuarioEstandar"/>
+    <testcase name="TC-CAMP-30 | HTTP status" time="0.179" classname="InscripcionesAutApiCamp30ConsultaDeInscriptosPorUsuarioEstandar"/>
+    <testcase name="TC-CAMP-30 | SLA &lt; 800 ms" time="0.179" classname="InscripcionesAutApiCamp30ConsultaDeInscriptosPorUsuarioEstandar"/>
+    <testcase name="TC-CAMP-30 | Content-Type JSON" time="0.179" classname="InscripcionesAutApiCamp30ConsultaDeInscriptosPorUsuarioEstandar"/>
+    <testcase name="TC-CAMP-30 | Error response is structured JSON" time="0.179" classname="InscripcionesAutApiCamp30ConsultaDeInscriptosPorUsuarioEstandar"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-31 | Consulta de inscriptos sin autenticación" id="053e1c84-b1b3-42a2-8578-22403e9afe59" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.178">
+    <testcase name="TC-CAMP-31 | mensaje estructurado de primer nivel" time="0.178" classname="InscripcionesAutApiCamp31ConsultaDeInscriptosSinAutenticacion"/>
+    <testcase name="TC-CAMP-31 | no expone password raíz" time="0.178" classname="InscripcionesAutApiCamp31ConsultaDeInscriptosSinAutenticacion"/>
+    <testcase name="TC-CAMP-31 | HTTP status" time="0.178" classname="InscripcionesAutApiCamp31ConsultaDeInscriptosSinAutenticacion"/>
+    <testcase name="TC-CAMP-31 | SLA &lt; 800 ms" time="0.178" classname="InscripcionesAutApiCamp31ConsultaDeInscriptosSinAutenticacion"/>
+    <testcase name="TC-CAMP-31 | Content-Type JSON" time="0.178" classname="InscripcionesAutApiCamp31ConsultaDeInscriptosSinAutenticacion"/>
+    <testcase name="TC-CAMP-31 | Error response is structured JSON" time="0.178" classname="InscripcionesAutApiCamp31ConsultaDeInscriptosSinAutenticacion"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-32 | Filtrado de inscriptos por parámetro de búsqueda" id="da4ca035-3276-4895-b274-8cbc69559f83" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.196">
+    <testcase name="TC-CAMP-32 | no expone password raíz" time="0.196" classname="InscripcionesAutApiCamp32FiltradoDeInscriptosPorParametroDeBusqueda"/>
+    <testcase name="TC-CAMP-32 | listado de inscriptos raíz" time="0.196" classname="InscripcionesAutApiCamp32FiltradoDeInscriptosPorParametroDeBusqueda"/>
+    <testcase name="TC-CAMP-32 | HTTP status" time="0.196" classname="InscripcionesAutApiCamp32FiltradoDeInscriptosPorParametroDeBusqueda"/>
+    <testcase name="TC-CAMP-32 | SLA &lt; 800 ms" time="0.196" classname="InscripcionesAutApiCamp32FiltradoDeInscriptosPorParametroDeBusqueda"/>
+    <testcase name="TC-CAMP-32 | Content-Type JSON" time="0.196" classname="InscripcionesAutApiCamp32FiltradoDeInscriptosPorParametroDeBusqueda"/>
+    <testcase name="TC-CAMP-32 | Enrollment contract" time="0.196" classname="InscripcionesAutApiCamp32FiltradoDeInscriptosPorParametroDeBusqueda"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-34 | Consulta de mis inscripciones sin rol estándar" id="4a71797e-2d13-4b63-bd79-b7a6c78d467c" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.180">
+    <testcase name="TC-CAMP-34 | mensaje estructurado de primer nivel" time="0.180" classname="InscripcionesAutApiCamp34ConsultaDeMisInscripcionesSinRolEstandar"/>
+    <testcase name="TC-CAMP-34 | no expone password raíz" time="0.180" classname="InscripcionesAutApiCamp34ConsultaDeMisInscripcionesSinRolEstandar"/>
+    <testcase name="TC-CAMP-34 | HTTP status" time="0.180" classname="InscripcionesAutApiCamp34ConsultaDeMisInscripcionesSinRolEstandar"/>
+    <testcase name="TC-CAMP-34 | SLA &lt; 800 ms" time="0.180" classname="InscripcionesAutApiCamp34ConsultaDeMisInscripcionesSinRolEstandar"/>
+    <testcase name="TC-CAMP-34 | Content-Type JSON" time="0.180" classname="InscripcionesAutApiCamp34ConsultaDeMisInscripcionesSinRolEstandar"/>
+    <testcase name="TC-CAMP-34 | Error response is structured JSON" time="0.180" classname="InscripcionesAutApiCamp34ConsultaDeMisInscripcionesSinRolEstandar"/>
+  </testsuite>
+  <testsuite name="Inscripciones / SETUP | Inscripción QA de usuario B para TC-CAMP-36" id="fd56d536-f911-41a1-ab18-498d0f68c2d3" timestamp="2026-10-05T21:08:46.140Z" tests="1" failures="0" errors="0" time="0.216">
+    <testcase name="SETUP other enrollment | HTTP 201" time="0.216" classname="InscripcionesSetupInscripcionQaDeUsuarioBParaTcCamp36"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-36 | Cancelación de inscripción de otro usuario" id="651ca356-86d0-4cdc-ae59-a3be58a2f9d9" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.183">
+    <testcase name="TC-CAMP-36 | mensaje estructurado de primer nivel" time="0.183" classname="InscripcionesAutApiCamp36CancelacionDeInscripcionDeOtroUsuario"/>
+    <testcase name="TC-CAMP-36 | no expone password raíz" time="0.183" classname="InscripcionesAutApiCamp36CancelacionDeInscripcionDeOtroUsuario"/>
+    <testcase name="TC-CAMP-36 | HTTP status" time="0.183" classname="InscripcionesAutApiCamp36CancelacionDeInscripcionDeOtroUsuario"/>
+    <testcase name="TC-CAMP-36 | SLA &lt; 800 ms" time="0.183" classname="InscripcionesAutApiCamp36CancelacionDeInscripcionDeOtroUsuario"/>
+    <testcase name="TC-CAMP-36 | Content-Type JSON" time="0.183" classname="InscripcionesAutApiCamp36CancelacionDeInscripcionDeOtroUsuario"/>
+    <testcase name="TC-CAMP-36 | Error response is structured JSON" time="0.183" classname="InscripcionesAutApiCamp36CancelacionDeInscripcionDeOtroUsuario"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-38 | Cancelación de inscripción inexistente" id="b7a7b9d1-f362-4f83-bf24-08d7512441ef" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.197">
+    <testcase name="TC-CAMP-38 | mensaje estructurado de primer nivel" time="0.197" classname="InscripcionesAutApiCamp38CancelacionDeInscripcionInexistente"/>
+    <testcase name="TC-CAMP-38 | no expone password raíz" time="0.197" classname="InscripcionesAutApiCamp38CancelacionDeInscripcionInexistente"/>
+    <testcase name="TC-CAMP-38 | HTTP status" time="0.197" classname="InscripcionesAutApiCamp38CancelacionDeInscripcionInexistente"/>
+    <testcase name="TC-CAMP-38 | SLA &lt; 800 ms" time="0.197" classname="InscripcionesAutApiCamp38CancelacionDeInscripcionInexistente"/>
+    <testcase name="TC-CAMP-38 | Content-Type JSON" time="0.197" classname="InscripcionesAutApiCamp38CancelacionDeInscripcionInexistente"/>
+    <testcase name="TC-CAMP-38 | Error response is structured JSON" time="0.197" classname="InscripcionesAutApiCamp38CancelacionDeInscripcionInexistente"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-ENR-01 | Contrato de alta de inscripción" id="59eb2b5d-9fdb-4440-807d-8031df3b1d9d" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.226">
+    <testcase name="TC-ENR-01 | no expone password raíz" time="0.226" classname="InscripcionesAutApiEnr01ContratoDeAltaDeInscripcion"/>
+    <testcase name="TC-ENR-01 | HTTP status" time="0.226" classname="InscripcionesAutApiEnr01ContratoDeAltaDeInscripcion"/>
+    <testcase name="TC-ENR-01 | SLA &lt; 800 ms" time="0.226" classname="InscripcionesAutApiEnr01ContratoDeAltaDeInscripcion"/>
+    <testcase name="TC-ENR-01 | Content-Type JSON" time="0.226" classname="InscripcionesAutApiEnr01ContratoDeAltaDeInscripcion"/>
+    <testcase name="TC-ENR-01 | Enrollment contract" time="0.226" classname="InscripcionesAutApiEnr01ContratoDeAltaDeInscripcion"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-ENR-02 | Inscripción con campaña inexistente" id="0f69ce89-a038-4c35-a21e-eb5512914981" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.184">
+    <testcase name="TC-ENR-02 | mensaje estructurado de primer nivel" time="0.184" classname="InscripcionesAutApiEnr02InscripcionConCampanaInexistente"/>
+    <testcase name="TC-ENR-02 | no expone password raíz" time="0.184" classname="InscripcionesAutApiEnr02InscripcionConCampanaInexistente"/>
+    <testcase name="TC-ENR-02 | HTTP status" time="0.184" classname="InscripcionesAutApiEnr02InscripcionConCampanaInexistente"/>
+    <testcase name="TC-ENR-02 | SLA &lt; 800 ms" time="0.184" classname="InscripcionesAutApiEnr02InscripcionConCampanaInexistente"/>
+    <testcase name="TC-ENR-02 | Content-Type JSON" time="0.184" classname="InscripcionesAutApiEnr02InscripcionConCampanaInexistente"/>
+    <testcase name="TC-ENR-02 | Error response is structured JSON" time="0.184" classname="InscripcionesAutApiEnr02InscripcionConCampanaInexistente"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-ENR-03 | Integridad de inscripción y unicidad" id="58409fd7-ea92-40fe-9adc-a0193a5d8de2" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.186">
+    <testcase name="TC-ENR-03 | mensaje estructurado de primer nivel" time="0.186" classname="InscripcionesAutApiEnr03IntegridadDeInscripcionYUnicidad"/>
+    <testcase name="TC-ENR-03 | no expone password raíz" time="0.186" classname="InscripcionesAutApiEnr03IntegridadDeInscripcionYUnicidad"/>
+    <testcase name="TC-ENR-03 | HTTP status" time="0.186" classname="InscripcionesAutApiEnr03IntegridadDeInscripcionYUnicidad"/>
+    <testcase name="TC-ENR-03 | SLA &lt; 800 ms" time="0.186" classname="InscripcionesAutApiEnr03IntegridadDeInscripcionYUnicidad"/>
+    <testcase name="TC-ENR-03 | Content-Type JSON" time="0.186" classname="InscripcionesAutApiEnr03IntegridadDeInscripcionYUnicidad"/>
+    <testcase name="TC-ENR-03 | Error response is structured JSON" time="0.186" classname="InscripcionesAutApiEnr03IntegridadDeInscripcionYUnicidad"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-CAMP-37 | Cancelación de inscripción histórica propia" id="ab9761e9-8469-4a08-9e22-32135cb6064f" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.196">
+    <testcase name="TC-CAMP-37 | mensaje estructurado de primer nivel" time="0.196" classname="InscripcionesAutApiCamp37CancelacionDeInscripcionHistoricaPropia"/>
+    <testcase name="TC-CAMP-37 | no expone password raíz" time="0.196" classname="InscripcionesAutApiCamp37CancelacionDeInscripcionHistoricaPropia"/>
+    <testcase name="TC-CAMP-37 | HTTP" time="0.196" classname="InscripcionesAutApiCamp37CancelacionDeInscripcionHistoricaPropia"/>
+    <testcase name="TC-CAMP-37 | Content-Type y SLA" time="0.196" classname="InscripcionesAutApiCamp37CancelacionDeInscripcionHistoricaPropia"/>
+    <testcase name="TC-CAMP-37 | contrato raíz" time="0.196" classname="InscripcionesAutApiCamp37CancelacionDeInscripcionHistoricaPropia"/>
+    <testcase name="TC-CAMP-37 | error de campaña finalizada" time="0.196" classname="InscripcionesAutApiCamp37CancelacionDeInscripcionHistoricaPropia"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-INS-01 | Inscripción con exactamente 18 años" id="b86a695c-c962-44eb-b0a7-5873b6612a52" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.211">
+    <testcase name="TC-INS-01 | no expone password raíz" time="0.211" classname="InscripcionesAutApiIns01InscripcionConExactamente18Anos"/>
+    <testcase name="TC-INS-01 | HTTP" time="0.211" classname="InscripcionesAutApiIns01InscripcionConExactamente18Anos"/>
+    <testcase name="TC-INS-01 | Content-Type y SLA" time="0.211" classname="InscripcionesAutApiIns01InscripcionConExactamente18Anos"/>
+    <testcase name="TC-INS-01 | contrato raíz" time="0.211" classname="InscripcionesAutApiIns01InscripcionConExactamente18Anos"/>
+    <testcase name="TC-INS-01 | alta de inscripción" time="0.211" classname="InscripcionesAutApiIns01InscripcionConExactamente18Anos"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-INS-02 | Inscripción con exactamente 64 años" id="f42783e9-c5c3-4f33-94ff-2f0544067b2f" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.213">
+    <testcase name="TC-INS-02 | no expone password raíz" time="0.213" classname="InscripcionesAutApiIns02InscripcionConExactamente64Anos"/>
+    <testcase name="TC-INS-02 | HTTP" time="0.213" classname="InscripcionesAutApiIns02InscripcionConExactamente64Anos"/>
+    <testcase name="TC-INS-02 | Content-Type y SLA" time="0.213" classname="InscripcionesAutApiIns02InscripcionConExactamente64Anos"/>
+    <testcase name="TC-INS-02 | contrato raíz" time="0.213" classname="InscripcionesAutApiIns02InscripcionConExactamente64Anos"/>
+    <testcase name="TC-INS-02 | alta de inscripción" time="0.213" classname="InscripcionesAutApiIns02InscripcionConExactamente64Anos"/>
+  </testsuite>
+  <testsuite name="Inscripciones / AUT-API-INS-03 | Búsqueda administrativa sin coincidencias" id="ce10b770-5af2-4969-bddd-6ce5fcbdc85d" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.202">
+    <testcase name="TC-INS-03 | no expone password raíz" time="0.202" classname="InscripcionesAutApiIns03BusquedaAdministrativaSinCoincidencias"/>
+    <testcase name="TC-INS-03 | HTTP" time="0.202" classname="InscripcionesAutApiIns03BusquedaAdministrativaSinCoincidencias"/>
+    <testcase name="TC-INS-03 | Content-Type y SLA" time="0.202" classname="InscripcionesAutApiIns03BusquedaAdministrativaSinCoincidencias"/>
+    <testcase name="TC-INS-03 | contrato raíz" time="0.202" classname="InscripcionesAutApiIns03BusquedaAdministrativaSinCoincidencias"/>
+    <testcase name="TC-INS-03 | listado de inscriptos raíz" time="0.202" classname="InscripcionesAutApiIns03BusquedaAdministrativaSinCoincidencias"/>
+    <testcase name="TC-INS-03 | búsqueda sin coincidencias" time="0.202" classname="InscripcionesAutApiIns03BusquedaAdministrativaSinCoincidencias"/>
+  </testsuite>
+  <testsuite name="Dashboard / AUT-API-CAMP-39 | Acceso a dashboard administrativo con métricas de campañas e inscripciones" id="91a9e083-311c-46fe-8ccc-bf2923c4b50a" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.302">
+    <testcase name="TC-CAMP-39 | no expone password raíz" time="0.302" classname="DashboardAutApiCamp39AccesoADashboardAdministrativoConMetricasDeCampanasEInscripciones"/>
+    <testcase name="TC-CAMP-39 | HTTP status" time="0.302" classname="DashboardAutApiCamp39AccesoADashboardAdministrativoConMetricasDeCampanasEInscripciones"/>
+    <testcase name="TC-CAMP-39 | SLA &lt; 800 ms" time="0.302" classname="DashboardAutApiCamp39AccesoADashboardAdministrativoConMetricasDeCampanasEInscripciones"/>
+    <testcase name="TC-CAMP-39 | Content-Type JSON" time="0.302" classname="DashboardAutApiCamp39AccesoADashboardAdministrativoConMetricasDeCampanasEInscripciones"/>
+    <testcase name="TC-CAMP-39 | Dashboard contract" time="0.302" classname="DashboardAutApiCamp39AccesoADashboardAdministrativoConMetricasDeCampanasEInscripciones"/>
+  </testsuite>
+  <testsuite name="Dashboard / AUT-API-CAMP-40 | Acceso a dashboard sin permisos de administrador" id="5df96dc5-825b-4ceb-ad85-5de244a6cbfc" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.184">
+    <testcase name="TC-CAMP-40 | mensaje estructurado de primer nivel" time="0.184" classname="DashboardAutApiCamp40AccesoADashboardSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-40 | no expone password raíz" time="0.184" classname="DashboardAutApiCamp40AccesoADashboardSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-40 | HTTP status" time="0.184" classname="DashboardAutApiCamp40AccesoADashboardSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-40 | SLA &lt; 800 ms" time="0.184" classname="DashboardAutApiCamp40AccesoADashboardSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-40 | Content-Type JSON" time="0.184" classname="DashboardAutApiCamp40AccesoADashboardSinPermisosDeAdministrador"/>
+    <testcase name="TC-CAMP-40 | Error response is structured JSON" time="0.184" classname="DashboardAutApiCamp40AccesoADashboardSinPermisosDeAdministrador"/>
+  </testsuite>
+  <testsuite name="Dashboard / AUT-API-DASH-01 | Dashboard: contrato de respuesta y métricas" id="ad4a1fdc-b5cc-4ac2-8a0a-16b61e278c81" timestamp="2026-10-05T21:08:46.140Z" tests="5" failures="0" errors="0" time="0.631">
+    <testcase name="TC-DASH-01 | no expone password raíz" time="0.631" classname="DashboardAutApiDash01DashboardContratoDeRespuestaYMetricas"/>
+    <testcase name="TC-DASH-01 | HTTP status" time="0.631" classname="DashboardAutApiDash01DashboardContratoDeRespuestaYMetricas"/>
+    <testcase name="TC-DASH-01 | SLA &lt; 800 ms" time="0.631" classname="DashboardAutApiDash01DashboardContratoDeRespuestaYMetricas"/>
+    <testcase name="TC-DASH-01 | Content-Type JSON" time="0.631" classname="DashboardAutApiDash01DashboardContratoDeRespuestaYMetricas"/>
+    <testcase name="TC-DASH-01 | Dashboard contract" time="0.631" classname="DashboardAutApiDash01DashboardContratoDeRespuestaYMetricas"/>
+  </testsuite>
+  <testsuite name="Dashboard / AUT-API-DASH-02 | Dashboard: consistencia de contadores con datos semilla" id="16447f8b-dbca-450f-938e-8f4b5b1c037f" timestamp="2026-10-05T21:08:46.140Z" tests="168" failures="0" errors="0" time="0.194">
+    <testcase name="TC-DASH-02 | no expone password raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de campañas | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de campañas | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de campañas | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de campañas | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 | total campañas" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de usuarios | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de usuarios | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de usuarios | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 referencia de usuarios | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 2 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 2 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 2 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 2 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 4 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 4 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 4 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 4 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 5 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 5 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 5 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 5 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 6 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 6 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 6 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 6 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 7 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 7 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 7 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 7 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 8 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 8 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 8 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 8 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 9 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 9 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 9 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 9 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 10 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 10 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 10 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 10 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 11 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 11 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 11 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 11 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 12 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 12 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 12 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 12 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 13 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 13 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 13 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 13 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 14 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 14 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 14 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 14 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 16 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 16 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 16 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 16 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 17 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 17 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 17 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 17 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 18 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 18 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 18 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 18 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 19 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 19 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 19 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 19 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 20 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 20 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 20 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 20 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 21 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 21 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 21 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 21 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 23 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 23 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 23 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 23 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 24 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 24 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 24 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 24 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 25 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 25 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 25 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 25 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 26 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 26 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 26 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 26 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 27 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 27 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 27 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 27 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 28 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 28 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 28 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 28 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 29 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 29 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 29 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 29 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 30 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 30 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 30 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 30 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 31 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 31 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 31 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 31 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 32 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 32 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 32 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 32 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 33 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 33 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 33 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 33 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 34 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 34 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 34 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 34 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 37 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 37 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 37 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 37 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 38 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 38 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 38 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 38 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 39 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 39 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 39 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 39 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 40 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 40 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 40 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 40 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 68 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 68 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 68 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 68 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 69 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 69 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 69 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 69 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 70 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 70 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 70 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 70 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 71 | transporte" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 71 | HTTP" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 71 | Content-Type y SLA" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 inscripciones campaña 71 | contrato raíz" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 | total inscripciones" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 | donantes únicos estándar" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 | HTTP status" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 | SLA &lt; 800 ms" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 | Content-Type JSON" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+    <testcase name="TC-DASH-02 | Dashboard contract" time="0.194" classname="DashboardAutApiDash02DashboardConsistenciaDeContadoresConDatosSemilla"/>
+  </testsuite>
+  <testsuite name="Dashboard / AUT-API-DASH-03 | Dashboard: denegar acceso sin token" id="5f69c7af-9647-4124-b3de-8613dc7638ea" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.178">
+    <testcase name="TC-DASH-03 | mensaje estructurado de primer nivel" time="0.178" classname="DashboardAutApiDash03DashboardDenegarAccesoSinToken"/>
+    <testcase name="TC-DASH-03 | no expone password raíz" time="0.178" classname="DashboardAutApiDash03DashboardDenegarAccesoSinToken"/>
+    <testcase name="TC-DASH-03 | HTTP status" time="0.178" classname="DashboardAutApiDash03DashboardDenegarAccesoSinToken"/>
+    <testcase name="TC-DASH-03 | SLA &lt; 800 ms" time="0.178" classname="DashboardAutApiDash03DashboardDenegarAccesoSinToken"/>
+    <testcase name="TC-DASH-03 | Content-Type JSON" time="0.178" classname="DashboardAutApiDash03DashboardDenegarAccesoSinToken"/>
+    <testcase name="TC-DASH-03 | Error response is structured JSON" time="0.178" classname="DashboardAutApiDash03DashboardDenegarAccesoSinToken"/>
+  </testsuite>
+  <testsuite name="Dashboard / AUT-API-DASH-04 | Dashboard: denegar acceso a usuario estándar" id="58ca7441-673f-4154-bd8a-ac5a8aba3387" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.234">
+    <testcase name="TC-DASH-04 | mensaje estructurado de primer nivel" time="0.234" classname="DashboardAutApiDash04DashboardDenegarAccesoAUsuarioEstandar"/>
+    <testcase name="TC-DASH-04 | no expone password raíz" time="0.234" classname="DashboardAutApiDash04DashboardDenegarAccesoAUsuarioEstandar"/>
+    <testcase name="TC-DASH-04 | HTTP status" time="0.234" classname="DashboardAutApiDash04DashboardDenegarAccesoAUsuarioEstandar"/>
+    <testcase name="TC-DASH-04 | SLA &lt; 800 ms" time="0.234" classname="DashboardAutApiDash04DashboardDenegarAccesoAUsuarioEstandar"/>
+    <testcase name="TC-DASH-04 | Content-Type JSON" time="0.234" classname="DashboardAutApiDash04DashboardDenegarAccesoAUsuarioEstandar"/>
+    <testcase name="TC-DASH-04 | Error response is structured JSON" time="0.234" classname="DashboardAutApiDash04DashboardDenegarAccesoAUsuarioEstandar"/>
+  </testsuite>
+  <testsuite name="Dashboard / AUT-API-DASH-06 | Dashboard: campañas recientes y estados" id="1b26e1a9-1246-48c4-9bc8-5ce6ab0d8d6c" timestamp="2026-10-05T21:08:46.140Z" tests="11" failures="0" errors="0" time="0.187">
+    <testcase name="TC-DASH-06 | no expone password raíz" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 referencia de campañas | transporte" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 referencia de campañas | HTTP" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 referencia de campañas | Content-Type y SLA" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 referencia de campañas | contrato raíz" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 | cantidades por estado" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 | recientes existentes y disponibles" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 | HTTP status" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 | SLA &lt; 800 ms" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 | Content-Type JSON" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+    <testcase name="TC-DASH-06 | Dashboard contract" time="0.187" classname="DashboardAutApiDash06DashboardCampanasRecientesYEstados"/>
+  </testsuite>
+  <testsuite name="98 - Verificación de cuotas / AUT-API-AUTH-42 | Login excede cuota por IP" id="1f87c88c-8206-4e16-a92a-a71411e36f9e" timestamp="2026-10-05T21:08:46.140Z" tests="11" failures="0" errors="0" time="0.188">
+    <testcase name="TC-AUTH-42 | intento dentro de cuota" time="0.188" classname="98VerificacionDeCuotasAutApiAuth42LoginExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-42 | mensaje estructurado de primer nivel" time="0.188" classname="98VerificacionDeCuotasAutApiAuth42LoginExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-42 | no expone password raíz" time="0.188" classname="98VerificacionDeCuotasAutApiAuth42LoginExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-42 | HTTP" time="0.188" classname="98VerificacionDeCuotasAutApiAuth42LoginExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-42 | Content-Type y SLA" time="0.188" classname="98VerificacionDeCuotasAutApiAuth42LoginExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-42 | contrato raíz" time="0.188" classname="98VerificacionDeCuotasAutApiAuth42LoginExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-42 | Retry-After y sin tokens" time="0.188" classname="98VerificacionDeCuotasAutApiAuth42LoginExcedeCuotaPorIp"/>
+  </testsuite>
+  <testsuite name="98 - Verificación de cuotas / AUT-API-AUTH-43 | Recuperación excede cuota por IP" id="4bd170c9-446d-4a46-abab-8729542ec69a" timestamp="2026-10-05T21:08:46.140Z" tests="6" failures="0" errors="0" time="0.177">
+    <testcase name="TC-AUTH-43 | mensaje estructurado de primer nivel" time="0.177" classname="98VerificacionDeCuotasAutApiAuth43RecuperacionExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-43 | no expone password raíz" time="0.177" classname="98VerificacionDeCuotasAutApiAuth43RecuperacionExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-43 | HTTP" time="0.177" classname="98VerificacionDeCuotasAutApiAuth43RecuperacionExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-43 | Content-Type y SLA" time="0.177" classname="98VerificacionDeCuotasAutApiAuth43RecuperacionExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-43 | contrato raíz" time="0.177" classname="98VerificacionDeCuotasAutApiAuth43RecuperacionExcedeCuotaPorIp"/>
+    <testcase name="TC-AUTH-43 | Retry-After y sin tokens" time="0.177" classname="98VerificacionDeCuotasAutApiAuth43RecuperacionExcedeCuotaPorIp"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / AUT-API-CAMP-35 | Cancelación de inscripción propia vigente" id="dc7bb157-f2b2-4917-8bac-dad23a8256d6" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.219">
+    <testcase name="TC-CAMP-35 | HTTP status" time="0.219" classname="99CierreDeFlujosCrudAutApiCamp35CancelacionDeInscripcionPropiaVigente"/>
+    <testcase name="TC-CAMP-35 | SLA &lt; 800 ms" time="0.219" classname="99CierreDeFlujosCrudAutApiCamp35CancelacionDeInscripcionPropiaVigente"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | inscripción de usuario B TC-CAMP-36" id="c5640f74-77bf-4b81-ac4a-816429ef897a" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.226">
+    <testcase name="Cleanup otherEnrollmentId | already absent or HTTP 204" time="0.226" classname="99CierreDeFlujosCrudLimpiezaInscripcionDeUsuarioBTcCamp36"/>
+    <testcase name="Cleanup otherEnrollmentId | SLA &lt; 800 ms" time="0.226" classname="99CierreDeFlujosCrudLimpiezaInscripcionDeUsuarioBTcCamp36"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | inscripción auxiliar AUT-API-ENR-01" id="ad7974ac-71d7-4cef-9220-76f46c566b31" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.227">
+    <testcase name="Limpieza ENR-01 | HTTP 204" time="0.227" classname="99CierreDeFlujosCrudLimpiezaInscripcionAuxiliarAutApiEnr01"/>
+    <testcase name="Limpieza ENR-01 | SLA &lt; 800 ms" time="0.227" classname="99CierreDeFlujosCrudLimpiezaInscripcionAuxiliarAutApiEnr01"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | campaña dedicada AUT-API-ENR-01" id="d118b45b-6b55-4920-abe9-c8f441b6007b" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.220">
+    <testcase name="Limpieza campaña ENR-01 | HTTP 204" time="0.220" classname="99CierreDeFlujosCrudLimpiezaCampanaDedicadaAutApiEnr01"/>
+    <testcase name="Limpieza campaña ENR-01 | SLA &lt; 800 ms" time="0.220" classname="99CierreDeFlujosCrudLimpiezaCampanaDedicadaAutApiEnr01"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | campaña de cupo completo AUT-API-CAMP-18/27" id="4a63a325-0858-42c4-977c-71daee297942" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.233">
+    <testcase name="Limpieza campaña llena | HTTP 204" time="0.233" classname="99CierreDeFlujosCrudLimpiezaCampanaDeCupoCompletoAutApiCamp1827"/>
+    <testcase name="Limpieza campaña llena | SLA &lt; 800 ms" time="0.233" classname="99CierreDeFlujosCrudLimpiezaCampanaDeCupoCompletoAutApiCamp1827"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | campaña con último cupo AUT-API-CAMP-28" id="1b7a3eda-bb17-454b-b8fd-8b847f0604b3" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.221">
+    <testcase name="Limpieza último cupo | HTTP 204" time="0.221" classname="99CierreDeFlujosCrudLimpiezaCampanaConUltimoCupoAutApiCamp28"/>
+    <testcase name="Limpieza último cupo | SLA &lt; 800 ms" time="0.221" classname="99CierreDeFlujosCrudLimpiezaCampanaConUltimoCupoAutApiCamp28"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / AUT-API-CAMP-15 | Eliminación de campaña por administrador" id="50166d6f-0b24-4c85-adf9-4a597b270e50" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.215">
+    <testcase name="TC-CAMP-15 | HTTP status" time="0.215" classname="99CierreDeFlujosCrudAutApiCamp15EliminacionDeCampanaPorAdministrador"/>
+    <testcase name="TC-CAMP-15 | SLA &lt; 800 ms" time="0.215" classname="99CierreDeFlujosCrudAutApiCamp15EliminacionDeCampanaPorAdministrador"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / AUT-API-PERF-14 | Baja de usuario por administrador" id="c7cc468d-11a5-4e76-9616-e3ce1216306d" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.221">
+    <testcase name="TC-PERF-14 | HTTP status" time="0.221" classname="99CierreDeFlujosCrudAutApiPerf14BajaDeUsuarioPorAdministrador"/>
+    <testcase name="TC-PERF-14 | SLA &lt; 800 ms" time="0.221" classname="99CierreDeFlujosCrudAutApiPerf14BajaDeUsuarioPorAdministrador"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / AUT-API-PERF-12 | Actualización de password de perfil" id="c725278a-f107-41f5-9a03-30c8aa771091" timestamp="2026-10-05T21:08:46.140Z" tests="8" failures="1" errors="0" time="1.229">
+    <testcase name="TC-PERF-12 | no expone password raíz" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil"/>
+    <testcase name="TC-PERF-12 | modelo usuario de primer nivel" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil"/>
+    <testcase name="TC-PERF-12 | HTTP status" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil"/>
+    <testcase name="TC-PERF-12 | SLA &lt; 800 ms" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil">
+      <failure type="AssertionFailure" message="expected 1702 to be below 800">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: b1b390c1-3185-4515-8de8-3f142eb8a4d3.]]>
+        <![CDATA[Collection name: SangreYa - API REST (AUT-API) - DEPLOY QA (suite-owned cleanup).]]>
+        <![CDATA[Request name: 99 - Cierre de flujos CRUD / AUT-API-PERF-12 | Actualización de password de perfil.]]>
+        <![CDATA[Test description: TC-PERF-12 | SLA < 800 ms.]]>
+        <![CDATA[Error message: expected 1702 to be below 800.]]>
+        <![CDATA[Stacktrace: AssertionError: expected 1702 to be below 800
+   at Object.eval sandbox-script.js:2:138).]]>
+      </failure>
+    </testcase>
+    <testcase name="TC-PERF-12 | Content-Type JSON" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil"/>
+    <testcase name="TC-PERF-12 | User contract and no credential leakage" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil"/>
+    <testcase name="TC-PERF-12 | updated password allows login" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil"/>
+    <testcase name="TC-PERF-12 | old access token revoked" time="1.229" classname="99CierreDeFlujosCrudAutApiPerf12ActualizacionDePasswordDePerfil"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / AUT-API-PERF-13 | Baja de usuario propio" id="b405d4fc-2a36-4b13-a918-ddedccc7797b" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.216">
+    <testcase name="TC-PERF-13 | HTTP status" time="0.216" classname="99CierreDeFlujosCrudAutApiPerf13BajaDeUsuarioPropio"/>
+    <testcase name="TC-PERF-13 | SLA &lt; 800 ms" time="0.216" classname="99CierreDeFlujosCrudAutApiPerf13BajaDeUsuarioPropio"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | usuario menor de edad QA" id="5a8b6058-faf7-4e34-a7f3-8a678de31222" timestamp="2026-10-05T21:08:46.140Z" tests="3" failures="0" errors="0" time="0.235">
+    <testcase name="SETUP | renovar token vigente antes de Limpieza | usuario menor de edad QA" time="0.235" classname="99CierreDeFlujosCrudLimpiezaUsuarioMenorDeEdadQa"/>
+    <testcase name="Cleanup underAgeUserId | HTTP 204" time="0.235" classname="99CierreDeFlujosCrudLimpiezaUsuarioMenorDeEdadQa"/>
+    <testcase name="Cleanup underAgeUserId | SLA &lt; 800 ms" time="0.235" classname="99CierreDeFlujosCrudLimpiezaUsuarioMenorDeEdadQa"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | usuario mayor QA" id="930b9174-1634-4f5c-8431-02deafec19f1" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.233">
+    <testcase name="Cleanup overAgeUserId | HTTP 204" time="0.233" classname="99CierreDeFlujosCrudLimpiezaUsuarioMayorQa"/>
+    <testcase name="Cleanup overAgeUserId | SLA &lt; 800 ms" time="0.233" classname="99CierreDeFlujosCrudLimpiezaUsuarioMayorQa"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | usuarios qa+runId residuales" id="e1caea98-6058-41f3-88a1-68da8ec68935" timestamp="2026-10-05T21:08:46.140Z" tests="4" failures="0" errors="0" time="0.565">
+    <testcase name="Cleanup users sweep | GET HTTP 200" time="0.565" classname="99CierreDeFlujosCrudLimpiezaUsuariosQaRunIdResiduales"/>
+    <testcase name="Cleanup user runId 85" time="0.565" classname="99CierreDeFlujosCrudLimpiezaUsuariosQaRunIdResiduales"/>
+    <testcase name="Cleanup user runId 86" time="0.565" classname="99CierreDeFlujosCrudLimpiezaUsuariosQaRunIdResiduales"/>
+    <testcase name="Cleanup user runId 89" time="0.565" classname="99CierreDeFlujosCrudLimpiezaUsuariosQaRunIdResiduales"/>
+  </testsuite>
+  <testsuite name="99 - Cierre de flujos CRUD / Limpieza | campañas con runId residuales" id="27346181-636b-4060-b04e-668ea8f2bb15" timestamp="2026-10-05T21:08:46.140Z" tests="2" failures="0" errors="0" time="0.201">
+    <testcase name="Cleanup campaigns sweep | GET HTTP 200" time="0.201" classname="99CierreDeFlujosCrudLimpiezaCampanasConRunIdResiduales"/>
+    <testcase name="Cleanup campaigns sweep | no leftovers" time="0.201" classname="99CierreDeFlujosCrudLimpiezaCampanasConRunIdResiduales"/>
+  </testsuite>
+</testsuites>
