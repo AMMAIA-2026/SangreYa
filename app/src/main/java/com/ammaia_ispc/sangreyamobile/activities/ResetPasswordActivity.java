@@ -93,7 +93,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         saveButton.setEnabled(false);
 
         PasswordRecoveryRequest request =
-                new PasswordRecoveryRequest(email, newPassword);
+                new PasswordRecoveryRequest(email, newPassword, confirmPassword);
 
         ApiClient.getPlainApiService()
                 .recoverPassword(request)
@@ -128,9 +128,21 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             finish();
 
                         } else {
+                            String errorMessage = "No se pudo actualizar la contraseña.";
+                            if (response.errorBody() != null) {
+                                try {
+                                    String body = response.errorBody().string();
+                                    if (!TextUtils.isEmpty(body)) {
+                                        errorMessage = body;
+                                    }
+                                } catch (Exception ignored) {
+                                    // Si no se puede leer el cuerpo del error, se mantiene
+                                    // el mensaje genérico.
+                                }
+                            }
                             UiHelper.showToast(
                                     ResetPasswordActivity.this,
-                                    "No se pudo actualizar la contraseña.",
+                                    errorMessage,
                                     Toast.LENGTH_LONG
                             );
                         }
