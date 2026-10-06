@@ -92,11 +92,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etEmail" />
 
-    <!-- TODO(password-toggle): agregar un ImageButton id="btnTogglePassword" sobre el
-         extremo derecho de etPassword, con contentDescription="@string/show_password".
-         Agregar paddingEnd="48dp" a etPassword y constraints End/Top/Bottom vinculadas
-         a etPassword. Luego enlazarlo en LoginActivity y llamar
-         UiHelper.configurePasswordToggle(etPassword, btnTogglePassword). -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="0dp"
@@ -106,13 +101,26 @@
         android:hint="@string/hint_password"
         android:inputType="textPassword"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingEnd="48dp"
         android:textColor="@color/primary_text"
         android:textColorHint="@color/secondary_text"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvLabelPassword" />
+
+    <ImageButton
+        android:id="@+id/btnTogglePassword"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="4dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/show_password"
+        android:src="@android:drawable/ic_menu_view"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="@id/etPassword"
+        app:layout_constraintTop_toTopOf="@id/etPassword"
+        app:layout_constraintBottom_toBottomOf="@id/etPassword" />
 
     <Button
         android:id="@+id/btnIngresar"
