@@ -21,8 +21,8 @@ import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
 
 public class ContactActivity extends AppCompatActivity {
 
-    private static final int MAX_NOMBRE_LENGTH = 20;
-    private static final int MAX_MENSAJE_LENGTH = 500;
+    private static final int MAX_NOMBRE_LENGTH = ContactRequest.MAX_NOMBRE_LENGTH;
+    private static final int MAX_MENSAJE_LENGTH = ContactRequest.MAX_MENSAJE_LENGTH;
 
     private EditText etNombre, etEmail, etMensaje;
     private Spinner spinnerMotivo;

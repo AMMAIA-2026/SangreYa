@@ -14,6 +14,7 @@ import com.ammaia_ispc.sangreyamobile.model.Enrollment;
 import com.ammaia_ispc.sangreyamobile.model.EnrollmentUser;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.ammaia_ispc.sangreyamobile.model.MyEnrollments;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -132,8 +133,12 @@ public final class CampaignApiRepository {
             Context context,
             int campaignId,
             Callback<Integer> callback) {
-        request(ApiClient.getApiService(context).enrollInCampaign(campaignId), response ->
-                new JSONObject(response).getInt("totalInscriptos"), callback);
+        enrollInCampaign(ApiClient.getApiService(context), campaignId, callback);
+    }
+
+    static void enrollInCampaign(ApiService api, int campaignId, Callback<Integer> callback) {
+        request(api.enrollInCampaign(campaignId), response -> JsonParser.parseString(response)
+                .getAsJsonObject().get("totalInscriptos").getAsInt(), callback);
     }
 
     public static void getMyEnrollments(
