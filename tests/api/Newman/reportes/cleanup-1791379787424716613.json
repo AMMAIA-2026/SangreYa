@@ -3,8 +3,22 @@
     "baseUrl":  "https://sangreyaispc.pythonanywhere.com",
     "collectionSha256":  "A228C49959E3DF48296EB85EA40C3BBE7A9B7340A24FFBCEFEEC3C3024BC184F",
     "operationsSha256":  "CD4340A6E9EDF9E3AB8C9B7544CB57880B7AC7A1D1D9A5C5423722F4B0D322C2",
-    "cleanupComplete":  false,
+    "cleanupComplete":  true,
     "blocked":  [
                     "TC-DASH-05: requiere limpieza completa de datos de negocio y ejecuciÃ³n separada"
-                ]
+                ],
+    "cleanupResult":  {
+                          "runId":  "1791379787424716613",
+                          "deleted":  {
+                                          "contacts":  4,
+                                          "campaigns":  0,
+                                          "users":  1,
+                                          "healthCenters":  0
+                                      },
+                          "related":  {
+                                          "token_blacklist_blacklistedtoken":  5
+                                      },
+                          "hashInspectionAUTH14":  true,
+                          "cleanupComplete":  true
+                      }
 }
