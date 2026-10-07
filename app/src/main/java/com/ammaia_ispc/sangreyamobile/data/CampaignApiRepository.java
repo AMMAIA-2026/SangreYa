@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiConfig;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
 import com.ammaia_ispc.sangreyamobile.model.Enrollment;
@@ -103,7 +104,11 @@ public final class CampaignApiRepository {
     public static void getCampaigns(
             Context context,
             Callback<List<Campaign>> callback) {
-        request(ApiClient.getApiService(context).getCampaigns(), response -> {
+        getCampaigns(ApiClient.getApiService(context), callback);
+    }
+
+    static void getCampaigns(ApiService api, Callback<List<Campaign>> callback) {
+        request(api.getCampaigns(), response -> {
             JSONArray jsonArray = new JSONArray(response);
             List<Campaign> campaigns = new ArrayList<>();
 
