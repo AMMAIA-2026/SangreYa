@@ -29,7 +29,6 @@ public final class ApiClient {
         return retrofit.create(ApiService.class);
     }
 
-
     public static ApiService getPlainApiService() {
         if (plainRetrofit == null) {
             plainRetrofit = new Retrofit.Builder()
@@ -38,5 +37,14 @@ public final class ApiClient {
                     .build();
         }
         return plainRetrofit.create(ApiService.class);
+    }
+
+    public static ApiService createApiService(String baseUrl, OkHttpClient client) {
+        Retrofit customRetrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return customRetrofit.create(ApiService.class);
     }
 }

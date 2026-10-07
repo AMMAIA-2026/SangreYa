@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.AuthApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private Button btnIngresar;
+    private AuthApiRepository authRepository;
 
     private TextView tvRegistrate;
     private TextView tvOlvidasteContrasena;
@@ -57,13 +59,19 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnIngresar = findViewById(R.id.btnIngresar);
+        authRepository = new AuthApiRepository(ApiClient.getPlainApiService(),
+                new AuthApiRepository.SessionStore() {
+                    @Override
+                    public void save(LoginResponse response) {
+                        SessionManager.saveSession(LoginActivity.this,
+                                response.getAccess(), response.getRefresh(), response.getUser());
+                    }
 
-        // TODO(password-toggle): agregar el toggle de contraseña en LoginActivity.
-        // 1. En activity_login.xml, agregar un ImageButton con id btnTogglePassword,
-        //    ubicado sobre el extremo derecho de etPassword (como hace register.xml).
-        // 2. Declarar ImageButton btnTogglePassword y enlazarlo después de etPassword.
-        // 3. Llamar después de findViewById:
-        //    UiHelper.configurePasswordToggle(etPassword, btnTogglePassword);
+                    @Override
+                    public void clear() {
+                        SessionManager.clearSession(LoginActivity.this);
+                    }
+                });
 
         tvRegistrate = findViewById(R.id.tvRegistrate);
         tvOlvidasteContrasena = findViewById(R.id.tvOlvidasteContrasena);
@@ -111,19 +119,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private void performLogin(String email, String password) {
         setLoading(true);
-        ApiClient.getApiService(this).login(new LoginRequest(email, password)).enqueue(new Callback<LoginResponse>() {
+        authRepository.login(new LoginRequest(email, password), new AuthApiRepository.LoginCallback() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onSuccess(LoginResponse response) {
                 setLoading(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    handleLoginSuccess(response.body());
-                } else {
-                    handleLoginError(response.errorBody());
-                }
+                handleLoginSuccess(response);
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onHttpError(int statusCode, ResponseBody errorBody) {
+                setLoading(false);
+                handleLoginError(errorBody);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
                 setLoading(false);
                 showMessage(getString(R.string.error_connection));
             }
@@ -131,7 +141,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void handleLoginSuccess(LoginResponse body) {
-        SessionManager.saveSession(this, body.getAccess(), body.getRefresh(), body.getUser());
         setLoading(true);
         ApiClient.getApiService(this)
                 .getUserProfile(body.getUser().getId())
