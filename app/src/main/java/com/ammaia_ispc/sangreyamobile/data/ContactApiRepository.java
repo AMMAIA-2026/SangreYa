@@ -35,7 +35,13 @@ public final class ContactApiRepository {
             ContactRequest request,
             ContactCallback callback) {
 
-        ApiService api = ApiClient.getApiService(context);
+        sendContact(ApiClient.getApiService(context), request, callback);
+    }
+
+    static boolean sendContact(ApiService api, ContactRequest request, ContactCallback callback) {
+        if (!request.isValid()) {
+            return false;
+        }
 
         api.sendContact(request).enqueue(new retrofit2.Callback<Void>() {
             @Override
@@ -124,5 +130,6 @@ public final class ContactApiRepository {
                 });
             }
         });
+        return true;
     }
 }
