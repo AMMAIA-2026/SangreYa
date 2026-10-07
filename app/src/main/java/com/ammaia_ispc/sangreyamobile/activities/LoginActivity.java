@@ -19,7 +19,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
-import com.ammaia_ispc.sangreyamobile.model.LoginRequest;
+import com.ammaia_ispc.sangreyamobile.model.LoginViewModel;
 import com.ammaia_ispc.sangreyamobile.model.LoginResponse;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 import android.util.Log;
@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private ImageButton btnTogglePassword;
     private Button btnIngresar;
-    private AuthApiRepository authRepository;
+    private LoginViewModel loginViewModel;
 
     private TextView tvRegistrate;
     private TextView tvOlvidasteContrasena;
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnIngresar = findViewById(R.id.btnIngresar);
-        authRepository = new AuthApiRepository(ApiClient.getPlainApiService(),
+        loginViewModel = new LoginViewModel(new AuthApiRepository(ApiClient.getPlainApiService(),
                 new AuthApiRepository.SessionStore() {
                     @Override
                     public void save(LoginResponse response) {
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void clear() {
                         SessionManager.clearSession(LoginActivity.this);
                     }
-                });
+                }));
 
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         UiHelper.configurePasswordToggle(etPassword, btnTogglePassword);
@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString();
 
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+        if (LoginViewModel.hasEmptyFields(email, password)) {
             showMessage(getString(R.string.error_required_fields));
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             showMessage(getString(R.string.error_invalid_email));
@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void performLogin(String email, String password) {
         setLoading(true);
-        authRepository.login(new LoginRequest(email, password), new AuthApiRepository.LoginCallback() {
+        loginViewModel.login(email, password, new AuthApiRepository.LoginCallback() {
             @Override
             public void onSuccess(LoginResponse response) {
                 setLoading(false);
