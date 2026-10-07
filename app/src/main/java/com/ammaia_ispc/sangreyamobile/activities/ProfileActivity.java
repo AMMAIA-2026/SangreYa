@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,15 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.UserApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
-import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ProfileValidator;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
 import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
+import com.ammaia_ispc.sangreyamobile.model.ProfileViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -64,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String originalBirthDate;
     private int userId;
     private boolean adminEditMode;
+    private ProfileViewModel profileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,22 @@ public class ProfileActivity extends AppCompatActivity {
             UiHelper.showMessage(messageView, R.string.profile_session_error);
             return;
         }
+
+        UserApiRepository repository = new UserApiRepository(ApiClient.getApiService(this));
+        ProfileViewModel.SessionStore sessionStore = new ProfileViewModel.SessionStore() {
+            @Override
+            public int getUserId() {
+                return SessionManager.getUserId(ProfileActivity.this);
+            }
+
+            @Override
+            public void updateUserName(String name) {
+                SessionManager.updateUserName(ProfileActivity.this, name);
+            }
+        };
+        profileViewModel = adminEditMode
+                ? new ProfileViewModel(repository, sessionStore, userId)
+                : new ProfileViewModel(repository, sessionStore);
 
         UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);
         ApiClient.getApiService(this).getUserProfile(userId).enqueue(new Callback<AuthUser>() {
@@ -231,46 +249,40 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void submitProfile(UserUpdateRequest request) {
-        UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);
-
-        ApiClient.getApiService(this).updateUserProfile(userId, request)
-                .enqueue(new Callback<AuthUser>() {
-                    @Override
-                    public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
-                        UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
-                        if (response.isSuccessful() && response.body() != null) {
-                            populateProfile(response.body());
-                            if (userId == SessionManager.getUserId(ProfileActivity.this)) {
-                                SessionManager.updateUserName(
-                                        ProfileActivity.this,
-                                        response.body().getDisplayName());
-                                configureNavigation();
-                            }
-                            Toast.makeText(
-                                    ProfileActivity.this,
-                                    adminEditMode
-                                            ? R.string.admin_user_updated_message
-                                            : R.string.profile_updated_message,
-                                    Toast.LENGTH_SHORT).show();
-                            if (adminEditMode) {
-                                setResult(RESULT_OK);
-                                finish();
-                            }
-                        } else {
-                            handleResponseError(response, true);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AuthUser> call, Throwable throwable) {
-                        UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
-                        UiHelper.showMessage(
-                                messageView,
-                                adminEditMode
-                                        ? R.string.admin_user_update_error
-                                        : R.string.profile_update_error);
-                    }
-                });
+        if (profileViewModel == null) {
+            UiHelper.showMessage(messageView, R.string.profile_session_error);
+            return;
+        }
+        profileViewModel.save(request, state -> {
+            UiHelper.setLoading(loadingIndicator, profileForm, state.loading, saveButton);
+            if (state.loading) {
+                return;
+            }
+            if (state.isSuccess()) {
+                populateProfile(state.response.body());
+                if (userId == SessionManager.getUserId(ProfileActivity.this)) {
+                    configureNavigation();
+                }
+                Toast.makeText(
+                        ProfileActivity.this,
+                        adminEditMode
+                                ? R.string.admin_user_updated_message
+                                : R.string.profile_updated_message,
+                        Toast.LENGTH_SHORT).show();
+                if (adminEditMode) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            } else if (state.response != null) {
+                handleResponseError(state.response, true);
+            } else {
+                UiHelper.showMessage(
+                        messageView,
+                        adminEditMode
+                                ? R.string.admin_user_update_error
+                                : R.string.profile_update_error);
+            }
+        });
     }
 
     private boolean validateForm() {
@@ -286,7 +298,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(email)) {
             return showFieldError(emailInput, R.string.profile_required_field);
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!ProfileValidator.isValidEmail(email)) {
             return showFieldError(emailInput, R.string.profile_email_invalid);
         }
 
@@ -294,7 +306,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(dni)) {
             return showFieldError(dniInput, R.string.profile_required_field);
         }
-        if (!dni.matches("[0-9]{7,8}")) {
+        if (!ProfileValidator.isValidDni(dni)) {
             return showFieldError(dniInput, R.string.profile_dni_invalid);
         }
 
