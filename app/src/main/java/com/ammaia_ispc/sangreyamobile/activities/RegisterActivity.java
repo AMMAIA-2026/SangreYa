@@ -174,15 +174,14 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // DNI válido
-        if (dni.length() < 7 || dni.length() > 8) {
-            UiHelper.showToast(
-                    this,
-                    "Ingresá un DNI válido",
-                    Toast.LENGTH_SHORT
-            );
+
+        // DNI válido: exactamente 7 u 8 dígitos
+        if (!dni.matches("\\d{7,8}")) {
+            etDni.setError("El DNI debe tener 7 u 8 dígitos numéricos");
+            etDni.requestFocus();
             return;
         }
+
 
         // Email válido
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
