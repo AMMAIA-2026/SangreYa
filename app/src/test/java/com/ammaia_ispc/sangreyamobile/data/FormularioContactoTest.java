@@ -1,115 +1,78 @@
 package com.ammaia_ispc.sangreyamobile.data;
 
-import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
+import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Proxy;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.mockwebserver.Dispatcher;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
+import retrofit2.Call;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
-public class EnrollmentApiTest {
-    private MockWebServer server;
-    private OkHttpClient client;
-    private ApiService api;
-    private volatile String responseContentType;
-
-    @Before
-    public void setUp() throws IOException {
-        server = new MockWebServer();
-        server.setDispatcher(new Dispatcher() {
-            @Override
-            public MockResponse dispatch(RecordedRequest request) {
-                if ("POST".equals(request.getMethod())) {
-                    if ("/inscripciones/campanias/7/".equals(request.getPath())) {
-                        return new MockResponse().setResponseCode(201)
-                                .setHeader("Content-Type", "application/json; charset=utf-8")
-                                .setBody("{\"totalInscriptos\":3}");
-                    }
-                    if ("/inscripciones/campanias/8/".equals(request.getPath())) {
-                        return new MockResponse().setResponseCode(200)
-                                .setHeader("Content-Type", "application/json; charset=utf-8")
-                                .setBody("");
-                    }
-                }
-                return new MockResponse().setResponseCode(404);
-            }
-        });
-        server.start(InetAddress.getByAddress(new byte[]{127, 0, 0, 1}), 0);
-        HttpUrl localUrl = server.url("/").newBuilder().host("127.0.0.1").build();
-        client = new OkHttpClient.Builder()
-                .proxy(Proxy.NO_PROXY)
-                .followRedirects(false)
-                .followSslRedirects(false)
-                .retryOnConnectionFailure(false)
-                .callTimeout(3, TimeUnit.SECONDS)
-                .addInterceptor(chain -> {
-                    HttpUrl url = chain.request().url();
-                    if (!"127.0.0.1".equals(url.host()) || url.port() != localUrl.port()) {
-                        throw new IOException("El test solo permite el MockWebServer local");
-                    }
-                    okhttp3.Response response = chain.proceed(chain.request());
-                    responseContentType = response.header("Content-Type");
-                    return response;
-                })
-                .build();
-        api = ApiClient.createApiService(localUrl.toString(), client);
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        if (client != null) {
-            client.dispatcher().cancelAll();
-            client.dispatcher().executorService().shutdownNow();
-            client.connectionPool().evictAll();
-        }
-        if (server != null) {
-            server.shutdown();
-        }
-    }
-
-    // TC-NET-05
+public class FormularioContactoTest {
+    // TC-UNIT-01
     @Test
     @SuppressWarnings("unchecked")
-    public void bodyVacioYContentType() throws Exception {
+    public void validoEnviaSolicitud() {
+        // Arrange: los máximos permitidos también son válidos.
+        String nombre = text(20);
+        String mensaje = text(500);
+        ContactRequest request = new ContactRequest(nombre, "ana@example.test", "Consulta general", mensaje);
+        ApiService api = mock(ApiService.class);
+        Call<Void> call = mock(Call.class);
+        ContactApiRepository.ContactCallback callback = mock(ContactApiRepository.ContactCallback.class);
+        when(api.sendContact(any())).thenReturn(call);
+        ArgumentCaptor<ContactRequest> sent = ArgumentCaptor.forClass(ContactRequest.class);
+
+        // Act
+        ContactApiRepository.sendContact(api, request, callback);
+
+        // Assert
+        verify(api).sendContact(sent.capture());
+        assertEquals(JsonParser.parseString("{\"nombre_completo\":\"" + nombre
+                        + "\",\"correo_electronico\":\"ana@example.test\",\"motivo\":\"Consulta general\","
+                        + "\"mensaje\":\"" + mensaje + "\"}"),
+                new Gson().toJsonTree(sent.getValue()));
+        verify(call).enqueue(any());
+    }
+
+    // TC-UNIT-02
+    @Test
+    public void rechazaObligatoriosYLimites() {
         // Arrange
-        CampaignApiRepository.Callback<Integer> callback = mock(CampaignApiRepository.Callback.class);
+        ApiService api = mock(ApiService.class);
+        ContactApiRepository.ContactCallback callback = mock(ContactApiRepository.ContactCallback.class);
+        ContactRequest[] invalid = {
+                new ContactRequest(" ", "ana@example.test", "Consulta general", "Consulta de prueba"),
+                new ContactRequest("Ana", "", "Consulta general", "Consulta de prueba"),
+                new ContactRequest("Ana", "ana@example.test", "", "Consulta de prueba"),
+                new ContactRequest("Ana", "ana@example.test", "Consulta general", ""),
+                new ContactRequest(text(21), "ana@example.test", "Consulta general", "Consulta de prueba"),
+                new ContactRequest("Ana", "ana@example.test", "Consulta general", text(501)),
+                new ContactRequest("Ana", "sin-arroba", "Consulta general", "Consulta de prueba")
+        };
 
-        // Act: inscripción con POST sin cuerpo y respuesta JSON.
-        CampaignApiRepository.enrollInCampaign(api, 7, callback);
+        // Act
+        boolean anyAccepted = false;
+        for (ContactRequest request : invalid) {
+            anyAccepted |= ContactApiRepository.sendContact(api, request, callback);
+        }
 
         // Assert
-        verify(callback, timeout(5000)).onSuccess(3);
-        assertEquals("application/json; charset=utf-8", responseContentType);
-        RecordedRequest request = server.takeRequest(1, TimeUnit.SECONDS);
-        assertEquals("POST", request.getMethod());
-        assertEquals("/inscripciones/campanias/7/", request.getPath());
-        assertEquals(0L, request.getBodySize());
+        assertFalse(anyAccepted);
+        verifyNoInteractions(api, callback);
+    }
 
-        // Act: una respuesta vacía debe llegar al callback de error sin crash.
-        CampaignApiRepository.enrollInCampaign(api, 8, callback);
-
-        // Assert
-        verify(callback, timeout(5000)).onError(any(Exception.class));
-        verifyNoMoreInteractions(callback);
-        assertEquals(2, server.getRequestCount());
+    private String text(int length) {
+        return new String(new char[length]).replace('\0', 'A');
     }
 }
