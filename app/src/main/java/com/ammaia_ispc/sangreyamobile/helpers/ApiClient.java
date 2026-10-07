@@ -25,7 +25,6 @@ public final class ApiClient {
         return retrofit.create(ApiService.class);
     }
 
-
     public static ApiService getPlainApiService() {
         if (plainRetrofit == null) {
             plainRetrofit = createRetrofit(ApiConfig.BASE_URL, new OkHttpClient());

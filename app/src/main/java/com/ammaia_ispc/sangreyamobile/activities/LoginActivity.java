@@ -62,7 +62,19 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnIngresar = findViewById(R.id.btnIngresar);
-        authRepository = new AuthApiRepository(ApiClient.getApiService(this));
+        authRepository = new AuthApiRepository(ApiClient.getPlainApiService(),
+                new AuthApiRepository.SessionStore() {
+                    @Override
+                    public void save(LoginResponse response) {
+                        SessionManager.saveSession(LoginActivity.this,
+                                response.getAccess(), response.getRefresh(), response.getUser());
+                    }
+
+                    @Override
+                    public void clear() {
+                        SessionManager.clearSession(LoginActivity.this);
+                    }
+                });
 
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         UiHelper.configurePasswordToggle(etPassword, btnTogglePassword);
@@ -135,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void handleLoginSuccess(LoginResponse body) {
-        SessionManager.saveSession(this, body.getAccess(), body.getRefresh(), body.getUser());
         setLoading(true);
         ApiClient.getApiService(this)
                 .getUserProfile(body.getUser().getId())
