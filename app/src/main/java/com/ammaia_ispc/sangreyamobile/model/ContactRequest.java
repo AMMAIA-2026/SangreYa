@@ -1,6 +1,13 @@
 package com.ammaia_ispc.sangreyamobile.model;
 
+import java.util.regex.Pattern;
+
 public class ContactRequest {
+    public static final int MAX_NOMBRE_LENGTH = 20;
+    public static final int MAX_MENSAJE_LENGTH = 500;
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9+._%\\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}"
+                    + "(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25})+");
 
     private final String nombre_completo;
     private final String correo_electronico;
@@ -29,5 +36,16 @@ public class ContactRequest {
 
     public String getMensaje() {
         return mensaje;
+    }
+
+    public boolean isValid() {
+        return present(nombre_completo) && nombre_completo.length() <= MAX_NOMBRE_LENGTH
+                && present(correo_electronico) && EMAIL_PATTERN.matcher(correo_electronico).matches()
+                && present(motivo)
+                && present(mensaje) && mensaje.length() <= MAX_MENSAJE_LENGTH;
+    }
+
+    private static boolean present(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }
