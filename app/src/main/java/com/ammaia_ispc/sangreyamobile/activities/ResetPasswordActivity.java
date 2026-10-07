@@ -13,23 +13,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.PasswordValidator;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryRequest;
 import com.ammaia_ispc.sangreyamobile.model.PasswordRecoveryResponse;
-
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ResetPasswordActivity extends AppCompatActivity {
-
-    private static final Pattern PASSWORD_PATTERN =
-            Pattern.compile(
-                    "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])" +
-                            "(?=.*[^A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\\s]).{10,}$"
-            );
 
     private EditText newPasswordInput;
     private EditText confirmPasswordInput;
@@ -48,14 +41,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.saveButton);
         backButton = findViewById(R.id.backButton);
 
-        // TODO(password-toggle): agregar toggles a los dos campos de ResetPasswordActivity.
-        // 1. En activity_reset_password.xml, agregar ImageButton btnToggleNewPassword
-        //    junto a newPasswordInput y btnToggleConfirmPassword junto a confirmPasswordInput.
-        // 2. Declarar y enlazar ambos ImageButton en esta Activity.
-        // 3. Llamar después de findViewById:
-        //    UiHelper.configurePasswordToggle(newPasswordInput, btnToggleNewPassword);
-        //    UiHelper.configurePasswordToggle(confirmPasswordInput, btnToggleConfirmPassword);
-
         email = getIntent().getStringExtra(ExtraKeys.EXTRA_EMAIL);
 
         backButton.setOnClickListener(v -> finish());
@@ -66,15 +51,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
         String newPassword = newPasswordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
 
-        if (TextUtils.isEmpty(newPassword)
-                || !PASSWORD_PATTERN.matcher(newPassword).matches()) {
+        if (!PasswordValidator.isValid(newPassword)) {
 
             newPasswordInput.setError(getString(R.string.error_weak_password));
             newPasswordInput.requestFocus();
             return;
         }
 
-        if (!newPassword.equals(confirmPassword)) {
+        if (!PasswordValidator.matchesConfirmation(newPassword, confirmPassword)) {
             confirmPasswordInput.setError(getString(R.string.error_password_mismatch));
             confirmPasswordInput.requestFocus();
             return;
