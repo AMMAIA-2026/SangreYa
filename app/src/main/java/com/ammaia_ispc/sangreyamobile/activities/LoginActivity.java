@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.LoginRequest;
 import com.ammaia_ispc.sangreyamobile.model.LoginResponse;
 import com.ammaia_ispc.sangreyamobile.model.AuthUser;
@@ -43,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail;
     private EditText etPassword;
+    private ImageButton btnTogglePassword;
     private Button btnIngresar;
     private AuthApiRepository authRepository;
 
@@ -72,6 +75,9 @@ public class LoginActivity extends AppCompatActivity {
                         SessionManager.clearSession(LoginActivity.this);
                     }
                 });
+
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
+        UiHelper.configurePasswordToggle(etPassword, btnTogglePassword);
 
         tvRegistrate = findViewById(R.id.tvRegistrate);
         tvOlvidasteContrasena = findViewById(R.id.tvOlvidasteContrasena);
