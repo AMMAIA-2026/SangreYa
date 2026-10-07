@@ -1,5 +1,101 @@
 /* The runner embeds this expression in the v2.1 runtime collection. */
 ({
+  registeredUser(pm, payload, label, done) {
+    // RegistroView returns a success message, not the created user's ID.
+    // Resolve only the uniquely named fixture through the authenticated admin list.
+    this.request(pm, 'GET', '/usuarios/', undefined, pm.variables.get('adminAccessToken'), (error, response) => {
+      let users;
+      try { users = response && response.json(); } catch (_) { users = null; }
+      const matches = Array.isArray(users)
+        ? users.filter(user => user.email === payload.email && user.username === payload.username)
+        : [];
+      const user = matches.length === 1 ? matches[0] : null;
+      pm.test(label + ' | recuperar ID de cuenta creada', () => {
+        pm.expect(error).to.equal(null);
+        pm.expect(response && response.code).to.equal(200);
+        pm.expect(users).to.be.an('array');
+        pm.expect(matches).to.have.length(1);
+        pm.expect(user && user.id).to.be.a('number').and.greaterThan(0);
+      });
+      done(!error && response && response.code === 200 && user && Number.isFinite(user.id) && user.id > 0 ? user : null);
+    });
+  },
+  quotaHistory(pm, key, windowMs, now, marginMs = 2000) {
+    const stored = pm.collectionVariables.get(key);
+    const history = JSON.parse(stored === undefined ? (pm.variables.get(key) || '[]') : stored);
+    if (!Array.isArray(history)) throw new Error('Historial de cuota QA inválido: ' + key);
+    return history.filter(time => Number.isFinite(time) && now - time < windowMs + marginMs)
+      .sort((a, b) => a - b);
+  },
+  waitUntil(pm, label, readyAt, done) {
+    // A single timer chain: no polling requests, no interval left running in Newman.
+    const tick = () => {
+      const remainingMs = Math.max(0, readyAt - Date.now());
+      if (remainingMs === 0) {
+        console.log(label + ' | espera finalizada; reanudando.');
+        done();
+        return;
+      }
+      console.log(label + ' | faltan ' + Math.ceil(remainingMs / 1000)
+        + ' s; reanudación prevista ' + new Date(readyAt).toISOString() + ' (UTC).');
+      setTimeout(tick, Math.min(remainingMs, 30000));
+    };
+    tick();
+  },
+  reserve(pm, path, done) {
+    const policy = path === '/api/token/' ? ['__newmanLoginAttemptTimes', 5, 900000]
+      : path === '/usuarios/recuperar-password/' ? ['__newmanRecoveryAttemptTimes', 3, 3600000] : null;
+    if (!policy) { done(); return; }
+    const [key, limit, windowMs] = policy;
+    const now = Date.now();
+    const history = this.quotaHistory(pm, key, windowMs, now);
+    pm.collectionVariables.set(key, JSON.stringify(history)); pm.environment.set(key, JSON.stringify(history));
+    if (history.length >= limit) {
+      // Wait only until enough entries expire to leave one slot, not a fresh full window.
+      const readyAt = history[history.length - limit] + windowMs + 2000;
+      const label = 'Cuota QA ' + key + ' | ' + (pm.info.requestName || 'llamada adicional') + ' | ' + path;
+      this.waitUntil(pm, label, readyAt, () => this.reserve(pm, path, done));
+      return;
+    }
+    history.push(now);
+    pm.collectionVariables.set(key, JSON.stringify(history)); pm.environment.set(key, JSON.stringify(history));
+    done();
+  },
+  request(pm, method, path, payload, token, done, preserveToken = false) {
+    const refreshKeys = { adminAccessToken: 'adminRefreshToken', userAccessToken: 'refreshToken', secondUserAccessToken: 'secondUserRefreshToken' };
+    const key = !preserveToken && token && Object.keys(refreshKeys).find(name => pm.variables.get(name) === token);
+    let expiry;
+    try { expiry = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).exp; } catch (_) { expiry = null; }
+    if (key && expiry && expiry * 1000 - Date.now() < 300000 && pm.variables.get(refreshKeys[key])) {
+      this.request(pm, 'POST', '/api/token/refresh/', { refresh: pm.variables.get(refreshKeys[key]) }, null, (error, response) => {
+        pm.test('SETUP | renovar autorización para llamada adicional', () => {
+          pm.expect(error).to.equal(null); pm.expect(response.code).to.equal(200);
+          pm.expect(response.json().access).to.be.a('string').and.not.empty;
+        });
+        if (error || response.code !== 200) { done(error || new Error('No se renovó la autorización'), response); return; }
+        const body = response.json();
+        pm.collectionVariables.set(key, body.access); pm.environment.set(key, body.access);
+        if (body.refresh) { pm.collectionVariables.set(refreshKeys[key], body.refresh); pm.environment.set(refreshKeys[key], body.refresh); }
+        this.request(pm, method, path, payload, body.access, done, true);
+      });
+      return;
+    }
+    const dispatch = () => {
+      const request = { url: pm.variables.replaceIn('{{baseUrl}}') + path, method, header: { 'Content-Type': 'application/json' } };
+      if (token) request.header.Authorization = 'Bearer ' + token;
+      if (payload !== undefined) request.body = { mode: 'raw', raw: JSON.stringify(payload) };
+      pm.sendRequest(request, (error, response) => {
+        if (!error && response.code !== 429 && method === 'POST' && ['/api/token/', '/usuarios/recuperar-password/'].includes(path)) {
+          const key = path === '/api/token/' ? '__newmanLoginAttemptTimes' : '__newmanRecoveryAttemptTimes';
+          const history = JSON.parse(pm.variables.get(key) || '[]');
+          if (history.length) history[history.length - 1] = Date.now();
+          pm.collectionVariables.set(key, JSON.stringify(history)); pm.environment.set(key, JSON.stringify(history));
+        }
+        done(error, response);
+      });
+    };
+    if (method === 'POST') this.reserve(pm, path, dispatch); else dispatch();
+  },
   pre(pm) {
     const name = pm.info.requestName || '';
     const id = (name.match(/^AUT-API-([A-Z]+-\d+)/) || [])[1];
@@ -8,6 +104,88 @@
       pm.environment.set(key, value);
     };
     const runId = pm.variables.get('runId');
+    const registration = suffix => ({ username: 'qa_' + runId + '_' + suffix, email: 'qa+' + suffix + '-' + runId + '@example.test', password: pm.variables.get('testPassword'), dni: String(10000000 + Math.floor(Math.random() * 89999999)), nombre: 'Laura', apellido: 'QA', fecha_nacimiento: '1990-04-15' });
+    const newCases = ['AUTH-47', 'AUTH-48', 'AUTH-49', 'AUTH-50', 'AUTH-51', 'PERF-22', 'INS-04', 'INS-05'];
+    if (newCases.includes(id) && !runId) {
+      console.warn('BLOCKED TC-' + id + ': ejecutar la preparación para obtener runId.'); pm.execution.skipRequest(); return;
+    }
+    const prerequisites = {
+      'AUTH-47': ['testPassword', 'adminAccessToken'], 'AUTH-48': ['testPassword', 'qaStandardRole'],
+      'AUTH-49': ['testPassword', 'adminAccessToken'], 'AUTH-50': ['testPassword', 'adminAccessToken'],
+      'AUTH-51': ['testPassword', 'adminAccessToken'],
+      'PERF-22': ['userAccessToken', 'otherUserId', 'adminAccessToken'],
+      'INS-05': ['enrollmentId', 'userAccessToken']
+    };
+    const missing = (prerequisites[id] || []).filter(key => !pm.variables.get(key));
+    if (missing.length) {
+      const reason = 'BLOCKED TC-' + id + ': faltan fixtures ' + missing.join(', ');
+      put('blocked' + id, reason); console.warn(reason); pm.execution.skipRequest(); return;
+    }
+    if (['AUTH-48', 'AUTH-49', 'AUTH-51'].includes(id)) {
+      const payload = registration(id.toLowerCase());
+      if (id === 'AUTH-48') { payload.rol = 'Administrador'; put('auth48Email', payload.email); }
+      if (id === 'AUTH-49') { payload.fecha_nacimiento = '2026-02-30'; put('auth49Email', payload.email); }
+      if (id === 'AUTH-51') payload.nombre = 'N'.repeat(24);
+      put(id.replace('-', '').toLowerCase() + 'Payload', JSON.stringify(payload));
+    }
+    if (id === 'AUTH-47' || id === 'AUTH-50') {
+      const payload = registration(id.toLowerCase());
+      const prefix = id === 'AUTH-47' ? 'expiry' : 'auth50';
+      put(prefix + 'Email', payload.email); put(prefix + 'Password', payload.password);
+      this.request(pm, 'POST', '/usuarios/registro/', payload, null, (error, response) => {
+        pm.test('TC-' + id + ' | preparar cuenta descartable', () => {
+          pm.expect(error).to.equal(null); pm.expect(response.code).to.equal(201);
+          pm.expect(response.json().message).to.be.a('string').and.not.empty;
+        });
+        if (error || !response || response.code !== 201) { pm.execution.skipRequest(); return; }
+        this.registeredUser(pm, payload, 'TC-' + id, user => {
+          if (!user) { pm.execution.skipRequest(); return; }
+          put(prefix + 'UserId', String(user.id));
+          if (id === 'AUTH-50') return;
+          this.request(pm, 'POST', '/api/token/', { email: payload.email, password: payload.password }, null, (loginError, login) => {
+            pm.test('TC-AUTH-47 | token emitido por el servidor', () => {
+              pm.expect(loginError).to.equal(null); pm.expect(login.code).to.equal(200);
+              pm.expect(login.json().access).to.be.a('string').and.not.empty;
+              pm.expect(login.json().user.id).to.equal(user.id);
+            });
+            if (loginError || !login || login.code !== 200 || !login.json().access
+                || !login.json().user || login.json().user.id !== user.id) { pm.execution.skipRequest(); return; }
+            const token = login.json().access;
+            let expiry;
+            try { expiry = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).exp; } catch (_) { expiry = null; }
+            if (!Number.isFinite(expiry) || expiry * 1000 <= Date.now() || expiry * 1000 - Date.now() > 4500000) {
+              pm.test('TC-AUTH-47 | expiración verificable dentro del timeout del runner', () => pm.expect.fail('JWT sin exp futura válida o espera mayor al timeout del runner.'));
+              pm.execution.skipRequest(); return;
+            }
+            put('expiryAccessToken', token);
+            this.request(pm, 'GET', '/usuarios/' + user.id + '/', undefined, token, (profileError, profile) => {
+              pm.test('TC-AUTH-47 | access válido antes de expirar', () => {
+                pm.expect(profileError).to.equal(null); pm.expect(profile.code).to.equal(200);
+                pm.expect(profile.json().id).to.equal(user.id);
+              });
+              if (profileError || !profile || profile.code !== 200) { pm.execution.skipRequest(); return; }
+              console.log('TC-AUTH-47 | esperar expiración real: ' + Math.ceil((expiry * 1000 - Date.now()) / 1000) + ' s');
+              setTimeout(() => put('expiryReady', 'true'), Math.max(1, expiry * 1000 + 1000 - Date.now()));
+            }, true);
+          });
+        });
+      });
+      return;
+    }
+    if (id === 'PERF-22') {
+      this.request(pm, 'GET', '/usuarios/' + pm.variables.get('otherUserId') + '/', undefined, pm.variables.get('adminAccessToken'), (error, response) => {
+        pm.test('TC-PERF-22 | guardar perfil B antes del intento', () => {
+          pm.expect(error).to.equal(null); pm.expect(response.code).to.equal(200);
+          pm.expect(response.json().id).to.equal(Number(pm.variables.get('otherUserId')));
+        });
+        if (error || response.code !== 200 || response.json().id !== Number(pm.variables.get('otherUserId'))) { pm.execution.skipRequest(); return; }
+        put('profile22Original', JSON.stringify(response.json()));
+        const original = response.json();
+        const payload = {};
+        ['username', 'email', 'dni', 'nombre', 'apellido', 'fecha_nacimiento'].forEach(key => { payload[key] = original[key]; });
+        payload.nombre = 'QA Ajeno'; put('profile22Payload', JSON.stringify(payload));
+      });
+    }
     if (['CONTACT-08', 'CONTACT-09', 'CONTACT-18'].includes(id)) {
       let original;
       try { original = JSON.parse(pm.variables.get('qaOriginalContact') || 'null'); } catch (_) { original = null; }
@@ -46,8 +224,8 @@
       const key = login ? '__newmanLoginAttemptTimes' : '__newmanRecoveryAttemptTimes';
       const windowMs = login ? 900000 : 3600000;
       const limit = login ? 5 : 3;
-      function fillAvailableSlots() {
-        const history = JSON.parse(pm.collectionVariables.get(key) || '[]').filter(t => Date.now() - t < windowMs);
+      const fillAvailableSlots = () => {
+        const history = this.quotaHistory(pm, key, windowMs, Date.now(), 0);
         put(key, JSON.stringify(history));
         if (history.length >= limit) return;
         const payload = login
@@ -64,12 +242,13 @@
           put(key, JSON.stringify(history));
           fillAvailableSlots();
         });
-      }
-      const previous = JSON.parse(pm.collectionVariables.get(key) || '[]').filter(t => Date.now() - t < windowMs + 2000);
+      };
+      const previous = this.quotaHistory(pm, key, windowMs, Date.now());
       if (login && previous.length) {
-        const waitMs = Math.max(...previous) + windowMs + 2000 - Date.now();
-        console.log('TC-AUTH-42 | esperar ventana limpia: ' + Math.ceil(waitMs / 1000) + ' s');
-        setTimeout(fillAvailableSlots, Math.max(1, waitMs));
+        // This quota test deliberately needs every previous login to expire.
+        // Unlike a normal request, one free slot is not sufficient for its oracle.
+        const readyAt = previous[previous.length - 1] + windowMs + 2000;
+        this.waitUntil(pm, 'TC-AUTH-42 | ventana limpia de login', readyAt, fillAvailableSlots);
       } else fillAvailableSlots();
     }
     // Refresh only live authorization variables, never the deliberately old token of AUTH-44.
@@ -137,10 +316,7 @@
       put('ownedContactIds', JSON.stringify(ids));
     };
     const send = (method, path, payload, token, expected, label, field, done) => {
-      const request = { url: baseUrl + path, method, header: { 'Content-Type': 'application/json' } };
-      if (token) request.header.Authorization = 'Bearer ' + token;
-      if (payload !== undefined) request.body = { mode: 'raw', raw: JSON.stringify(payload) };
-      pm.sendRequest(request, (error, response) => {
+      this.request(pm, method, path, payload, token, (error, response) => {
         pm.test(label + ' | transporte', () => pm.expect(error).to.equal(null));
         if (error) return;
         check(response, expected, label, field);
@@ -160,7 +336,12 @@
       if (matchesFixture) put('otherUserEmail', body.email);
     }
     if (id && pm.response.code >= 400) pm.test('TC-' + id + ' | mensaje estructurado de primer nivel', () => errorContract(body));
-    if (id && body && typeof body === 'object') pm.test('TC-' + id + ' | no expone password raíz', () => (Array.isArray(body) ? body : [body]).forEach(value => pm.expect(value).to.not.have.property('password')));
+    if (id && body && typeof body === 'object') pm.test('TC-' + id + ' | no expone contraseña en respuesta', () => (Array.isArray(body) ? body : [body]).forEach(value => {
+      if (pm.response.code >= 400 && Object.prototype.hasOwnProperty.call(value, 'password')) {
+        pm.expect(value.password).to.be.an('array').and.not.empty;
+        value.password.forEach(message => pm.expect(message).to.be.a('string'));
+      } else pm.expect(value).to.not.have.property('password');
+    }));
     if (pm.request.method === 'POST' && path.endsWith('/usuarios/recuperar-password/') && pm.response.code !== 429) {
       const history = JSON.parse(get('__newmanRecoveryAttemptTimes') || '[]').filter(t => Date.now() - t < 3600000);
       if (history.length) history[history.length - 1] = Date.now();
@@ -178,8 +359,9 @@
       put('userAccessToken', body.access); put('refreshToken', body.refresh);
     }
     const statuses = { 'CONTACT-01': 201, 'CONTACT-02': 400, 'CONTACT-03': 400, 'CONTACT-04': 400, 'CONTACT-05': 201, 'CONTACT-08': 200, 'CONTACT-09': 403, 'CONTACT-15': 403, 'CONTACT-16': 401, 'CONTACT-17': 404, 'CONTACT-18': 400, 'CONTACT-19': 404, 'CONTACT-20': 201, 'CONTACT-21': 201, 'AUTH-24': 200, 'AUTH-42': 429, 'AUTH-43': 429, 'AUTH-44': 401, 'AUTH-45': 200, 'AUTH-46': 201, 'HEALTH-03': 405, 'HEALTH-07': 406, 'CAMP-37': 400, 'CAMP-73': 406, 'CAMP-74': 401, 'INS-01': 201, 'INS-02': 201, 'INS-03': 200 };
+    Object.assign(statuses, { 'AUTH-47': 401, 'AUTH-48': 201, 'AUTH-49': 400, 'AUTH-50': 400, 'AUTH-51': 201, 'INS-04': 401, 'INS-05': 401 });
     if (Object.prototype.hasOwnProperty.call(statuses, id)) {
-      const fields = { 'CONTACT-03': 'correo_electronico', 'CONTACT-04': 'motivo', 'CONTACT-18': 'tracked' };
+      const fields = { 'CONTACT-03': 'correo_electronico', 'CONTACT-04': 'motivo', 'CONTACT-18': 'tracked', 'AUTH-49': 'fecha_nacimiento' };
       check(pm.response, statuses[id], 'TC-' + id, fields[id]);
     }
     if (id && pm.response.code >= 200 && pm.response.code < 300 && body) {
@@ -313,6 +495,132 @@
       pm.test('TC-PERF-11 | rol protegido', () => pm.expect(body.rol).to.equal(get('qaStandardRole')));
       send('GET', '/dashboard/', undefined, get('userAccessToken'), 403, 'TC-PERF-11 permisos administrativos denegados');
     }
+    if (id === 'PERF-12' && pm.response.code === 200) {
+      const profilePath = '/usuarios/' + get('ownUserId') + '/';
+      const oldPassword = get('profilePasswordBeforePUT');
+      const attemptedPassword = get('profileAttemptedPassword');
+      const fields = ['username', 'email', 'dni', 'nombre', 'apellido', 'fecha_nacimiento'];
+      const expectedProfile = JSON.parse(pm.variables.replaceIn(pm.request.body.raw));
+      const assertProfile = (response, expected, label) => pm.test(label, () => {
+        pm.expect(response.json().id).to.equal(Number(get('ownUserId')));
+        fields.forEach(key => pm.expect(response.json()[key], key).to.equal(expected[key]));
+        pm.expect(response.json()).to.not.have.property('password');
+      });
+      pm.test('TC-PERF-12 | clave enviada distinta de la original', () => {
+        pm.expect(oldPassword).to.be.a('string').and.not.empty;
+        pm.expect(attemptedPassword).to.not.equal(oldPassword);
+      });
+      assertProfile(pm.response, expectedProfile, 'TC-PERF-12 | datos permitidos actualizados');
+      const verifyChange = (previousPassword, newPassword, oldAccess, oldRefresh, profile, label, done) => {
+        this.request(pm, 'GET', profilePath, undefined, oldAccess, (error, response) => {
+          pm.test(label + ' | access anterior revocado', () => {
+            pm.expect(error).to.equal(null); pm.expect(response && response.code).to.equal(401);
+          });
+          if (error || !response) return;
+          check(response, 401, label + ' access anterior');
+          send('POST', '/api/token/refresh/', { refresh: oldRefresh }, null, 401, label + ' refresh anterior', undefined, () => {
+            send('POST', '/api/token/', { email: get('userEmail'), password: previousPassword }, null, 401, label + ' clave anterior rechazada', undefined, () => {
+              send('POST', '/api/token/', { email: get('userEmail'), password: newPassword }, null, 200, label + ' clave nueva vigente', undefined, login => {
+                let session;
+                try { session = login.json(); } catch (_) { session = null; }
+                pm.test(label + ' | login corresponde al titular', () => {
+                  pm.expect(session && session.user && session.user.id).to.equal(Number(get('ownUserId')));
+                  pm.expect(session && session.access).to.be.a('string').and.not.empty;
+                  pm.expect(session && session.refresh).to.be.a('string').and.not.empty;
+                });
+                if (login.code !== 200 || !session || !session.user
+                    || session.user.id !== Number(get('ownUserId')) || !session.access || !session.refresh) return;
+                put('userPassword', newPassword);
+                put('userAccessToken', session.access); put('refreshToken', session.refresh);
+                send('GET', profilePath, undefined, session.access, 200, label + ' persistencia', undefined, saved => {
+                  if (saved.code !== 200) return;
+                  assertProfile(saved, profile, label + ' | edición persistida');
+                  done();
+                });
+              });
+            });
+          });
+        }, true);
+      };
+      verifyChange(oldPassword, attemptedPassword, get('profileAccessBeforePUT'), get('profileRefreshBeforePUT'), expectedProfile, 'TC-PERF-12 titular', () => {
+        const adminPassword = attemptedPassword + 'Admin';
+        const adminPayload = { ...expectedProfile, apellido: 'QA Admin Permitida', password: adminPassword };
+        const accessBeforeAdminPUT = get('userAccessToken');
+        const refreshBeforeAdminPUT = get('refreshToken');
+        send('PUT', profilePath, adminPayload, get('adminAccessToken'), 200, 'TC-PERF-12 edición admin', undefined, adminResponse => {
+          if (adminResponse.code !== 200) return;
+          assertProfile(adminResponse, adminPayload, 'TC-PERF-12 | datos actualizados por admin');
+          verifyChange(attemptedPassword, adminPassword, accessBeforeAdminPUT, refreshBeforeAdminPUT, adminPayload, 'TC-PERF-12 administrador', () => {});
+        });
+      });
+    }
+    if (id === 'AUTH-47') pm.test('TC-AUTH-47 | se usó el token emitido tras su expiración', () => pm.expect(get('expiryReady')).to.equal('true'));
+    if (['AUTH-47', 'INS-04', 'INS-05'].includes(id)) pm.test('TC-' + id + ' | rechazo sin sesión ni datos personales', () => {
+      ['access', 'refresh', 'actuales', 'historicas', 'user'].forEach(key => pm.expect(body).to.not.have.property(key));
+    });
+    if (id === 'AUTH-48' && pm.response.code === 201) {
+      send('POST', '/api/token/', { email: get('auth48Email'), password: get('testPassword') }, null, 200, 'TC-AUTH-48 login', undefined, login => {
+        pm.test('TC-AUTH-48 | rol enviado ignorado', () => {
+          pm.expect(login.json().user.rol).to.equal(get('qaStandardRole'));
+          pm.expect(login.json().user.rol).to.not.equal('Administrador');
+        });
+        if (login.code === 200 && login.json().access) send('GET', '/dashboard/', undefined, login.json().access, 403, 'TC-AUTH-48 privilegios denegados');
+      });
+    }
+    if (id === 'AUTH-49') send('GET', '/usuarios/', undefined, get('adminAccessToken'), 200, 'TC-AUTH-49 verificar ausencia', undefined, users => {
+      pm.test('TC-AUTH-49 | no creó cuenta con fecha imposible', () => pm.expect(users.json().some(user => user.email === get('auth49Email'))).to.equal(false));
+    });
+    if (id === 'AUTH-50') {
+      const originalPassword = get('auth50Password');
+      const validNew = originalPassword + 'Distinta1!';
+      const verifyUnchanged = (rejected, label, next) => {
+        send('POST', '/api/token/', { email: get('auth50Email'), password: rejected }, null, 401, label + ' clave rechazada no permite login', undefined, () => {
+          send('POST', '/api/token/', { email: get('auth50Email'), password: originalPassword }, null, 200, label + ' clave original conservada', undefined, next);
+        });
+      };
+      verifyUnchanged('Aa123456!', 'TC-AUTH-50 débil', () => {
+        send('POST', '/usuarios/recuperar-password/', { email: get('auth50Email'), password: validNew, password_confirmation: validNew + 'Otra' }, null, 400, 'TC-AUTH-50 confirmación distinta', undefined, () => verifyUnchanged(validNew, 'TC-AUTH-50 confirmación', () => {}));
+      });
+    }
+    if (id === 'AUTH-51') {
+      const registration = (field, length, suffix) => {
+        const payload = { username: 'qa_' + runId + '_limits_' + suffix, email: 'qa+limits-' + suffix + '-' + runId + '@example.test', password: get('testPassword'), dni: String(10000000 + Math.floor(Math.random() * 89999999)), nombre: 'Laura', apellido: 'QA', fecha_nacimiento: '1990-04-15' };
+        if (field === 'username') payload[field] += 'u'.repeat(length - payload[field].length);
+        else payload[field] = 'N'.repeat(length);
+        return payload;
+      };
+      const persistedLength = (response, payload, field, length, next) => {
+        if (response.code !== 201) { next(); return; }
+        this.registeredUser(pm, payload, 'TC-AUTH-51 ' + field + length, user => {
+          if (!user) { next(); return; }
+          send('GET', '/usuarios/' + user.id + '/', undefined, get('adminAccessToken'), 200, 'TC-AUTH-51 persistencia ' + field + length, undefined, profile => {
+            pm.test('TC-AUTH-51 | ' + field + ' conserva ' + length + ' caracteres', () => pm.expect(profile.json()[field].length).to.equal(length)); next();
+          });
+        });
+      };
+      const initialPayload = JSON.parse(pm.variables.replaceIn(pm.request.body.raw));
+      persistedLength(pm.response, initialPayload, 'nombre', 24, () => {
+        const variants = [['nombre',25,201],['nombre',26,400],['apellido',24,201],['apellido',25,201],['apellido',26,400],['username',149,201],['username',150,201],['username',151,400]];
+        serial(variants, (variant, next) => {
+          const [field,length,status] = variant;
+          const payload = registration(field,length,field+length);
+          send('POST', '/usuarios/registro/', payload, null, status, 'TC-AUTH-51 ' + field + length, status === 400 ? field : undefined, response => {
+            if (status === 201) persistedLength(response, payload, field, length, next); else next();
+          });
+        });
+      });
+    }
+    if (id === 'PERF-22') {
+      pm.test('TC-PERF-22 | edición ajena denegada', () => pm.expect([403,404]).to.include(pm.response.code));
+      pm.test('TC-PERF-22 | Content-Type y SLA', () => { pm.expect(pm.response.headers.get('Content-Type') || '').to.match(/application\/json/i); pm.expect(pm.response.responseTime).to.be.below(800); });
+      send('GET', '/usuarios/' + get('otherUserId') + '/', undefined, get('adminAccessToken'), 200, 'TC-PERF-22 consulta posterior', undefined, response => pm.test('TC-PERF-22 | perfil ajeno sin cambios', () => {
+        const original = JSON.parse(get('profile22Original'));
+        ['id','username','email','dni','nombre','apellido','fecha_nacimiento','fecha_registro','rol'].forEach(key => pm.expect(response.json()[key], key).to.eql(original[key]));
+      }));
+    }
+    if (id === 'INS-05') send('GET', '/inscripciones/mis-inscripciones/', undefined, get('userAccessToken'), 200, 'TC-INS-05 inscripción conservada', undefined, response => {
+      pm.test('TC-INS-05 | DELETE sin token no eliminó el registro', () => pm.expect(response.json().actuales.some(entry => entry.id === Number(get('enrollmentId')))).to.equal(true));
+    });
     if (id === 'CAMP-17') pm.test('TC-CAMP-17 | estado por fechas futuras', () => pm.expect(body.estado_calculado).to.equal('Proximamente'));
     if (id === 'DASH-02') send('GET', '/campanias/', undefined, null, 200, 'TC-DASH-02 referencia de campañas', undefined, response => {
       const campaigns = response.json();

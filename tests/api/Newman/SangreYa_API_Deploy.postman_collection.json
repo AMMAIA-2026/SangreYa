@@ -17,32 +17,10 @@
           "const requestName = pm.info.requestName || '';",
           "const requestUrl = pm.request.url.toString().split('?')[0];",
           "const isLoginRequest = String(pm.request.method).toUpperCase() === 'POST' && requestUrl.endsWith('/api/token/') && !requestName.startsWith('AUT-API-AUTH-42 |');",
-          "const hasInternalLogin = (requestName.startsWith('AUT-API-PERF-12 |') && ['userAccessToken', 'ownUserId'].every((key) => Boolean(pm.variables.get(key)))) || ['AUT-API-AUTH-44 |', 'AUT-API-AUTH-45 |'].some(prefix => requestName.startsWith(prefix));",
           "const isRecovery = String(pm.request.method).toUpperCase() === 'POST' && requestUrl.endsWith('/usuarios/recuperar-password/') && !requestName.startsWith('AUT-API-AUTH-43 |');",
-          "if (isLoginRequest || hasInternalLogin || isRecovery) {",
-          "  const quotas = [];",
-          "  if (isRecovery) quotas.push(['__newmanRecoveryAttemptTimes', 3, 60 * 60 * 1000]);",
-          "  if (isLoginRequest || hasInternalLogin) quotas.push(['__newmanLoginAttemptTimes', 5, 15 * 60 * 1000]);",
-          "  const marginMs = 2000;",
-          "  function reserveLoginSlot(index = 0) {",
-          "    if (index === quotas.length) { qaOperations.pre(pm); return; }",
-          "    const [quotaKey, limit, windowMs] = quotas[index];",
-          "    const now = Date.now();",
-          "    const history = JSON.parse(pm.collectionVariables.get(quotaKey) || '[]').filter((timestamp) => now - timestamp < windowMs + marginMs);",
-          "    pm.collectionVariables.set(quotaKey, JSON.stringify(history));",
-          "    pm.environment.set(quotaKey, JSON.stringify(history));",
-          "    if (history.length >= limit) {",
-          "      const waitMs = Math.max(1, history[0] + windowMs + marginMs - now);",
-          "      console.log('Cuota QA ' + quotaKey + ' | ' + requestName + ': esperando ' + Math.ceil(waitMs / 1000) + ' s antes del siguiente intento; se conserva el caso.');",
-          "      setTimeout(() => reserveLoginSlot(index), waitMs);",
-          "      return;",
-          "    }",
-          "    history.push(now);",
-          "    pm.collectionVariables.set(quotaKey, JSON.stringify(history));",
-          "    pm.environment.set(quotaKey, JSON.stringify(history));",
-          "    reserveLoginSlot(index + 1);",
-          "  }",
-          "  reserveLoginSlot();",
+           "if (isLoginRequest || isRecovery) {",
+           "  const path = isLoginRequest ? '/api/token/' : '/usuarios/recuperar-password/';",
+           "  qaOperations.reserve(pm, path, () => qaOperations.pre(pm));",
           "} else { qaOperations.pre(pm); }"
         ]
       }
@@ -1749,6 +1727,26 @@
               }
             }
           ]
+        },
+        {
+          "name": "AUT-API-AUTH-47 | Access token expirado no permite consultar el perfil",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{expiryAccessToken}}" }], "url": { "raw": "{{baseUrl}}/usuarios/{{expiryUserId}}/" }, "description": "TC-AUTH-47. Cuenta descartable creada en prerequest. La API emite el JWT, se consulta el perfil antes de expirar (200), se espera exp real y se repite sin renovar (401). Puede tardar la duración real del access; requiere timeout-script del runner y limpieza por runId. Checks en Qa-Operations.js." }
+        },
+        {
+          "name": "AUT-API-AUTH-48 | Registro ignora el rol administrador enviado",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/usuarios/registro/" }, "body": { "mode": "raw", "raw": "{{auth48Payload}}" }, "description": "TC-AUTH-48. Registro válido con rol Administrador agregado: 201 como estándar. Login comprueba el rol y dashboard deniega con 403. Datos nuevos por runId; checks en Qa-Operations.js." }
+        },
+        {
+          "name": "AUT-API-AUTH-49 | Registro rechaza fecha de nacimiento imposible",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/usuarios/registro/" }, "body": { "mode": "raw", "raw": "{{auth49Payload}}" }, "description": "TC-AUTH-49. fecha_nacimiento=2026-02-30 y demás datos válidos/únicos: 400 con error de fecha. GET admin comprueba ausencia de la cuenta. Checks en Qa-Operations.js." }
+        },
+        {
+          "name": "AUT-API-AUTH-50 | Recuperación rechaza clave débil y confirmación distinta",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/usuarios/recuperar-password/" }, "body": { "mode": "raw", "raw": "{\"email\":\"{{auth50Email}}\",\"password\":\"Aa123456!\",\"password_confirmation\":\"Aa123456!\"}" }, "description": "TC-AUTH-50. Fixture exclusivo descartable. Clave de 9 caracteres y variante robusta con confirmación diferente: 400. En ambas, login con clave original 200 y con la rechazada 401. Las llamadas respetan cuotas. Checks en Qa-Operations.js." }
+        },
+        {
+          "name": "AUT-API-AUTH-51 | Límites de nombre apellido y username",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/usuarios/registro/" }, "body": { "mode": "raw", "raw": "{{auth51Payload}}" }, "description": "TC-AUTH-51. Nombre/apellido 24 y 25 aceptados, 26 rechazado; username 149 y 150 aceptados, 151 rechazado. Una variante por campo, IDs/email/DNI propios. GET comprueba longitud persistida sin truncamiento. Limpieza por runId. Checks en Qa-Operations.js." }
         }
       ]
     },
@@ -3832,6 +3830,10 @@
               }
             }
           ]
+        },
+        {
+          "name": "AUT-API-PERF-22 | Usuario estándar no modifica un perfil ajeno",
+          "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{userAccessToken}}" }], "url": { "raw": "{{baseUrl}}/usuarios/{{otherUserId}}/" }, "body": { "mode": "raw", "raw": "{{profile22Payload}}" }, "description": "TC-PERF-22. Guardar perfil B como administrador, intentar PUT de A sobre B y exigir 403/404. GET posterior como admin debe ser idéntico al original. Datos propios de la suite. Checks en Qa-Operations.js." }
         }
       ]
     },
@@ -5295,6 +5297,14 @@
         {
           "name": "AUT-API-INS-03 | Búsqueda administrativa sin coincidencias",
           "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }], "url": { "raw": "{{baseUrl}}/inscripciones/campanias/{{campaignId}}/?buscar=no-coincide-{{runId}}" }, "description": "TC-INS-03 → RF-11 / HU-08. Campaña propia con inscriptos, término sin coincidencias: 200 y usuarios=[]; complemento negativo funcional del filtro." }
+        },
+        {
+          "name": "AUT-API-INS-04 | Mis inscripciones requiere autenticación",
+          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/inscripciones/mis-inscripciones/" }, "description": "TC-INS-04. GET sin token: 401 con error estructurado y sin inscripciones personales. Checks en Qa-Operations.js." }
+        },
+        {
+          "name": "AUT-API-INS-05 | Cancelación requiere autenticación",
+          "request": { "method": "DELETE", "header": [], "url": { "raw": "{{baseUrl}}/inscripciones/{{enrollmentId}}/" }, "description": "TC-INS-05. ID real de inscripción propia preparada por CAMP-20; DELETE sin token: 401. GET del titular confirma conservación del registro. Checks en Qa-Operations.js." }
         }
       ]
     },
@@ -6176,7 +6186,7 @@
           ]
         },
         {
-          "name": "AUT-API-PERF-12 | Actualización de password de perfil",
+          "name": "AUT-API-PERF-12 | Cambio de contraseña en perfil revoca sesiones",
           "request": {
             "method": "PUT",
             "header": [
@@ -6192,10 +6202,10 @@
             "url": {
               "raw": "{{baseUrl}}/usuarios/{{ownUserId}}/"
             },
-            "description": "Caso de prueba: TC-PERF-12. *Actualización de password de perfil\n\nTrazabilidad: RF-15; HU-11; RNF-05; CA textual: CRUD, perfil propio, recurso ajeno y protección de roles\nAutomatización: AUT-API-PERF-12\nValidaciones compartidas: status esperado, Content-Type JSON (salvo 204) y SLA < 800 ms. Los datos de usuario/admin y los IDs externos se cargan desde el entorno Postman.",
+            "description": "TC-PERF-12 → RF-15 / HU-11. Comportamiento del backend vigente: PUT actualiza datos y cambia la contraseña enviada, tanto para titular como para administrador autorizado. Comprobar access y refresh anteriores revocados (401), clave anterior rechazada (401), login con nueva clave (200) y persistencia del perfil. Actualizar credenciales QA después de cada cambio para PERF-13. Checks encadenados en Qa-Operations.js; no afirmar que password se ignora.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"{{userEmail}}\",\n  \"email\": \"{{userEmail}}\",\n  \"dni\": \"{{testUserDni}}\",\n  \"nombre\": \"Laura\",\n  \"apellido\": \"QA Actualizada\",\n  \"fecha_nacimiento\": \"1990-04-15\",\n  \"password\": \"{{newPassword}}\"\n}",
+              "raw": "{\n  \"username\": \"{{userEmail}}\",\n  \"email\": \"{{userEmail}}\",\n  \"dni\": \"{{testUserDni}}\",\n  \"nombre\": \"Laura\",\n  \"apellido\": \"QA Actualizada\",\n  \"fecha_nacimiento\": \"1990-04-15\",\n  \"password\": \"{{profileAttemptedPassword}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -6209,12 +6219,19 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const required = [\"userAccessToken\", \"ownUserId\"];",
+                  "const required = [\"userAccessToken\", \"refreshToken\", \"ownUserId\", \"userEmail\", \"userPassword\", \"adminAccessToken\", \"runId\"];",
                   "const missing = required.filter((key) => !pm.variables.get(key));",
                   "if (missing.length) {",
                   "  console.warn('Se omite TC-PERF-12; completar variables: ' + missing.join(', '));",
                   "  pm.execution.skipRequest();",
-                  "}"
+                  "}",
+                  "const originalPassword = pm.variables.get('userPassword');",
+                  "let attemptedPassword = 'Qa!' + pm.variables.get('runId') + 'Perfil';",
+                  "if (attemptedPassword === originalPassword) attemptedPassword += '!';",
+                  "pm.collectionVariables.set('profilePasswordBeforePUT', originalPassword);",
+                  "pm.collectionVariables.set('profileAccessBeforePUT', pm.variables.get('userAccessToken'));",
+                  "pm.collectionVariables.set('profileRefreshBeforePUT', pm.variables.get('refreshToken'));",
+                  "pm.collectionVariables.set('profileAttemptedPassword', attemptedPassword);"
                 ]
               }
             },
@@ -6245,35 +6262,7 @@
                   "  });",
                   "});",
                   "",
-                  "const oldAccess = pm.collectionVariables.get('userAccessToken');",
-                  "const newPassword = pm.environment.get('newPassword');",
-                  "pm.sendRequest({",
-                  "  url: pm.variables.replaceIn('{{baseUrl}}/api/token/'),",
-                  "  method: 'POST',",
-                  "  header: { 'Content-Type': 'application/json' },",
-                  "  body: { mode: 'raw', raw: JSON.stringify({ email: pm.collectionVariables.get('userEmail'), password: newPassword }) }",
-                  "}, (error, response) => {",
-                  "  const loginHistory = JSON.parse(pm.collectionVariables.get('__newmanLoginAttemptTimes') || '[]');",
-                  "  if (loginHistory.length) { loginHistory[loginHistory.length - 1] = Date.now(); pm.collectionVariables.set('__newmanLoginAttemptTimes', JSON.stringify(loginHistory)); }",
-                  "  pm.environment.set('__newmanLoginAttemptTimes', JSON.stringify(loginHistory));",
-                  "  pm.test(`${caseId} | updated password allows login`, () => {",
-                  "    pm.expect(error).to.equal(null);",
-                  "    pm.expect(response.code).to.equal(200);",
-                  "    const body = response.json();",
-                  "    pm.collectionVariables.set('userAccessToken', body.access);",
-                  "    pm.collectionVariables.set('refreshToken', body.refresh);",
-                  "    pm.environment.set('userAccessToken', body.access);",
-                  "    pm.environment.set('refreshToken', body.refresh);",
-                  "  });",
-                  "});",
-                  "pm.sendRequest({",
-                  "  url: pm.variables.replaceIn('{{baseUrl}}/usuarios/{{ownUserId}}/'),",
-                  "  method: 'GET',",
-                  "  header: { Authorization: `Bearer ${oldAccess}` }",
-                  "}, (error, response) => pm.test(`${caseId} | old access token revoked`, () => {",
-                  "  pm.expect(error).to.equal(null);",
-                  "  pm.expect(response.code).to.equal(401);",
-                  "}));"
+                  "// Cambio de clave, revocación y persistencia: Qa-Operations.js#test."
                 ]
               }
             }
