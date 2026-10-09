@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class ApiErrorMapperTest {
+    // TC-UNIT-09
     @Test
     public void noExponeBodyInterno() {
         // Arrange
@@ -29,6 +30,7 @@ public class ApiErrorMapperTest {
         assertEquals(internalBody, error.getBody());
     }
 
+    // TC-UNIT-11
     @Test
     public void mapeaStatusHttp() {
         // Arrange / Act / Assert

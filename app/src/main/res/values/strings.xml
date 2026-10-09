@@ -148,31 +148,30 @@
     <string name="campaign_detail_error">No se pudo cargar el detalle de la campaña.</string>
 
     <!-- Login -->
-    <string name="titulo_login">iniciar sesion</string>
-    <string name="subtitulo_login">ingresa a tu cuenta</string>
+    <string name="titulo_login">Iniciar sesión</string>
+    <string name="subtitulo_login">Ingresá a tu cuenta</string>
     <string name="hint_email">nombre@correo.com</string>
     <string name="hint_password">********</string>
-    <string name="btn_ingresar">iniciar sesion</string>
+    <string name="btn_ingresar">Iniciar sesión</string>
     <string name="ingresando">Ingresando...</string>
     <string name="error_connection">No se pudo conectar. Intentá nuevamente.</string>
     <string name="error_login_generico">No pudimos iniciar sesión. Intentá nuevamente.</string>
     <string name="session_expired_message">Tu sesión expiró. Iniciá sesión nuevamente.</string>
-    <string name="texto_no_tenes_cuenta">¿no tenes cuenta? </string>
-    <string name="link_registrate">registrate</string>
+    <string name="texto_no_tenes_cuenta">¿No tenés cuenta?</string>
+    <string name="link_registrate">Registrate</string>
 
     <!-- Registro -->
     <string name="RegisterTitle">Crear cuenta</string>
-    <string name="hint_nombre">Ana gomez</string>
+    <string name="hint_nombre">Ana Gómez</string>
     <string name="hint_grupo">Seleccionar</string>
     <string name="btn_crear_cuenta">Crear cuenta</string>
-    <string name="texto_ya_tenes_cuenta">¿Ya tenes cuenta? </string>
-    <string name="link_iniciar_sesion">Iniciar sesion</string>
+    <string name="texto_ya_tenes_cuenta">¿Ya tenés cuenta?</string>
+    <string name="link_iniciar_sesion">Iniciar sesión</string>
 
     <!-- Labels compartidos -->
     <string name="label_nombre_completo">Nombre completo</string>
     <string name="label_email">Email</string>
     <string name="label_password">Contraseña</string>
-    <string name="label_grupo">Grupo sanguineo</string>
 
     <string name="back">Volver</string>
 

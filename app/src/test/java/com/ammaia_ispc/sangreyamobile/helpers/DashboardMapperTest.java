@@ -11,6 +11,7 @@ import java.util.Collections;
 import static org.junit.Assert.assertEquals;
 
 public class DashboardMapperTest {
+    // TC-UNIT-10
     @Test
     public void calculaMetricas() {
         // Arrange
