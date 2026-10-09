@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">ProfileActivity.java</span></div><h1>ProfileActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.UserApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ProfileValidator;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.AuthUser;
+import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
+import com.ammaia_ispc.sangreyamobile.model.ProfileViewModel;
+import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+<span class="nc" id="L47">public class ProfileActivity extends AppCompatActivity {</span>
+<span class="nc" id="L48">    private static final Pattern USERNAME_PATTERN = Pattern.compile(</span>
+            &quot;^[\\p{L}\\p{N}_.@+\\-]+$&quot;);
+<span class="nc" id="L50">    private static final Pattern NAME_PATTERN = Pattern.compile(</span>
+            &quot;^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$&quot;);
+    private static final String API_DATE_FORMAT = &quot;yyyy-MM-dd&quot;;
+
+    private EditText usernameInput;
+    private EditText emailInput;
+    private EditText dniInput;
+    private EditText nameInput;
+    private EditText lastNameInput;
+    private EditText birthDateInput;
+    private Button saveButton;
+    private ProgressBar loadingIndicator;
+    private LinearLayout profileForm;
+    private TextView messageView;
+    private String birthDate;
+    private String originalBirthDate;
+    private int userId;
+    private boolean adminEditMode;
+    private ProfileViewModel profileViewModel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L72">        super.onCreate(savedInstanceState);</span>
+
+<span class="nc" id="L74">        adminEditMode = getIntent().hasExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID);</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (adminEditMode) {</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (!SessionManager.requireAdmin(this)) {</span>
+<span class="nc" id="L77">                return;</span>
+            }
+<span class="nc" id="L79">            userId = getIntent().getIntExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID, -1);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            if (userId &lt; 1) {</span>
+<span class="nc" id="L81">                finish();</span>
+<span class="nc" id="L82">                return;</span>
+            }
+        }
+
+<span class="nc" id="L86">        UiHelper.configureSystemBars(this);</span>
+<span class="nc" id="L87">        setContentView(R.layout.activity_profile);</span>
+
+<span class="nc" id="L89">        bindViews();</span>
+<span class="nc" id="L90">        configureNavigation();</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (adminEditMode) {</span>
+<span class="nc" id="L92">            configureAdminEditMode();</span>
+        } else {
+<span class="nc" id="L94">            configureBottomNavigation();</span>
+        }
+<span class="nc" id="L96">        DateHelper.configureDateInput(this, birthDateInput);</span>
+<span class="nc" id="L97">        saveButton.setOnClickListener(view -&gt; saveProfile());</span>
+<span class="nc" id="L98">        loadProfile();</span>
+<span class="nc" id="L99">    }</span>
+
+    private void bindViews() {
+<span class="nc" id="L102">        usernameInput = findViewById(R.id.profile_username);</span>
+<span class="nc" id="L103">        emailInput = findViewById(R.id.profile_email);</span>
+<span class="nc" id="L104">        dniInput = findViewById(R.id.profile_dni);</span>
+<span class="nc" id="L105">        nameInput = findViewById(R.id.profile_name);</span>
+<span class="nc" id="L106">        lastNameInput = findViewById(R.id.profile_last_name);</span>
+<span class="nc" id="L107">        birthDateInput = findViewById(R.id.profile_birth_date);</span>
+<span class="nc" id="L108">        saveButton = findViewById(R.id.profile_save);</span>
+<span class="nc" id="L109">        loadingIndicator = findViewById(R.id.profile_loading);</span>
+<span class="nc" id="L110">        profileForm = findViewById(R.id.profile_form);</span>
+<span class="nc" id="L111">        messageView = findViewById(R.id.profile_message);</span>
+<span class="nc" id="L112">    }</span>
+
+    private void configureNavigation() {
+<span class="nc" id="L115">        DrawerLayout drawerLayout = findViewById(R.id.profile_drawer);</span>
+<span class="nc" id="L116">        NavigationView navigationView = findViewById(R.id.profile_navigation_view);</span>
+<span class="nc" id="L117">        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);</span>
+<span class="nc" id="L118">    }</span>
+
+    private void configureAdminEditMode() {
+<span class="nc" id="L121">        ((TextView) findViewById(R.id.profile_title_view))</span>
+<span class="nc" id="L122">                .setText(R.string.admin_edit_user_title);</span>
+<span class="nc" id="L123">        ((TextView) findViewById(R.id.profile_subtitle_view))</span>
+<span class="nc" id="L124">                .setText(R.string.admin_edit_user_subtitle);</span>
+<span class="nc" id="L125">        findViewById(R.id.profile_bottom_navigation).setVisibility(View.GONE);</span>
+<span class="nc" id="L126">    }</span>
+
+    private void configureBottomNavigation() {
+<span class="nc" id="L129">        findViewById(R.id.profile_campaigns_navigation_item)</span>
+<span class="nc" id="L130">                .setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L131">                    startActivity(new Intent(this, CampaignListActivity.class));</span>
+<span class="nc" id="L132">                    finish();</span>
+<span class="nc" id="L133">                });</span>
+<span class="nc" id="L134">        findViewById(R.id.profile_enrollments_navigation_item)</span>
+<span class="nc" id="L135">                .setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L136">                    startActivity(new Intent(this, EnrollmentsActivity.class));</span>
+<span class="nc" id="L137">                    finish();</span>
+<span class="nc" id="L138">                });</span>
+<span class="nc" id="L139">    }</span>
+
+    private void loadProfile() {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (!adminEditMode) {</span>
+<span class="nc" id="L143">            userId = SessionManager.getUserId(this);</span>
+        }
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (userId &lt; 1) {</span>
+<span class="nc" id="L146">            UiHelper.showMessage(messageView, R.string.profile_session_error);</span>
+<span class="nc" id="L147">            return;</span>
+        }
+
+<span class="nc" id="L150">        UserApiRepository repository = new UserApiRepository(ApiClient.getApiService(this));</span>
+<span class="nc" id="L151">        ProfileViewModel.SessionStore sessionStore = new ProfileViewModel.SessionStore() {</span>
+            @Override
+            public int getUserId() {
+<span class="nc" id="L154">                return SessionManager.getUserId(ProfileActivity.this);</span>
+            }
+
+            @Override
+            public void updateUserName(String name) {
+<span class="nc" id="L159">                SessionManager.updateUserName(ProfileActivity.this, name);</span>
+<span class="nc" id="L160">            }</span>
+        };
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        profileViewModel = adminEditMode</span>
+<span class="nc" id="L163">                ? new ProfileViewModel(repository, sessionStore, userId)</span>
+<span class="nc" id="L164">                : new ProfileViewModel(repository, sessionStore);</span>
+
+<span class="nc" id="L166">        UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);</span>
+<span class="nc" id="L167">        ApiClient.getApiService(this).getUserProfile(userId).enqueue(new Callback&lt;AuthUser&gt;() {</span>
+            @Override
+            public void onResponse(Call&lt;AuthUser&gt; call, Response&lt;AuthUser&gt; response) {
+<span class="nc" id="L170">                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);</span>
+<span class="nc bnc" id="L171" title="All 4 branches missed.">                if (response.isSuccessful() &amp;&amp; response.body() != null) {</span>
+<span class="nc" id="L172">                    populateProfile(response.body());</span>
+<span class="nc" id="L173">                    UiHelper.clearMessage(messageView);</span>
+                } else {
+<span class="nc" id="L175">                    handleResponseError(response, false);</span>
+                }
+<span class="nc" id="L177">            }</span>
+
+            @Override
+            public void onFailure(Call&lt;AuthUser&gt; call, Throwable throwable) {
+<span class="nc" id="L181">                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);</span>
+<span class="nc" id="L182">                UiHelper.showMessage(</span>
+<span class="nc" id="L183">                        messageView,</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                        adminEditMode</span>
+<span class="nc" id="L185">                                ? R.string.admin_user_load_error</span>
+<span class="nc" id="L186">                                : R.string.profile_load_error);</span>
+<span class="nc" id="L187">            }</span>
+        });
+<span class="nc" id="L189">    }</span>
+
+    private void populateProfile(AuthUser user) {
+<span class="nc" id="L192">        usernameInput.setText(safeValue(user.getUsername()));</span>
+<span class="nc" id="L193">        emailInput.setText(safeValue(user.getEmail()));</span>
+<span class="nc" id="L194">        dniInput.setText(safeValue(user.getDni()));</span>
+<span class="nc" id="L195">        nameInput.setText(safeValue(user.getName()));</span>
+<span class="nc" id="L196">        lastNameInput.setText(safeValue(user.getLastName()));</span>
+<span class="nc" id="L197">        setBirthDate(user.getBirthDate());</span>
+<span class="nc" id="L198">        originalBirthDate = birthDate;</span>
+<span class="nc" id="L199">    }</span>
+
+    private void setBirthDate(String isoDate) {
+<span class="nc" id="L202">        birthDate = isoDate;</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">        if (isValidIsoDate(isoDate)) {</span>
+<span class="nc" id="L204">            birthDateInput.setText(DateHelper.toDisplayDate(isoDate));</span>
+        } else {
+<span class="nc" id="L206">            birthDateInput.setText(&quot;&quot;);</span>
+        }
+<span class="nc" id="L208">    }</span>
+
+    private void saveProfile() {
+<span class="nc" id="L211">        syncBirthDateFromInput();</span>
+<span class="nc" id="L212">        clearFieldErrors();</span>
+<span class="nc" id="L213">        UiHelper.clearMessage(messageView);</span>
+
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        if (!validateForm()) {</span>
+<span class="nc" id="L216">            return;</span>
+        }
+
+<span class="nc" id="L219">        UserUpdateRequest request = new UserUpdateRequest(</span>
+<span class="nc" id="L220">                valueOf(usernameInput),</span>
+<span class="nc" id="L221">                valueOf(emailInput),</span>
+<span class="nc" id="L222">                valueOf(dniInput),</span>
+<span class="nc" id="L223">                valueOf(nameInput),</span>
+<span class="nc" id="L224">                valueOf(lastNameInput),</span>
+                birthDate);
+
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        if (!TextUtils.equals(birthDate, originalBirthDate)</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">                &amp;&amp; !isEnrollmentAgeAllowed(birthDate)) {</span>
+<span class="nc" id="L229">            showAgeWarning(request);</span>
+<span class="nc" id="L230">            return;</span>
+        }
+
+<span class="nc" id="L233">        submitProfile(request);</span>
+<span class="nc" id="L234">    }</span>
+
+    private void showAgeWarning(UserUpdateRequest request) {
+<span class="nc" id="L237">        new AlertDialog.Builder(this)</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">                .setTitle(adminEditMode</span>
+<span class="nc" id="L239">                        ? R.string.admin_user_age_warning_title</span>
+<span class="nc" id="L240">                        : R.string.profile_age_warning_title)</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">                .setMessage(adminEditMode</span>
+<span class="nc" id="L242">                        ? R.string.admin_user_age_warning_message</span>
+<span class="nc" id="L243">                        : R.string.profile_age_warning_message)</span>
+<span class="nc" id="L244">                .setNegativeButton(R.string.profile_age_warning_cancel, null)</span>
+<span class="nc" id="L245">                .setPositiveButton(</span>
+                        R.string.profile_age_warning_confirm,
+<span class="nc" id="L247">                        (dialog, which) -&gt; submitProfile(request))</span>
+<span class="nc" id="L248">                .show();</span>
+<span class="nc" id="L249">    }</span>
+
+    private void submitProfile(UserUpdateRequest request) {
+<span class="nc bnc" id="L252" title="All 2 branches missed.">        if (profileViewModel == null) {</span>
+<span class="nc" id="L253">            UiHelper.showMessage(messageView, R.string.profile_session_error);</span>
+<span class="nc" id="L254">            return;</span>
+        }
+<span class="nc" id="L256">        profileViewModel.save(request, state -&gt; {</span>
+<span class="nc" id="L257">            UiHelper.setLoading(loadingIndicator, profileForm, state.loading, saveButton);</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            if (state.loading) {</span>
+<span class="nc" id="L259">                return;</span>
+            }
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            if (state.isSuccess()) {</span>
+<span class="nc" id="L262">                populateProfile(state.response.body());</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                if (userId == SessionManager.getUserId(ProfileActivity.this)) {</span>
+<span class="nc" id="L264">                    configureNavigation();</span>
+                }
+<span class="nc" id="L266">                Toast.makeText(</span>
+                        ProfileActivity.this,
+<span class="nc bnc" id="L268" title="All 2 branches missed.">                        adminEditMode</span>
+<span class="nc" id="L269">                                ? R.string.admin_user_updated_message</span>
+<span class="nc" id="L270">                                : R.string.profile_updated_message,</span>
+<span class="nc" id="L271">                        Toast.LENGTH_SHORT).show();</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">                if (adminEditMode) {</span>
+<span class="nc" id="L273">                    setResult(RESULT_OK);</span>
+<span class="nc" id="L274">                    finish();</span>
+                }
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            } else if (state.response != null) {</span>
+<span class="nc" id="L277">                handleResponseError(state.response, true);</span>
+            } else {
+<span class="nc" id="L279">                UiHelper.showMessage(</span>
+                        messageView,
+<span class="nc bnc" id="L281" title="All 2 branches missed.">                        adminEditMode</span>
+<span class="nc" id="L282">                                ? R.string.admin_user_update_error</span>
+<span class="nc" id="L283">                                : R.string.profile_update_error);</span>
+            }
+<span class="nc" id="L285">        });</span>
+<span class="nc" id="L286">    }</span>
+
+    private boolean validateForm() {
+<span class="nc" id="L289">        String username = valueOf(usernameInput);</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">        if (TextUtils.isEmpty(username)) {</span>
+<span class="nc" id="L291">            return showFieldError(usernameInput, R.string.profile_required_field);</span>
+        }
+<span class="nc bnc" id="L293" title="All 4 branches missed.">        if (username.length() &gt; 150 || !USERNAME_PATTERN.matcher(username).matches()) {</span>
+<span class="nc" id="L294">            return showFieldError(usernameInput, R.string.profile_username_invalid);</span>
+        }
+
+<span class="nc" id="L297">        String email = valueOf(emailInput);</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">        if (TextUtils.isEmpty(email)) {</span>
+<span class="nc" id="L299">            return showFieldError(emailInput, R.string.profile_required_field);</span>
+        }
+<span class="nc bnc" id="L301" title="All 2 branches missed.">        if (!ProfileValidator.isValidEmail(email)) {</span>
+<span class="nc" id="L302">            return showFieldError(emailInput, R.string.profile_email_invalid);</span>
+        }
+
+<span class="nc" id="L305">        String dni = valueOf(dniInput);</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">        if (TextUtils.isEmpty(dni)) {</span>
+<span class="nc" id="L307">            return showFieldError(dniInput, R.string.profile_required_field);</span>
+        }
+<span class="nc bnc" id="L309" title="All 2 branches missed.">        if (!ProfileValidator.isValidDni(dni)) {</span>
+<span class="nc" id="L310">            return showFieldError(dniInput, R.string.profile_dni_invalid);</span>
+        }
+
+<span class="nc" id="L313">        String name = valueOf(nameInput);</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">        if (TextUtils.isEmpty(name)) {</span>
+<span class="nc" id="L315">            return showFieldError(nameInput, R.string.profile_required_field);</span>
+        }
+<span class="nc bnc" id="L317" title="All 4 branches missed.">        if (name.length() &gt; 25 || !NAME_PATTERN.matcher(name).matches()) {</span>
+<span class="nc" id="L318">            return showFieldError(nameInput, R.string.profile_name_invalid);</span>
+        }
+
+<span class="nc" id="L321">        String lastName = valueOf(lastNameInput);</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">        if (TextUtils.isEmpty(lastName)) {</span>
+<span class="nc" id="L323">            return showFieldError(lastNameInput, R.string.profile_required_field);</span>
+        }
+<span class="nc bnc" id="L325" title="All 4 branches missed.">        if (lastName.length() &gt; 25 || !NAME_PATTERN.matcher(lastName).matches()) {</span>
+<span class="nc" id="L326">            return showFieldError(lastNameInput, R.string.profile_name_invalid);</span>
+        }
+
+<span class="nc bnc" id="L329" title="All 2 branches missed.">        if (!isValidIsoDate(birthDate)) {</span>
+<span class="nc" id="L330">            return showFieldError(birthDateInput, R.string.profile_birth_date_invalid);</span>
+        }
+<span class="nc" id="L332">        return true;</span>
+    }
+
+    private boolean showFieldError(EditText field, int messageResId) {
+<span class="nc" id="L336">        field.setError(getString(messageResId));</span>
+<span class="nc" id="L337">        field.requestFocus();</span>
+<span class="nc" id="L338">        return false;</span>
+    }
+
+    private void handleResponseError(Response&lt;?&gt; response, boolean update) {
+<span class="nc" id="L342">        int statusCode = response.code();</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">        if (statusCode == 401) {</span>
+<span class="nc" id="L344">            SessionManager.expireSession(this);</span>
+<span class="nc" id="L345">            return;</span>
+        }
+<span class="nc bnc" id="L347" title="All 2 branches missed.">        if (statusCode == 403) {</span>
+<span class="nc" id="L348">            UiHelper.showMessage(</span>
+                    messageView,
+<span class="nc bnc" id="L350" title="All 2 branches missed.">                    adminEditMode</span>
+<span class="nc" id="L351">                            ? R.string.admin_user_unauthorized_error</span>
+<span class="nc" id="L352">                            : R.string.profile_unauthorized_error);</span>
+<span class="nc" id="L353">            return;</span>
+        }
+<span class="nc bnc" id="L355" title="All 2 branches missed.">        if (statusCode == 404) {</span>
+<span class="nc" id="L356">            UiHelper.showMessage(</span>
+                    messageView,
+<span class="nc bnc" id="L358" title="All 2 branches missed.">                    adminEditMode</span>
+<span class="nc" id="L359">                            ? R.string.admin_user_not_found_error</span>
+<span class="nc" id="L360">                            : R.string.profile_not_found_error);</span>
+<span class="nc" id="L361">            return;</span>
+        }
+<span class="nc bnc" id="L363" title="All 4 branches missed.">        if (statusCode == 400 &amp;&amp; applyServerErrors(response.errorBody())) {</span>
+<span class="nc" id="L364">            UiHelper.showMessage(messageView, R.string.profile_generic_validation_error);</span>
+<span class="nc" id="L365">            return;</span>
+        }
+<span class="nc" id="L367">        UiHelper.showMessage(</span>
+                messageView,
+<span class="nc bnc" id="L369" title="All 2 branches missed.">                update</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">                        ? (adminEditMode</span>
+<span class="nc" id="L371">                        ? R.string.admin_user_update_error</span>
+<span class="nc" id="L372">                        : R.string.profile_update_error)</span>
+<span class="nc bnc" id="L373" title="All 2 branches missed.">                        : (adminEditMode</span>
+<span class="nc" id="L374">                        ? R.string.admin_user_load_error</span>
+<span class="nc" id="L375">                        : R.string.profile_load_error));</span>
+<span class="nc" id="L376">    }</span>
+
+    private boolean applyServerErrors(ResponseBody errorBody) {
+<span class="nc bnc" id="L379" title="All 2 branches missed.">        if (errorBody == null) {</span>
+<span class="nc" id="L380">            return false;</span>
+        }
+
+        try {
+<span class="nc" id="L384">            JSONObject errors = new JSONObject(errorBody.string());</span>
+<span class="nc" id="L385">            boolean handled = false;</span>
+<span class="nc" id="L386">            handled |= applyServerError(errors, &quot;username&quot;, usernameInput);</span>
+<span class="nc" id="L387">            handled |= applyServerError(errors, &quot;email&quot;, emailInput);</span>
+<span class="nc" id="L388">            handled |= applyServerError(errors, &quot;dni&quot;, dniInput);</span>
+<span class="nc" id="L389">            handled |= applyServerError(errors, &quot;nombre&quot;, nameInput);</span>
+<span class="nc" id="L390">            handled |= applyServerError(errors, &quot;apellido&quot;, lastNameInput);</span>
+<span class="nc" id="L391">            handled |= applyServerError(errors, &quot;fecha_nacimiento&quot;, birthDateInput);</span>
+<span class="nc" id="L392">            return handled;</span>
+<span class="nc" id="L393">        } catch (Exception ignored) {</span>
+<span class="nc" id="L394">            return false;</span>
+        }
+    }
+
+    private boolean applyServerError(JSONObject errors, String key, EditText field) {
+<span class="nc bnc" id="L399" title="All 2 branches missed.">        if (!errors.has(key)) {</span>
+<span class="nc" id="L400">            return false;</span>
+        }
+
+<span class="nc" id="L403">        String detail = firstError(errors.opt(key));</span>
+<span class="nc" id="L404">        int messageResId = serverMessageFor(key, detail);</span>
+<span class="nc" id="L405">        field.setError(getString(messageResId));</span>
+<span class="nc" id="L406">        field.requestFocus();</span>
+<span class="nc" id="L407">        return true;</span>
+    }
+
+    private int serverMessageFor(String key, String detail) {
+<span class="nc" id="L411">        String normalized = UiHelper.normalized(detail, Locale.ROOT);</span>
+<span class="nc bnc" id="L412" title="All 2 branches missed.">        if (normalized.contains(&quot;required&quot;)</span>
+<span class="nc bnc" id="L413" title="All 2 branches missed.">                || normalized.contains(&quot;blank&quot;)</span>
+<span class="nc bnc" id="L414" title="All 2 branches missed.">                || normalized.contains(&quot;obligatorio&quot;)) {</span>
+<span class="nc" id="L415">            return R.string.profile_required_field;</span>
+        }
+<span class="nc bnc" id="L417" title="All 2 branches missed.">        if (&quot;username&quot;.equals(key)) {</span>
+<span class="nc bnc" id="L418" title="All 4 branches missed.">            return normalized.contains(&quot;unique&quot;) || normalized.contains(&quot;exist&quot;)</span>
+<span class="nc" id="L419">                    ? R.string.profile_username_taken</span>
+<span class="nc" id="L420">                    : R.string.profile_username_invalid;</span>
+        }
+<span class="nc bnc" id="L422" title="All 2 branches missed.">        if (&quot;email&quot;.equals(key)) {</span>
+<span class="nc bnc" id="L423" title="All 4 branches missed.">            return normalized.contains(&quot;unique&quot;) || normalized.contains(&quot;exist&quot;)</span>
+<span class="nc" id="L424">                    ? R.string.profile_email_taken</span>
+<span class="nc" id="L425">                    : R.string.profile_email_invalid;</span>
+        }
+<span class="nc bnc" id="L427" title="All 2 branches missed.">        if (&quot;dni&quot;.equals(key)) {</span>
+<span class="nc bnc" id="L428" title="All 4 branches missed.">            return normalized.contains(&quot;unique&quot;) || normalized.contains(&quot;exist&quot;)</span>
+<span class="nc" id="L429">                    ? R.string.profile_dni_taken</span>
+<span class="nc" id="L430">                    : R.string.profile_dni_invalid;</span>
+        }
+<span class="nc bnc" id="L432" title="All 4 branches missed.">        if (&quot;nombre&quot;.equals(key) || &quot;apellido&quot;.equals(key)) {</span>
+<span class="nc" id="L433">            return R.string.profile_name_invalid;</span>
+        }
+<span class="nc" id="L435">        return R.string.profile_birth_date_invalid;</span>
+    }
+
+    private String firstError(Object value) {
+<span class="nc bnc" id="L439" title="All 2 branches missed.">        if (value instanceof JSONArray) {</span>
+<span class="nc" id="L440">            JSONArray errors = (JSONArray) value;</span>
+<span class="nc bnc" id="L441" title="All 2 branches missed.">            return errors.length() == 0 ? &quot;&quot; : errors.optString(0, &quot;&quot;);</span>
+        }
+<span class="nc bnc" id="L443" title="All 2 branches missed.">        return value == null ? &quot;&quot; : String.valueOf(value);</span>
+    }
+
+    private void clearFieldErrors() {
+<span class="nc" id="L447">        usernameInput.setError(null);</span>
+<span class="nc" id="L448">        emailInput.setError(null);</span>
+<span class="nc" id="L449">        dniInput.setError(null);</span>
+<span class="nc" id="L450">        nameInput.setError(null);</span>
+<span class="nc" id="L451">        lastNameInput.setError(null);</span>
+<span class="nc" id="L452">        birthDateInput.setError(null);</span>
+<span class="nc" id="L453">    }</span>
+
+    private String valueOf(EditText field) {
+<span class="nc" id="L456">        return field.getText().toString().trim();</span>
+    }
+
+    private String safeValue(String value) {
+<span class="nc bnc" id="L460" title="All 2 branches missed.">        return value == null ? &quot;&quot; : value;</span>
+    }
+
+    private boolean isValidIsoDate(String value) {
+<span class="nc" id="L464">        return DateHelper.isValidIsoDate(value);</span>
+    }
+
+    private void syncBirthDateFromInput() {
+<span class="nc" id="L468">        String displayDate = valueOf(birthDateInput);</span>
+<span class="nc bnc" id="L469" title="All 2 branches missed.">        if (TextUtils.isEmpty(displayDate)) {</span>
+<span class="nc" id="L470">            birthDate = null;</span>
+<span class="nc" id="L471">            return;</span>
+        }
+
+<span class="nc" id="L474">        birthDate = DateHelper.toIsoDate(displayDate);</span>
+<span class="nc" id="L475">    }</span>
+
+    private boolean isEnrollmentAgeAllowed(String value) {
+<span class="nc" id="L478">        Date birth = parseDate(value, API_DATE_FORMAT);</span>
+<span class="nc bnc" id="L479" title="All 2 branches missed.">        if (birth == null) {</span>
+<span class="nc" id="L480">            return true;</span>
+        }
+
+<span class="nc" id="L483">        Calendar birthCalendar = Calendar.getInstance();</span>
+<span class="nc" id="L484">        birthCalendar.setTime(birth);</span>
+<span class="nc" id="L485">        Calendar today = Calendar.getInstance();</span>
+<span class="nc" id="L486">        int age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);</span>
+<span class="nc bnc" id="L487" title="All 2 branches missed.">        if (today.get(Calendar.MONTH) &lt; birthCalendar.get(Calendar.MONTH)</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">                || (today.get(Calendar.MONTH) == birthCalendar.get(Calendar.MONTH)</span>
+<span class="nc bnc" id="L489" title="All 2 branches missed.">                &amp;&amp; today.get(Calendar.DAY_OF_MONTH) &lt; birthCalendar.get(Calendar.DAY_OF_MONTH))) {</span>
+<span class="nc" id="L490">            age--;</span>
+        }
+<span class="nc bnc" id="L492" title="All 4 branches missed.">        return age &gt;= 18 &amp;&amp; age &lt; 65;</span>
+    }
+
+    private Date parseDate(String value, String pattern) {
+<span class="nc bnc" id="L496" title="All 2 branches missed.">        if (TextUtils.isEmpty(value)) {</span>
+<span class="nc" id="L497">            return null;</span>
+        }
+<span class="nc" id="L499">        SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.US);</span>
+<span class="nc" id="L500">        formatter.setLenient(false);</span>
+        try {
+<span class="nc" id="L502">            return formatter.parse(value);</span>
+<span class="nc" id="L503">        } catch (ParseException ignored) {</span>
+<span class="nc" id="L504">            return null;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminCampaignListActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">AdminCampaignListActivity.java</span></div><h1>AdminCampaignListActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import androidx.appcompat.app.AlertDialog;
+
+<span class="nc" id="L36">public class AdminCampaignListActivity extends AppCompatActivity {</span>
+
+<span class="nc" id="L38">    private List&lt;Campaign&gt; campaigns = new ArrayList&lt;&gt;();</span>
+    private LinearLayout campaignContainer;
+    private EditText searchInput;
+    private MaterialButton allFilter;
+    private MaterialButton activeFilter;
+    private MaterialButton upcomingFilter;
+    private MaterialButton finishedFilter;
+<span class="nc" id="L45">    private String currentFilter = &quot;Todas&quot;;</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L49">        super.onCreate(savedInstanceState);</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (!SessionManager.requireAdmin(this)) {</span>
+<span class="nc" id="L51">            return;</span>
+        }
+
+<span class="nc" id="L54">        UiHelper.configureSystemBars(this);</span>
+
+<span class="nc" id="L56">        setContentView(R.layout.activity_admin_campaign_list);</span>
+
+<span class="nc" id="L58">        bindViews();</span>
+<span class="nc" id="L59">        configureFilters();</span>
+<span class="nc" id="L60">        configureSearch();</span>
+<span class="nc" id="L61">    }</span>
+
+    @Override
+    protected void onResume() {
+<span class="nc" id="L65">        super.onResume();</span>
+
+<span class="nc" id="L67">        loadCampaigns();</span>
+<span class="nc" id="L68">    }</span>
+
+    private void loadCampaigns() {
+<span class="nc" id="L71">        CampaignApiRepository.getCampaigns(</span>
+                this,
+<span class="nc" id="L73">                new CampaignApiRepository.Callback&lt;List&lt;Campaign&gt;&gt;() {</span>
+                    @Override
+                    public void onSuccess(List&lt;Campaign&gt; value) {
+<span class="nc" id="L76">                        campaigns = value;</span>
+<span class="nc" id="L77">                        showCampaigns();</span>
+<span class="nc" id="L78">                    }</span>
+
+                    @Override
+                    public void onError(Exception exception) {
+<span class="nc" id="L82">                        showCampaignError(exception);</span>
+<span class="nc" id="L83">                    }</span>
+                });
+<span class="nc" id="L85">    }</span>
+
+    private void showCampaignError(Exception exception) {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        String message = CampaignApiRepository.isUnauthorized(exception)</span>
+<span class="nc" id="L89">                ? getString(R.string.admin_campaigns_unauthorized)</span>
+<span class="nc" id="L90">                : getString(R.string.campaigns_load_error);</span>
+<span class="nc" id="L91">        UiHelper.showToast(this, message, Toast.LENGTH_LONG);</span>
+<span class="nc" id="L92">    }</span>
+
+    private void bindViews() {
+
+<span class="nc" id="L96">        campaignContainer = findViewById(R.id.admin_campaign_container);</span>
+<span class="nc" id="L97">        searchInput = findViewById(R.id.admin_campaign_search);</span>
+<span class="nc" id="L98">        allFilter = findViewById(R.id.admin_filter_all);</span>
+<span class="nc" id="L99">        activeFilter = findViewById(R.id.admin_filter_active);</span>
+<span class="nc" id="L100">        upcomingFilter = findViewById(R.id.admin_filter_upcoming);</span>
+<span class="nc" id="L101">        finishedFilter = findViewById(R.id.admin_filter_finished);</span>
+
+<span class="nc" id="L103">        DrawerLayout drawerLayout = findViewById(R.id.admin_campaign_drawer);</span>
+<span class="nc" id="L104">        NavigationView navigationView = findViewById(R.id.admin_campaign_navigation_view);</span>
+<span class="nc" id="L105">        NavigationDrawerHelper.configure(</span>
+                this,
+                drawerLayout,
+                navigationView);
+
+<span class="nc" id="L110">        findViewById(R.id.admin_campaign_add)</span>
+<span class="nc" id="L111">                .setOnClickListener(view -&gt; openCreateCampaign());</span>
+
+<span class="nc" id="L113">        findViewById(R.id.admin_nav_dashboard)</span>
+<span class="nc" id="L114">                .setOnClickListener(view -&gt; openDashboard());</span>
+
+<span class="nc" id="L116">        findViewById(R.id.admin_nav_users)</span>
+<span class="nc" id="L117">                .setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L118">                    Intent intent = new Intent(this, UsersActivity.class);</span>
+<span class="nc" id="L119">                    startActivity(intent);</span>
+<span class="nc" id="L120">                });</span>
+
+<span class="nc" id="L122">        findViewById(R.id.admin_messages_navigation).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L123">            Intent intent = new Intent(this, AdminContactListActivity.class);</span>
+<span class="nc" id="L124">            startActivity(intent);</span>
+<span class="nc" id="L125">        });</span>
+
+<span class="nc" id="L127">    }</span>
+
+    private void configureFilters() {
+<span class="nc" id="L130">        allFilter.setOnClickListener(view -&gt; selectFilter(&quot;Todas&quot;));</span>
+<span class="nc" id="L131">        activeFilter.setOnClickListener(view -&gt; selectFilter(&quot;Activa&quot;));</span>
+<span class="nc" id="L132">        upcomingFilter.setOnClickListener(view -&gt; selectFilter(&quot;Proximamente&quot;));</span>
+<span class="nc" id="L133">        finishedFilter.setOnClickListener(view -&gt; selectFilter(&quot;Finalizada&quot;));</span>
+<span class="nc" id="L134">    }</span>
+
+    private void configureSearch() {
+<span class="nc" id="L137">        searchInput.addTextChangedListener(new TextWatcher() {</span>
+
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after) {
+<span class="nc" id="L145">            }</span>
+
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count) {
+<span class="nc" id="L153">                showCampaigns();</span>
+<span class="nc" id="L154">            }</span>
+
+            @Override
+            public void afterTextChanged(Editable s) {
+<span class="nc" id="L158">            }</span>
+        });
+<span class="nc" id="L160">    }</span>
+
+    private void selectFilter(String filter) {
+<span class="nc" id="L163">        currentFilter = filter;</span>
+<span class="nc" id="L164">        showCampaigns();</span>
+<span class="nc" id="L165">    }</span>
+
+    private void showCampaigns() {
+
+<span class="nc" id="L169">        String query = searchInput</span>
+<span class="nc" id="L170">                .getText()</span>
+<span class="nc" id="L171">                .toString()</span>
+<span class="nc" id="L172">                .trim()</span>
+<span class="nc" id="L173">                .toLowerCase(Locale.getDefault()); //TODO. Aplicar el UiHelper.normalized</span>
+
+<span class="nc" id="L175">        campaignContainer.removeAllViews();</span>
+
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        for (Campaign campaign : campaigns) {</span>
+
+<span class="nc bnc" id="L179" title="All 2 branches missed.">            if (!currentFilter.equals(&quot;Todas&quot;)</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">                    &amp;&amp; !campaign.calculatedStatus.equals(currentFilter)) {</span>
+<span class="nc" id="L181">                continue;</span>
+            }
+
+<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (!query.isEmpty()</span>
+                    &amp;&amp; !campaign.title
+<span class="nc" id="L186">                    .toLowerCase(Locale.getDefault())</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                    .contains(query)) {</span>
+<span class="nc" id="L188">                continue;</span>
+            }
+
+<span class="nc" id="L191">            View card = createCampaignCard(campaign);</span>
+
+<span class="nc" id="L193">            LinearLayout.LayoutParams cardParams =</span>
+<span class="nc" id="L194">                    (LinearLayout.LayoutParams) card.getLayoutParams();</span>
+
+<span class="nc" id="L196">            cardParams.setMargins(</span>
+                    0,
+                    0,
+                    0,
+<span class="nc" id="L200">                    getResources().getDimensionPixelSize(R.dimen.card_spacing)</span>
+            );
+
+<span class="nc" id="L203">            campaignContainer.addView(card, cardParams);</span>
+<span class="nc" id="L204">        }</span>
+
+<span class="nc" id="L206">        updateFilterStyles();</span>
+<span class="nc" id="L207">    }</span>
+
+    private void updateFilterStyles() {
+<span class="nc" id="L210">        styleFilter(allFilter, currentFilter.equals(&quot;Todas&quot;));</span>
+<span class="nc" id="L211">        styleFilter(activeFilter, currentFilter.equals(&quot;Activa&quot;));</span>
+<span class="nc" id="L212">        styleFilter(upcomingFilter, currentFilter.equals(&quot;Proximamente&quot;));</span>
+<span class="nc" id="L213">        styleFilter(finishedFilter, currentFilter.equals(&quot;Finalizada&quot;));</span>
+<span class="nc" id="L214">    }</span>
+
+    private void styleFilter(MaterialButton filter, boolean selected) {
+
+<span class="nc" id="L218">        filter.setTextColor(</span>
+<span class="nc" id="L219">                ContextCompat.getColor(</span>
+                        this,
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                        selected</span>
+<span class="nc" id="L222">                                ? R.color.white</span>
+<span class="nc" id="L223">                                : R.color.secondary_text</span>
+                )
+        );
+
+<span class="nc" id="L227">        filter.setBackgroundTintList(</span>
+<span class="nc" id="L228">                ColorStateList.valueOf(</span>
+<span class="nc" id="L229">                        ContextCompat.getColor(</span>
+                                this,
+<span class="nc bnc" id="L231" title="All 2 branches missed.">                                selected</span>
+<span class="nc" id="L232">                                        ? R.color.primary_red</span>
+<span class="nc" id="L233">                                        : R.color.surface</span>
+                        )
+                )
+        );
+<span class="nc" id="L237">    }</span>
+
+    private View createCampaignCard(Campaign campaign) {
+
+<span class="nc" id="L241">        View card = getLayoutInflater().inflate(</span>
+                R.layout.item_admin_campaign,
+                campaignContainer,
+                false
+        );
+
+<span class="nc" id="L247">        card.setOnClickListener(</span>
+<span class="nc" id="L248">                view -&gt; openCampaignDetail(campaign)</span>
+        );
+
+<span class="nc" id="L251">        ((TextView) card.findViewById(R.id.admin_campaign_title))</span>
+<span class="nc" id="L252">                .setText(campaign.title);</span>
+
+<span class="nc" id="L254">        TextView status =</span>
+<span class="nc" id="L255">                card.findViewById(R.id.admin_campaign_status);</span>
+
+<span class="nc" id="L257">        status.setText(</span>
+<span class="nc" id="L258">                CampaignHelper.statusText(</span>
+                        campaign.calculatedStatus
+                )
+        );
+
+<span class="nc" id="L263">        status.setTextColor(</span>
+<span class="nc" id="L264">                ContextCompat.getColor(</span>
+                        this,
+<span class="nc" id="L266">                        CampaignHelper.statusColor(</span>
+                                campaign.calculatedStatus
+                        )
+                )
+        );
+
+<span class="nc" id="L272">        status.setBackgroundResource(</span>
+<span class="nc" id="L273">                CampaignHelper.statusBackground(</span>
+                        campaign.calculatedStatus
+                )
+        );
+
+<span class="nc" id="L278">        String locationAndDates =</span>
+                campaign.location
+                        + &quot; · &quot;
+<span class="nc" id="L281">                        + CampaignHelper.formatShortDate(</span>
+                        campaign.startDate,
+                        campaign.endDate
+                );
+
+<span class="nc" id="L286">        ((TextView) card.findViewById(R.id.admin_campaign_location))</span>
+<span class="nc" id="L287">                .setText(locationAndDates);</span>
+
+<span class="nc" id="L289">        TextView capacity =</span>
+<span class="nc" id="L290">                card.findViewById(R.id.admin_campaign_capacity);</span>
+
+<span class="nc bnc" id="L292" title="All 2 branches missed.">        if (campaign.maximumCapacity != null) {</span>
+
+<span class="nc" id="L294">            capacity.setText(</span>
+<span class="nc" id="L295">                    getString(</span>
+                            R.string.capacity_occupied,
+<span class="nc" id="L297">                            campaign.totalRegistered,</span>
+                            campaign.maximumCapacity
+                    )
+            );
+
+        } else {
+
+<span class="nc" id="L304">            capacity.setText(</span>
+<span class="nc" id="L305">                    getString(</span>
+                            R.string.registered_count,
+<span class="nc" id="L307">                            campaign.totalRegistered</span>
+                    )
+            );
+        }
+
+<span class="nc" id="L312">        ImageView editButton =</span>
+<span class="nc" id="L313">                card.findViewById(R.id.admin_campaign_edit);</span>
+
+<span class="nc" id="L315">        editButton.setOnClickListener(</span>
+<span class="nc" id="L316">                view -&gt; openCampaignEdit(campaign)</span>
+        );
+
+<span class="nc" id="L319">        ImageView deleteButton =</span>
+<span class="nc" id="L320">                card.findViewById(R.id.admin_campaign_delete);</span>
+
+<span class="nc" id="L322">        deleteButton.setOnClickListener(</span>
+<span class="nc" id="L323">                view -&gt; confirmDeleteCampaign(campaign)</span>
+        );
+
+<span class="nc" id="L326">        return card;</span>
+    }
+
+    private void confirmDeleteCampaign(Campaign campaign) {
+
+<span class="nc" id="L331">        new AlertDialog.Builder(this)</span>
+<span class="nc" id="L332">                .setTitle(&quot;Eliminar campaña&quot;)</span>
+<span class="nc" id="L333">                .setMessage(</span>
+                        &quot;¿Estás seguro de que querés eliminar la campaña \&quot;&quot;
+                                + campaign.title
+                                + &quot;\&quot;?&quot;
+                )
+<span class="nc" id="L338">                .setNegativeButton(&quot;Cancelar&quot;, null)</span>
+<span class="nc" id="L339">                .setPositiveButton(&quot;Eliminar&quot;, (dialog, which) -&gt;</span>
+<span class="nc" id="L340">                        deleteCampaign(campaign)</span>
+                )
+<span class="nc" id="L342">                .show();</span>
+<span class="nc" id="L343">    }</span>
+
+    private void deleteCampaign(Campaign campaign) {
+<span class="nc" id="L346">        String accessToken = SessionManager.getAccessToken(this);</span>
+
+<span class="nc bnc" id="L348" title="All 4 branches missed.">        if (accessToken == null || accessToken.trim().isEmpty()) {</span>
+<span class="nc" id="L349">            UiHelper.showToast(</span>
+                    this,
+                    &quot;No hay una sesión de administrador activa.&quot;,
+                    Toast.LENGTH_LONG
+            );
+<span class="nc" id="L354">            return;</span>
+        }
+
+        // TODO (refactor pendiente): este flujo queda fuera del alcance actual.
+        // Motivo: hay que centralizar el manejo de jwt y auth.
+        // Aquí todavía usa HttpURLConnection y transporta el accessToken manualmente.
+        // Pasos para aplicarlo:
+        // 1. Agregar el DELETE en ApiService.
+        // 2. Cambiar el repository para recibir Context y usar ApiClient.
+        // 3. Dejar que AuthInterceptor y TokenAuthenticator administren el JWT.
+        // 4. Reemplazar la llamada siguiente por este ejemplo:
+        // CampaignApiRepository.deleteCampaign(this, campaign.id, callback);
+<span class="nc" id="L366">        CampaignApiRepository.deleteCampaign(</span>
+                campaign.id,
+                accessToken,
+<span class="nc" id="L369">                new CampaignApiRepository.Callback&lt;Void&gt;() {</span>
+
+                    @Override
+                    public void onSuccess(Void value) {
+<span class="nc" id="L373">                        UiHelper.showToast(</span>
+                                AdminCampaignListActivity.this,
+                                &quot;Campaña eliminada correctamente.&quot;,
+                                Toast.LENGTH_SHORT
+                        );
+
+<span class="nc" id="L379">                        loadCampaigns();</span>
+<span class="nc" id="L380">                    }</span>
+
+                    @Override
+                    public void onError(Exception exception) {
+
+                        String message;
+
+<span class="nc bnc" id="L387" title="All 2 branches missed.">                        if (CampaignApiRepository.isUnauthorized(exception)) {</span>
+<span class="nc" id="L388">                            message = &quot;No tenés permisos para eliminar esta campaña.&quot;;</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">                        } else if (CampaignApiRepository.isNotFound(exception)) {</span>
+<span class="nc" id="L390">                            message = &quot;La campaña no existe o ya fue eliminada.&quot;;</span>
+<span class="nc bnc" id="L391" title="All 2 branches missed.">                        } else if (CampaignApiRepository.isNetworkError(exception)) {</span>
+<span class="nc" id="L392">                            message = &quot;No se pudo conectar con el servidor. Revisá tu conexión.&quot;;</span>
+                        } else {
+<span class="nc" id="L394">                            message = &quot;No se pudo eliminar la campaña. Intentá nuevamente.&quot;;</span>
+                        }
+
+<span class="nc" id="L397">                        UiHelper.showToast(</span>
+                                AdminCampaignListActivity.this,
+                                message,
+                                Toast.LENGTH_LONG
+                        );
+<span class="nc" id="L402">                    }</span>
+                }
+        );
+<span class="nc" id="L405">    }</span>
+
+    private void openCreateCampaign() {
+
+<span class="nc" id="L409">        Intent intent =</span>
+                new Intent(this, CreateCampaignActivity.class);
+
+<span class="nc" id="L412">        startActivity(intent);</span>
+<span class="nc" id="L413">    }</span>
+
+    private void openCampaignDetail(Campaign campaign) {
+
+<span class="nc" id="L417">        Intent intent =</span>
+                new Intent(this, CampaignDetailActivity.class);
+
+<span class="nc" id="L420">        intent.putExtra(</span>
+                ExtraKeys.EXTRA_CAMPAIGN,
+                campaign
+        );
+
+<span class="nc" id="L425">        intent.putExtra(</span>
+                ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL,
+                true
+        );
+
+<span class="nc" id="L430">        startActivity(intent);</span>
+<span class="nc" id="L431">    }</span>
+
+    private void openCampaignEdit(Campaign campaign) {
+
+<span class="nc" id="L435">        Intent intent =</span>
+                new Intent(this, CreateCampaignActivity.class);
+
+<span class="nc" id="L438">        intent.putExtra(</span>
+                ExtraKeys.EXTRA_CAMPAIGN,
+                campaign
+        );
+
+<span class="nc" id="L443">        startActivity(intent);</span>
+<span class="nc" id="L444">    }</span>
+
+    private void openDashboard() {
+
+<span class="nc" id="L448">        Intent intent =</span>
+                new Intent(this, AdminDashboardActivity.class);
+
+<span class="nc" id="L451">        intent.addFlags(</span>
+                Intent.FLAG_ACTIVITY_CLEAR_TOP
+        );
+
+<span class="nc" id="L455">        startActivity(intent);</span>
+<span class="nc" id="L456">        finish();</span>
+<span class="nc" id="L457">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

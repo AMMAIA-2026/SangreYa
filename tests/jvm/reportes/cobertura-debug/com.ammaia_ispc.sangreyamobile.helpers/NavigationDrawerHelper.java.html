@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NavigationDrawerHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.helpers</a> &gt; <span class="el_source">NavigationDrawerHelper.java</span></div><h1>NavigationDrawerHelper.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.helpers;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.activities.AdminCampaignListActivity;
+import com.google.android.material.navigation.NavigationView;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.activities.AboutUsActivity;
+import com.ammaia_ispc.sangreyamobile.activities.LoginActivity;
+import com.ammaia_ispc.sangreyamobile.activities.RegisterActivity;
+import com.ammaia_ispc.sangreyamobile.activities.ContactActivity;
+import com.ammaia_ispc.sangreyamobile.activities.EnrollmentsActivity;
+
+public final class NavigationDrawerHelper {
+    private NavigationDrawerHelper() {
+    }
+
+    public static void configure(
+            Activity activity,
+            DrawerLayout drawerLayout,
+            NavigationView navigationView) {
+<span class="nc" id="L30">        boolean admin = SessionManager.isAdmin(activity);</span>
+<span class="nc" id="L31">        boolean standardUser = SessionManager.isStandardUser(activity);</span>
+<span class="nc" id="L32">        String displayUser = SessionManager.getUserName(activity);</span>
+
+<span class="nc" id="L34">        TextView greeting = activity.findViewById(R.id.header_greeting);</span>
+<span class="nc" id="L35">        TextView subtitle = activity.findViewById(R.id.header_subtitle);</span>
+<span class="nc bnc" id="L36" title="All 6 branches missed.">        if ((standardUser || admin) &amp;&amp; !TextUtils.isEmpty(displayUser)) {</span>
+<span class="nc" id="L37">            greeting.setText(activity.getString(R.string.logged_user_greeting, displayUser));</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (standardUser) {</span>
+<span class="nc" id="L39">                subtitle.setText(R.string.campaign_subtitle);</span>
+            }
+        } else {
+<span class="nc" id="L42">            greeting.setText(R.string.guest_greeting);</span>
+<span class="nc" id="L43">            subtitle.setText(R.string.guest_subtitle);</span>
+        }
+
+<span class="nc" id="L46">        activity.findViewById(R.id.menu_button).setOnClickListener(view -&gt;</span>
+<span class="nc" id="L47">                drawerLayout.openDrawer(GravityCompat.START));</span>
+
+<span class="nc bnc" id="L49" title="All 4 branches missed.">        navigationView.getMenu().findItem(R.id.nav_login).setVisible(!standardUser &amp;&amp; !admin);</span>
+<span class="nc bnc" id="L50" title="All 4 branches missed.">        navigationView.getMenu().findItem(R.id.nav_register).setVisible(!standardUser &amp;&amp; !admin);</span>
+<span class="nc bnc" id="L51" title="All 4 branches missed.">        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(standardUser || admin);</span>
+<span class="nc" id="L52">        navigationView.getMenu().findItem(R.id.nav_campaigns).setVisible(admin);</span>
+<span class="nc" id="L53">        navigationView.getMenu().findItem(R.id.nav_enrollments).setVisible(standardUser);</span>
+
+<span class="nc" id="L55">        navigationView.setNavigationItemSelectedListener(item -&gt; {</span>
+            Intent intent;
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (item.getItemId() == R.id.nav_about_us) {</span>
+<span class="nc" id="L58">                intent = new Intent(activity, AboutUsActivity.class);</span>
+<span class="nc" id="L59">                activity.startActivity(intent);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.nav_campaigns) {</span>
+<span class="nc" id="L61">                intent = new Intent(activity, AdminCampaignListActivity.class);</span>
+<span class="nc" id="L62">                activity.startActivity(intent);</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.nav_enrollments) {</span>
+<span class="nc" id="L64">                intent = new Intent(activity, EnrollmentsActivity.class);</span>
+<span class="nc" id="L65">                activity.startActivity(intent);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.nav_contact) {</span>
+<span class="nc" id="L67">                intent = new Intent(activity, ContactActivity.class);</span>
+<span class="nc" id="L68">                activity.startActivity(intent);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.nav_login) {</span>
+<span class="nc" id="L70">                intent = new Intent(activity, LoginActivity.class);</span>
+<span class="nc" id="L71">                activity.startActivity(intent);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.nav_register) {</span>
+<span class="nc" id="L73">                intent = new Intent(activity, RegisterActivity.class);</span>
+<span class="nc" id="L74">                activity.startActivity(intent);</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            } else if (item.getItemId() == R.id.nav_logout) {</span>
+<span class="nc" id="L76">                SessionManager.logout(activity);</span>
+            } else {
+<span class="nc" id="L78">                return false;</span>
+            }
+<span class="nc" id="L80">            drawerLayout.closeDrawer(GravityCompat.START);</span>
+<span class="nc" id="L81">            return true;</span>
+        });
+<span class="nc" id="L83">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

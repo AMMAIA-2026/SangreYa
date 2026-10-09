@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnrollmentsActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">EnrollmentsActivity.java</span></div><h1>EnrollmentsActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.ammaia_ispc.sangreyamobile.model.Enrollment;
+import com.ammaia_ispc.sangreyamobile.model.MyEnrollments;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L35">public class EnrollmentsActivity extends AppCompatActivity {</span>
+<span class="nc" id="L36">    private final List&lt;Enrollment&gt; currentEnrollments = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L37">    private final List&lt;Enrollment&gt; historicalEnrollments = new ArrayList&lt;&gt;();</span>
+
+    private LinearLayout enrollmentsContainer;
+    private ProgressBar loadingIndicator;
+    private ScrollView enrollmentsScroll;
+    private TextView emptyView;
+    private TextView messageView;
+    private MaterialButton currentFilter;
+    private MaterialButton historyFilter;
+    private boolean showingHistory;
+    private boolean cancellationInProgress;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L51">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L52">        UiHelper.configureSystemBars(this);</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (!SessionManager.isStandardUser(this)) {</span>
+<span class="nc" id="L55">            finish();</span>
+<span class="nc" id="L56">            return;</span>
+        }
+
+<span class="nc" id="L59">        setContentView(R.layout.activity_enrollments);</span>
+<span class="nc" id="L60">        bindViews();</span>
+<span class="nc" id="L61">        configureNavigation();</span>
+<span class="nc" id="L62">        configureFilters();</span>
+<span class="nc" id="L63">    }</span>
+
+    @Override
+    protected void onResume() {
+<span class="nc" id="L67">        super.onResume();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (enrollmentsContainer != null) {</span>
+<span class="nc" id="L69">            loadEnrollments();</span>
+        }
+<span class="nc" id="L71">    }</span>
+
+    private void bindViews() {
+<span class="nc" id="L74">        enrollmentsContainer = findViewById(R.id.enrollments_container);</span>
+<span class="nc" id="L75">        loadingIndicator = findViewById(R.id.enrollments_loading);</span>
+<span class="nc" id="L76">        enrollmentsScroll = findViewById(R.id.enrollments_scroll);</span>
+<span class="nc" id="L77">        emptyView = findViewById(R.id.enrollments_empty);</span>
+<span class="nc" id="L78">        messageView = findViewById(R.id.enrollments_message);</span>
+<span class="nc" id="L79">        currentFilter = findViewById(R.id.enrollments_current_filter);</span>
+<span class="nc" id="L80">        historyFilter = findViewById(R.id.enrollments_history_filter);</span>
+<span class="nc" id="L81">    }</span>
+
+    private void configureNavigation() {
+<span class="nc" id="L84">        DrawerLayout drawerLayout = findViewById(R.id.enrollments_drawer);</span>
+<span class="nc" id="L85">        NavigationView navigationView = findViewById(R.id.enrollments_navigation_view);</span>
+<span class="nc" id="L86">        NavigationDrawerHelper.configure(</span>
+                this,
+                drawerLayout,
+                navigationView);
+
+<span class="nc" id="L91">        findViewById(R.id.enrollments_campaigns_navigation_item)</span>
+<span class="nc" id="L92">                .setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L93">                    Intent intent = new Intent(this, CampaignListActivity.class);</span>
+<span class="nc" id="L94">                    startActivity(intent);</span>
+<span class="nc" id="L95">                    finish();</span>
+<span class="nc" id="L96">                });</span>
+
+<span class="nc" id="L98">        findViewById(R.id.enrollments_profile_navigation_item)</span>
+<span class="nc" id="L99">                .setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L100">                    startActivity(new Intent(this, ProfileActivity.class));</span>
+<span class="nc" id="L101">                    finish();</span>
+<span class="nc" id="L102">                });</span>
+<span class="nc" id="L103">    }</span>
+
+    private void configureFilters() {
+<span class="nc" id="L106">        currentFilter.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L107">            showingHistory = false;</span>
+<span class="nc" id="L108">            showEnrollments();</span>
+<span class="nc" id="L109">        });</span>
+<span class="nc" id="L110">        historyFilter.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L111">            showingHistory = true;</span>
+<span class="nc" id="L112">            showEnrollments();</span>
+<span class="nc" id="L113">        });</span>
+<span class="nc" id="L114">    }</span>
+
+    private void loadEnrollments() {
+<span class="nc" id="L117">        UiHelper.clearMessage(messageView);</span>
+<span class="nc" id="L118">        UiHelper.setLoading(loadingIndicator, enrollmentsScroll, true);</span>
+<span class="nc" id="L119">        CampaignApiRepository.getMyEnrollments(</span>
+                this,
+<span class="nc" id="L121">                new CampaignApiRepository.Callback&lt;MyEnrollments&gt;() {</span>
+                    @Override
+                    public void onSuccess(MyEnrollments value) {
+<span class="nc" id="L124">                        currentEnrollments.clear();</span>
+<span class="nc" id="L125">                        historicalEnrollments.clear();</span>
+<span class="nc" id="L126">                        currentEnrollments.addAll(value.current);</span>
+<span class="nc" id="L127">                        historicalEnrollments.addAll(value.historical);</span>
+<span class="nc" id="L128">                        showEnrollments();</span>
+<span class="nc" id="L129">                        UiHelper.setLoading(loadingIndicator, enrollmentsScroll, false);</span>
+<span class="nc" id="L130">                    }</span>
+
+                    @Override
+                    public void onError(Exception exception) {
+<span class="nc" id="L134">                        UiHelper.setLoading(loadingIndicator, enrollmentsScroll, false);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">                        if (isSessionError(exception)) {</span>
+<span class="nc" id="L136">                            SessionManager.expireSession(EnrollmentsActivity.this);</span>
+<span class="nc" id="L137">                            return;</span>
+                        }
+<span class="nc" id="L139">                        UiHelper.showMessage(messageView, R.string.enrollments_load_error);</span>
+<span class="nc" id="L140">                    }</span>
+                });
+<span class="nc" id="L142">    }</span>
+
+    private void showEnrollments() {
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        List&lt;Enrollment&gt; enrollments = showingHistory</span>
+<span class="nc" id="L146">                ? historicalEnrollments</span>
+<span class="nc" id="L147">                : currentEnrollments;</span>
+
+<span class="nc" id="L149">        enrollmentsContainer.removeAllViews();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        emptyView.setVisibility(enrollments.isEmpty() ? View.VISIBLE : View.GONE);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        emptyView.setText(showingHistory</span>
+<span class="nc" id="L152">                ? R.string.enrollments_empty_history</span>
+<span class="nc" id="L153">                : R.string.enrollments_empty_current);</span>
+
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for (Enrollment enrollment : enrollments) {</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if (enrollment.campaign != null) {</span>
+<span class="nc" id="L157">                enrollmentsContainer.addView(createEnrollmentCard(enrollment));</span>
+            }
+<span class="nc" id="L159">        }</span>
+
+<span class="nc" id="L161">        updateFilterStyles();</span>
+<span class="nc" id="L162">    }</span>
+
+    private View createEnrollmentCard(Enrollment enrollment) {
+<span class="nc" id="L165">        View card = getLayoutInflater().inflate(</span>
+                R.layout.item_enrollment,
+                enrollmentsContainer,
+                false);
+<span class="nc" id="L169">        Campaign campaign = enrollment.campaign;</span>
+
+<span class="nc" id="L171">        TextView status = card.findViewById(R.id.enrollment_campaign_status);</span>
+<span class="nc" id="L172">        status.setText(CampaignHelper.statusText(campaign.calculatedStatus));</span>
+<span class="nc" id="L173">        status.setTextColor(ContextCompat.getColor(</span>
+                this,
+<span class="nc" id="L175">                CampaignHelper.statusColor(campaign.calculatedStatus)));</span>
+<span class="nc" id="L176">        status.setBackgroundResource(CampaignHelper.statusBackground(campaign.calculatedStatus));</span>
+
+<span class="nc" id="L178">        ((TextView) card.findViewById(R.id.enrollment_campaign_title))</span>
+<span class="nc" id="L179">                .setText(campaign.title);</span>
+<span class="nc" id="L180">        ((TextView) card.findViewById(R.id.enrollment_campaign_location))</span>
+<span class="nc" id="L181">                .setText(campaign.location);</span>
+<span class="nc" id="L182">        ((TextView) card.findViewById(R.id.enrollment_campaign_dates))</span>
+<span class="nc" id="L183">                .setText(CampaignHelper.formatShortDate(campaign.startDate, campaign.endDate));</span>
+
+<span class="nc" id="L185">        Button cancelButton = card.findViewById(R.id.enrollment_cancel);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        cancelButton.setVisibility(showingHistory ? View.GONE : View.VISIBLE);</span>
+<span class="nc" id="L187">        cancelButton.setOnClickListener(view -&gt; confirmCancellation(enrollment));</span>
+<span class="nc" id="L188">        card.setOnClickListener(view -&gt; openCampaignDetails(campaign));</span>
+
+<span class="nc" id="L190">        LinearLayout.LayoutParams cardParams = (LinearLayout.LayoutParams) card.getLayoutParams();</span>
+<span class="nc" id="L191">        cardParams.setMargins(</span>
+                0,
+                0,
+                0,
+<span class="nc" id="L195">                getResources().getDimensionPixelSize(R.dimen.card_spacing));</span>
+<span class="nc" id="L196">        card.setLayoutParams(cardParams);</span>
+<span class="nc" id="L197">        return card;</span>
+    }
+
+    private void confirmCancellation(Enrollment enrollment) {
+<span class="nc bnc" id="L201" title="All 4 branches missed.">        if (cancellationInProgress || enrollment.campaign == null) {</span>
+<span class="nc" id="L202">            return;</span>
+        }
+
+<span class="nc" id="L205">        new AlertDialog.Builder(this)</span>
+<span class="nc" id="L206">                .setTitle(R.string.cancel_enrollment_title)</span>
+<span class="nc" id="L207">                .setMessage(getString(</span>
+                        R.string.cancel_enrollment_message,
+                        enrollment.campaign.title))
+<span class="nc" id="L210">                .setNegativeButton(R.string.dialog_cancel, null)</span>
+<span class="nc" id="L211">                .setPositiveButton(</span>
+                        R.string.cancel_enrollment_confirm,
+<span class="nc" id="L213">                        (dialog, which) -&gt; cancelEnrollment(enrollment))</span>
+<span class="nc" id="L214">                .show();</span>
+<span class="nc" id="L215">    }</span>
+
+    private void cancelEnrollment(Enrollment enrollment) {
+<span class="nc bnc" id="L218" title="All 2 branches missed.">        if (cancellationInProgress) {</span>
+<span class="nc" id="L219">            return;</span>
+        }
+
+<span class="nc" id="L222">        cancellationInProgress = true;</span>
+<span class="nc" id="L223">        CampaignApiRepository.cancelEnrollment(</span>
+                this,
+                enrollment.id,
+<span class="nc" id="L226">                new CampaignApiRepository.Callback&lt;Void&gt;() {</span>
+                    @Override
+                    public void onSuccess(Void value) {
+<span class="nc" id="L229">                        cancellationInProgress = false;</span>
+<span class="nc" id="L230">                        currentEnrollments.remove(enrollment);</span>
+<span class="nc" id="L231">                        showEnrollments();</span>
+<span class="nc" id="L232">                        Toast.makeText(</span>
+                                EnrollmentsActivity.this,
+                                R.string.cancel_enrollment_success,
+<span class="nc" id="L235">                                Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L236">                    }</span>
+
+                    @Override
+                    public void onError(Exception exception) {
+<span class="nc" id="L240">                        cancellationInProgress = false;</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">                        if (isSessionError(exception)) {</span>
+<span class="nc" id="L242">                            SessionManager.expireSession(EnrollmentsActivity.this);</span>
+<span class="nc" id="L243">                            return;</span>
+                        }
+<span class="nc" id="L245">                        String code = CampaignApiRepository.getErrorCode(exception);</span>
+<span class="nc" id="L246">                        Toast.makeText(</span>
+                                EnrollmentsActivity.this,
+<span class="nc bnc" id="L248" title="All 2 branches missed.">                                &quot;campania_finalizada&quot;.equals(code)</span>
+<span class="nc" id="L249">                                        ? R.string.cancel_enrollment_finished</span>
+<span class="nc" id="L250">                                        : R.string.cancel_enrollment_error,</span>
+<span class="nc" id="L251">                                Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L252">                    }</span>
+                });
+<span class="nc" id="L254">    }</span>
+
+    private void openCampaignDetails(Campaign campaign) {
+<span class="nc" id="L257">        Intent intent = new Intent(this, CampaignDetailActivity.class);</span>
+<span class="nc" id="L258">        intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);</span>
+<span class="nc" id="L259">        intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);</span>
+<span class="nc" id="L260">        startActivity(intent);</span>
+<span class="nc" id="L261">    }</span>
+
+    private void updateFilterStyles() {
+<span class="nc bnc" id="L264" title="All 2 branches missed.">        styleFilter(currentFilter, !showingHistory);</span>
+<span class="nc" id="L265">        styleFilter(historyFilter, showingHistory);</span>
+<span class="nc" id="L266">    }</span>
+
+    private void styleFilter(MaterialButton filter, boolean selected) {
+<span class="nc" id="L269">        filter.setTextColor(ContextCompat.getColor(</span>
+                this,
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                selected ? R.color.white : R.color.secondary_text));</span>
+<span class="nc" id="L272">        filter.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(</span>
+                this,
+<span class="nc bnc" id="L274" title="All 2 branches missed.">                selected ? R.color.primary_red : R.color.surface)));</span>
+<span class="nc" id="L275">    }</span>
+
+    private boolean isSessionError(Exception exception) {
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        return exception instanceof CampaignApiRepository.HttpException</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">                &amp;&amp; ((CampaignApiRepository.HttpException) exception).getStatusCode() == 401;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

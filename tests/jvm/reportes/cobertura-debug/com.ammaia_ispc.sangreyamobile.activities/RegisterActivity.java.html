@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegisterActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">RegisterActivity.java</span></div><h1>RegisterActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.RegisterApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
+
+import android.app.AlertDialog;
+
+<span class="nc" id="L24">public class RegisterActivity extends AppCompatActivity {</span>
+
+    private Button btnCreateAccount;
+    private TextView tvIniciarSesion;
+    private EditText etName;
+    private EditText etApellido;
+    private EditText etUsername;
+    private EditText etDni;
+    private EditText etRegisterEmail;
+    private EditText etFechaNacimiento;
+    private EditText etRegisterPassword;
+    private EditText etConfirmPassword;
+    private CheckBox cbAceptarTerminos;
+    private ImageButton btnTogglePassword;
+    private ImageButton btnToggleConfirmPassword;
+
+    private static final String TEXTO_TERMINOS =
+            &quot;Términos y Condiciones y Política de Privacidad de SangreYa\n\n&quot; +
+                    &quot;1. Datos que recolectamos: al registrarte, almacenamos tu nombre, apellido, &quot; +
+                    &quot;DNI, email, fecha de nacimiento y grupo sanguíneo (si lo indicás), con el único &quot; +
+                    &quot;fin de gestionar tu participación en campañas de donación de sangre.\n\n&quot; +
+                    &quot;2. Uso de tus datos: tus datos no se comparten con terceros ajenos al proyecto &quot; +
+                    &quot;ni se utilizan con fines comerciales. Solo se usan para identificarte y &quot; +
+                    &quot;gestionar tus inscripciones a campañas.\n\n&quot; +
+                    &quot;3. Tus derechos (Ley 25.326 de Protección de Datos Personales): podés acceder, &quot; +
+                    &quot;rectificar o solicitar la eliminación de tus datos personales en cualquier &quot; +
+                    &quot;momento desde la opción correspondiente en tu perfil.\n\n&quot; +
+                    &quot;4. Seguridad: tu contraseña se almacena de forma cifrada y nunca es visible &quot; +
+                    &quot;para el equipo de SangreYa ni se comparte por ningún medio.\n\n&quot; +
+                    &quot;Al aceptar, confirmás que leíste y entendés estos términos.&quot;;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L57">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L58">        setContentView(R.layout.activity_register);</span>
+<span class="nc" id="L59">        NavigationHelper.configureBackButton(this, R.id.btnBack);</span>
+
+<span class="nc" id="L61">        btnCreateAccount = findViewById(R.id.btnCreateAccount);</span>
+<span class="nc" id="L62">        tvIniciarSesion = findViewById(R.id.tvIniciarSesion);</span>
+
+<span class="nc" id="L64">        etName = findViewById(R.id.etName);</span>
+<span class="nc" id="L65">        etApellido = findViewById(R.id.etApellido);</span>
+<span class="nc" id="L66">        etUsername = findViewById(R.id.etUsername);</span>
+<span class="nc" id="L67">        etDni = findViewById(R.id.etDni);</span>
+<span class="nc" id="L68">        etRegisterEmail = findViewById(R.id.etRegisterEmail);</span>
+<span class="nc" id="L69">        etFechaNacimiento = findViewById(R.id.etFechaNacimiento);</span>
+<span class="nc" id="L70">        etRegisterPassword = findViewById(R.id.etRegisterPassword);</span>
+<span class="nc" id="L71">        etConfirmPassword = findViewById(R.id.etConfirmPassword);</span>
+<span class="nc" id="L72">        cbAceptarTerminos = findViewById(R.id.cbAceptarTerminos);</span>
+
+<span class="nc" id="L74">        btnTogglePassword = findViewById(R.id.btnTogglePassword);</span>
+<span class="nc" id="L75">        btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);</span>
+
+<span class="nc" id="L77">        UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);</span>
+<span class="nc" id="L78">        UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);</span>
+
+<span class="nc" id="L80">        cbAceptarTerminos.setOnClickListener(v -&gt; mostrarTerminos());</span>
+
+        // TODO(date-input): habilitar escritura manual en etFechaNacimiento.
+        // 1. En activity_register.xml, quitar android:focusable=&quot;false&quot; del EditText.
+        // 2. Agregar android:drawableEnd=&quot;@drawable/ic_calendar&quot; al mismo EditText.
+        // 3. Reemplazar este setOnClickListener por:
+        //    DateHelper.configureDateInput(this, etFechaNacimiento);
+
+<span class="nc" id="L88">        btnCreateAccount.setOnClickListener(v -&gt; validarRegistro());</span>
+
+<span class="nc" id="L90">        tvIniciarSesion.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L91">            Intent intent = new Intent(</span>
+                    RegisterActivity.this,
+                    LoginActivity.class
+            );
+<span class="nc" id="L95">            startActivity(intent);</span>
+<span class="nc" id="L96">            finish();</span>
+<span class="nc" id="L97">        });</span>
+<span class="nc" id="L98">    }</span>
+
+    private void mostrarTerminos() {
+<span class="nc" id="L101">        new AlertDialog.Builder(this)</span>
+<span class="nc" id="L102">                .setTitle(&quot;Términos y Condiciones&quot;)</span>
+<span class="nc" id="L103">                .setMessage(TEXTO_TERMINOS)</span>
+<span class="nc" id="L104">                .setPositiveButton(&quot;Cerrar&quot;, null)</span>
+<span class="nc" id="L105">                .show();</span>
+<span class="nc" id="L106">    }</span>
+
+    private void validarRegistro() {
+
+<span class="nc" id="L110">        etName.setError(null);</span>
+<span class="nc" id="L111">        etApellido.setError(null);</span>
+<span class="nc" id="L112">        etUsername.setError(null);</span>
+<span class="nc" id="L113">        etDni.setError(null);</span>
+<span class="nc" id="L114">        etRegisterEmail.setError(null);</span>
+<span class="nc" id="L115">        etFechaNacimiento.setError(null);</span>
+<span class="nc" id="L116">        etRegisterPassword.setError(null);</span>
+<span class="nc" id="L117">        etConfirmPassword.setError(null);</span>
+
+<span class="nc" id="L119">        String name = ((EditText) findViewById(R.id.etName))</span>
+<span class="nc" id="L120">                .getText().toString().trim();</span>
+
+<span class="nc" id="L122">        String apellido = ((EditText) findViewById(R.id.etApellido))</span>
+<span class="nc" id="L123">                .getText().toString().trim();</span>
+
+<span class="nc" id="L125">        String username = ((EditText) findViewById(R.id.etUsername))</span>
+<span class="nc" id="L126">                .getText().toString().trim();</span>
+
+<span class="nc" id="L128">        String fechaNacimientoDisplay = ((EditText) findViewById(R.id.etFechaNacimiento))</span>
+<span class="nc" id="L129">                .getText().toString().trim();</span>
+<span class="nc" id="L130">        String fechaNacimiento = DateHelper.toIsoDate(fechaNacimientoDisplay);</span>
+
+<span class="nc" id="L132">        String dni = ((EditText) findViewById(R.id.etDni))</span>
+<span class="nc" id="L133">                .getText().toString().trim();</span>
+
+<span class="nc" id="L135">        String email = ((EditText) findViewById(R.id.etRegisterEmail))</span>
+<span class="nc" id="L136">                .getText().toString().trim();</span>
+
+<span class="nc" id="L138">        String password = ((EditText) findViewById(R.id.etRegisterPassword))</span>
+<span class="nc" id="L139">                .getText().toString();</span>
+
+<span class="nc" id="L141">        String confirmPassword = ((EditText) findViewById(R.id.etConfirmPassword))</span>
+<span class="nc" id="L142">                .getText().toString();</span>
+
+        // Campos obligatorios
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (TextUtils.isEmpty(name) ||</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                TextUtils.isEmpty(dni) ||</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">                TextUtils.isEmpty(email) ||</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                TextUtils.isEmpty(password) ||</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                TextUtils.isEmpty(confirmPassword) ||</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">                TextUtils.isEmpty(apellido) ||</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                TextUtils.isEmpty(username) ||</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                TextUtils.isEmpty(fechaNacimientoDisplay)) {</span>
+
+<span class="nc" id="L154">            UiHelper.showToast(</span>
+                    this,
+                    &quot;Completá todos los campos&quot;,
+                    Toast.LENGTH_SHORT
+            );
+<span class="nc" id="L159">            return;</span>
+        }
+
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        if (!cbAceptarTerminos.isChecked()) {</span>
+<span class="nc" id="L163">            UiHelper.showToast(</span>
+                    this,
+                    &quot;Tenés que aceptar los Términos y Condiciones para continuar&quot;,
+                    Toast.LENGTH_SHORT
+            );
+<span class="nc" id="L168">            return;</span>
+        }
+
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        if (TextUtils.isEmpty(fechaNacimiento)) {</span>
+<span class="nc" id="L172">            etFechaNacimiento.setError(getString(R.string.profile_birth_date_invalid));</span>
+<span class="nc" id="L173">            etFechaNacimiento.requestFocus();</span>
+<span class="nc" id="L174">            return;</span>
+        }
+
+
+        // DNI válido: exactamente 7 u 8 dígitos
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (!dni.matches(&quot;\\d{7,8}&quot;)) {</span>
+<span class="nc" id="L180">            etDni.setError(&quot;El DNI debe tener 7 u 8 dígitos numéricos&quot;);</span>
+<span class="nc" id="L181">            etDni.requestFocus();</span>
+<span class="nc" id="L182">            return;</span>
+        }
+
+
+        // Email válido
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {</span>
+<span class="nc" id="L188">            UiHelper.showToast(</span>
+                    this,
+                    &quot;Ingresá un email válido&quot;,
+                    Toast.LENGTH_SHORT
+            );
+<span class="nc" id="L193">            return;</span>
+        }
+
+        // Contraseña
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (password.length() &lt; 10 ||</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">                !password.matches(&quot;.*[A-Z].*&quot;) ||</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                !password.matches(&quot;.*[a-z].*&quot;) ||</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">                !password.matches(&quot;.*[0-9].*&quot;) ||</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                !password.matches(&quot;.*[^A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\\s].*&quot;)) {</span>
+
+<span class="nc" id="L203">            UiHelper.showToast(</span>
+                    this,
+                    &quot;La contraseña debe tener 10 caracteres, mayúscula, minúscula, número y símbolo&quot;,
+                    Toast.LENGTH_SHORT
+            );
+<span class="nc" id="L208">            return;</span>
+        }
+
+        // Confirmación de contraseña
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        if (!password.equals(confirmPassword)) {</span>
+<span class="nc" id="L213">            UiHelper.showToast(</span>
+                    this,
+                    &quot;Las contraseñas no coinciden&quot;,
+                    Toast.LENGTH_SHORT
+            );
+<span class="nc" id="L218">            return;</span>
+        }
+
+<span class="nc" id="L221">        RegisterRequest request = new RegisterRequest(</span>
+                username,
+                email,
+                password,
+                dni,
+                name,
+                apellido,
+                fechaNacimiento
+        );
+
+<span class="nc" id="L231">        RegisterApiRepository.register(</span>
+                this,
+                request,
+<span class="nc" id="L234">                new RegisterApiRepository.RegisterCallback() {</span>
+
+                    @Override
+                    public void onSuccess() {
+<span class="nc" id="L238">                        clearForm();</span>
+<span class="nc" id="L239">                        UiHelper.showToast(</span>
+                                RegisterActivity.this,
+                                &quot;Cuenta creada correctamente&quot;,
+                                Toast.LENGTH_SHORT
+                        );
+<span class="nc" id="L244">                    }</span>
+
+                    @Override
+                    public void onValidationError(String field, String message) {
+<span class="nc bnc" id="L248" title="All 7 branches missed.">                        switch (field) {</span>
+                            case &quot;email&quot;:
+<span class="nc" id="L250">                                etRegisterEmail.setError(message);</span>
+<span class="nc" id="L251">                                etRegisterEmail.requestFocus();</span>
+<span class="nc" id="L252">                                break;</span>
+
+                            case &quot;dni&quot;:
+<span class="nc" id="L255">                                etDni.setError(message);</span>
+<span class="nc" id="L256">                                etDni.requestFocus();</span>
+<span class="nc" id="L257">                                break;</span>
+
+                            case &quot;username&quot;:
+<span class="nc" id="L260">                                etUsername.setError(message);</span>
+<span class="nc" id="L261">                                etUsername.requestFocus();</span>
+<span class="nc" id="L262">                                break;</span>
+
+                            case &quot;nombre&quot;:
+<span class="nc" id="L265">                                etName.setError(message);</span>
+<span class="nc" id="L266">                                etName.requestFocus();</span>
+<span class="nc" id="L267">                                break;</span>
+
+                            case &quot;apellido&quot;:
+<span class="nc" id="L270">                                etApellido.setError(message);</span>
+<span class="nc" id="L271">                                etApellido.requestFocus();</span>
+<span class="nc" id="L272">                                break;</span>
+
+                            case &quot;fecha_nacimiento&quot;:
+<span class="nc" id="L275">                                etFechaNacimiento.setError(message);</span>
+<span class="nc" id="L276">                                etFechaNacimiento.requestFocus();</span>
+<span class="nc" id="L277">                                break;</span>
+
+                            default:
+<span class="nc" id="L280">                                UiHelper.showToast(</span>
+                                        RegisterActivity.this,
+                                        message,
+                                        Toast.LENGTH_SHORT
+                                );
+                                break;
+                        }
+<span class="nc" id="L287">                    }</span>
+
+                    @Override
+                    public void onError(int messageRes) {
+<span class="nc" id="L291">                        UiHelper.showToast(</span>
+                                RegisterActivity.this,
+<span class="nc" id="L293">                                getString(messageRes),</span>
+                                Toast.LENGTH_SHORT
+                        );
+<span class="nc" id="L296">                    }</span>
+                }
+        );
+<span class="nc" id="L299">    }</span>
+
+    private void clearForm() {
+<span class="nc" id="L302">        etName.setText(&quot;&quot;);</span>
+<span class="nc" id="L303">        etApellido.setText(&quot;&quot;);</span>
+<span class="nc" id="L304">        etUsername.setText(&quot;&quot;);</span>
+<span class="nc" id="L305">        etDni.setText(&quot;&quot;);</span>
+<span class="nc" id="L306">        etRegisterEmail.setText(&quot;&quot;);</span>
+<span class="nc" id="L307">        etFechaNacimiento.setText(&quot;&quot;);</span>
+<span class="nc" id="L308">        etRegisterPassword.setText(&quot;&quot;);</span>
+<span class="nc" id="L309">        etConfirmPassword.setText(&quot;&quot;);</span>
+<span class="nc" id="L310">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-09T18:43:07" hostname="GUILLE" time="0.139">
+  <properties/>
+  <testcase name="persisteTokensDeLogin" classname="com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest" time="0.139"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SangreYa — JUnit y MockWebServer</title>
+  <style>
+    body { font: 16px system-ui, sans-serif; margin: 32px; color: #222; }
+    table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+    td, th { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f2f2f2; }
+    .pass { color: #176c37; font-weight: bold; }
+    code { overflow-wrap: anywhere; }
+    td:last-child { overflow-wrap: anywhere; font-size: 14px; }
+    a { color: #174ea6; }
+  </style>
+</head>
+<body>
+  <h1>Reporte JUnit y MockWebServer</h1>
+  <p>Ejecución final: <strong>2026-10-09T15:43:05-03:00</strong></p>
+  <p class="pass">Debug: 29/29 PASS · Release: 29/29 PASS · 0 fallos · 0 omitidos</p>
+  <p>29 métodos: 24 JUnit sin MockWebServer y 5 con MockWebServer; 20 casos documentados.</p>
+  <p>Commit base: <code>423f705f3bb0ee0592d7c2fccec8c99c3cba0785</code><br>
+    Fuentes probadas SHA-256: <code>48a698a287ed132c7dc1cd86f0cfc58bbc9bed762ed53937eb9ff35b7419817e</code></p>
+  <nav>
+    <a href="resultados-debug/index.html">Resultados debug</a> ·
+    <a href="resultados-release/index.html">Resultados release</a> ·
+    <a href="cobertura-debug/index.html">Cobertura HTML</a> ·
+    <a href="cobertura-debug/coverage.xml">Cobertura XML</a> ·
+    <a href="ejecucion.json">Metadatos</a> ·
+    <a href="resumen.md">Resumen</a>
+  </nav>
+  <h2>Casos y métodos</h2>
+  <table>
+    <thead><tr><th>Caso</th><th>Métodos</th><th>Debug</th><th>Release</th><th>Tests</th></tr></thead>
+    <tbody>
+      <tr><td>TC-NET-01</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.AuthApiTest.html">com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login200ParseaTokens</a></td></tr>
+      <tr><td>TC-NET-02</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.AuthApiTest.html">com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login401NoPersisteSesion</a></td></tr>
+      <tr><td>TC-NET-03</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.ProfileApiTest.html">com.ammaia_ispc.sangreyamobile.data.ProfileApiTest#timeoutMuestraErrorSinPerderDatos</a></td></tr>
+      <tr><td>TC-NET-04</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.CampaignApiTest.html">com.ammaia_ispc.sangreyamobile.data.CampaignApiTest#http500MapeaErrorSeguro</a></td></tr>
+      <tr><td>TC-NET-05</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest.html">com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest#bodyVacioYContentType</a></td></tr>
+      <tr><td>TC-UNIT-01</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest.html">com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#validoEnviaSolicitud</a></td></tr>
+      <tr><td>TC-UNIT-02</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest.html">com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#rechazaObligatoriosYLimites</a></td></tr>
+      <tr><td>TC-UNIT-03</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest.html">com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest#jsonMapeaPerfilSinPassword</a></td></tr>
+      <tr><td>TC-UNIT-04</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest#rechazaEmailYDniInvalidos</a></td></tr>
+      <tr><td>TC-UNIT-05</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest.html">com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest#actualizaPerfilPropio</a></td></tr>
+      <tr><td>TC-UNIT-06</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#rejectsInvalidDates</a></td></tr>
+      <tr><td>TC-UNIT-07</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#validatesCapacity</a></td></tr>
+      <tr><td>TC-UNIT-08</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest.html">com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest#optionalHealthCenterNull</a></td></tr>
+      <tr><td>TC-UNIT-09</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest.html">com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#noExponeBodyInterno</a></td></tr>
+      <tr><td>TC-UNIT-10</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest.html">com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest#calculaMetricas</a></td></tr>
+      <tr><td>TC-UNIT-11</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest.html">com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#mapeaStatusHttp</a></td></tr>
+      <tr><td>TC-UNIT-12</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest.html">com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest#rechazaCamposVacios</a></td></tr>
+      <tr><td>TC-UNIT-13</td><td>1</td><td class="pass">PASS</td><td class="pass">PASS</td><td><a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest.html">com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest#persisteTokensDeLogin</a></td></tr>
+      <tr><td>TC-UNIT-14</td><td>8</td><td class="pass">PASS</td><td class="pass">PASS</td><td>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordEnElMinimoYPorEncima</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordDeNueveCaracteresAunqueCumplaLaComplejidad</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordNulaOVacia</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMayuscula</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMinuscula</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinNumero</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinSimboloInclusoConEspaciosOLetrasAcentuadas</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordConLetrasAcentuadasYSimbolo</a>
+      </td></tr>
+      <tr><td>TC-UNIT-15</td><td>3</td><td class="pass">PASS</td><td class="pass">PASS</td><td>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaConfirmacionIdentica</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionDistintaSinNormalizarMayusculasNiEspacios</a><br>
+        <a href="resultados-debug/classes/com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.html">com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionConValoresNulos</a>
+      </td></tr>
+    </tbody>
+  </table>
+  <h2>Configuración de la corrida</h2>
+  <p>Dependencia exclusiva de tests org.json:json:20231013 para ejecutar el mapper con JSONObject real en JVM.</p>
+  <p>JDK 17; JUnit 4.13.2; Mockito 4.11.0; MockWebServer 4.11.0; JaCoCo 0.8.13.</p>
+  <p><code>.\gradlew.bat :app:testDebugUnitTest :app:testReleaseUnitTest :app:jacocoDebugReport --rerun-tasks --continue --console=plain</code></p>
+  <h2>Cobertura debug</h2>
+  <p>Líneas: 7.48% (235/3140). Ramas: 9.59% (101/1053).</p>
+  <p>Cobertura agregada de todas las clases compiladas de producción debug, incluyendo Activities y código no ejercitado. Se excluyen R, BuildConfig y Manifest generados; no representa cobertura aislada por caso.</p>
+  <p>JUnit XML: <code>junit-debug/</code> y <code>junit-release/</code>. Datos de cobertura: <code>testDebugUnitTest.exec</code> y <code>testReleaseUnitTest.exec</code>. Hashes: <a href="sha256.json">sha256.json</a>.</p>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminDashboardHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.helpers</a> &gt; <span class="el_source">AdminDashboardHelper.java</span></div><h1>AdminDashboardHelper.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.helpers;
+
+import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+public final class AdminDashboardHelper {
+
+    private AdminDashboardHelper() {
+    }
+
+    public static int totalCampaigns(List&lt;DashboardCampaignStatus&gt; statuses) {
+<span class="fc" id="L17">        int total = 0;</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        for (DashboardCampaignStatus status : statuses) {</span>
+<span class="fc" id="L19">            total += status.count;</span>
+<span class="fc" id="L20">        }</span>
+<span class="fc" id="L21">        return total;</span>
+    }
+
+    public static List&lt;Campaign&gt; orderRecentCampaigns(List&lt;Campaign&gt; campaigns) {
+<span class="nc" id="L25">        List&lt;Campaign&gt; ordered = new ArrayList&lt;&gt;(campaigns);</span>
+<span class="nc" id="L26">        ordered.sort(Comparator</span>
+<span class="nc" id="L27">                .comparingInt((Campaign campaign) -&gt; statusOrder(campaign.calculatedStatus))</span>
+<span class="nc" id="L28">                .thenComparing(campaign -&gt; campaign.startDate));</span>
+<span class="nc" id="L29">        return ordered;</span>
+    }
+
+    private static int statusOrder(String status) {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (&quot;Activa&quot;.equals(status)) {</span>
+<span class="nc" id="L34">            return 0;</span>
+        }
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (&quot;Proximamente&quot;.equals(status)) {</span>
+<span class="nc" id="L37">            return 1;</span>
+        }
+<span class="nc" id="L39">        return 2;</span>
+    }
+
+    public static int percentage(int amount, int total) {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        return total == 0 ? 0 : Math.round(amount * 100f / total);</span>
+    }
+
+    public static String monthLabel(int month) {
+<span class="nc" id="L47">        String[] months = {&quot;&quot;, &quot;Ene&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Abr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Ago&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dic&quot;};</span>
+<span class="nc bnc" id="L48" title="All 4 branches missed.">        return month &gt;= 1 &amp;&amp; month &lt;= 12 ? months[month] : &quot;&quot;;</span>
+    }
+
+    public static String yearLabel(int year) {
+<span class="nc" id="L52">        return String.format(Locale.getDefault(), &quot;%02d&quot;, Math.abs(year % 100));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

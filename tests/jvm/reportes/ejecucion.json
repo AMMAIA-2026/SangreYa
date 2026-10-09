@@ -1,0 +1,790 @@
+{
+  "project": "D:\\LetsCode\\Pepsi\\SangreYa mobile",
+  "excel": "C:\\Users\\Guillermo\\Desktop\\Trabajo TestCases\\Planilla07-10-26.xlsx",
+  "folder": "D:\\LetsCode\\Pepsi\\SangreYa mobile\\tests\\jvm\\reportes",
+  "git_commit": "423f705f3bb0ee0592d7c2fccec8c99c3cba0785",
+  "worktree_has_changes": true,
+  "worktree_before_report": "M app/build.gradle",
+  "source_tree_sha256": "48a698a287ed132c7dc1cd86f0cfc58bbc9bed762ed53937eb9ff35b7419817e",
+  "source_hashes": {
+    "app/build.gradle": "c674504d39869fd36c18cf198102b119836777e40e24502a1386a7344c23f951",
+    "app/src/main/AndroidManifest.xml": "942e990bf377579b1964d986ab32364688e16abea1017685a33a12afbfeb7bac",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/AboutUsActivity.java": "616e2f6fc9816699853e1c512b5aad50116af96dd64f9f3a57a4c3287499d276",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/AdminCampaignEnrollmentsActivity.java": "f14d81812e5629a4d8340c4e255bc3c66a390409d9b5bfbd22f12d335f55e8f2",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/AdminCampaignListActivity.java": "8fd56f8a830d40ce25b4919334e85e5509eb096c3003414542d638374517d0dc",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/AdminContactListActivity.java": "83ccb1b6b620ca1203c441500e7c3abdab75f290836f30ba74ae46e4c02b0a88",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/AdminDashboardActivity.java": "5423f216b66458bad32a8776f1927883d30203c69b263b1c15357c1c85178cb0",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/CampaignDetailActivity.java": "aaeea202bf31c4d66495c7876c7a181a11794f0a0d615654f0a806e364f85abf",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/CampaignListActivity.java": "89b54ab8b2ea5f4a2269996583177c781111ec9cce2f58014c84ecd74103cc10",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/ContactActivity.java": "518e5148ea90b9b4f9d91307c34c127c8c248729757bb343bff51fafa7e8d82f",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/ContactDetailActivity.java": "02503bc4db2cb6171c4e249cf3059154a3aeb18fb513488f83d89b8a9e1050b3",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/CreateCampaignActivity.java": "2f3ee1e29c12194b12e9fd91d3186db351ed68b907f12bfce2d142ddb70e80a8",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/EnrollmentsActivity.java": "a0d19565c3a180882079562ab89b413d3af9f06e218f35e1423a6d1ac1c6409c",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/ForgotPasswordActivity.java": "39b411e806fd7a19c181bd3725acf23383a6147c17a16b60027abfdc0d6a0e4e",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/LoginActivity.java": "09f64e2ec335dc4d2c9ff1c31c10fae358bdafb5bd0df5db19a966c4aa33572e",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/MainActivity.java": "18ba3bd738bf3d087b51ac2e88611fe6c6e98614a56125de26619ef6861fef6f",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/ProfileActivity.java": "1a1068416d359a360b8712f53bc62db2337608c61f1c177b17d7524244894135",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/RegisterActivity.java": "88d57807b8177ab74fccf367ec27570128fa9dd10ab37075db95ab092896874c",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/ResetPasswordActivity.java": "3898af33b48aed9975eb40a0c2d18c869de22e32cb53d811dec6b52de05c1bae",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/SplashActivity.java": "780c557de3d1c2a28dd9bee65b23ee7bae18abff8ec9c3f1d9d284660c692f7b",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/activities/UsersActivity.java": "7f4755ffc14bd6213f424559b9b33f10291773bf490fd5bf633bf3efa23c87f5",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/data/AuthApiRepository.java": "c86e74f214abd8750d6eed5c9aff6eb6562dc2ce0026fcc3e9d6f4117cc8fa34",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/data/CampaignApiRepository.java": "d6c4a188d23039c975abaf1ed8bf7b31e4682818e0557742fbff20948a667ed7",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/data/ContactApiRepository.java": "98dc63cbbadbf45e54cb208ca880f234ce43d95c722987b476eb489eb83404f8",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/data/DashboardApiRepository.java": "dc62669843cf7acb86b0d02630499453d775e021b9c5dd094dd3eef5a616ce42",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/data/HealthCenterApiRepository.java": "4a7fc69e1d1ebdfe2f32644c10fdd56c7a9a098c43d0489207f170c51ca95481",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/data/RegisterApiRepository.java": "f100810f4c21a864842d603f723cdb5401019efc2983fac80c657bef92a415bf",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/data/UserApiRepository.java": "efd5593a157ec6937083167b895706f2d78497fcdc56fef331ea0d19bfd201ee",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/AdminDashboardHelper.java": "adfa5ad9d7815e63e315cc559781e083fe4036400e11f74728972c85b37e13f9",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/ApiClient.java": "f1d60a5834c556ca044958204e309ea659631111ab51af679856c4e309470429",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/ApiConfig.java": "69e8dfc2e479854b658bcde669b4246269dcff19e25d620b535311ede6375fea",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/ApiService.java": "d0a8c9fe8ba19cc85afc2f15020b1a5a6ba50efafef6a6d656b03b005227954b",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/AuthInterceptor.java": "397aef7831b9a46fd73da2b1060e9782a577a4fb4119c0c4375d77ecc1b77f4d",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/CampaignHelper.java": "0de469bda69913b786da4ac1b6f5c13e6ca73fd758de9397d8fa755eec536a50",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/CampaignValidator.java": "6789eb64a5d384b0e6100660e73f33374eb7af8a51c93ec2b31bc2d5d921bfbb",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/ContactDateTimeHelper.java": "bcd08b151778e394c3ec304c9c800eafd3820454725c94a2ce8dff1a40de1054",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/DashboardChartView.java": "fd54cf7a8cc59c03b11b06c93cce4f3b0c0ef00cfeb90bf691540c072ec609a1",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/DateHelper.java": "6bdf674feb3b3d8fdd04d2e69d8513dd114d196c38f74dece64ea894223017cb",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/ExtraKeys.java": "31fc51c3d5db7fc70009994ee7a4ba499d10b01863a25ca0845fce545bc76e29",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/NavigationDrawerHelper.java": "3cffe2b628b4b8b95fcef845e66195705de0ca5594f0c7fb8a49815a9167f954",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/NavigationHelper.java": "9bf42c80b5cef6983c7777ecd5ee026b115a37d03c01b73f0a3ea7b1e26ba18d",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidator.java": "e718466f57e482713722e1db236586cb85902c72b6f4c9da4aded8af95b0c6de",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/ProfileValidator.java": "f55332484a91ae8e885d7af5ee505a3d3a2b6e2d78d2cb34685d417e62d005d2",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/SessionManager.java": "03965960fa242ee0ccea69b180c570892e25668a62f80b19a427b27eedf615e5",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/TokenAuthenticator.java": "e30ba1487163fd4e8c6f337b448a0df8de526f82d925bfad348b5ae88a2783c1",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/helpers/UiHelper.java": "6f1b9d3a772dcebb1ff707a029702839283b21fe742ed263646982349f9581ef",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/AdminDashboardData.java": "69feb5d757dbf27c36e5169a0a9e8618b2acc4839c5142ae8c884e6e4b267f79",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/AuthUser.java": "01e7a1f79f4ecfaefe6d805f97bb3f0247a82ff658eb42eecf33d58e4db045a6",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/Campaign.java": "7397a3a5735c736211bc4f65c3af6e007943a08c239fd6f2daa53f48d4d988ec",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/CampaignEnrollments.java": "ca9c45d6e01c622b763795d4eaae80b185e141ae382e3771cacbfb56016aff66",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/ContactMessage.java": "e1a2f778eb0231494a78308cae5e70a3e817e40290235d479f35a3c5cfd9b092",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/ContactRequest.java": "8f54bf2ba303426406856c1ac72b5eddf2d8befa1367fbc618fefc770b4f69e4",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/ContactTrackedRequest.java": "01d6323926589a7e3a336f33349d4730c14d92297718dd577c71b0b0146fdd73",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/DashboardCampaignStatus.java": "29976b198c1d7e6a608686ff9aaa7cfe25162d3bd822d1c9d9c5d83a1e08f0a9",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/DashboardMonthlyDonors.java": "97f5b600b6bd753973ca433876d94d92f5b80cad0fc275754cf9b169e20d7a32",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/Enrollment.java": "ea60b18fd5c67ca003b755ac257a84423d4839146460b12d70e7ede8ba8e7a6f",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/EnrollmentUser.java": "b299417ee2fc1617c7c50fcbefb70d6e539240f2df915760bd315b81c4641b29",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/HealthCenter.java": "a1451bd1b158022ced3f4e119160ff0cb8aacde4b21af9f4cd367e6fca6a8161",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/HealthCenterResponse.java": "4364363a3a2c5db2e74aaae665889565492e6163839fb3fa44900c1ce0cab5cb",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/LoginRequest.java": "41b57abbb316aa7b5c73b972166a9a7518bc1e9ecc74f13ae7a31f1df255aedd",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/LoginResponse.java": "1635f8b47f0cbec4709930e4738a16d24eab9ac1a95cdd1541f21f885442d966",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/LoginViewModel.java": "12ae51a69511c681bd9c7b4344ffa481931710a346638ffdcc0d6ddea907b008",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/MyEnrollments.java": "735a441cd0d2c91128946932bf4f51b078caf576013ce8406497cbb830cd3532",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/PasswordRecoveryRequest.java": "32dd0b45963b3c25381f22c21cc6868158aa1c280db121e0b7602d35f1c07084",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/PasswordRecoveryResponse.java": "04cee2afc72cc727d5086448e83c298af847cd628d9b836a8daf9770c31db51a",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/ProfileViewMode.java": "f0b4ce7bfc4c4ab2857b07611bfa964b3cc6b0c9b1174c63e5383efc2753eb0f",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/ProfileViewModel.java": "56f7c358c4aecb8bcf19d455bbcd2f8fbc1feeed89556a2bb7c86887e141e18a",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/RefreshRequest.java": "449e7942d65bbd1319ef3040c5c84a2ef2d7eb75a8b61b0650d5e5b12507fbfc",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/RefreshResponse.java": "165d660f88e306315e1be8523b496f38b2cbf7337f05280de7501c1dfc814ffa",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/RegisterRequest.java": "e6e30f619877b18fe71e1b6706163f99355ecbe8777d81558ab027ef10fedb54",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/User.java": "b522d52871e732d79150a5aa734de87dc2e130bbbe5b6977d39719df48e0d84c",
+    "app/src/main/java/com/ammaia_ispc/sangreyamobile/model/UserUpdateRequest.java": "c67350dc76e41a1ec07e6eb6e57924dacb31f9288c9bf52505d6b33fc838b65f",
+    "app/src/main/res/drawable/bg_active_alert.xml": "aee34c66113f2bcda070f218ed79427ee07d08aeeac13c345c9b4be6660e7902",
+    "app/src/main/res/drawable/bg_admin_role.xml": "04c4a4da18eb8ece2894bea3547c327212491c81eafc7b0308658e44c883809e",
+    "app/src/main/res/drawable/bg_bell.xml": "eb0f12838f1daca7599c76495e48ce471e649dd8dab6bf046c16bdd46bb27df5",
+    "app/src/main/res/drawable/bg_button_cancel.xml": "83b94397e4de6635395cf4b740296b08ec13c463208368361ea3f95a8e79f75e",
+    "app/src/main/res/drawable/bg_button_outline.xml": "de6f751c1e5951f83a87cdd04b96b7a0c1830029052ecb8edcfacc33c2ad5bde",
+    "app/src/main/res/drawable/bg_button_primary.xml": "4ead54f4778535de8d132ec59f988e640c790e0953647893f5eb1a6f065c678e",
+    "app/src/main/res/drawable/bg_button_square_primary.xml": "4ed7762e8833b91d24395b56930ec28cb01b56ea99cf368373da0c2eee4841e7",
+    "app/src/main/res/drawable/bg_campaign_card.xml": "4fa4db13b9f91193d4fdb35073fa4470ea8378b8aabdc5f84cdf09f9c1cf9301",
+    "app/src/main/res/drawable/bg_center_card.xml": "aba6663caee2dc0c55d4624b275147222fc6b8682e4f8237e7146a017b7b8f79",
+    "app/src/main/res/drawable/bg_contact_reason.xml": "b18a40575fbaa90e5e6adbdca66399ed7e6bea72758bdbb52dbcc53af4302755",
+    "app/src/main/res/drawable/bg_dashboard_card.xml": "240bbac0872a2d31fc5abf8e2bcc8e14a889504f51c37811120db22a788d9e59",
+    "app/src/main/res/drawable/bg_dot_active.xml": "767f2b4d6801400c3ec291c2284f80eaf4235462c1dfbfc8706069a4e2926dbc",
+    "app/src/main/res/drawable/bg_dot_inactive.xml": "1abc3d4e718f48d69feeb058f4523de542d636eb5246e51b19430ade0975df30",
+    "app/src/main/res/drawable/bg_dot_unread.xml": "a7e4e597dfc8a92cad6f16eaff4588ce431bb099cb0338fdd62fb49568276f33",
+    "app/src/main/res/drawable/bg_edit_button.xml": "fd2c6a275decae4e1bbac47d8c827e83fb37e9bff2906f47455abb994c17ed1e",
+    "app/src/main/res/drawable/bg_filter_selected.xml": "51ac0a1c5b5f9d030485858da8b5c4dd46f90767ab4c764f00ac0d153dade8be",
+    "app/src/main/res/drawable/bg_filter_unselected.xml": "4fd1e8b4dc9902dff049a8f79a2c773b6bd39eacf71190c0afb1bf8bfc41fa06",
+    "app/src/main/res/drawable/bg_hero_logo.xml": "2a3a7f3c6e82d7b502fce36243020f4f07814f38351f756241cec853f31e0868",
+    "app/src/main/res/drawable/bg_input_field.xml": "0a857e03a9ced4ca2a3f869afd769ca13bb3e5712083a9bfc840999389656b46",
+    "app/src/main/res/drawable/bg_menu_button.xml": "d87850c7549fa72fc4de5f682dac6c3f3dfe1df3bf667fa06560ed423f3616ab",
+    "app/src/main/res/drawable/bg_registered_callout.xml": "9038f52cc38bc4474bdad0ef004b6b40ae32393ef091333730e3b3d70f5c0f9b",
+    "app/src/main/res/drawable/bg_splash_gradient.xml": "3e376c10f8d7e6354b318a067f2971963700b239ce7d9eb6af15ae03d16c21a4",
+    "app/src/main/res/drawable/bg_splash_icon_circle.xml": "49c3ccba951257e7d111d26cfd41a78813bdced4317e69550c11d2b3760faccb",
+    "app/src/main/res/drawable/bg_status_active.xml": "a8d41d4b4df4985ec6fb9553a9261204f9f6f84ba5048763ba4ee2fb8f09e6b9",
+    "app/src/main/res/drawable/bg_status_finished.xml": "00341bcf6ce047198e4ec05f96b60a554d40eddd554feca50154c3e5e813e3e8",
+    "app/src/main/res/drawable/bg_status_upcoming.xml": "ad85ffbd79a275411b8dc3c99c309569d440543377419c3f4baad3ea04a6eced",
+    "app/src/main/res/drawable/bg_toast.xml": "7f0c22949e52e778152e098e074d9a04a83c3556f9fb78e1c809d04c5485041f",
+    "app/src/main/res/drawable/ic_add.xml": "75babfe47cbfdf5c741100c9d0d9d25e23486973585d22866398dfc48c7048ea",
+    "app/src/main/res/drawable/ic_back.xml": "33ba95dedc12d353fdf010badf133997b61bc8a3510385b6d88933e740c5ae0c",
+    "app/src/main/res/drawable/ic_blood_drop.xml": "6dcc8206017398acfabd81a5df499c0ffebb5dc469bf63516fc1475b7278b7e0",
+    "app/src/main/res/drawable/ic_calendar.xml": "ffe25ab3a2298cbaea50c39dee38895989e9e564d4964564a0c41b50244b2c95",
+    "app/src/main/res/drawable/ic_check.xml": "6ac8e494c689d6f1d21b18e568faa2a928b077b3bbad32d60fddf08d8605765b",
+    "app/src/main/res/drawable/ic_clock.xml": "1f915fd1a99c76501f6b0fd95bd42afdd1a423539885be9554c2f581cf47e7cc",
+    "app/src/main/res/drawable/ic_dashboard.xml": "8b1c731126a2164141da88f8586dba6bc674e27f1726949beab09a74c88a2242",
+    "app/src/main/res/drawable/ic_delete.xml": "893adb844dba95c4e2950cee8e5871de317838a8adac05bcd3705c8826c85ad1",
+    "app/src/main/res/drawable/ic_edit.xml": "99873bc30d78b8b397ab4c8a9f55210a5b2cbbcbc231d383d4d925259027e0b8",
+    "app/src/main/res/drawable/ic_home.xml": "c15b2a6684ed0b632add79a5ec6e39d28988bbef2ce81829ac99d86b5e4a17c4",
+    "app/src/main/res/drawable/ic_launcher_background.xml": "ed423c73a6f40a4d2909f0901e60527b3a807cd59e1b5593bcaae1808b1c6321",
+    "app/src/main/res/drawable/ic_launcher_foreground.xml": "01d1a6a6c1234eb7fe270d097eb283d72b9c95ae5118886f1b6573aad280f1f7",
+    "app/src/main/res/drawable/ic_list.xml": "2a572d7abe0d7ce405a571ba9c6105db6c332f51db117bb3c4c78307c28d3e4c",
+    "app/src/main/res/drawable/ic_location.xml": "1e71a09126fcc95b6abbc512ee373d224945903b0013a5bec67df2bc05c1b232",
+    "app/src/main/res/drawable/ic_menu.xml": "3b7d898afc9492cd6cf0d8c45f68db5343b601d4aa4a959adfc6a350a29ec424",
+    "app/src/main/res/drawable/ic_messages.xml": "403254bb9af16bffb38bd3386ffb577bcf2e3ab4aa4b6b835915ffa0372f3e0c",
+    "app/src/main/res/drawable/ic_notifications.xml": "bb0f5e1ac18bede5757f9fba42079a98c951be300c2ee75570ca6eb6036223b0",
+    "app/src/main/res/drawable/ic_profile.xml": "3facee6a9f5539c3e0a543f10524f6a064e60f1d95e53f5cc5ae39ab7acd0d29",
+    "app/src/main/res/drawable/ic_search.xml": "9b5cc2cbcb1674d78d105496de2afa182e23ecc762e941abd643abb81dfdf29c",
+    "app/src/main/res/layout/activity_about_us.xml": "aa2b7cdd605357cfc1ab62f38394df7304c1740406562c935c8c827b4fe90aa7",
+    "app/src/main/res/layout/activity_admin_campaign_enrollments.xml": "56873e2e2fd594e0beb9ee9999b004a6d53e754336fef388ce0b4166342bf6dd",
+    "app/src/main/res/layout/activity_admin_campaign_list.xml": "d95147b3a0105e55cc13b20a5cb0c7c57c2ff74e1c655ce4b8377ea99e2e5c96",
+    "app/src/main/res/layout/activity_admin_contact_list.xml": "ae6117598bb4f022029ba2632b5615dfb2a9a0086232643a4446e00adc78fcfb",
+    "app/src/main/res/layout/activity_admin_dashboard.xml": "76857928aa413ac7fac1feda30ae96fc85248ebfde43e8dc3dc1344283fe811a",
+    "app/src/main/res/layout/activity_campaign_detail.xml": "2c68c3426259d1ab5baaa40dcb41d131c8f3e03c6f3925e995cd59f161b29593",
+    "app/src/main/res/layout/activity_campaign_list.xml": "c207280a96f538fa14040d08fd80f6915d1373ac11666554a9d5985e3afcb22b",
+    "app/src/main/res/layout/activity_contact.xml": "f514a67239b015670d0baeab417f8baccc7b774899a349fdc60a7c2a5a18ea86",
+    "app/src/main/res/layout/activity_contact_detail.xml": "22e7525a9286b1e435fa97451c0ba6f520d76f444b820f6f6e267a372ad16bbe",
+    "app/src/main/res/layout/activity_create_campaign.xml": "c133017e003f07aeae3ae065d3cc2305618377dfce9238f20458fe048bd82e1d",
+    "app/src/main/res/layout/activity_enrollments.xml": "b14c2fbfe1009dd812fff5385e844f90fbd436bb19ac7d2194fc20ddec4bc8f7",
+    "app/src/main/res/layout/activity_forgot_password.xml": "4b156c54f00dc1ad4b1ff73126f23a196a5db082f1327acfbb4a945732c8e59f",
+    "app/src/main/res/layout/activity_login.xml": "1cccbac0da28bb1aa66d86fbc3f009f82d09a8c884be4802ab4b212e658d31f2",
+    "app/src/main/res/layout/activity_profile.xml": "867ebfc7c34c0bf6dfd7b7b9a7ec512c5378da23dcbb200f9d760be44da39ce1",
+    "app/src/main/res/layout/activity_register.xml": "f6528cc2a0d2a468a6d4292f0d1068acce81e9c8ad3cb0b0d01b96b2711614e2",
+    "app/src/main/res/layout/activity_reset_password.xml": "bc6a883b4e569400ae48efed80d777d080c78c1e06ab79098966046d7d7181ac",
+    "app/src/main/res/layout/activity_splash.xml": "1f6646c12ef0997b5724af4ab95096986655b6b788d7f50f673d3bb9a1bea0cc",
+    "app/src/main/res/layout/activity_users.xml": "42da3d433c3c4269b2d098330eab10c0b25ce13198f8060cb6d593193dc1a0d9",
+    "app/src/main/res/layout/drawer_header.xml": "4c67d30b874d6760d7e053e25d1db1b90a45d1103d4dcc346786e9f2a0a31d8d",
+    "app/src/main/res/layout/item_admin_campaign.xml": "fc92d627a24761fb7da8db3645f51583d52170e5a8eee04b3077e5166a4cf950",
+    "app/src/main/res/layout/item_admin_contact.xml": "c74ff55805d429a3c74376c2901996dc86440bb78241e86d571e40eb51689a7e",
+    "app/src/main/res/layout/item_admin_enrollment_user.xml": "6d7a2495dbc5ccdf9df3eaf1826436d670e09a98a4bd63026f345c0e1b8d0d07",
+    "app/src/main/res/layout/item_admin_recent_campaign.xml": "a6749bce4e2867f06e40ddd473f4ac543eb432b6d7e3589e148d81f67d245e24",
+    "app/src/main/res/layout/item_campaign.xml": "3d909bfef58b4a6d6f979bc0470f1035a082b3789573956637956eddea6c25ae",
+    "app/src/main/res/layout/item_enrollment.xml": "15aec38d252b4838a19606adb11dbf6da82267a4a5c87adbe7970d6553e43412",
+    "app/src/main/res/layout/toast_enrollment.xml": "d797bcf15533d89c124c2e6c55e5d041df60c07b01d94bab9d635f7ae34ffbe5",
+    "app/src/main/res/layout/view_campaign_header.xml": "712b834e3aba6a6f6ff64846f9023ae07bc8fcd4ecfa581582894054634960f3",
+    "app/src/main/res/menu/navigation_menu.xml": "0330ee37bbce2ba4618dd29bf5b8d9b26e9dadb0c48641e1fa8eaed6ea5b91bf",
+    "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": "88f7653499ef524126ea5018a99baf9cc3269e7e584d6205dfdd76db39f39cc0",
+    "app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml": "88f7653499ef524126ea5018a99baf9cc3269e7e584d6205dfdd76db39f39cc0",
+    "app/src/main/res/values/colors.xml": "5e9d7ae9249214179f929eb9c5bf956828a6968d00eef9c44044c2f89662fcdd",
+    "app/src/main/res/values/dimens.xml": "766987732737fc7924ca66e13a00bdb81ef78a0326d74e565f27b33d6ce6564d",
+    "app/src/main/res/values/strings.xml": "1c4556d3d3362c75075a8d79ae8deaa771513fc9e7eadef4856daf293c85cd34",
+    "app/src/main/res/values/themes.xml": "73d2ba0d698704a56f3f1f85fdb600d30cffff04d8f4da39d260de3e6cf440a4",
+    "app/src/main/res/values-night/themes.xml": "cbec1b388912d8a75a78b8e4a7b80307187d0a8e9f6b4a25375eb9c8c7c80a68",
+    "app/src/main/res/xml/backup_rules.xml": "9f7e4c84c8fd2c81478d15962383f47cc6ff55d62abcd40c8ffa6fc08a8c35b7",
+    "app/src/main/res/xml/data_extraction_rules.xml": "cb1fc47ab4a984530ed60e0e6ee638929c3038290e7e7e0b4b03a3a30fbe7381",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/ApiErrorMapperTest.java": "29d6c2e57122651eb9f36a2bcb1dd0a346d619f72e5dbac9091c2064e82a031b",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/AuthApiTest.java": "2007967a6ec748a644a169f7bd0f8d9afc0cf48a66acd1252a8b837bd7f351ab",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/AuthRepositoryTest.java": "78092a7bf9f2eb675afa71f8ae91cc06e275569e5b863ed80fe195a2528e92cc",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/CampaignApiTest.java": "dbc86035030ed69d224c9f6cba7ff8b47201ccf2cd6b8fcf4fd74f540f96d140",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/CampaignMapperTest.java": "805b7f45b43c16727998a9adb434a406f51d1de82d6e7a2a0209003c6f0a23f7",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/EnrollmentApiTest.java": "e45e496ba37006be33b74ea2779c8b6e9b74c40b318b1f2fac40a0e5edbaf09e",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/FormularioContactoTest.java": "45a438cced4c94ff3d1b392bdd677426fc42b2964f8311de6f07d85ea626569a",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/ProfileApiTest.java": "3dab82e4e1a40409394241f385f0987eabdc69a304cbf79f6c8c715609339f29",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/CampaignValidatorTest.java": "ad083d95e46870abf30098219f9c751fe81b7507d8ab2055cc45883ca3994f43",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/DashboardMapperTest.java": "f2c2d2da32c6f336772d7458ec8946f2f4668f49956eab58274134ac5b5582ba",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/LoginViewModelTest.java": "990f94d851623eca325d8e837bc0feee470db51e7328fe480fe9ae0c2fff03c4",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java": "438bba833236a0c6d81d0ca80e8f3444bc27ad21ab785315efad24211d7b364a",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/ProfileMapperTest.java": "ee1aace47ef341e0007ea707abb793eddd1d478ff21f1a93ab6788889d67733a",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/ProfileValidatorTest.java": "557303771fd4da47cd49a280fef1210faf3e895cbf24a22d939ba5cacd8e648e",
+    "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/ProfileViewModelTest.java": "fe058f3f5f7591b9bec7bafc5b8f988e1ce08dc73623043c4de191da513c5ff8",
+    "build.gradle": "f1e6652daac61d0e640a043e1ab2bde022296b815d19521f6556bf0387799d94",
+    "gradle.properties": "8e23982b54de00b8b69584b1852e8733cca0d1be64e4dc7f83a5cb354e338578",
+    "settings.gradle": "f8df9c4d2cd08a0ce231472cd808bfc97bd944aafa6b00b3bb990d7ced9c24ea"
+  },
+  "start_utc": "2026-10-09T18:43:05+00:00",
+  "start_local": "2026-10-09T15:43:05-03:00",
+  "published_local": "2026-10-09T15:46:32.158430-03:00",
+  "java": "OpenJDK 17.0.6 (Android Studio jbr)",
+  "command": ".\\gradlew.bat :app:testDebugUnitTest :app:testReleaseUnitTest :app:jacocoDebugReport --rerun-tasks --continue --console=plain",
+  "jacoco_version": "0.8.13",
+  "coverage_variant": "debug",
+  "coverage": {
+    "INSTRUCTION": {
+      "covered": 994,
+      "total": 12967,
+      "percent": 7.67
+    },
+    "BRANCH": {
+      "covered": 101,
+      "total": 1053,
+      "percent": 9.59
+    },
+    "LINE": {
+      "covered": 235,
+      "total": 3140,
+      "percent": 7.48
+    },
+    "COMPLEXITY": {
+      "covered": 105,
+      "total": 1159,
+      "percent": 9.06
+    },
+    "METHOD": {
+      "covered": 70,
+      "total": 629,
+      "percent": 11.13
+    },
+    "CLASS": {
+      "covered": 26,
+      "total": 112,
+      "percent": 23.21
+    }
+  },
+  "summary": {
+    "debug": {
+      "tests": 29,
+      "passed": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_without_mockwebserver": 24,
+      "mockwebserver": 5,
+      "seconds": 3.117
+    },
+    "release": {
+      "tests": 29,
+      "passed": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_without_mockwebserver": 24,
+      "mockwebserver": 5,
+      "seconds": 3.07
+    }
+  },
+  "inventory": {
+    "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#noExponeBodyInterno": {
+      "case": "TC-UNIT-09",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/ApiErrorMapperTest.java",
+      "line": 14
+    },
+    "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#mapeaStatusHttp": {
+      "case": "TC-UNIT-11",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/ApiErrorMapperTest.java",
+      "line": 34
+    },
+    "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login200ParseaTokens": {
+      "case": "TC-NET-01",
+      "kind": "MockWebServer",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/AuthApiTest.java",
+      "line": 95
+    },
+    "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login401NoPersisteSesion": {
+      "case": "TC-NET-02",
+      "kind": "MockWebServer",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/AuthApiTest.java",
+      "line": 106
+    },
+    "com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest#persisteTokensDeLogin": {
+      "case": "TC-UNIT-13",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/AuthRepositoryTest.java",
+      "line": 26
+    },
+    "com.ammaia_ispc.sangreyamobile.data.CampaignApiTest#http500MapeaErrorSeguro": {
+      "case": "TC-NET-04",
+      "kind": "MockWebServer",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/CampaignApiTest.java",
+      "line": 83
+    },
+    "com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest#optionalHealthCenterNull": {
+      "case": "TC-UNIT-08",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/CampaignMapperTest.java",
+      "line": 14
+    },
+    "com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest#bodyVacioYContentType": {
+      "case": "TC-NET-05",
+      "kind": "MockWebServer",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/EnrollmentApiTest.java",
+      "line": 90
+    },
+    "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#validoEnviaSolicitud": {
+      "case": "TC-UNIT-01",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/FormularioContactoTest.java",
+      "line": 23
+    },
+    "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#rechazaObligatoriosYLimites": {
+      "case": "TC-UNIT-02",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/FormularioContactoTest.java",
+      "line": 49
+    },
+    "com.ammaia_ispc.sangreyamobile.data.ProfileApiTest#timeoutMuestraErrorSinPerderDatos": {
+      "case": "TC-NET-03",
+      "kind": "MockWebServer",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/data/ProfileApiTest.java",
+      "line": 88
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#rejectsInvalidDates": {
+      "case": "TC-UNIT-06",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/CampaignValidatorTest.java",
+      "line": 10
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#validatesCapacity": {
+      "case": "TC-UNIT-07",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/CampaignValidatorTest.java",
+      "line": 36
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest#calculaMetricas": {
+      "case": "TC-UNIT-10",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/DashboardMapperTest.java",
+      "line": 15
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest#rechazaCamposVacios": {
+      "case": "TC-UNIT-12",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/LoginViewModelTest.java",
+      "line": 14
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordEnElMinimoYPorEncima": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 11
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordDeNueveCaracteresAunqueCumplaLaComplejidad": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 17
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordNulaOVacia": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 22
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMayuscula": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 28
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMinuscula": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 33
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinNumero": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 38
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinSimboloInclusoConEspaciosOLetrasAcentuadas": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 43
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordConLetrasAcentuadasYSimbolo": {
+      "case": "TC-UNIT-14",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 51
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaConfirmacionIdentica": {
+      "case": "TC-UNIT-15",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 57
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionDistintaSinNormalizarMayusculasNiEspacios": {
+      "case": "TC-UNIT-15",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 62
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionConValoresNulos": {
+      "case": "TC-UNIT-15",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/PasswordValidatorTest.java",
+      "line": 70
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest#jsonMapeaPerfilSinPassword": {
+      "case": "TC-UNIT-03",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/ProfileMapperTest.java",
+      "line": 15
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest#rechazaEmailYDniInvalidos": {
+      "case": "TC-UNIT-04",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/ProfileValidatorTest.java",
+      "line": 10
+    },
+    "com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest#actualizaPerfilPropio": {
+      "case": "TC-UNIT-05",
+      "kind": "JUnit",
+      "source": "app/src/test/java/com/ammaia_ispc/sangreyamobile/helpers/ProfileViewModelTest.java",
+      "line": 26
+    }
+  },
+  "results": {
+    "debug": {
+      "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#noExponeBodyInterno": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#mapeaStatusHttp": {
+        "status": "PASS",
+        "seconds": 1.235,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login401NoPersisteSesion": {
+        "status": "PASS",
+        "seconds": 0.923,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.AuthApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login200ParseaTokens": {
+        "status": "PASS",
+        "seconds": 0.013,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.AuthApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest#persisteTokensDeLogin": {
+        "status": "PASS",
+        "seconds": 0.139,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.CampaignApiTest#http500MapeaErrorSeguro": {
+        "status": "PASS",
+        "seconds": 0.046,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.CampaignApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest#optionalHealthCenterNull": {
+        "status": "PASS",
+        "seconds": 0.03,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest#bodyVacioYContentType": {
+        "status": "PASS",
+        "seconds": 0.044,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#rechazaObligatoriosYLimites": {
+        "status": "PASS",
+        "seconds": 0.023,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#validoEnviaSolicitud": {
+        "status": "PASS",
+        "seconds": 0.01,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.ProfileApiTest#timeoutMuestraErrorSinPerderDatos": {
+        "status": "PASS",
+        "seconds": 0.569,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.ProfileApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#validatesCapacity": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#rejectsInvalidDates": {
+        "status": "PASS",
+        "seconds": 0.008,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest#calculaMetricas": {
+        "status": "PASS",
+        "seconds": 0.002,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest#rechazaCamposVacios": {
+        "status": "PASS",
+        "seconds": 0.002,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordEnElMinimoYPorEncima": {
+        "status": "PASS",
+        "seconds": 0.002,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaConfirmacionIdentica": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionDistintaSinNormalizarMayusculasNiEspacios": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionConValoresNulos": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordConLetrasAcentuadasYSimbolo": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordNulaOVacia": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinSimboloInclusoConEspaciosOLetrasAcentuadas": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordDeNueveCaracteresAunqueCumplaLaComplejidad": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinNumero": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMinuscula": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMayuscula": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest#jsonMapeaPerfilSinPassword": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest#rechazaEmailYDniInvalidos": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest#actualizaPerfilPropio": {
+        "status": "PASS",
+        "seconds": 0.065,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest.xml"
+      }
+    },
+    "release": {
+      "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#noExponeBodyInterno": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#mapeaStatusHttp": {
+        "status": "PASS",
+        "seconds": 1.192,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login401NoPersisteSesion": {
+        "status": "PASS",
+        "seconds": 0.912,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.AuthApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login200ParseaTokens": {
+        "status": "PASS",
+        "seconds": 0.015,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.AuthApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest#persisteTokensDeLogin": {
+        "status": "PASS",
+        "seconds": 0.134,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.CampaignApiTest#http500MapeaErrorSeguro": {
+        "status": "PASS",
+        "seconds": 0.042,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.CampaignApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest#optionalHealthCenterNull": {
+        "status": "PASS",
+        "seconds": 0.028,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest#bodyVacioYContentType": {
+        "status": "PASS",
+        "seconds": 0.042,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#rechazaObligatoriosYLimites": {
+        "status": "PASS",
+        "seconds": 0.024,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#validoEnviaSolicitud": {
+        "status": "PASS",
+        "seconds": 0.009,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.data.ProfileApiTest#timeoutMuestraErrorSinPerderDatos": {
+        "status": "PASS",
+        "seconds": 0.58,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.data.ProfileApiTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#validatesCapacity": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#rejectsInvalidDates": {
+        "status": "PASS",
+        "seconds": 0.006,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest#calculaMetricas": {
+        "status": "PASS",
+        "seconds": 0.003,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest#rechazaCamposVacios": {
+        "status": "PASS",
+        "seconds": 0.002,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordEnElMinimoYPorEncima": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaConfirmacionIdentica": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionDistintaSinNormalizarMayusculasNiEspacios": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionConValoresNulos": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordConLetrasAcentuadasYSimbolo": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordNulaOVacia": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinSimboloInclusoConEspaciosOLetrasAcentuadas": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordDeNueveCaracteresAunqueCumplaLaComplejidad": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinNumero": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMinuscula": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMayuscula": {
+        "status": "PASS",
+        "seconds": 0.0,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest#jsonMapeaPerfilSinPassword": {
+        "status": "PASS",
+        "seconds": 0.003,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest#rechazaEmailYDniInvalidos": {
+        "status": "PASS",
+        "seconds": 0.001,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest.xml"
+      },
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest#actualizaPerfilPropio": {
+        "status": "PASS",
+        "seconds": 0.072,
+        "xml": "TEST-com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest.xml"
+      }
+    }
+  },
+  "cases": {
+    "TC-NET-01": [
+      "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login200ParseaTokens"
+    ],
+    "TC-NET-02": [
+      "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login401NoPersisteSesion"
+    ],
+    "TC-NET-03": [
+      "com.ammaia_ispc.sangreyamobile.data.ProfileApiTest#timeoutMuestraErrorSinPerderDatos"
+    ],
+    "TC-NET-04": [
+      "com.ammaia_ispc.sangreyamobile.data.CampaignApiTest#http500MapeaErrorSeguro"
+    ],
+    "TC-NET-05": [
+      "com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest#bodyVacioYContentType"
+    ],
+    "TC-UNIT-01": [
+      "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#validoEnviaSolicitud"
+    ],
+    "TC-UNIT-02": [
+      "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#rechazaObligatoriosYLimites"
+    ],
+    "TC-UNIT-03": [
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest#jsonMapeaPerfilSinPassword"
+    ],
+    "TC-UNIT-04": [
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest#rechazaEmailYDniInvalidos"
+    ],
+    "TC-UNIT-05": [
+      "com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest#actualizaPerfilPropio"
+    ],
+    "TC-UNIT-06": [
+      "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#rejectsInvalidDates"
+    ],
+    "TC-UNIT-07": [
+      "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#validatesCapacity"
+    ],
+    "TC-UNIT-08": [
+      "com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest#optionalHealthCenterNull"
+    ],
+    "TC-UNIT-09": [
+      "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#noExponeBodyInterno"
+    ],
+    "TC-UNIT-10": [
+      "com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest#calculaMetricas"
+    ],
+    "TC-UNIT-11": [
+      "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#mapeaStatusHttp"
+    ],
+    "TC-UNIT-12": [
+      "com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest#rechazaCamposVacios"
+    ],
+    "TC-UNIT-13": [
+      "com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest#persisteTokensDeLogin"
+    ],
+    "TC-UNIT-14": [
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordEnElMinimoYPorEncima",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordDeNueveCaracteresAunqueCumplaLaComplejidad",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordNulaOVacia",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMayuscula",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMinuscula",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinNumero",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinSimboloInclusoConEspaciosOLetrasAcentuadas",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordConLetrasAcentuadasYSimbolo"
+    ],
+    "TC-UNIT-15": [
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaConfirmacionIdentica",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionDistintaSinNormalizarMayusculasNiEspacios",
+      "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionConValoresNulos"
+    ]
+  },
+  "test_environment_fix": "Dependencia exclusiva de tests org.json:json:20231013 para ejecutar el mapper con JSONObject real en JVM.",
+  "apk_generated": false
+}

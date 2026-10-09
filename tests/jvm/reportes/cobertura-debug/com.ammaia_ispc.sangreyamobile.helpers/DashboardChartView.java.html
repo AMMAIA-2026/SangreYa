@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DashboardChartView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.helpers</a> &gt; <span class="el_source">DashboardChartView.java</span></div><h1>DashboardChartView.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.helpers;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Typeface;
+import android.util.AttributeSet;
+import android.view.View;
+
+import androidx.core.content.ContextCompat;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
+import com.ammaia_ispc.sangreyamobile.model.DashboardMonthlyDonors;
+
+import java.util.Collections;
+import java.util.List;
+
+public class DashboardChartView extends View {
+<span class="nc" id="L21">    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);</span>
+<span class="nc" id="L22">    private List&lt;DashboardMonthlyDonors&gt; monthlyDonors = Collections.emptyList();</span>
+<span class="nc" id="L23">    private List&lt;DashboardCampaignStatus&gt; campaignStatuses = Collections.emptyList();</span>
+<span class="nc" id="L24">    private String emptyMessage = &quot;&quot;;</span>
+    private boolean donutChart;
+
+    public DashboardChartView(Context context, AttributeSet attrs) {
+<span class="nc" id="L28">        super(context, attrs);</span>
+<span class="nc" id="L29">        paint.setTypeface(Typeface.create(&quot;sans&quot;, Typeface.NORMAL));</span>
+<span class="nc" id="L30">    }</span>
+
+    public void setMonthlyDonors(List&lt;DashboardMonthlyDonors&gt; monthlyDonors) {
+<span class="nc" id="L33">        donutChart = false;</span>
+<span class="nc" id="L34">        this.monthlyDonors = monthlyDonors;</span>
+<span class="nc" id="L35">        invalidate();</span>
+<span class="nc" id="L36">    }</span>
+
+    public void setCampaignStatuses(List&lt;DashboardCampaignStatus&gt; campaignStatuses) {
+<span class="nc" id="L39">        donutChart = true;</span>
+<span class="nc" id="L40">        this.campaignStatuses = campaignStatuses;</span>
+<span class="nc" id="L41">        invalidate();</span>
+<span class="nc" id="L42">    }</span>
+
+    public void setEmptyMessage(String emptyMessage) {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        this.emptyMessage = emptyMessage == null ? &quot;&quot; : emptyMessage;</span>
+<span class="nc" id="L46">        invalidate();</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+<span class="nc" id="L51">        super.onDraw(canvas);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (donutChart) {</span>
+<span class="nc" id="L53">            drawDonut(canvas);</span>
+        } else {
+<span class="nc" id="L55">            drawBars(canvas);</span>
+        }
+<span class="nc" id="L57">    }</span>
+
+    private void drawDonut(Canvas canvas) {
+<span class="nc" id="L60">        float density = getResources().getDisplayMetrics().density;</span>
+<span class="nc" id="L61">        float centerX = getWidth() / 2f;</span>
+<span class="nc" id="L62">        float centerY = getHeight() / 2f;</span>
+<span class="nc" id="L63">        float radius = Math.min(getWidth(), getHeight()) / 2f - 20 * density;</span>
+<span class="nc" id="L64">        int total = AdminDashboardHelper.totalCampaigns(campaignStatuses);</span>
+
+<span class="nc" id="L66">        paint.setStyle(Paint.Style.STROKE);</span>
+<span class="nc" id="L67">        paint.setStrokeWidth(25 * density);</span>
+<span class="nc" id="L68">        RectF bounds = new RectF(</span>
+                centerX - radius,
+                centerY - radius,
+                centerX + radius,
+                centerY + radius);
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (campaignStatuses.isEmpty()) {</span>
+<span class="nc" id="L75">            paint.setColor(ContextCompat.getColor(getContext(), R.color.border));</span>
+<span class="nc" id="L76">            canvas.drawArc(bounds, 0, 360, false, paint);</span>
+        } else {
+<span class="nc" id="L78">            float startAngle = -90;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            for (DashboardCampaignStatus status : campaignStatuses) {</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                float sweep = total == 0 ? 0 : status.count * 360f / total;</span>
+<span class="nc" id="L81">                paint.setColor(ContextCompat.getColor(</span>
+<span class="nc" id="L82">                        getContext(),</span>
+<span class="nc" id="L83">                        CampaignHelper.statusColor(status.status)));</span>
+<span class="nc" id="L84">                canvas.drawArc(bounds, startAngle, sweep, false, paint);</span>
+<span class="nc" id="L85">                startAngle += sweep;</span>
+<span class="nc" id="L86">            }</span>
+        }
+
+<span class="nc" id="L89">        paint.setStyle(Paint.Style.FILL);</span>
+<span class="nc" id="L90">        paint.setColor(ContextCompat.getColor(getContext(), R.color.primary_text));</span>
+<span class="nc" id="L91">        paint.setTextAlign(Paint.Align.CENTER);</span>
+<span class="nc" id="L92">        paint.setTypeface(Typeface.DEFAULT_BOLD);</span>
+<span class="nc" id="L93">        paint.setTextSize(22 * density);</span>
+<span class="nc" id="L94">        canvas.drawText(String.valueOf(total), centerX, centerY + 3 * density, paint);</span>
+<span class="nc" id="L95">        paint.setTypeface(Typeface.DEFAULT);</span>
+<span class="nc" id="L96">        paint.setTextSize(10 * density);</span>
+<span class="nc" id="L97">        canvas.drawText(</span>
+<span class="nc" id="L98">                getContext().getString(R.string.dashboard_campaigns_label),</span>
+                centerX,
+                centerY + 19 * density,
+                paint);
+<span class="nc" id="L102">    }</span>
+
+    private void drawBars(Canvas canvas) {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (monthlyDonors.isEmpty()) {</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (!emptyMessage.isEmpty()) {</span>
+<span class="nc" id="L107">                float density = getResources().getDisplayMetrics().density;</span>
+<span class="nc" id="L108">                paint.setStyle(Paint.Style.FILL);</span>
+<span class="nc" id="L109">                paint.setColor(ContextCompat.getColor(getContext(), R.color.secondary_text));</span>
+<span class="nc" id="L110">                paint.setTextAlign(Paint.Align.CENTER);</span>
+<span class="nc" id="L111">                paint.setTypeface(Typeface.DEFAULT);</span>
+<span class="nc" id="L112">                paint.setTextSize(12 * density);</span>
+<span class="nc" id="L113">                canvas.drawText(emptyMessage, getWidth() / 2f, getHeight() / 2f, paint);</span>
+            }
+<span class="nc" id="L115">            return;</span>
+        }
+
+<span class="nc" id="L118">        float density = getResources().getDisplayMetrics().density;</span>
+<span class="nc" id="L119">        float left = 14 * density;</span>
+<span class="nc" id="L120">        float right = getWidth() - 8 * density;</span>
+<span class="nc" id="L121">        float top = 24 * density;</span>
+<span class="nc" id="L122">        float baseline = getHeight() - 28 * density;</span>
+<span class="nc" id="L123">        float chartHeight = baseline - top;</span>
+<span class="nc" id="L124">        int max = 0;</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        for (DashboardMonthlyDonors donor : monthlyDonors) {</span>
+<span class="nc" id="L126">            max = Math.max(max, donor.count);</span>
+<span class="nc" id="L127">        }</span>
+
+<span class="nc" id="L129">        paint.setStyle(Paint.Style.STROKE);</span>
+<span class="nc" id="L130">        paint.setStrokeWidth(density);</span>
+<span class="nc" id="L131">        paint.setColor(ContextCompat.getColor(getContext(), R.color.border));</span>
+<span class="nc" id="L132">        canvas.drawLine(left, baseline, right, baseline, paint);</span>
+<span class="nc" id="L133">        paint.setStyle(Paint.Style.FILL);</span>
+<span class="nc" id="L134">        paint.setTextAlign(Paint.Align.CENTER);</span>
+<span class="nc" id="L135">        paint.setTypeface(Typeface.DEFAULT);</span>
+<span class="nc" id="L136">        paint.setTextSize(9 * density);</span>
+
+<span class="nc" id="L138">        float slotWidth = (right - left) / monthlyDonors.size();</span>
+<span class="nc" id="L139">        float barWidth = Math.min(27 * density, slotWidth * 0.58f);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        for (int index = 0; index &lt; monthlyDonors.size(); index++) {</span>
+<span class="nc" id="L141">            DashboardMonthlyDonors donor = monthlyDonors.get(index);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            float height = max == 0 ? 0 : chartHeight * donor.count / max;</span>
+<span class="nc" id="L143">            float center = left + slotWidth * index + slotWidth / 2;</span>
+<span class="nc" id="L144">            paint.setColor(ContextCompat.getColor(getContext(), R.color.primary_red));</span>
+<span class="nc" id="L145">            canvas.drawRoundRect(</span>
+                    center - barWidth / 2,
+                    baseline - height,
+                    center + barWidth / 2,
+                    baseline,
+                    5 * density,
+                    5 * density,
+                    paint);
+
+<span class="nc" id="L154">            paint.setColor(ContextCompat.getColor(getContext(), R.color.secondary_text));</span>
+<span class="nc" id="L155">            float monthBaseline = getHeight() - 17 * density;</span>
+<span class="nc" id="L156">            float yearBaseline = getHeight() - 5 * density;</span>
+<span class="nc" id="L157">            canvas.drawText(</span>
+<span class="nc" id="L158">                    AdminDashboardHelper.monthLabel(donor.month),</span>
+                    center,
+                    monthBaseline,
+                    paint);
+<span class="nc" id="L162">            canvas.drawText(</span>
+<span class="nc" id="L163">                    AdminDashboardHelper.yearLabel(donor.year),</span>
+                    center,
+                    yearBaseline,
+                    paint);
+
+<span class="nc" id="L168">            paint.setColor(ContextCompat.getColor(getContext(), R.color.primary_text));</span>
+<span class="nc" id="L169">            paint.setTypeface(Typeface.DEFAULT_BOLD);</span>
+<span class="nc" id="L170">            float valueBaseline = Math.max(</span>
+                    12 * density,
+                    baseline - height - 6 * density);
+<span class="nc" id="L173">            canvas.drawText(String.valueOf(donor.count), center, valueBaseline, paint);</span>
+<span class="nc" id="L174">            paint.setTypeface(Typeface.DEFAULT);</span>
+        }
+<span class="nc" id="L176">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
