@@ -31,6 +31,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -141,6 +142,7 @@ public class CampaignListActivity extends AppCompatActivity {
 
     private void showCampaigns(String filter) {
         campaignContainer.removeAllViews();
+        Date today = new Date();
         String query = UiHelper.normalized(
                 searchInput.getText().toString(),
                 Locale.getDefault());
@@ -153,7 +155,7 @@ public class CampaignListActivity extends AppCompatActivity {
             if ("Finalizada".equals(campaign.calculatedStatus)) {
                 continue;
             }
-            if (filter.equals("Activas") && !campaign.calculatedStatus.equals("Activa")) {
+            if (filter.equals("Activas") && !CampaignHelper.isActiveOn(campaign, today)) {
                 continue;
             }
             if (filter.equals("Próximas") && !campaign.calculatedStatus.equals("Proximamente")) {

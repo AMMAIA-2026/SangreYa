@@ -1,5 +1,28 @@
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
 plugins {
     id 'com.android.application'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = '0.8.13'
+}
+
+tasks.register('jacocoDebugReport', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+    executionData.setFrom(files("$buildDir/jacoco/testDebugUnitTest.exec"))
+    sourceDirectories.setFrom(files('src/main/java'))
+    classDirectories.setFrom(fileTree("$buildDir/intermediates/javac/debug/classes") {
+        exclude '**/R.class', '**/R$*.class', '**/BuildConfig.class', '**/Manifest*.class'
+    })
+    reports {
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/coverage/debug')
+        xml.required = true
+        xml.outputLocation = layout.buildDirectory.file('reports/coverage/debug/coverage.xml')
+        csv.required = false
+    }
 }
 
 android {
