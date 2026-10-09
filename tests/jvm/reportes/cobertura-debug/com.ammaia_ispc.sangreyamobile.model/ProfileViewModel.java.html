@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileViewModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.model</a> &gt; <span class="el_source">ProfileViewModel.java</span></div><h1>ProfileViewModel.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.model;
+
+import com.ammaia_ispc.sangreyamobile.data.UserApiRepository;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public final class ProfileViewModel {
+    public interface SessionStore {
+        int getUserId();
+
+        void updateUserName(String name);
+    }
+
+    public interface Listener {
+        void onStateChanged(State state);
+    }
+
+    public static final class State {
+        public final UserUpdateRequest form;
+        public final boolean loading;
+        public final Response&lt;AuthUser&gt; response;
+        public final Throwable failure;
+
+        private State(UserUpdateRequest form, boolean loading,
+<span class="fc" id="L27">                      Response&lt;AuthUser&gt; response, Throwable failure) {</span>
+<span class="fc" id="L28">            this.form = form;</span>
+<span class="fc" id="L29">            this.loading = loading;</span>
+<span class="fc" id="L30">            this.response = response;</span>
+<span class="fc" id="L31">            this.failure = failure;</span>
+<span class="fc" id="L32">        }</span>
+
+        public boolean isSuccess() {
+<span class="pc bpc" id="L35" title="3 of 6 branches missed.">            return response != null &amp;&amp; response.isSuccessful() &amp;&amp; response.body() != null;</span>
+        }
+    }
+
+    private final UserApiRepository repository;
+    private final SessionStore sessionStore;
+    private final int userId;
+    private State state;
+
+    public ProfileViewModel(UserApiRepository repository, SessionStore sessionStore) {
+<span class="fc" id="L45">        this(repository, sessionStore, sessionStore.getUserId());</span>
+<span class="fc" id="L46">    }</span>
+
+<span class="fc" id="L48">    public ProfileViewModel(UserApiRepository repository, SessionStore sessionStore, int userId) {</span>
+<span class="fc" id="L49">        this.repository = repository;</span>
+<span class="fc" id="L50">        this.sessionStore = sessionStore;</span>
+<span class="fc" id="L51">        this.userId = userId;</span>
+<span class="fc" id="L52">    }</span>
+
+    public State getState() {
+<span class="fc" id="L55">        return state;</span>
+    }
+
+    public void save(UserUpdateRequest form, Listener listener) {
+<span class="fc" id="L59">        state = new State(form, true, null, null);</span>
+<span class="fc" id="L60">        listener.onStateChanged(state);</span>
+<span class="fc" id="L61">        repository.updateProfile(userId, form, new Callback&lt;AuthUser&gt;() {</span>
+            @Override
+            public void onResponse(Call&lt;AuthUser&gt; call, Response&lt;AuthUser&gt; response) {
+<span class="fc" id="L64">                state = new State(form, false, response, null);</span>
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">                if (state.isSuccess() &amp;&amp; userId == sessionStore.getUserId()) {</span>
+<span class="fc" id="L66">                    sessionStore.updateUserName(response.body().getDisplayName());</span>
+                }
+<span class="fc" id="L68">                listener.onStateChanged(state);</span>
+<span class="fc" id="L69">            }</span>
+
+            @Override
+            public void onFailure(Call&lt;AuthUser&gt; call, Throwable throwable) {
+<span class="fc" id="L73">                state = new State(form, false, null, throwable);</span>
+<span class="fc" id="L74">                listener.onStateChanged(state);</span>
+<span class="fc" id="L75">            }</span>
+        });
+<span class="fc" id="L77">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

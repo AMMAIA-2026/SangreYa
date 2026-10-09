@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">LoginActivity.java</span></div><h1>LoginActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import android.widget.TextView;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.AuthApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.LoginViewModel;
+import com.ammaia_ispc.sangreyamobile.model.LoginResponse;
+import com.ammaia_ispc.sangreyamobile.model.AuthUser;
+import android.util.Log;
+import android.util.Patterns;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+<span class="nc" id="L42">public class LoginActivity extends AppCompatActivity {</span>
+
+    private static final String TAG = &quot;LoginActivity&quot;;
+
+    private EditText etEmail;
+    private EditText etPassword;
+    private ImageButton btnTogglePassword;
+    private Button btnIngresar;
+    private LoginViewModel loginViewModel;
+
+    private TextView tvRegistrate;
+    private TextView tvOlvidasteContrasena;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L57">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L58">        setContentView(R.layout.activity_login);</span>
+
+<span class="nc" id="L60">        NavigationHelper.configureBackButton(this, R.id.btnBack);</span>
+
+<span class="nc" id="L62">        etEmail = findViewById(R.id.etEmail);</span>
+<span class="nc" id="L63">        etPassword = findViewById(R.id.etPassword);</span>
+<span class="nc" id="L64">        btnIngresar = findViewById(R.id.btnIngresar);</span>
+<span class="nc" id="L65">        loginViewModel = new LoginViewModel(new AuthApiRepository(ApiClient.getPlainApiService(),</span>
+<span class="nc" id="L66">                new AuthApiRepository.SessionStore() {</span>
+                    @Override
+                    public void save(LoginResponse response) {
+<span class="nc" id="L69">                        SessionManager.saveSession(LoginActivity.this,</span>
+<span class="nc" id="L70">                                response.getAccess(), response.getRefresh(), response.getUser());</span>
+<span class="nc" id="L71">                    }</span>
+
+                    @Override
+                    public void clear() {
+<span class="nc" id="L75">                        SessionManager.clearSession(LoginActivity.this);</span>
+<span class="nc" id="L76">                    }</span>
+                }));
+
+<span class="nc" id="L79">        btnTogglePassword = findViewById(R.id.btnTogglePassword);</span>
+<span class="nc" id="L80">        UiHelper.configurePasswordToggle(etPassword, btnTogglePassword);</span>
+
+<span class="nc" id="L82">        tvRegistrate = findViewById(R.id.tvRegistrate);</span>
+<span class="nc" id="L83">        tvOlvidasteContrasena = findViewById(R.id.tvOlvidasteContrasena);</span>
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (getIntent().getBooleanExtra(ExtraKeys.EXTRA_SESSION_EXPIRED, false)) {</span>
+<span class="nc" id="L86">            showMessage(getString(R.string.session_expired_message));</span>
+        }
+
+<span class="nc" id="L89">        tvRegistrate.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+<span class="nc" id="L92">                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);</span>
+<span class="nc" id="L93">                startActivity(intent);</span>
+<span class="nc" id="L94">            }</span>
+        });
+
+<span class="nc" id="L97">        tvOlvidasteContrasena.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+<span class="nc" id="L100">                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);</span>
+<span class="nc" id="L101">                startActivity(intent);</span>
+<span class="nc" id="L102">            }</span>
+        });
+
+<span class="nc" id="L105">        btnIngresar.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+<span class="nc" id="L108">                validarEIngresar();</span>
+<span class="nc" id="L109">            }</span>
+        });
+<span class="nc" id="L111">    }</span>
+
+    private void validarEIngresar() {
+<span class="nc" id="L114">        String email = etEmail.getText().toString().trim();</span>
+<span class="nc" id="L115">        String password = etPassword.getText().toString();</span>
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if (LoginViewModel.hasEmptyFields(email, password)) {</span>
+<span class="nc" id="L118">            showMessage(getString(R.string.error_required_fields));</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {</span>
+<span class="nc" id="L120">            showMessage(getString(R.string.error_invalid_email));</span>
+        } else {
+<span class="nc" id="L122">            performLogin(email, password);</span>
+        }
+<span class="nc" id="L124">    }</span>
+
+    private void performLogin(String email, String password) {
+<span class="nc" id="L127">        setLoading(true);</span>
+<span class="nc" id="L128">        loginViewModel.login(email, password, new AuthApiRepository.LoginCallback() {</span>
+            @Override
+            public void onSuccess(LoginResponse response) {
+<span class="nc" id="L131">                setLoading(false);</span>
+<span class="nc" id="L132">                handleLoginSuccess(response);</span>
+<span class="nc" id="L133">            }</span>
+
+            @Override
+            public void onHttpError(int statusCode, ResponseBody errorBody) {
+<span class="nc" id="L137">                setLoading(false);</span>
+<span class="nc" id="L138">                handleLoginError(errorBody);</span>
+<span class="nc" id="L139">            }</span>
+
+            @Override
+            public void onFailure(Throwable throwable) {
+<span class="nc" id="L143">                setLoading(false);</span>
+<span class="nc" id="L144">                showMessage(getString(R.string.error_connection));</span>
+<span class="nc" id="L145">            }</span>
+        });
+<span class="nc" id="L147">    }</span>
+
+    private void handleLoginSuccess(LoginResponse body) {
+<span class="nc" id="L150">        setLoading(true);</span>
+<span class="nc" id="L151">        ApiClient.getApiService(this)</span>
+<span class="nc" id="L152">                .getUserProfile(body.getUser().getId())</span>
+<span class="nc" id="L153">                .enqueue(new Callback&lt;AuthUser&gt;() {</span>
+                    @Override
+                    public void onResponse(Call&lt;AuthUser&gt; call, Response&lt;AuthUser&gt; response) {
+<span class="nc bnc" id="L156" title="All 4 branches missed.">                        if (response.isSuccessful() &amp;&amp; response.body() != null) {</span>
+<span class="nc" id="L157">                            SessionManager.updateUserName(</span>
+                                    LoginActivity.this,
+<span class="nc" id="L159">                                    response.body().getDisplayName());</span>
+                        }
+<span class="nc" id="L161">                        continueLogin(body);</span>
+<span class="nc" id="L162">                    }</span>
+
+                    @Override
+                    public void onFailure(Call&lt;AuthUser&gt; call, Throwable t) {
+<span class="nc" id="L166">                        continueLogin(body);</span>
+<span class="nc" id="L167">                    }</span>
+                });
+<span class="nc" id="L169">    }</span>
+
+    private void continueLogin(LoginResponse body) {
+<span class="nc" id="L172">        setLoading(false);</span>
+<span class="nc" id="L173">        boolean admin = SessionManager.isAdmin(this);</span>
+<span class="nc" id="L174">        Intent intent = new Intent(</span>
+                LoginActivity.this,
+<span class="nc bnc" id="L176" title="All 2 branches missed.">                admin ? AdminDashboardActivity.class : MainActivity.class);</span>
+<span class="nc" id="L177">        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);</span>
+<span class="nc" id="L178">        startActivity(intent);</span>
+<span class="nc" id="L179">    }</span>
+
+    private void handleLoginError(ResponseBody errorBody) {
+<span class="nc" id="L182">        Map&lt;String, List&lt;String&gt;&gt; errors = parseFieldErrors(errorBody);</span>
+<span class="nc" id="L183">        List&lt;String&gt; messages = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (errors.containsKey(&quot;email&quot;)) {</span>
+<span class="nc" id="L185">            messages.addAll(errors.get(&quot;email&quot;));</span>
+        }
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if (errors.containsKey(&quot;password&quot;)) {</span>
+<span class="nc" id="L188">            messages.addAll(errors.get(&quot;password&quot;));</span>
+        }
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        if (errors.containsKey(&quot;non_field_errors&quot;)) {</span>
+<span class="nc" id="L191">            messages.addAll(errors.get(&quot;non_field_errors&quot;));</span>
+        }
+
+<span class="nc bnc" id="L194" title="All 2 branches missed.">        if (messages.isEmpty()) {</span>
+<span class="nc" id="L195">            showMessage(getString(R.string.error_login_generico));</span>
+        } else {
+<span class="nc" id="L197">            showMessage(TextUtils.join(&quot; &quot;, messages));</span>
+        }
+<span class="nc" id="L199">    }</span>
+
+    private Map&lt;String, List&lt;String&gt;&gt; parseFieldErrors(ResponseBody errorBody) {
+<span class="nc" id="L202">        Map&lt;String, List&lt;String&gt;&gt; errors = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">        if (errorBody == null) {</span>
+<span class="nc" id="L204">            return errors;</span>
+        }
+        try {
+<span class="nc" id="L207">            JsonObject json = new JsonParser().parse(errorBody.string()).getAsJsonObject();</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">            for (Map.Entry&lt;String, JsonElement&gt; entry : json.entrySet()) {</span>
+<span class="nc" id="L209">                String field = entry.getKey();</span>
+<span class="nc bnc" id="L210" title="All 4 branches missed.">                if (&quot;codigo&quot;.equals(field) || &quot;status_code&quot;.equals(field)) {</span>
+<span class="nc" id="L211">                    continue;</span>
+                }
+<span class="nc" id="L213">                List&lt;String&gt; messages = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L214">                JsonElement value = entry.getValue();</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                if (value.isJsonArray()) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">                    for (JsonElement item : value.getAsJsonArray()) {</span>
+<span class="nc" id="L217">                        messages.add(item.getAsString());</span>
+<span class="nc" id="L218">                    }</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                } else if (value.isJsonPrimitive()) {</span>
+<span class="nc" id="L220">                    messages.add(value.getAsString());</span>
+                }
+<span class="nc bnc" id="L222" title="All 2 branches missed.">                if (!messages.isEmpty()) {</span>
+<span class="nc" id="L223">                    errors.put(field, messages);</span>
+                }
+<span class="nc" id="L225">            }</span>
+<span class="nc" id="L226">        } catch (Exception e) {</span>
+<span class="nc" id="L227">            Log.w(TAG, &quot;Failed to parse login error body&quot;, e);</span>
+<span class="nc" id="L228">        }</span>
+<span class="nc" id="L229">        return errors;</span>
+    }
+
+    private void showMessage(String message) {
+<span class="nc" id="L233">        View toastView = getLayoutInflater().inflate(R.layout.toast_enrollment, null);</span>
+<span class="nc" id="L234">        ((TextView) toastView.findViewById(R.id.toast_message)).setText(message);</span>
+
+<span class="nc" id="L236">        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);</span>
+<span class="nc" id="L237">        toast.setGravity(</span>
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
+                0,
+<span class="nc" id="L240">                getResources().getDimensionPixelSize(R.dimen.toast_bottom_offset));</span>
+<span class="nc" id="L241">        toast.setView(toastView);</span>
+<span class="nc" id="L242">        toast.show();</span>
+<span class="nc" id="L243">    }</span>
+
+    private void setLoading(boolean loading) {
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        btnIngresar.setEnabled(!loading);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">        btnIngresar.setText(loading ? R.string.ingresando : R.string.btn_ingresar);</span>
+<span class="nc" id="L248">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

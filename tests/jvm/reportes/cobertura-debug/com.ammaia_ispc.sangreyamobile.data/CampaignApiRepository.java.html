@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CampaignApiRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.data</a> &gt; <span class="el_source">CampaignApiRepository.java</span></div><h1>CampaignApiRepository.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.data;
+
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiConfig;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
+import com.ammaia_ispc.sangreyamobile.model.Enrollment;
+import com.ammaia_ispc.sangreyamobile.model.EnrollmentUser;
+import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
+import com.ammaia_ispc.sangreyamobile.model.MyEnrollments;
+import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
+
+public final class CampaignApiRepository {
+    private static final String CAMPAIGNS_PATH = &quot;campanias/&quot;;
+
+    private CampaignApiRepository() {
+    }
+
+    private static Handler mainHandler() {
+<span class="nc" id="L45">        return new Handler(Looper.getMainLooper());</span>
+    }
+
+    public interface Callback&lt;T&gt; {
+        void onSuccess(T value);
+
+        void onError(Exception exception);
+    }
+
+    public static final class HttpException extends IOException {
+        private final int statusCode;
+        private final String body;
+
+        public HttpException(int statusCode, String body) {
+<span class="fc" id="L59">            super(&quot;HTTP &quot; + statusCode);</span>
+<span class="fc" id="L60">            this.statusCode = statusCode;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            this.body = body == null ? &quot;&quot; : body;</span>
+<span class="fc" id="L62">        }</span>
+
+        public int getStatusCode() {
+<span class="fc" id="L65">            return statusCode;</span>
+        }
+
+        public String getBody() {
+<span class="fc" id="L69">            return body;</span>
+        }
+    }
+
+    public static boolean isNotFound(Exception exception) {
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        return exception instanceof HttpException</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                &amp;&amp; ((HttpException) exception).getStatusCode() == 404;</span>
+    }
+
+    public static boolean isUnauthorized(Exception exception) {
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (!(exception instanceof HttpException)) {</span>
+<span class="nc" id="L80">            return false;</span>
+        }
+
+<span class="fc" id="L83">        int statusCode = ((HttpException) exception).getStatusCode();</span>
+<span class="fc bfc" id="L84" title="All 4 branches covered.">        return statusCode == 401 || statusCode == 403;</span>
+    }
+
+    public static boolean isNetworkError(Exception exception) {
+<span class="pc bpc" id="L88" title="1 of 4 branches missed.">        return exception instanceof IOException &amp;&amp; !(exception instanceof HttpException);</span>
+    }
+
+    public static String getErrorCode(Exception exception) {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (!(exception instanceof HttpException)) {</span>
+<span class="nc" id="L93">            return null;</span>
+        }
+
+        try {
+<span class="nc" id="L97">            String code = new JSONObject(((HttpException) exception).getBody())</span>
+<span class="nc" id="L98">                    .optString(&quot;codigo&quot;, &quot;&quot;);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            return code.isEmpty() ? null : code;</span>
+<span class="nc" id="L100">        } catch (Exception ignored) {</span>
+<span class="nc" id="L101">            return null;</span>
+        }
+    }
+
+    public static void getCampaigns(
+            Context context,
+            Callback&lt;List&lt;Campaign&gt;&gt; callback) {
+<span class="nc" id="L108">        getCampaigns(ApiClient.getApiService(context), callback);</span>
+<span class="nc" id="L109">    }</span>
+
+    static void getCampaigns(ApiService api, Callback&lt;List&lt;Campaign&gt;&gt; callback) {
+<span class="fc" id="L112">        request(api.getCampaigns(), response -&gt; {</span>
+<span class="nc" id="L113">            JSONArray jsonArray = new JSONArray(response);</span>
+<span class="nc" id="L114">            List&lt;Campaign&gt; campaigns = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            for (int index = 0; index &lt; jsonArray.length(); index++) {</span>
+<span class="nc" id="L117">                campaigns.add(fromJson(jsonArray.getJSONObject(index)));</span>
+            }
+
+<span class="nc" id="L120">            return campaigns;</span>
+        }, callback);
+<span class="fc" id="L122">    }</span>
+
+    public static void getCampaign(
+            Context context,
+            int campaignId,
+            Callback&lt;Campaign&gt; callback) {
+<span class="nc" id="L128">        request(ApiClient.getApiService(context).getCampaign(campaignId), response -&gt;</span>
+<span class="nc" id="L129">                fromJson(new JSONObject(response)), callback);</span>
+<span class="nc" id="L130">    }</span>
+
+    public static void enrollInCampaign(
+            Context context,
+            int campaignId,
+            Callback&lt;Integer&gt; callback) {
+<span class="nc" id="L136">        enrollInCampaign(ApiClient.getApiService(context), campaignId, callback);</span>
+<span class="nc" id="L137">    }</span>
+
+    static void enrollInCampaign(ApiService api, int campaignId, Callback&lt;Integer&gt; callback) {
+<span class="fc" id="L140">        request(api.enrollInCampaign(campaignId), response -&gt; JsonParser.parseString(response)</span>
+<span class="fc" id="L141">                .getAsJsonObject().get(&quot;totalInscriptos&quot;).getAsInt(), callback);</span>
+<span class="fc" id="L142">    }</span>
+
+    public static void getMyEnrollments(
+            Context context,
+            Callback&lt;MyEnrollments&gt; callback) {
+<span class="nc" id="L147">        request(ApiClient.getApiService(context).getMyEnrollments(), response -&gt; {</span>
+<span class="nc" id="L148">            JSONObject json = new JSONObject(response);</span>
+<span class="nc" id="L149">            return new MyEnrollments(</span>
+<span class="nc" id="L150">                    parseEnrollments(json.optJSONArray(&quot;actuales&quot;)),</span>
+<span class="nc" id="L151">                    parseEnrollments(json.optJSONArray(&quot;historicas&quot;)));</span>
+        }, callback);
+<span class="nc" id="L153">    }</span>
+
+    public static void getCampaignEnrollments(
+            Context context,
+            int campaignId,
+            Callback&lt;CampaignEnrollments&gt; callback) {
+<span class="nc" id="L159">        request(ApiClient.getApiService(context).getCampaignEnrollments(campaignId), response -&gt; {</span>
+<span class="nc" id="L160">            JSONObject json = new JSONObject(response);</span>
+<span class="nc" id="L161">            List&lt;EnrollmentUser&gt; users = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L162">            JSONArray usersJson = json.optJSONArray(&quot;usuarios&quot;);</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">            if (usersJson != null) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                for (int index = 0; index &lt; usersJson.length(); index++) {</span>
+<span class="nc" id="L165">                    JSONObject user = usersJson.optJSONObject(index);</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                    if (user != null) {</span>
+<span class="nc" id="L167">                        users.add(new EnrollmentUser(</span>
+<span class="nc" id="L168">                                user.optInt(&quot;id&quot;),</span>
+<span class="nc" id="L169">                                user.optString(&quot;nombre&quot;, &quot;&quot;),</span>
+<span class="nc" id="L170">                                user.optString(&quot;apellido&quot;, &quot;&quot;),</span>
+<span class="nc" id="L171">                                user.optString(&quot;dni&quot;, &quot;&quot;),</span>
+<span class="nc" id="L172">                                user.optString(&quot;email&quot;, &quot;&quot;)));</span>
+                    }
+                }
+            }
+
+<span class="nc" id="L177">            return new CampaignEnrollments(</span>
+<span class="nc" id="L178">                    fromJson(json.optJSONObject(&quot;campania&quot;)),</span>
+<span class="nc" id="L179">                    json.optInt(&quot;total_inscriptos&quot;, users.size()),</span>
+                    users);
+        }, callback);
+<span class="nc" id="L182">    }</span>
+
+    public static void cancelEnrollment(
+            Context context,
+            int enrollmentId,
+            Callback&lt;Void&gt; callback) {
+<span class="nc" id="L188">        requestVoid(ApiClient.getApiService(context).cancelEnrollment(enrollmentId), callback);</span>
+<span class="nc" id="L189">    }</span>
+
+    public static void createCampaign(
+            Context context,
+            String title,
+            String description,
+            String location,
+            Integer healthCenterId,
+            String startDate,
+            String endDate,
+            Integer maximumCapacity,
+            Callback&lt;Campaign&gt; callback) {
+<span class="nc" id="L201">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L202">        body.put(&quot;titulo&quot;, title);</span>
+<span class="nc" id="L203">        body.put(&quot;descripcion&quot;, description);</span>
+<span class="nc" id="L204">        body.put(&quot;ubicacion&quot;, location);</span>
+<span class="nc" id="L205">        body.put(&quot;centro_salud&quot;, healthCenterId);</span>
+<span class="nc" id="L206">        body.put(&quot;fecha_inicio&quot;, startDate);</span>
+<span class="nc" id="L207">        body.put(&quot;fecha_fin&quot;, endDate);</span>
+<span class="nc" id="L208">        body.put(&quot;cupo_maximo&quot;, maximumCapacity);</span>
+
+<span class="nc" id="L210">        request(ApiClient.getApiService(context).createCampaign(body), response -&gt;</span>
+<span class="nc" id="L211">                fromJson(new JSONObject(response)), callback);</span>
+<span class="nc" id="L212">    }</span>
+
+    public static void updateCampaign(
+            Context context,
+            int campaignId,
+            String title,
+            String description,
+            String location,
+            Integer healthCenterId,
+            String startDate,
+            String endDate,
+            Integer maximumCapacity,
+            Callback&lt;Campaign&gt; callback) {
+<span class="nc" id="L225">        Map&lt;String, Object&gt; body = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L226">        body.put(&quot;titulo&quot;, title);</span>
+<span class="nc" id="L227">        body.put(&quot;descripcion&quot;, description);</span>
+<span class="nc" id="L228">        body.put(&quot;ubicacion&quot;, location);</span>
+<span class="nc" id="L229">        body.put(&quot;centro_salud&quot;, healthCenterId);</span>
+<span class="nc" id="L230">        body.put(&quot;fecha_inicio&quot;, startDate);</span>
+<span class="nc" id="L231">        body.put(&quot;fecha_fin&quot;, endDate);</span>
+<span class="nc" id="L232">        body.put(&quot;cupo_maximo&quot;, maximumCapacity);</span>
+
+<span class="nc" id="L234">        request(ApiClient.getApiService(context).updateCampaign(campaignId, body), response -&gt;</span>
+<span class="nc" id="L235">                fromJson(new JSONObject(response)), callback);</span>
+<span class="nc" id="L236">    }</span>
+
+
+    public static void deleteCampaign(
+            int campaignId,
+            String accessToken,
+            Callback&lt;Void&gt; callback) {
+<span class="nc" id="L243">        new Thread(() -&gt; {</span>
+            try {
+<span class="nc" id="L245">                executeDelete(</span>
+                        CAMPAIGNS_PATH + campaignId + &quot;/&quot;,
+                        accessToken);
+
+<span class="nc" id="L249">                mainHandler().post(() -&gt; callback.onSuccess(null));</span>
+
+<span class="nc" id="L251">            } catch (Exception exception) {</span>
+<span class="nc" id="L252">                Log.e(</span>
+                        &quot;CampaignApiRepository&quot;,
+                        &quot;Error al eliminar la campaña &quot; + campaignId,
+                        exception);
+
+<span class="nc" id="L257">                mainHandler().post(() -&gt; callback.onError(exception));</span>
+<span class="nc" id="L258">            }</span>
+<span class="nc" id="L259">        }).start();</span>
+<span class="nc" id="L260">    }</span>
+
+    private interface Parser&lt;T&gt; {
+        T parse(String response) throws Exception;
+    }
+
+    private static &lt;T&gt; void request(
+            Call&lt;ResponseBody&gt; call,
+            Parser&lt;T&gt; parser,
+            Callback&lt;T&gt; callback) {
+<span class="fc" id="L270">        call.enqueue(new retrofit2.Callback&lt;ResponseBody&gt;() {</span>
+            @Override
+            public void onResponse(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response) {
+<span class="fc bfc" id="L273" title="All 2 branches covered.">                if (!response.isSuccessful()) {</span>
+<span class="fc" id="L274">                    callback.onError(httpException(response));</span>
+<span class="fc" id="L275">                    return;</span>
+                }
+
+<span class="fc" id="L278">                ResponseBody body = response.body();</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">                if (body == null) {</span>
+<span class="nc" id="L280">                    callback.onError(new IOException(&quot;Respuesta vacía del servidor&quot;));</span>
+<span class="nc" id="L281">                    return;</span>
+                }
+
+                try {
+<span class="fc" id="L285">                    callback.onSuccess(parser.parse(body.string()));</span>
+<span class="fc" id="L286">                } catch (Exception exception) {</span>
+<span class="fc" id="L287">                    callback.onError(exception);</span>
+<span class="fc" id="L288">                }</span>
+<span class="fc" id="L289">            }</span>
+
+            @Override
+            public void onFailure(Call&lt;ResponseBody&gt; call, Throwable throwable) {
+<span class="nc" id="L293">                callback.onError(asException(throwable));</span>
+<span class="nc" id="L294">            }</span>
+        });
+<span class="fc" id="L296">    }</span>
+
+    private static void requestVoid(Call&lt;Void&gt; call, Callback&lt;Void&gt; callback) {
+<span class="nc" id="L299">        call.enqueue(new retrofit2.Callback&lt;Void&gt;() {</span>
+            @Override
+            public void onResponse(Call&lt;Void&gt; call, Response&lt;Void&gt; response) {
+<span class="nc bnc" id="L302" title="All 2 branches missed.">                if (response.isSuccessful()) {</span>
+<span class="nc" id="L303">                    callback.onSuccess(null);</span>
+                } else {
+<span class="nc" id="L305">                    callback.onError(httpException(response));</span>
+                }
+<span class="nc" id="L307">            }</span>
+
+            @Override
+            public void onFailure(Call&lt;Void&gt; call, Throwable throwable) {
+<span class="nc" id="L311">                callback.onError(asException(throwable));</span>
+<span class="nc" id="L312">            }</span>
+        });
+<span class="nc" id="L314">    }</span>
+
+    private static void executeDelete(String path, String accessToken) throws Exception {
+<span class="nc" id="L317">        HttpURLConnection connection = null;</span>
+
+        try {
+<span class="nc" id="L320">            URL url = new URL(ApiConfig.BASE_URL + path);</span>
+<span class="nc" id="L321">            connection = (HttpURLConnection) url.openConnection();</span>
+<span class="nc" id="L322">            connection.setRequestMethod(&quot;DELETE&quot;);</span>
+<span class="nc" id="L323">            connection.setConnectTimeout(10000);</span>
+<span class="nc" id="L324">            connection.setReadTimeout(10000);</span>
+<span class="nc" id="L325">            connection.setRequestProperty(&quot;Accept&quot;, &quot;application/json&quot;);</span>
+<span class="nc bnc" id="L326" title="All 4 branches missed.">            if (accessToken != null &amp;&amp; !accessToken.trim().isEmpty()) {</span>
+<span class="nc" id="L327">                connection.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);</span>
+            }
+
+<span class="nc" id="L330">            int statusCode = connection.getResponseCode();</span>
+<span class="nc bnc" id="L331" title="All 4 branches missed.">            InputStream stream = statusCode &gt;= 200 &amp;&amp; statusCode &lt; 300</span>
+<span class="nc" id="L332">                    ? connection.getInputStream()</span>
+<span class="nc" id="L333">                    : connection.getErrorStream();</span>
+<span class="nc" id="L334">            String body = readBody(stream);</span>
+
+<span class="nc bnc" id="L336" title="All 4 branches missed.">            if (statusCode &lt; 200 || statusCode &gt;= 300) {</span>
+<span class="nc" id="L337">                throw new HttpException(statusCode, body);</span>
+            }
+        } finally {
+<span class="nc bnc" id="L340" title="All 2 branches missed.">            if (connection != null) {</span>
+<span class="nc" id="L341">                connection.disconnect();</span>
+            }
+        }
+<span class="nc" id="L344">    }</span>
+
+    private static String readBody(InputStream stream) throws Exception {
+<span class="nc bnc" id="L347" title="All 2 branches missed.">        if (stream == null) {</span>
+<span class="nc" id="L348">            return &quot;&quot;;</span>
+        }
+
+<span class="nc" id="L351">        StringBuilder body = new StringBuilder();</span>
+<span class="nc" id="L352">        try (BufferedReader reader = new BufferedReader(</span>
+                new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+            String line;
+<span class="nc bnc" id="L355" title="All 2 branches missed.">            while ((line = reader.readLine()) != null) {</span>
+<span class="nc" id="L356">                body.append(line);</span>
+            }
+        }
+<span class="nc" id="L359">        return body.toString();</span>
+    }
+
+    private static HttpException httpException(Response&lt;?&gt; response) {
+<span class="fc" id="L363">        String body = &quot;&quot;;</span>
+<span class="fc" id="L364">        ResponseBody errorBody = response.errorBody();</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">        if (errorBody != null) {</span>
+            try {
+<span class="fc" id="L367">                body = errorBody.string();</span>
+<span class="nc" id="L368">            } catch (IOException ignored) {</span>
+                // Keep the status code when the error body cannot be read.
+<span class="fc" id="L370">            }</span>
+        }
+<span class="fc" id="L372">        return new HttpException(response.code(), body);</span>
+    }
+
+    private static Exception asException(Throwable throwable) {
+<span class="nc bnc" id="L376" title="All 2 branches missed.">        return throwable instanceof Exception</span>
+<span class="nc" id="L377">                ? (Exception) throwable</span>
+<span class="nc" id="L378">                : new IOException(throwable);</span>
+    }
+
+    static Campaign fromJson(JSONObject json) {
+<span class="pc bpc" id="L382" title="1 of 2 branches missed.">        if (json == null) {</span>
+<span class="nc" id="L383">            return null;</span>
+        }
+
+<span class="fc" id="L386">        String campaignStatus = normalizeStatus(</span>
+<span class="fc" id="L387">                json.optString(&quot;estado_campania&quot;, &quot;&quot;));</span>
+<span class="fc" id="L388">        String calculatedStatus = normalizeStatus(</span>
+<span class="fc" id="L389">                json.optString(&quot;estado_calculado&quot;, campaignStatus));</span>
+
+<span class="fc" id="L391">        JSONObject healthCenterJson = json.optJSONObject(&quot;centro_salud_detalle&quot;);</span>
+<span class="fc" id="L392">        HealthCenter healthCenter = fromHealthCenter(healthCenterJson);</span>
+<span class="fc" id="L393">        Integer healthCenterId = null;</span>
+<span class="fc bfc" id="L394" title="All 2 branches covered.">        if (healthCenter != null) {</span>
+<span class="fc" id="L395">            healthCenterId = healthCenter.id;</span>
+        } else {
+<span class="fc" id="L397">            healthCenterId = nullableInteger(json, &quot;centro_salud&quot;);</span>
+        }
+
+<span class="fc" id="L400">        Integer maximumCapacity = null;</span>
+<span class="pc bpc" id="L401" title="2 of 4 branches missed.">        if (json.has(&quot;cupo_maximo&quot;) &amp;&amp; !json.isNull(&quot;cupo_maximo&quot;)) {</span>
+<span class="fc" id="L402">            maximumCapacity = Integer.valueOf(json.optInt(&quot;cupo_maximo&quot;));</span>
+        }
+
+<span class="fc" id="L405">        int totalRegistered = json.optInt(&quot;total_inscriptos&quot;, 0);</span>
+
+<span class="fc" id="L407">        return new Campaign(</span>
+<span class="fc" id="L408">                json.optInt(&quot;id&quot;),</span>
+<span class="fc" id="L409">                json.optString(&quot;titulo&quot;, &quot;&quot;),</span>
+<span class="fc" id="L410">                json.optString(&quot;descripcion&quot;, &quot;&quot;),</span>
+<span class="fc" id="L411">                json.optString(&quot;ubicacion&quot;, &quot;&quot;),</span>
+                healthCenterId,
+                healthCenter,
+<span class="fc" id="L414">                json.optString(&quot;fecha_inicio&quot;, &quot;&quot;),</span>
+<span class="fc" id="L415">                json.optString(&quot;fecha_fin&quot;, &quot;&quot;),</span>
+                maximumCapacity,
+                totalRegistered,
+                campaignStatus,
+                calculatedStatus);
+    }
+
+    private static List&lt;Enrollment&gt; parseEnrollments(JSONArray jsonArray) {
+<span class="nc" id="L423">        List&lt;Enrollment&gt; enrollments = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">        if (jsonArray == null) {</span>
+<span class="nc" id="L425">            return enrollments;</span>
+        }
+
+<span class="nc bnc" id="L428" title="All 2 branches missed.">        for (int index = 0; index &lt; jsonArray.length(); index++) {</span>
+<span class="nc" id="L429">            JSONObject item = jsonArray.optJSONObject(index);</span>
+<span class="nc bnc" id="L430" title="All 2 branches missed.">            if (item != null) {</span>
+<span class="nc" id="L431">                enrollments.add(new Enrollment(</span>
+<span class="nc" id="L432">                        item.optInt(&quot;id&quot;),</span>
+<span class="nc" id="L433">                        fromJson(item.optJSONObject(&quot;campania&quot;))));</span>
+            }
+        }
+<span class="nc" id="L436">        return enrollments;</span>
+    }
+
+    private static HealthCenter fromHealthCenter(JSONObject json) {
+<span class="fc bfc" id="L440" title="All 2 branches covered.">        if (json == null) {</span>
+<span class="fc" id="L441">            return null;</span>
+        }
+
+<span class="fc" id="L444">        return new HealthCenter(</span>
+<span class="fc" id="L445">                json.optInt(&quot;id&quot;),</span>
+<span class="fc" id="L446">                json.optString(&quot;nombre&quot;, &quot;&quot;),</span>
+<span class="fc" id="L447">                json.optString(&quot;direccion&quot;, &quot;&quot;),</span>
+<span class="fc" id="L448">                json.optString(&quot;barrio&quot;, &quot;&quot;),</span>
+<span class="fc" id="L449">                json.optString(&quot;ciudad&quot;, json.optString(&quot;localidad&quot;, &quot;&quot;)),</span>
+<span class="fc" id="L450">                json.optString(&quot;telefono&quot;, &quot;&quot;),</span>
+<span class="fc" id="L451">                json.optString(&quot;sitio_web&quot;, &quot;&quot;),</span>
+<span class="fc" id="L452">                json.optString(&quot;latitud&quot;, &quot;&quot;),</span>
+<span class="fc" id="L453">                json.optString(&quot;longitud&quot;, &quot;&quot;));</span>
+    }
+
+    private static Integer nullableInteger(JSONObject json, String key) {
+<span class="pc bpc" id="L457" title="2 of 4 branches missed.">        if (!json.has(key) || json.isNull(key)) {</span>
+<span class="fc" id="L458">            return null;</span>
+        }
+
+<span class="nc" id="L461">        return json.optInt(key);</span>
+    }
+
+    private static String normalizeStatus(String status) {
+<span class="pc bpc" id="L465" title="1 of 2 branches missed.">        if (status == null) {</span>
+<span class="nc" id="L466">            return &quot;&quot;;</span>
+        }
+
+<span class="pc bpc" id="L469" title="1 of 2 branches missed.">        if (status.equalsIgnoreCase(&quot;Próximamente&quot;)</span>
+<span class="pc bpc" id="L470" title="1 of 2 branches missed.">                || status.equalsIgnoreCase(&quot;Proximamente&quot;)) {</span>
+<span class="nc" id="L471">            return &quot;Proximamente&quot;;</span>
+        }
+
+<span class="pc bpc" id="L474" title="1 of 2 branches missed.">        if (status.equalsIgnoreCase(&quot;En curso&quot;)</span>
+<span class="pc bpc" id="L475" title="1 of 2 branches missed.">                || status.equalsIgnoreCase(&quot;Activa&quot;)) {</span>
+<span class="nc" id="L476">            return &quot;Activa&quot;;</span>
+        }
+
+<span class="pc bpc" id="L479" title="1 of 2 branches missed.">        if (status.equalsIgnoreCase(&quot;Finalizada&quot;)) {</span>
+<span class="nc" id="L480">            return &quot;Finalizada&quot;;</span>
+        }
+
+<span class="fc" id="L483">        return status;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.model</a> &gt; <span class="el_source">ContactRequest.java</span></div><h1>ContactRequest.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.model;
+
+import java.util.regex.Pattern;
+
+public class ContactRequest {
+    public static final int MAX_NOMBRE_LENGTH = 20;
+    public static final int MAX_MENSAJE_LENGTH = 500;
+<span class="fc" id="L8">    private static final Pattern EMAIL_PATTERN = Pattern.compile(</span>
+            &quot;[a-zA-Z0-9+._%\\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}&quot;
+                    + &quot;(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25})+&quot;);
+
+    private final String nombre_completo;
+    private final String correo_electronico;
+    private final String motivo;
+    private final String mensaje;
+
+    public ContactRequest(String nombre_completo, String correo_electronico,
+<span class="fc" id="L18">                          String motivo, String mensaje) {</span>
+<span class="fc" id="L19">        this.nombre_completo = nombre_completo;</span>
+<span class="fc" id="L20">        this.correo_electronico = correo_electronico;</span>
+<span class="fc" id="L21">        this.motivo = motivo;</span>
+<span class="fc" id="L22">        this.mensaje = mensaje;</span>
+<span class="fc" id="L23">    }</span>
+
+    public String getNombre_completo() {
+<span class="nc" id="L26">        return nombre_completo;</span>
+    }
+
+    public String getCorreo_electronico() {
+<span class="nc" id="L30">        return correo_electronico;</span>
+    }
+
+    public String getMotivo() {
+<span class="nc" id="L34">        return motivo;</span>
+    }
+
+    public String getMensaje() {
+<span class="nc" id="L38">        return mensaje;</span>
+    }
+
+    public boolean isValid() {
+<span class="fc bfc" id="L42" title="All 4 branches covered.">        return present(nombre_completo) &amp;&amp; nombre_completo.length() &lt;= MAX_NOMBRE_LENGTH</span>
+<span class="fc bfc" id="L43" title="All 4 branches covered.">                &amp;&amp; present(correo_electronico) &amp;&amp; EMAIL_PATTERN.matcher(correo_electronico).matches()</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">                &amp;&amp; present(motivo)</span>
+<span class="fc bfc" id="L45" title="All 4 branches covered.">                &amp;&amp; present(mensaje) &amp;&amp; mensaje.length() &lt;= MAX_MENSAJE_LENGTH;</span>
+    }
+
+    private static boolean present(String value) {
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">        return value != null &amp;&amp; !value.trim().isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

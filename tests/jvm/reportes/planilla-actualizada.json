@@ -1,0 +1,197 @@
+{
+  "excel": "C:\\Users\\Guillermo\\Desktop\\Trabajo TestCases\\Planilla07-10-26.xlsx",
+  "updated_local": "2026-10-09T15:50:13.307872-03:00",
+  "backup": "C:\\Users\\GUILLE~1\\AppData\\Local\\Temp\\opencode\\Planilla07-10-26.antes-JVM-20261009-154305.xlsx",
+  "updated_cases": 20,
+  "associated_methods": 29,
+  "cases": {
+    "TC-NET-01": {
+      "sheet": "Auth",
+      "row": 53,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login200ParseaTokens"
+      ],
+      "status": "PASS",
+      "designer": "Guillermo Mauricio Diván"
+    },
+    "TC-NET-02": {
+      "sheet": "Auth",
+      "row": 54,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.AuthApiTest#login401NoPersisteSesion"
+      ],
+      "status": "PASS",
+      "designer": "Vanessa Marcela Villanueva Casini"
+    },
+    "TC-NET-03": {
+      "sheet": "Perfil Usuario",
+      "row": 28,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.ProfileApiTest#timeoutMuestraErrorSinPerderDatos"
+      ],
+      "status": "PASS",
+      "designer": "Irina Pirles"
+    },
+    "TC-NET-04": {
+      "sheet": "Campañas",
+      "row": 41,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.CampaignApiTest#http500MapeaErrorSeguro"
+      ],
+      "status": "PASS",
+      "designer": "Astrid Ana Luppi"
+    },
+    "TC-NET-05": {
+      "sheet": "Inscripciones",
+      "row": 47,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.EnrollmentApiTest#bodyVacioYContentType"
+      ],
+      "status": "PASS",
+      "designer": "Abigail Yazmin Picone Ambrosioni"
+    },
+    "TC-UNIT-01": {
+      "sheet": "Contacto",
+      "row": 18,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#validoEnviaSolicitud"
+      ],
+      "status": "PASS",
+      "designer": "Abigail Yazmin Picone Ambrosioni"
+    },
+    "TC-UNIT-02": {
+      "sheet": "Contacto",
+      "row": 19,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.FormularioContactoTest#rechazaObligatoriosYLimites"
+      ],
+      "status": "PASS",
+      "designer": "Abigail Yazmin Picone Ambrosioni"
+    },
+    "TC-UNIT-03": {
+      "sheet": "Perfil Usuario",
+      "row": 25,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.ProfileMapperTest#jsonMapeaPerfilSinPassword"
+      ],
+      "status": "PASS",
+      "designer": "Irina Pirles"
+    },
+    "TC-UNIT-04": {
+      "sheet": "Perfil Usuario",
+      "row": 26,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.ProfileValidatorTest#rechazaEmailYDniInvalidos"
+      ],
+      "status": "PASS",
+      "designer": "Irina Pirles"
+    },
+    "TC-UNIT-05": {
+      "sheet": "Perfil Usuario",
+      "row": 27,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest#actualizaPerfilPropio"
+      ],
+      "status": "PASS",
+      "designer": "Irina Pirles"
+    },
+    "TC-UNIT-06": {
+      "sheet": "Campañas",
+      "row": 38,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#rejectsInvalidDates"
+      ],
+      "status": "PASS"
+    },
+    "TC-UNIT-07": {
+      "sheet": "Campañas",
+      "row": 39,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.CampaignValidatorTest#validatesCapacity"
+      ],
+      "status": "PASS"
+    },
+    "TC-UNIT-08": {
+      "sheet": "Campañas",
+      "row": 40,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.CampaignMapperTest#optionalHealthCenterNull"
+      ],
+      "status": "PASS"
+    },
+    "TC-UNIT-09": {
+      "sheet": "Dashboard",
+      "row": 14,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#noExponeBodyInterno"
+      ],
+      "status": "PASS",
+      "designer": "Guillermo Mauricio Diván"
+    },
+    "TC-UNIT-10": {
+      "sheet": "Dashboard",
+      "row": 15,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.DashboardMapperTest#calculaMetricas"
+      ],
+      "status": "PASS",
+      "designer": "Guillermo Mauricio Diván"
+    },
+    "TC-UNIT-11": {
+      "sheet": "Dashboard",
+      "row": 16,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.ApiErrorMapperTest#mapeaStatusHttp"
+      ],
+      "status": "PASS",
+      "designer": "Guillermo Mauricio Diván"
+    },
+    "TC-UNIT-12": {
+      "sheet": "Auth",
+      "row": 49,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.LoginViewModelTest#rechazaCamposVacios"
+      ],
+      "status": "PASS",
+      "designer": "Astrid Ana Luppi"
+    },
+    "TC-UNIT-13": {
+      "sheet": "Auth",
+      "row": 50,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.data.AuthRepositoryTest#persisteTokensDeLogin"
+      ],
+      "status": "PASS",
+      "designer": "Astrid Ana Luppi"
+    },
+    "TC-UNIT-14": {
+      "sheet": "Auth",
+      "row": 51,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordEnElMinimoYPorEncima",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordDeNueveCaracteresAunqueCumplaLaComplejidad",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordNulaOVacia",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMayuscula",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinMinuscula",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinNumero",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaPasswordSinSimboloInclusoConEspaciosOLetrasAcentuadas",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaPasswordConLetrasAcentuadasYSimbolo"
+      ],
+      "status": "PASS",
+      "designer": "Vanessa Marcela Villanueva Casini"
+    },
+    "TC-UNIT-15": {
+      "sheet": "Auth",
+      "row": 52,
+      "methods": [
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#aceptaConfirmacionIdentica",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionDistintaSinNormalizarMayusculasNiEspacios",
+        "com.ammaia_ispc.sangreyamobile.helpers.PasswordValidatorTest#rechazaConfirmacionConValoresNulos"
+      ],
+      "status": "PASS",
+      "designer": "Vanessa Marcela Villanueva Casini"
+    }
+  },
+  "excel_sha256": "a428a8ed3cd6b439871b3327aeabaaa1f869ae39823210e3c5d2f869b038ac89",
+  "verification": "Paquete XLSX válido; hojas y estilos conservados; celdas ajenas a los 20 casos conservadas; referencias de métodos y resultados verificados."
+}

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsersActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">UsersActivity.java</span></div><h1>UsersActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.model.AuthUser;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+
+<span class="nc" id="L32">public class UsersActivity extends AppCompatActivity {</span>
+
+    private static final int REQUEST_EDIT_USER = 1001;
+    private LinearLayout usersContainer;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L39">        super.onCreate(savedInstanceState);</span>
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (!SessionManager.requireAdmin(this)) {</span>
+<span class="nc" id="L42">            return;</span>
+        }
+
+<span class="nc" id="L45">        setContentView(R.layout.activity_users);</span>
+
+<span class="nc" id="L47">        DrawerLayout drawerLayout = findViewById(R.id.admin_users_drawer);</span>
+<span class="nc" id="L48">        NavigationView navigationView = findViewById(R.id.admin_users_navigation_view);</span>
+<span class="nc" id="L49">        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);</span>
+
+<span class="nc" id="L51">        findViewById(R.id.admin_nav_dashboard).setOnClickListener(view -&gt; openDashboard());</span>
+<span class="nc" id="L52">        findViewById(R.id.admin_nav_campaigns).setOnClickListener(view -&gt; openCampaigns());</span>
+<span class="nc" id="L53">        findViewById(R.id.admin_nav_messages).setOnClickListener(view -&gt; openMessages());</span>
+
+<span class="nc" id="L55">        usersContainer = findViewById(R.id.users_container);</span>
+
+<span class="nc" id="L57">        loadUsers();</span>
+<span class="nc" id="L58">    }</span>
+
+    private void loadUsers() {
+
+<span class="nc" id="L62">        ApiService apiService = ApiClient.getApiService(this);</span>
+
+<span class="nc" id="L64">        apiService.getUsers().enqueue(new Callback&lt;List&lt;AuthUser&gt;&gt;() {</span>
+
+            @Override
+            public void onResponse(
+                    Call&lt;List&lt;AuthUser&gt;&gt; call,
+                    Response&lt;List&lt;AuthUser&gt;&gt; response
+            ) {
+<span class="nc bnc" id="L71" title="All 4 branches missed.">                if (!response.isSuccessful() || response.body() == null) {</span>
+<span class="nc" id="L72">                    return;</span>
+                }
+
+<span class="nc" id="L75">                usersContainer.removeAllViews();</span>
+
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                for (AuthUser user : response.body()) {</span>
+
+<span class="nc" id="L79">                    LinearLayout userCard = new LinearLayout(UsersActivity.this);</span>
+<span class="nc" id="L80">                    userCard.setOrientation(LinearLayout.VERTICAL);</span>
+<span class="nc" id="L81">                    userCard.setPadding(24, 20, 24, 20);</span>
+
+<span class="nc" id="L83">                    GradientDrawable cardBackground = new GradientDrawable();</span>
+<span class="nc" id="L84">                    cardBackground.setColor(Color.WHITE);</span>
+<span class="nc" id="L85">                    cardBackground.setStroke(</span>
+                            3,
+<span class="nc" id="L87">                            Color.parseColor(&quot;#C7C7C7&quot;)</span>
+                    );
+<span class="nc" id="L89">                    cardBackground.setCornerRadius(18);</span>
+
+<span class="nc" id="L91">                    userCard.setBackground(cardBackground);</span>
+
+<span class="nc" id="L93">                    TextView name = new TextView(UsersActivity.this);</span>
+<span class="nc" id="L94">                    name.setText(</span>
+<span class="nc" id="L95">                            user.getName() + &quot; &quot; + user.getLastName()</span>
+                    );
+<span class="nc" id="L97">                    name.setTextSize(18);</span>
+<span class="nc" id="L98">                    name.setTextColor(Color.parseColor(&quot;#262022&quot;));</span>
+<span class="nc" id="L99">                    name.setTypeface(</span>
+                            null,
+                            android.graphics.Typeface.BOLD
+                    );
+
+<span class="nc" id="L104">                    userCard.addView(name);</span>
+
+<span class="nc" id="L106">                    TextView email = new TextView(UsersActivity.this);</span>
+<span class="nc" id="L107">                    email.setText(user.getEmail());</span>
+<span class="nc" id="L108">                    email.setTextSize(14);</span>
+<span class="nc" id="L109">                    email.setTextColor(Color.parseColor(&quot;#70686B&quot;));</span>
+
+<span class="nc" id="L111">                    userCard.addView(email);</span>
+
+<span class="nc" id="L113">                    TextView dni = new TextView(UsersActivity.this);</span>
+<span class="nc" id="L114">                    dni.setText(&quot;DNI: &quot; + user.getDni());</span>
+<span class="nc" id="L115">                    dni.setTextSize(14);</span>
+<span class="nc" id="L116">                    dni.setTextColor(Color.parseColor(&quot;#70686B&quot;));</span>
+
+<span class="nc" id="L118">                    userCard.addView(dni);</span>
+
+<span class="nc" id="L120">                    userCard.setOnClickListener(v -&gt; {</span>
+
+<span class="nc" id="L122">                        new android.app.AlertDialog.Builder(</span>
+                                UsersActivity.this
+                        )
+<span class="nc" id="L125">                                .setTitle(&quot;Datos del usuario&quot;)</span>
+<span class="nc" id="L126">                                .setMessage(</span>
+                                        &quot;Nombre: &quot;
+<span class="nc" id="L128">                                                + user.getName()</span>
+                                                + &quot; &quot;
+<span class="nc" id="L130">                                                + user.getLastName()</span>
+                                                + &quot;\n\nEmail: &quot;
+<span class="nc" id="L132">                                                + user.getEmail()</span>
+                                                + &quot;\n\nDNI: &quot;
+<span class="nc" id="L134">                                                + user.getDni()</span>
+                                                + &quot;\n\nRol: &quot;
+<span class="nc" id="L136">                                                + user.getRole()</span>
+                                 )
+<span class="nc" id="L138">                                 .setNeutralButton(</span>
+                                         &quot;Editar&quot;,
+<span class="nc" id="L140">                                         (dialog, which) -&gt; openEditUser(user)</span>
+                                 )
+<span class="nc" id="L142">                                 .setPositiveButton(</span>
+                                         &quot;Cerrar&quot;,
+                                         null
+                                )
+<span class="nc" id="L146">                                .setNegativeButton(</span>
+                                        &quot;Eliminar&quot;,
+                                        (dialog, which) -&gt; {
+
+<span class="nc" id="L150">                                            new android.app.AlertDialog.Builder(</span>
+                                                    UsersActivity.this
+                                            )
+<span class="nc" id="L153">                                                    .setTitle(&quot;Eliminar usuario&quot;)</span>
+<span class="nc" id="L154">                                                    .setMessage(</span>
+                                                            &quot;¿Estás seguro de que querés eliminar a &quot;
+<span class="nc" id="L156">                                                                    + user.getName()</span>
+                                                                    + &quot; &quot;
+<span class="nc" id="L158">                                                                    + user.getLastName()</span>
+                                                                    + &quot;?&quot;
+                                                    )
+<span class="nc" id="L161">                                                    .setNegativeButton(</span>
+                                                            &quot;Cancelar&quot;,
+                                                            null
+                                                    )
+<span class="nc" id="L165">                                                    .setPositiveButton(</span>
+                                                            &quot;Eliminar&quot;,
+                                                            (confirmDialog, confirmWhich) -&gt; {
+
+<span class="nc" id="L169">                                                                ApiService apiService =</span>
+<span class="nc" id="L170">                                                                        ApiClient.getApiService(</span>
+                                                                                UsersActivity.this
+                                                                        );
+
+<span class="nc" id="L174">                                                                apiService.deleteUser(</span>
+<span class="nc" id="L175">                                                                        user.getId()</span>
+<span class="nc" id="L176">                                                                ).enqueue(new Callback&lt;Void&gt;() {</span>
+
+                                                                    @Override
+                                                                    public void onResponse(
+                                                                            Call&lt;Void&gt; call,
+                                                                            Response&lt;Void&gt; response
+                                                                    ) {
+<span class="nc bnc" id="L183" title="All 2 branches missed.">                                                                        if (response.isSuccessful()) {</span>
+<span class="nc" id="L184">                                                                            loadUsers();</span>
+                                                                        }
+<span class="nc" id="L186">                                                                    }</span>
+
+                                                                    @Override
+                                                                    public void onFailure(
+                                                                            Call&lt;Void&gt; call,
+                                                                            Throwable t
+                                                                    ) {
+                                                                        // La conexión con la API falló.
+<span class="nc" id="L194">                                                                    }</span>
+                                                                });
+<span class="nc" id="L196">                                                            }</span>
+                                                    )
+<span class="nc" id="L198">                                                    .show();</span>
+<span class="nc" id="L199">                                        }</span>
+                                )
+<span class="nc" id="L201">                                .show();</span>
+<span class="nc" id="L202">                    });</span>
+
+<span class="nc" id="L204">                    LinearLayout.LayoutParams cardParams =</span>
+                            new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            );
+
+<span class="nc" id="L210">                    cardParams.setMargins(0, 0, 0, 18);</span>
+
+<span class="nc" id="L212">                    usersContainer.addView(</span>
+                            userCard,
+                            cardParams
+                    );
+<span class="nc" id="L216">                }</span>
+<span class="nc" id="L217">            }</span>
+
+            @Override
+            public void onFailure(
+                    Call&lt;List&lt;AuthUser&gt;&gt; call,
+                    Throwable t
+            ) {
+                // La conexión con la API falló.
+<span class="nc" id="L225">            }</span>
+        });
+<span class="nc" id="L227">    }</span>
+
+    private void openEditUser(AuthUser user) {
+<span class="nc" id="L230">        Intent intent = new Intent(this, ProfileActivity.class);</span>
+<span class="nc" id="L231">        intent.putExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID, user.getId());</span>
+<span class="nc" id="L232">        startActivityForResult(intent, REQUEST_EDIT_USER);</span>
+<span class="nc" id="L233">    }</span>
+
+    private void openDashboard() {
+<span class="nc" id="L236">        Intent intent = new Intent(this, AdminDashboardActivity.class);</span>
+<span class="nc" id="L237">        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);</span>
+<span class="nc" id="L238">        startActivity(intent);</span>
+<span class="nc" id="L239">        finish();</span>
+<span class="nc" id="L240">    }</span>
+
+    private void openCampaigns() {
+<span class="nc" id="L243">        navigateTo(AdminCampaignListActivity.class);</span>
+<span class="nc" id="L244">    }</span>
+
+    private void openMessages() {
+<span class="nc" id="L247">        navigateTo(AdminContactListActivity.class);</span>
+<span class="nc" id="L248">    }</span>
+
+    private void navigateTo(Class&lt;?&gt; destination) {
+<span class="nc" id="L251">        Intent intent = new Intent(this, destination);</span>
+<span class="nc" id="L252">        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);</span>
+<span class="nc" id="L253">        startActivity(intent);</span>
+<span class="nc" id="L254">        finish();</span>
+<span class="nc" id="L255">    }</span>
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+<span class="nc" id="L259">        super.onActivityResult(requestCode, resultCode, data);</span>
+<span class="nc bnc" id="L260" title="All 4 branches missed.">        if (requestCode == REQUEST_EDIT_USER &amp;&amp; resultCode == RESULT_OK) {</span>
+<span class="nc" id="L261">            loadUsers();</span>
+        }
+<span class="nc" id="L263">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
