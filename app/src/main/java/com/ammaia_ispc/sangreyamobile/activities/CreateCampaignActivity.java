@@ -1,7 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,9 +26,7 @@ import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.ammaia_ispc.sangreyamobile.data.HealthCenterApiRepository;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class CreateCampaignActivity extends AppCompatActivity {
     private EditText nameInput;
@@ -38,8 +35,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
     private EditText addressInput;
     private EditText startDateInput;
     private EditText endDateInput;
-    private EditText startTimeInput;
-    private EditText endTimeInput;
     private EditText capacityInput;
     private EditText descriptionInput;
     private Campaign editingCampaign;
@@ -75,8 +70,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         });
         startDateInput = findViewById(R.id.create_campaign_start_date);
         endDateInput = findViewById(R.id.create_campaign_end_date);
-        startTimeInput = findViewById(R.id.create_campaign_start_time);
-        endTimeInput = findViewById(R.id.create_campaign_end_time);
         capacityInput = findViewById(R.id.create_campaign_capacity);
         descriptionInput = findViewById(R.id.create_campaign_description);
 
@@ -91,8 +84,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         // 2. Reemplazar estos listeners por:
         // DateHelper.configureDateInput(this, startDateInput);
         // DateHelper.configureDateInput(this, endDateInput);
-        startTimeInput.setOnClickListener(view -> showTimePicker(startTimeInput));
-        endTimeInput.setOnClickListener(view -> showTimePicker(endTimeInput));
 
         findViewById(R.id.create_campaign_publish).setOnClickListener(view -> publishCampaign());
 
@@ -272,18 +263,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 });
     }
 
-    private void showTimePicker(EditText target) {
-        Calendar calendar = Calendar.getInstance();
-        new TimePickerDialog(
-                this,
-                (picker, hourOfDay, minute) -> target.setText(
-                        String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)),
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                true
-        ).show();
-    }
-
     private void publishCampaign() {
         if (!validateRequiredFields()) {
             return;
@@ -409,8 +388,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(nameInput.getText())
                 || TextUtils.isEmpty(addressInput.getText())
                 || TextUtils.isEmpty(startDateInput.getText())
-                || TextUtils.isEmpty(endDateInput.getText())
-                || TextUtils.isEmpty(capacityInput.getText())) {
+                || TextUtils.isEmpty(endDateInput.getText())) {
             Toast.makeText(this, R.string.campaign_required_fields_message, Toast.LENGTH_SHORT).show();
             return false;
         }

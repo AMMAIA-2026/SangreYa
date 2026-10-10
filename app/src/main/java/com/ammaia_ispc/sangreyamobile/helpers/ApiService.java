@@ -15,9 +15,9 @@ import com.ammaia_ispc.sangreyamobile.model.ContactTrackedRequest;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -79,7 +79,7 @@ public interface ApiService {
     Call<ResponseBody> getCampaigns();
 
     @POST("campanias/")
-    Call<ResponseBody> createCampaign(@Body Map<String, Object> request);
+    Call<ResponseBody> createCampaign(@Body RequestBody request);
 
     @GET("campanias/{campaignId}/")
     Call<ResponseBody> getCampaign(@Path("campaignId") int campaignId);
@@ -87,7 +87,7 @@ public interface ApiService {
     @PUT("campanias/{campaignId}/")
     Call<ResponseBody> updateCampaign(
             @Path("campaignId") int campaignId,
-            @Body Map<String, Object> request);
+            @Body RequestBody request);
 
     @POST("inscripciones/campanias/{campaignId}/")
     Call<ResponseBody> enrollInCampaign(@Path("campaignId") int campaignId);

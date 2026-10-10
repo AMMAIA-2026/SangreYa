@@ -3,6 +3,7 @@ package com.ammaia_ispc.sangreyamobile.data;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.junit.After;
@@ -24,6 +25,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -44,6 +48,12 @@ public class CampaignApiTest {
                     return new MockResponse().setResponseCode(500)
                             .setHeader("Content-Type", "application/json; charset=utf-8")
                             .setBody("{\"codigo\":\"error_sintetico\",\"detalle\":\"stack trace de prueba\"}");
+                }
+                if (("POST".equals(request.getMethod()) && "/campanias/".equals(request.getPath()))
+                        || ("PUT".equals(request.getMethod()) && "/campanias/7/".equals(request.getPath()))) {
+                    return new MockResponse().setResponseCode(200)
+                            .setHeader("Content-Type", "application/json; charset=utf-8")
+                            .setBody(request.getBody().clone().readUtf8());
                 }
                 return new MockResponse().setResponseCode(404);
             }
@@ -104,6 +114,61 @@ public class CampaignApiTest {
         assertEquals("GET", request.getMethod());
         assertEquals("/campanias/", request.getPath());
         assertEquals(1, server.getRequestCount());
+    }
+
+    @Test
+    public void createCampaignSendsExplicitNullCapacity() throws Exception {
+        assertCampaignCapacityRequest(false, null);
+    }
+
+    @Test
+    public void updateCampaignCanClearCapacity() throws Exception {
+        assertCampaignCapacityRequest(true, null);
+    }
+
+    @Test
+    public void createCampaignPreservesNumericCapacity() throws Exception {
+        assertCampaignCapacityRequest(false, 60);
+    }
+
+    @Test
+    public void updateCampaignPreservesNumericCapacity() throws Exception {
+        assertCampaignCapacityRequest(true, 60);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertCampaignCapacityRequest(boolean editing, Integer capacity) throws Exception {
+        CampaignApiRepository.Callback<Campaign> callback = mock(CampaignApiRepository.Callback.class);
+        ArgumentCaptor<Campaign> result = ArgumentCaptor.forClass(Campaign.class);
+
+        if (editing) {
+            CampaignApiRepository.updateCampaign(api, 7, "Campaña", "Descripción", "Dirección",
+                    null, "2026-11-10", "2026-11-12", capacity, callback);
+        } else {
+            CampaignApiRepository.createCampaign(api, "Campaña", "Descripción", "Dirección",
+                    null, "2026-11-10", "2026-11-12", capacity, callback);
+        }
+
+        verify(callback, timeout(5000)).onSuccess(result.capture());
+        verifyNoMoreInteractions(callback);
+        assertEquals(capacity, result.getValue().maximumCapacity);
+
+        RecordedRequest request = server.takeRequest(1, TimeUnit.SECONDS);
+        assertNotNull(request);
+        assertEquals(editing ? "PUT" : "POST", request.getMethod());
+        assertEquals(editing ? "/campanias/7/" : "/campanias/", request.getPath());
+        JsonObject body = JsonParser.parseString(request.getBody().readUtf8()).getAsJsonObject();
+        assertTrue(body.has("cupo_maximo"));
+        if (capacity == null) {
+            assertTrue(body.get("cupo_maximo").isJsonNull());
+        } else {
+            assertEquals(capacity.intValue(), body.get("cupo_maximo").getAsInt());
+        }
+        assertEquals("2026-11-10", body.get("fecha_inicio").getAsString());
+        assertEquals("2026-11-12", body.get("fecha_fin").getAsString());
+        assertEquals(7, body.size());
+        assertNull(body.get("hora_inicio"));
+        assertNull(body.get("hora_fin"));
     }
 }
 

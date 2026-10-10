@@ -57,7 +57,7 @@ public class CampaignValidatorTest {
         assertFalse(acceptsZero);
         assertFalse(acceptsNegative);
         assertFalse(acceptsOverLimit);
-        assertFalse(acceptsNull);
+        assertTrue(acceptsNull);
         assertTrue(acceptsMinimum);
         assertTrue(acceptsMiddle);
         assertTrue(acceptsMaximum);
