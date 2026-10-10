@@ -293,6 +293,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         ImageView editButton =
                 card.findViewById(R.id.admin_campaign_edit);
 
+        editButton.setContentDescription(
+                getString(R.string.edit_campaign_named_description, campaign.title));
         editButton.setOnClickListener(
                 view -> openCampaignEdit(campaign)
         );
@@ -300,6 +302,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         ImageView deleteButton =
                 card.findViewById(R.id.admin_campaign_delete);
 
+        deleteButton.setContentDescription(
+                getString(R.string.delete_campaign_named_description, campaign.title));
         deleteButton.setOnClickListener(
                 view -> confirmDeleteCampaign(campaign)
         );

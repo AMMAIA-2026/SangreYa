@@ -240,6 +240,8 @@
     <string name="campaign_create_unauthorized_error">No tenés permisos para crear campañas.</string>
     <string name="campaign_create_server_error">No se pudo publicar la campaña. Intentá más tarde.</string>
     <string name="edit_campaign_description">Editar campaña</string>
+    <string name="edit_campaign_named_description">Editar campaña %1$s</string>
+    <string name="delete_campaign_named_description">Eliminar campaña %1$s</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
     <string name="campaign_updated_message">Campaña actualizada</string>
