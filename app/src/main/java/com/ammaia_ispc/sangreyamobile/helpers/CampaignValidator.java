@@ -18,7 +18,7 @@ public final class CampaignValidator {
     }
 
     public static boolean isValidCapacity(Integer capacity) {
-        return capacity != null && capacity >= 1 && capacity <= MAX_CAPACITY;
+        return capacity == null || (capacity >= 1 && capacity <= MAX_CAPACITY);
     }
 
     private static Date parseIso(String value) {

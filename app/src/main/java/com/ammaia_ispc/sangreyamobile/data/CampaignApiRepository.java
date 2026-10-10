@@ -14,6 +14,8 @@ import com.ammaia_ispc.sangreyamobile.model.Enrollment;
 import com.ammaia_ispc.sangreyamobile.model.EnrollmentUser;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.ammaia_ispc.sangreyamobile.model.MyEnrollments;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
@@ -31,12 +33,15 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
 public final class CampaignApiRepository {
     private static final String CAMPAIGNS_PATH = "campanias/";
+    private static final Gson CAMPAIGN_GSON = new GsonBuilder().serializeNulls().create();
 
     private CampaignApiRepository() {
     }
@@ -198,16 +203,23 @@ public final class CampaignApiRepository {
             String endDate,
             Integer maximumCapacity,
             Callback<Campaign> callback) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("titulo", title);
-        body.put("descripcion", description);
-        body.put("ubicacion", location);
-        body.put("centro_salud", healthCenterId);
-        body.put("fecha_inicio", startDate);
-        body.put("fecha_fin", endDate);
-        body.put("cupo_maximo", maximumCapacity);
+        createCampaign(ApiClient.getApiService(context), title, description, location,
+                healthCenterId, startDate, endDate, maximumCapacity, callback);
+    }
 
-        request(ApiClient.getApiService(context).createCampaign(body), response ->
+    static void createCampaign(
+            ApiService api,
+            String title,
+            String description,
+            String location,
+            Integer healthCenterId,
+            String startDate,
+            String endDate,
+            Integer maximumCapacity,
+            Callback<Campaign> callback) {
+        RequestBody body = campaignRequestBody(title, description, location,
+                healthCenterId, startDate, endDate, maximumCapacity);
+        request(api.createCampaign(body), response ->
                 fromJson(new JSONObject(response)), callback);
     }
 
@@ -222,6 +234,35 @@ public final class CampaignApiRepository {
             String endDate,
             Integer maximumCapacity,
             Callback<Campaign> callback) {
+        updateCampaign(ApiClient.getApiService(context), campaignId, title, description, location,
+                healthCenterId, startDate, endDate, maximumCapacity, callback);
+    }
+
+    static void updateCampaign(
+            ApiService api,
+            int campaignId,
+            String title,
+            String description,
+            String location,
+            Integer healthCenterId,
+            String startDate,
+            String endDate,
+            Integer maximumCapacity,
+            Callback<Campaign> callback) {
+        RequestBody body = campaignRequestBody(title, description, location,
+                healthCenterId, startDate, endDate, maximumCapacity);
+        request(api.updateCampaign(campaignId, body), response ->
+                fromJson(new JSONObject(response)), callback);
+    }
+
+    private static RequestBody campaignRequestBody(
+            String title,
+            String description,
+            String location,
+            Integer healthCenterId,
+            String startDate,
+            String endDate,
+            Integer maximumCapacity) {
         Map<String, Object> body = new HashMap<>();
         body.put("titulo", title);
         body.put("descripcion", description);
@@ -231,8 +272,9 @@ public final class CampaignApiRepository {
         body.put("fecha_fin", endDate);
         body.put("cupo_maximo", maximumCapacity);
 
-        request(ApiClient.getApiService(context).updateCampaign(campaignId, body), response ->
-                fromJson(new JSONObject(response)), callback);
+        // Null must be sent explicitly so editing can clear an existing capacity.
+        return RequestBody.create(CAMPAIGN_GSON.toJson(body),
+                MediaType.get("application/json; charset=utf-8"));
     }
 
 

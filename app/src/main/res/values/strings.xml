@@ -213,11 +213,7 @@
     <string name="label_start_date">Fecha de inicio</string>
     <string name="label_end_date">Fecha de fin</string>
     <string name="hint_date">DD/MM/AAAA</string>
-    <string name="label_start_time">Desde</string>
-    <string name="label_end_time">Hasta</string>
-    <string name="hint_start_time">09:00</string>
-    <string name="hint_end_time">17:00</string>
-    <string name="label_max_donors">Cupo máximo de donantes</string>
+    <string name="label_max_donors">Cupo máximo de donantes (opcional)</string>
     <string name="hint_max_donors">Ej: 60</string>
     <string name="label_description">Descripción</string>
     <string name="hint_campaign_description">Contá de qué se trata la campaña…</string>
