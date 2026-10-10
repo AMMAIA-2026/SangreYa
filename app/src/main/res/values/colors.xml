@@ -9,10 +9,11 @@
     <color name="secondary_text">#70686B</color>
     <color name="surface">#FFFFFFFF</color>
     <color name="border">#E6E0E1</color>
-    <color name="active_text">#237E4E</color>
+    <color name="active_text">#217A4B</color>
     <color name="active_background">#E0F4E7</color>
-    <color name="upcoming_text">#91631A</color>
+    <color name="upcoming_text">#8C6019</color>
     <color name="upcoming_background">#FAEBC7</color>
+    <color name="finished_text">#6E6669</color>
     <color name="finished_background">#ECE9EA</color>
     <color name="pale_red">#FCEDEF</color>
     <color name="hero_accent">#9B3A4E</color>
