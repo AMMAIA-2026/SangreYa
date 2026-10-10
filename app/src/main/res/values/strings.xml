@@ -45,6 +45,8 @@
     <string name="profile_navigation">Perfil</string>
     <string name="show_password">Mostrar contraseña</string>
     <string name="hide_password">Ocultar contraseña</string>
+    <string name="show_confirm_password">Mostrar confirmación de contraseña</string>
+    <string name="hide_confirm_password">Ocultar confirmación de contraseña</string>
     <string name="campaign_location_description">Ubicación de la campaña</string>
     <string name="campaign_date_description">Fecha de la campaña</string>
     <string name="campaign_loading">Cargando campañas</string>

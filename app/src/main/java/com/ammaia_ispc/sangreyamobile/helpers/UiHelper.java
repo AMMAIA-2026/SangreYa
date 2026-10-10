@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.res.ColorStateList;
 
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
@@ -62,8 +63,17 @@ public final class UiHelper {
     public static void configurePasswordToggle(
             EditText passwordInput,
             ImageButton toggleButton) {
+        configurePasswordToggle(passwordInput, toggleButton,
+                R.string.show_password, R.string.hide_password);
+    }
+
+    public static void configurePasswordToggle(
+            EditText passwordInput,
+            ImageButton toggleButton,
+            @StringRes int showDescriptionResId,
+            @StringRes int hideDescriptionResId) {
         toggleButton.setContentDescription(
-                toggleButton.getContext().getString(R.string.show_password));
+                toggleButton.getContext().getString(showDescriptionResId));
         toggleButton.setOnClickListener(view -> {
             boolean passwordVisible = !toggleButton.isSelected();
             toggleButton.setSelected(passwordVisible);
@@ -72,7 +82,7 @@ public final class UiHelper {
                     : PasswordTransformationMethod.getInstance());
             passwordInput.setSelection(passwordInput.length());
             toggleButton.setContentDescription(toggleButton.getContext().getString(
-                    passwordVisible ? R.string.hide_password : R.string.show_password));
+                    passwordVisible ? hideDescriptionResId : showDescriptionResId));
         });
     }
 

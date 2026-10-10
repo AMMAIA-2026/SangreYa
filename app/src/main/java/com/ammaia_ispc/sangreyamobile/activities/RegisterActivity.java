@@ -75,7 +75,8 @@ public class RegisterActivity extends AppCompatActivity {
         btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
 
         UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);
-        UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);
+        UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword,
+                R.string.show_confirm_password, R.string.hide_confirm_password);
 
         cbAceptarTerminos.setOnClickListener(v -> mostrarTerminos());
 
