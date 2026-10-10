@@ -111,16 +111,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void validarEIngresar() {
+        etEmail.setError(null);
+        etPassword.setError(null);
+
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString();
 
-        if (LoginViewModel.hasEmptyFields(email, password)) {
-            showMessage(getString(R.string.error_required_fields));
+        if (TextUtils.isEmpty(email)) {
+            etEmail.setError(getString(R.string.error_required_field));
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showMessage(getString(R.string.error_invalid_email));
-        } else {
-            performLogin(email, password);
+            etEmail.setError(getString(R.string.error_invalid_email));
         }
+        if (TextUtils.isEmpty(password)) {
+            etPassword.setError(getString(R.string.error_required_field));
+        }
+
+        if (UiHelper.focusFirstError(etEmail, etPassword)) {
+            return;
+        }
+        performLogin(email, password);
     }
 
     private void performLogin(String email, String password) {
@@ -182,19 +191,20 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, List<String>> errors = parseFieldErrors(errorBody);
         List<String> messages = new ArrayList<>();
         if (errors.containsKey("email")) {
-            messages.addAll(errors.get("email"));
+            etEmail.setError(TextUtils.join(" ", errors.get("email")));
         }
         if (errors.containsKey("password")) {
-            messages.addAll(errors.get("password"));
+            etPassword.setError(TextUtils.join(" ", errors.get("password")));
         }
         if (errors.containsKey("non_field_errors")) {
             messages.addAll(errors.get("non_field_errors"));
         }
 
-        if (messages.isEmpty()) {
-            showMessage(getString(R.string.error_login_generico));
-        } else {
+        boolean hasFieldErrors = UiHelper.focusFirstError(etEmail, etPassword);
+        if (!messages.isEmpty()) {
             showMessage(TextUtils.join(" ", messages));
+        } else if (!hasFieldErrors) {
+            showMessage(getString(R.string.error_login_generico));
         }
     }
 

@@ -52,6 +52,17 @@ public final class UiHelper {
         messageView.setText("");
         messageView.setVisibility(View.GONE);
     }
+
+    public static boolean focusFirstError(TextView... fields) {
+        for (TextView field : fields) {
+            if (field.getError() != null) {
+                field.requestFocus();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String normalized(String value, Locale locale) {
         return value == null ? "" : value.trim().toLowerCase(locale);
     }

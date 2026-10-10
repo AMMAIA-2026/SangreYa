@@ -110,6 +110,9 @@ public final class RegisterApiRepository {
                                         errores.getString(0)
                                 );
 
+                            } else if (json.has("password")) {
+                                JSONArray errores = json.getJSONArray("password");
+                                callback.onValidationError("password", errores.getString(0));
                             } else {
                                 callback.onValidationError(
                                         "",

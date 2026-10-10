@@ -195,6 +195,8 @@
     <string name="save_password_button">Guardar contraseña</string>
 
     <string name="error_invalid_email">Ingresá un email válido</string>
+    <string name="error_required_field">Completá este campo</string>
+    <string name="error_terms_required">Tenés que aceptar los Términos y Condiciones para continuar</string>
     <string name="error_invalid_dni">Ingresá un DNI válido (7 u 8 dígitos)</string>
     <string name="error_weak_password">Mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
