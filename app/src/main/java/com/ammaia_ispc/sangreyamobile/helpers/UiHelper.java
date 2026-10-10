@@ -2,6 +2,7 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.res.ColorStateList;
 
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.google.android.material.button.MaterialButton;
@@ -51,6 +54,17 @@ public final class UiHelper {
         messageView.setText("");
         messageView.setVisibility(View.GONE);
     }
+
+    public static boolean focusFirstError(TextView... fields) {
+        for (TextView field : fields) {
+            if (field.getError() != null) {
+                field.requestFocus();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String normalized(String value, Locale locale) {
         return value == null ? "" : value.trim().toLowerCase(locale);
     }
@@ -62,8 +76,17 @@ public final class UiHelper {
     public static void configurePasswordToggle(
             EditText passwordInput,
             ImageButton toggleButton) {
+        configurePasswordToggle(passwordInput, toggleButton,
+                R.string.show_password, R.string.hide_password);
+    }
+
+    public static void configurePasswordToggle(
+            EditText passwordInput,
+            ImageButton toggleButton,
+            @StringRes int showDescriptionResId,
+            @StringRes int hideDescriptionResId) {
         toggleButton.setContentDescription(
-                toggleButton.getContext().getString(R.string.show_password));
+                toggleButton.getContext().getString(showDescriptionResId));
         toggleButton.setOnClickListener(view -> {
             boolean passwordVisible = !toggleButton.isSelected();
             toggleButton.setSelected(passwordVisible);
@@ -72,7 +95,7 @@ public final class UiHelper {
                     : PasswordTransformationMethod.getInstance());
             passwordInput.setSelection(passwordInput.length());
             toggleButton.setContentDescription(toggleButton.getContext().getString(
-                    passwordVisible ? R.string.hide_password : R.string.show_password));
+                    passwordVisible ? hideDescriptionResId : showDescriptionResId));
         });
     }
 
@@ -80,6 +103,11 @@ public final class UiHelper {
             Context context,
             MaterialButton filter,
             boolean selected) {
+
+        filter.setSelected(selected);
+        ViewCompat.setStateDescription(filter, context.getString(
+                selected ? R.string.filter_selected : R.string.filter_not_selected));
+        filter.setTypeface(filter.getTypeface(), selected ? Typeface.BOLD : Typeface.NORMAL);
 
         filter.setTextColor(
                 ContextCompat.getColor(
@@ -97,6 +125,12 @@ public final class UiHelper {
                 )
         );
     }
+
+    public static void announceFilterChange(MaterialButton filter) {
+        filter.announceForAccessibility(filter.getContext().getString(
+                R.string.filter_applied, filter.getText()));
+    }
+
     /*
      * TODO: completar la centralizacion de Toast.makeText.
      * Pendiente:

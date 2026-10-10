@@ -30,5 +30,5 @@
     <dimen name="toast_bottom_offset">80dp</dimen>
     <dimen name="filter_finished_width">132dp</dimen>
     <dimen name="search_bar_height">48dp</dimen>
-    <dimen name="edit_button_size">32dp</dimen>
+    <dimen name="edit_button_size">48dp</dimen>
 </resources>

@@ -50,6 +50,17 @@
                 android:paddingEnd="12dp"
                 android:paddingBottom="14dp">
 
+                <TextView
+                    android:id="@+id/dashboard_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:accessibilityHeading="true"
+                    android:text="@string/dashboard_navigation"
+                    android:textColor="@color/primary_text"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -61,6 +72,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dashboard_donors_title"
+                        android:accessibilityHeading="true"
                         android:textColor="@color/primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -118,6 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dashboard_enrollments_title"
+                        android:accessibilityHeading="true"
                         android:textColor="@color/primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -141,6 +154,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dashboard_status_title"
+                        android:accessibilityHeading="true"
                         android:textColor="@color/primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -178,6 +192,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dashboard_recent_title"
+                        android:accessibilityHeading="true"
                         android:textColor="@color/primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />

@@ -109,14 +109,19 @@ public class AdminContactListActivity extends AppCompatActivity {
     }
 
     private void configureFilters() {
-        allFilter.setOnClickListener(view -> selectFilter("Todos"));
-        unansweredFilter.setOnClickListener(view -> selectFilter("Sin responder"));
-        answeredFilter.setOnClickListener(view -> selectFilter("Respondidos"));
+        updateFilterStyles();
+        allFilter.setOnClickListener(view -> selectFilter("Todos", allFilter));
+        unansweredFilter.setOnClickListener(view -> selectFilter("Sin responder", unansweredFilter));
+        answeredFilter.setOnClickListener(view -> selectFilter("Respondidos", answeredFilter));
     }
 
-    private void selectFilter(String filter) {
+    private void selectFilter(String filter, MaterialButton selectedButton) {
+        if (currentFilter.equals(filter)) {
+            return;
+        }
         currentFilter = filter;
         showContacts();
+        UiHelper.announceFilterChange(selectedButton);
     }
 
     private void showContacts() {

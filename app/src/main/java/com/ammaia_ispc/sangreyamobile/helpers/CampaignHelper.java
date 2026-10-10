@@ -57,7 +57,7 @@ public final class CampaignHelper {
         if (status.equals("Proximamente")) {
             return R.color.upcoming_text;
         }
-        return R.color.secondary_text;
+        return R.color.finished_text;
     }
 
     public static int statusBackground(String status) {

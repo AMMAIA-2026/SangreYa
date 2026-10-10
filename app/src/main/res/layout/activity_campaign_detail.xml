@@ -68,6 +68,7 @@
 
             <TextView
                 android:id="@+id/detail_title"
+                android:accessibilityHeading="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="7dp"
@@ -127,6 +128,7 @@
                 android:layout_height="35dp"
                 android:paddingTop="7dp"
                 android:text="@string/description_title"
+                android:accessibilityHeading="true"
                 android:textColor="@color/primary_text"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -204,6 +206,7 @@
                     android:layout_height="35dp"
                     android:paddingTop="7dp"
                     android:text="@string/health_center_title"
+                    android:accessibilityHeading="true"
                     android:textColor="@color/primary_text"
                     android:textSize="12sp"
                     android:textStyle="bold" />

@@ -1,7 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -113,9 +112,10 @@ public class CampaignListActivity extends AppCompatActivity {
     }
 
     private void configureFilters() {
-        allFilter.setOnClickListener(view -> selectFilter("Todas"));
-        activeFilter.setOnClickListener(view -> selectFilter("Activas"));
-        upcomingFilter.setOnClickListener(view -> selectFilter("Próximas"));
+        updateFilterStyles(currentFilter);
+        allFilter.setOnClickListener(view -> selectFilter("Todas", allFilter));
+        activeFilter.setOnClickListener(view -> selectFilter("Activas", activeFilter));
+        upcomingFilter.setOnClickListener(view -> selectFilter("Próximas", upcomingFilter));
     }
 
     private void configureSearch() {
@@ -135,9 +135,13 @@ public class CampaignListActivity extends AppCompatActivity {
         });
     }
 
-    private void selectFilter(String filter) {
+    private void selectFilter(String filter, MaterialButton selectedButton) {
+        if (currentFilter.equals(filter)) {
+            return;
+        }
         currentFilter = filter;
         showCampaigns(currentFilter);
+        UiHelper.announceFilterChange(selectedButton);
     }
 
     private void showCampaigns(String filter) {
@@ -184,15 +188,9 @@ public class CampaignListActivity extends AppCompatActivity {
     }
 
     private void updateFilterStyles(String selectedFilter) {
-        styleFilter(allFilter, selectedFilter.equals("Todas"));
-        styleFilter(activeFilter, selectedFilter.equals("Activas"));
-        styleFilter(upcomingFilter, selectedFilter.equals("Próximas"));
-    }
-
-    private void styleFilter(MaterialButton filter, boolean selected) {
-        filter.setTextColor(ContextCompat.getColor(this, selected ? R.color.white : R.color.secondary_text));
-        filter.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(this, selected ? R.color.primary_red : R.color.surface)));
+        UiHelper.styleFilter(this, allFilter, selectedFilter.equals("Todas"));
+        UiHelper.styleFilter(this, activeFilter, selectedFilter.equals("Activas"));
+        UiHelper.styleFilter(this, upcomingFilter, selectedFilter.equals("Próximas"));
     }
 
     private View createCampaignCard(Campaign campaign) {

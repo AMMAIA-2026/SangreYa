@@ -2,7 +2,6 @@ package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -103,14 +102,18 @@ public class EnrollmentsActivity extends AppCompatActivity {
     }
 
     private void configureFilters() {
-        currentFilter.setOnClickListener(view -> {
-            showingHistory = false;
-            showEnrollments();
-        });
-        historyFilter.setOnClickListener(view -> {
-            showingHistory = true;
-            showEnrollments();
-        });
+        updateFilterStyles();
+        currentFilter.setOnClickListener(view -> selectFilter(false, currentFilter));
+        historyFilter.setOnClickListener(view -> selectFilter(true, historyFilter));
+    }
+
+    private void selectFilter(boolean history, MaterialButton selectedButton) {
+        if (showingHistory == history) {
+            return;
+        }
+        showingHistory = history;
+        showEnrollments();
+        UiHelper.announceFilterChange(selectedButton);
     }
 
     private void loadEnrollments() {
@@ -261,17 +264,8 @@ public class EnrollmentsActivity extends AppCompatActivity {
     }
 
     private void updateFilterStyles() {
-        styleFilter(currentFilter, !showingHistory);
-        styleFilter(historyFilter, showingHistory);
-    }
-
-    private void styleFilter(MaterialButton filter, boolean selected) {
-        filter.setTextColor(ContextCompat.getColor(
-                this,
-                selected ? R.color.white : R.color.secondary_text));
-        filter.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(
-                this,
-                selected ? R.color.primary_red : R.color.surface)));
+        UiHelper.styleFilter(this, currentFilter, !showingHistory);
+        UiHelper.styleFilter(this, historyFilter, showingHistory);
     }
 
     private boolean isSessionError(Exception exception) {

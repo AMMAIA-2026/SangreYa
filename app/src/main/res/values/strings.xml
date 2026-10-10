@@ -37,6 +37,9 @@
     <string name="filter_all">Todas</string>
     <string name="filter_active">Activas</string>
     <string name="filter_upcoming">Próximas</string>
+    <string name="filter_selected">Seleccionado</string>
+    <string name="filter_not_selected">No seleccionado</string>
+    <string name="filter_applied">Filtro aplicado: %1$s</string>
     <string name="registered_count">%1$d inscriptos</string>
     <string name="maximum_capacity">Cupo máximo: %1$d</string>
     <string name="unlimited_capacity">Cupo máximo: Sin límite</string>
@@ -45,6 +48,8 @@
     <string name="profile_navigation">Perfil</string>
     <string name="show_password">Mostrar contraseña</string>
     <string name="hide_password">Ocultar contraseña</string>
+    <string name="show_confirm_password">Mostrar confirmación de contraseña</string>
+    <string name="hide_confirm_password">Ocultar confirmación de contraseña</string>
     <string name="campaign_location_description">Ubicación de la campaña</string>
     <string name="campaign_date_description">Fecha de la campaña</string>
     <string name="campaign_loading">Cargando campañas</string>
@@ -151,7 +156,7 @@
     <string name="titulo_login">Iniciar sesión</string>
     <string name="subtitulo_login">Ingresá a tu cuenta</string>
     <string name="hint_email">nombre@correo.com</string>
-    <string name="hint_password">********</string>
+    <string name="hint_password">Tu contraseña</string>
     <string name="btn_ingresar">Iniciar sesión</string>
     <string name="ingresando">Ingresando...</string>
     <string name="error_connection">No se pudo conectar. Intentá nuevamente.</string>
@@ -193,6 +198,8 @@
     <string name="save_password_button">Guardar contraseña</string>
 
     <string name="error_invalid_email">Ingresá un email válido</string>
+    <string name="error_required_field">Completá este campo</string>
+    <string name="error_terms_required">Tenés que aceptar los Términos y Condiciones para continuar</string>
     <string name="error_invalid_dni">Ingresá un DNI válido (7 u 8 dígitos)</string>
     <string name="error_weak_password">Mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
@@ -233,6 +240,8 @@
     <string name="campaign_create_unauthorized_error">No tenés permisos para crear campañas.</string>
     <string name="campaign_create_server_error">No se pudo publicar la campaña. Intentá más tarde.</string>
     <string name="edit_campaign_description">Editar campaña</string>
+    <string name="edit_campaign_named_description">Editar campaña %1$s</string>
+    <string name="delete_campaign_named_description">Eliminar campaña %1$s</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
     <string name="campaign_updated_message">Campaña actualizada</string>
@@ -250,6 +259,7 @@
     <!-- Contacto -->
     <string name="menu_contact">Contacto</string>
     <string name="contact_title">Contacto</string>
+    <string name="contact_detail_title">Detalle del mensaje</string>
     <string name="contact_subtitle">¿Tenés dudas o sugerencias? Escribinos</string>
     <string name="label_full_name">Nombre completo</string>
     <string name="hint_full_name">Tu nombre y apellido</string>

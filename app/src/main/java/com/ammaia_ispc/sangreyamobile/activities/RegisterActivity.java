@@ -16,6 +16,7 @@ import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.data.RegisterApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.PasswordValidator;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.RegisterRequest;
 
@@ -75,7 +76,8 @@ public class RegisterActivity extends AppCompatActivity {
         btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
 
         UiHelper.configurePasswordToggle(etRegisterPassword, btnTogglePassword);
-        UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword);
+        UiHelper.configurePasswordToggle(etConfirmPassword, btnToggleConfirmPassword,
+                R.string.show_confirm_password, R.string.hide_confirm_password);
 
         cbAceptarTerminos.setOnClickListener(v -> mostrarTerminos());
 
@@ -107,14 +109,17 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void validarRegistro() {
 
-        etName.setError(null);
-        etApellido.setError(null);
-        etUsername.setError(null);
-        etDni.setError(null);
-        etRegisterEmail.setError(null);
-        etFechaNacimiento.setError(null);
-        etRegisterPassword.setError(null);
-        etConfirmPassword.setError(null);
+        EditText[] fields = {etName, etApellido, etUsername, etDni, etRegisterEmail,
+                etFechaNacimiento, etRegisterPassword, etConfirmPassword};
+        for (EditText field : fields) {
+            field.setError(null);
+            String value = field.getText().toString();
+            boolean passwordField = field == etRegisterPassword || field == etConfirmPassword;
+            if (TextUtils.isEmpty(passwordField ? value : value.trim())) {
+                field.setError(getString(R.string.error_required_field));
+            }
+        }
+        cbAceptarTerminos.setError(null);
 
         String name = ((EditText) findViewById(R.id.etName))
                 .getText().toString().trim();
@@ -141,80 +146,40 @@ public class RegisterActivity extends AppCompatActivity {
         String confirmPassword = ((EditText) findViewById(R.id.etConfirmPassword))
                 .getText().toString();
 
-        // Campos obligatorios
-        if (TextUtils.isEmpty(name) ||
-                TextUtils.isEmpty(dni) ||
-                TextUtils.isEmpty(email) ||
-                TextUtils.isEmpty(password) ||
-                TextUtils.isEmpty(confirmPassword) ||
-                TextUtils.isEmpty(apellido) ||
-                TextUtils.isEmpty(username) ||
-                TextUtils.isEmpty(fechaNacimientoDisplay)) {
-
-            UiHelper.showToast(
-                    this,
-                    "Completá todos los campos",
-                    Toast.LENGTH_SHORT
-            );
-            return;
-        }
-
-        if (!cbAceptarTerminos.isChecked()) {
-            UiHelper.showToast(
-                    this,
-                    "Tenés que aceptar los Términos y Condiciones para continuar",
-                    Toast.LENGTH_SHORT
-            );
-            return;
-        }
-
-        if (TextUtils.isEmpty(fechaNacimiento)) {
+        if (!TextUtils.isEmpty(fechaNacimientoDisplay) && TextUtils.isEmpty(fechaNacimiento)) {
             etFechaNacimiento.setError(getString(R.string.profile_birth_date_invalid));
-            etFechaNacimiento.requestFocus();
-            return;
         }
-
 
         // DNI válido: exactamente 7 u 8 dígitos
-        if (!dni.matches("\\d{7,8}")) {
-            etDni.setError("El DNI debe tener 7 u 8 dígitos numéricos");
-            etDni.requestFocus();
-            return;
+        if (!TextUtils.isEmpty(dni) && !dni.matches("\\d{7,8}")) {
+            etDni.setError(getString(R.string.error_invalid_dni));
         }
 
-
         // Email válido
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            UiHelper.showToast(
-                    this,
-                    "Ingresá un email válido",
-                    Toast.LENGTH_SHORT
-            );
-            return;
+        if (!TextUtils.isEmpty(email)
+                && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etRegisterEmail.setError(getString(R.string.error_invalid_email));
         }
 
         // Contraseña
-        if (password.length() < 10 ||
-                !password.matches(".*[A-Z].*") ||
-                !password.matches(".*[a-z].*") ||
-                !password.matches(".*[0-9].*") ||
-                !password.matches(".*[^A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\\s].*")) {
-
-            UiHelper.showToast(
-                    this,
-                    "La contraseña debe tener 10 caracteres, mayúscula, minúscula, número y símbolo",
-                    Toast.LENGTH_SHORT
-            );
-            return;
+        if (!TextUtils.isEmpty(password) && !PasswordValidator.isValid(password)) {
+            etRegisterPassword.setError(getString(R.string.error_weak_password));
         }
 
         // Confirmación de contraseña
-        if (!password.equals(confirmPassword)) {
-            UiHelper.showToast(
-                    this,
-                    "Las contraseñas no coinciden",
-                    Toast.LENGTH_SHORT
-            );
+        if (!TextUtils.isEmpty(confirmPassword)
+                && !PasswordValidator.matchesConfirmation(password, confirmPassword)) {
+            etConfirmPassword.setError(getString(R.string.error_password_mismatch));
+        }
+
+        if (!cbAceptarTerminos.isChecked()) {
+            cbAceptarTerminos.setError(getString(R.string.error_terms_required));
+        }
+
+        if (UiHelper.focusFirstError(fields)) {
+            return;
+        }
+        if (UiHelper.focusFirstError(cbAceptarTerminos)) {
             return;
         }
 
@@ -274,6 +239,11 @@ public class RegisterActivity extends AppCompatActivity {
                             case "fecha_nacimiento":
                                 etFechaNacimiento.setError(message);
                                 etFechaNacimiento.requestFocus();
+                                break;
+
+                            case "password":
+                                etRegisterPassword.setError(message);
+                                etRegisterPassword.requestFocus();
                                 break;
 
                             default:

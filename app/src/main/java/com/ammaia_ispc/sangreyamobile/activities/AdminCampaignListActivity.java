@@ -1,7 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -127,10 +126,11 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     }
 
     private void configureFilters() {
-        allFilter.setOnClickListener(view -> selectFilter("Todas"));
-        activeFilter.setOnClickListener(view -> selectFilter("Activa"));
-        upcomingFilter.setOnClickListener(view -> selectFilter("Proximamente"));
-        finishedFilter.setOnClickListener(view -> selectFilter("Finalizada"));
+        updateFilterStyles();
+        allFilter.setOnClickListener(view -> selectFilter("Todas", allFilter));
+        activeFilter.setOnClickListener(view -> selectFilter("Activa", activeFilter));
+        upcomingFilter.setOnClickListener(view -> selectFilter("Proximamente", upcomingFilter));
+        finishedFilter.setOnClickListener(view -> selectFilter("Finalizada", finishedFilter));
     }
 
     private void configureSearch() {
@@ -159,9 +159,13 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         });
     }
 
-    private void selectFilter(String filter) {
+    private void selectFilter(String filter, MaterialButton selectedButton) {
+        if (currentFilter.equals(filter)) {
+            return;
+        }
         currentFilter = filter;
         showCampaigns();
+        UiHelper.announceFilterChange(selectedButton);
     }
 
     private void showCampaigns() {
@@ -207,33 +211,10 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     }
 
     private void updateFilterStyles() {
-        styleFilter(allFilter, currentFilter.equals("Todas"));
-        styleFilter(activeFilter, currentFilter.equals("Activa"));
-        styleFilter(upcomingFilter, currentFilter.equals("Proximamente"));
-        styleFilter(finishedFilter, currentFilter.equals("Finalizada"));
-    }
-
-    private void styleFilter(MaterialButton filter, boolean selected) {
-
-        filter.setTextColor(
-                ContextCompat.getColor(
-                        this,
-                        selected
-                                ? R.color.white
-                                : R.color.secondary_text
-                )
-        );
-
-        filter.setBackgroundTintList(
-                ColorStateList.valueOf(
-                        ContextCompat.getColor(
-                                this,
-                                selected
-                                        ? R.color.primary_red
-                                        : R.color.surface
-                        )
-                )
-        );
+        UiHelper.styleFilter(this, allFilter, currentFilter.equals("Todas"));
+        UiHelper.styleFilter(this, activeFilter, currentFilter.equals("Activa"));
+        UiHelper.styleFilter(this, upcomingFilter, currentFilter.equals("Proximamente"));
+        UiHelper.styleFilter(this, finishedFilter, currentFilter.equals("Finalizada"));
     }
 
     private View createCampaignCard(Campaign campaign) {
@@ -312,6 +293,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         ImageView editButton =
                 card.findViewById(R.id.admin_campaign_edit);
 
+        editButton.setContentDescription(
+                getString(R.string.edit_campaign_named_description, campaign.title));
         editButton.setOnClickListener(
                 view -> openCampaignEdit(campaign)
         );
@@ -319,6 +302,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         ImageView deleteButton =
                 card.findViewById(R.id.admin_campaign_delete);
 
+        deleteButton.setContentDescription(
+                getString(R.string.delete_campaign_named_description, campaign.title));
         deleteButton.setOnClickListener(
                 view -> confirmDeleteCampaign(campaign)
         );
