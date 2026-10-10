@@ -28,9 +28,31 @@ use una implementación real de `JSONObject` en JVM.
 - `reportes/indice.html`: entrada navegable.
 - `reportes/resumen.md`: resumen de la corrida.
 - `reportes/resultados-debug/` y `reportes/resultados-release/`: reportes HTML de Gradle.
-- `reportes/junit-debug/` y `reportes/junit-release/`: resultados XML originales.
+- `reportes/junit-debug/` y `reportes/junit-release/`: resultados XML de la corrida, sin el hostname local.
 - `reportes/cobertura-debug/`: cobertura JaCoCo en HTML y XML.
 - `reportes/ejecucion.json`: versión, commit, hashes de fuentes y resultados por método.
 - `reportes/planilla-actualizada.json`: registro de actualización de la planilla.
 - `reportes/sha256.json`: hashes de integridad de los archivos del reporte.
 
+## Publicación de evidencia
+
+Los reportes HTML, XML, JSON y sus recursos se conservan como evidencia de
+entrega. La sanitización elimina rutas absolutas y el hostname, y sustituye los
+identificadores de sesión JaCoCo por nombres neutros. Se conservan los casos,
+resultados, tiempos, cobertura, hashes de fuentes y atribuciones del equipo.
+Los binarios `.exec` son locales y están excluidos de Git.
+
+Después de copiar una nueva corrida a `reportes/`, desde la raíz del proyecto:
+
+```powershell
+python tests/Sanitize-Evidence.py --write
+python tests/Sanitize-Evidence.py --check
+```
+
+El primer comando sanitiza los metadatos y actualiza `sha256.json`; el segundo
+verifica que no queden cambios pendientes de sanitización ni indicadores de
+secretos o rutas locales en los reportes públicos. Los hashes de archivos de
+texto se calculan con saltos de línea LF para ser estables entre Windows y Linux;
+los recursos binarios se verifican sin transformación. El manifiesto no incluye
+su propio archivo ni los artefactos ignorados. Los hashes históricos de fuentes
+en `ejecucion.json` permanecen tal como se registraron en la corrida.

@@ -1,7 +1,7 @@
 {
-  "excel": "C:\\Users\\Guillermo\\Desktop\\Trabajo TestCases\\Planilla07-10-26.xlsx",
+  "excel": "Planilla07-10-26.xlsx",
   "updated_local": "2026-10-09T15:50:13.307872-03:00",
-  "backup": "C:\\Users\\GUILLE~1\\AppData\\Local\\Temp\\opencode\\Planilla07-10-26.antes-JVM-20261009-154305.xlsx",
+  "backup": null,
   "updated_cases": 20,
   "associated_methods": 29,
   "cases": {

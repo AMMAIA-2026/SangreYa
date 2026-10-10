@@ -1,7 +1,7 @@
-*.private.postman_environment.json
-*.private.json
+# Inherit root protections, including private environments, logs and runtime.
 __pycache__/
 .postman/
 postman/
-!reportes/**/*.log
-!reports/**/*.log
+
+# reportes/ contains required evidence: HTML, JUnit XML and cleanup manifests.
+# No blanket allow rule here: it would re-enable secrets or generated files.
