@@ -33,6 +33,17 @@
         android:padding="24dp">
 
         <TextView
+            android:id="@+id/contact_detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:accessibilityHeading="true"
+            android:text="@string/contact_detail_title"
+            android:textColor="@color/primary_text"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/contact_detail_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

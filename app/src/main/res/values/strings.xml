@@ -259,6 +259,7 @@
     <!-- Contacto -->
     <string name="menu_contact">Contacto</string>
     <string name="contact_title">Contacto</string>
+    <string name="contact_detail_title">Detalle del mensaje</string>
     <string name="contact_subtitle">¿Tenés dudas o sugerencias? Escribinos</string>
     <string name="label_full_name">Nombre completo</string>
     <string name="hint_full_name">Tu nombre y apellido</string>
