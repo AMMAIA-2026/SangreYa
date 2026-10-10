@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-09T18:43:14" hostname="GUILLE" time="0.072">
+<testsuite name="com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-09T18:43:14" time="0.072">
   <properties/>
   <testcase name="actualizaPerfilPropio" classname="com.ammaia_ispc.sangreyamobile.helpers.ProfileViewModelTest" time="0.072"/>
   <system-out><![CDATA[]]></system-out>

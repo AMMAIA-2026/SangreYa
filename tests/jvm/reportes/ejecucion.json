@@ -1,7 +1,7 @@
 {
-  "project": "D:\\LetsCode\\Pepsi\\SangreYa mobile",
-  "excel": "C:\\Users\\Guillermo\\Desktop\\Trabajo TestCases\\Planilla07-10-26.xlsx",
-  "folder": "D:\\LetsCode\\Pepsi\\SangreYa mobile\\tests\\jvm\\reportes",
+  "project": ".",
+  "excel": "Planilla07-10-26.xlsx",
+  "folder": "tests/jvm/reportes",
   "git_commit": "423f705f3bb0ee0592d7c2fccec8c99c3cba0785",
   "worktree_has_changes": true,
   "worktree_before_report": "M app/build.gradle",
