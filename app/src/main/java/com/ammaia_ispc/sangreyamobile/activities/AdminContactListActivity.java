@@ -153,7 +153,21 @@ public class AdminContactListActivity extends AppCompatActivity {
             contactContainer.addView(card, cardParams);
         }
 
+        // BUG-011: avisar cuando no hay mensajes para mostrar
+        if (contactContainer.getChildCount() == 0) {
+            showEmptyMessage();
+        }
+
         updateFilterStyles();
+    }
+
+    private void showEmptyMessage() {
+        TextView empty = new TextView(this);
+        empty.setText(R.string.admin_contacts_empty);
+        empty.setTextSize(16);
+        empty.setPadding(0, 32, 0, 32);
+        empty.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        contactContainer.addView(empty);
     }
 
     private void updateFilterStyles() {
