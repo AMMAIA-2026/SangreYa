@@ -37,6 +37,9 @@
     <string name="filter_all">Todas</string>
     <string name="filter_active">Activas</string>
     <string name="filter_upcoming">Próximas</string>
+    <string name="filter_selected">Seleccionado</string>
+    <string name="filter_not_selected">No seleccionado</string>
+    <string name="filter_applied">Filtro aplicado: %1$s</string>
     <string name="registered_count">%1$d inscriptos</string>
     <string name="maximum_capacity">Cupo máximo: %1$d</string>
     <string name="unlimited_capacity">Cupo máximo: Sin límite</string>

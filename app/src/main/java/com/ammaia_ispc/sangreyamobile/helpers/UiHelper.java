@@ -2,6 +2,7 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.content.res.ColorStateList;
 
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.google.android.material.button.MaterialButton;
@@ -102,6 +104,11 @@ public final class UiHelper {
             MaterialButton filter,
             boolean selected) {
 
+        filter.setSelected(selected);
+        ViewCompat.setStateDescription(filter, context.getString(
+                selected ? R.string.filter_selected : R.string.filter_not_selected));
+        filter.setTypeface(filter.getTypeface(), selected ? Typeface.BOLD : Typeface.NORMAL);
+
         filter.setTextColor(
                 ContextCompat.getColor(
                         context,
@@ -118,6 +125,12 @@ public final class UiHelper {
                 )
         );
     }
+
+    public static void announceFilterChange(MaterialButton filter) {
+        filter.announceForAccessibility(filter.getContext().getString(
+                R.string.filter_applied, filter.getText()));
+    }
+
     /*
      * TODO: completar la centralizacion de Toast.makeText.
      * Pendiente:
