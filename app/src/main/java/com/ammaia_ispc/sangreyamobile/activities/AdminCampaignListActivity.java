@@ -170,11 +170,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
     private void showCampaigns() {
 
-        String query = searchInput
-                .getText()
-                .toString()
-                .trim()
-                .toLowerCase(Locale.getDefault()); //TODO. Aplicar el UiHelper.normalized
+        String query = UiHelper.normalized(
+                searchInput.getText().toString(), Locale.getDefault());
 
         campaignContainer.removeAllViews();
 
@@ -328,29 +325,9 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     }
 
     private void deleteCampaign(Campaign campaign) {
-        String accessToken = SessionManager.getAccessToken(this);
-
-        if (accessToken == null || accessToken.trim().isEmpty()) {
-            UiHelper.showToast(
-                    this,
-                    "No hay una sesión de administrador activa.",
-                    Toast.LENGTH_LONG
-            );
-            return;
-        }
-
-        // TODO (refactor pendiente): este flujo queda fuera del alcance actual.
-        // Motivo: hay que centralizar el manejo de jwt y auth.
-        // Aquí todavía usa HttpURLConnection y transporta el accessToken manualmente.
-        // Pasos para aplicarlo:
-        // 1. Agregar el DELETE en ApiService.
-        // 2. Cambiar el repository para recibir Context y usar ApiClient.
-        // 3. Dejar que AuthInterceptor y TokenAuthenticator administren el JWT.
-        // 4. Reemplazar la llamada siguiente por este ejemplo:
-        // CampaignApiRepository.deleteCampaign(this, campaign.id, callback);
         CampaignApiRepository.deleteCampaign(
+                this,
                 campaign.id,
-                accessToken,
                 new CampaignApiRepository.Callback<Void>() {
 
                     @Override

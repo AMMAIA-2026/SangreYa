@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -40,6 +41,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
         confirmPasswordInput = findViewById(R.id.confirmPasswordInput);
         saveButton = findViewById(R.id.saveButton);
         backButton = findViewById(R.id.backButton);
+
+        ImageButton btnToggleNewPassword = findViewById(R.id.btnToggleNewPassword);
+        ImageButton btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
+        UiHelper.configurePasswordToggle(newPasswordInput, btnToggleNewPassword);
+        UiHelper.configurePasswordToggle(confirmPasswordInput, btnToggleConfirmPassword,
+                R.string.show_confirm_password, R.string.hide_confirm_password);
 
         email = getIntent().getStringExtra(ExtraKeys.EXTRA_EMAIL);
 
