@@ -89,6 +89,9 @@ public interface ApiService {
             @Path("campaignId") int campaignId,
             @Body RequestBody request);
 
+    @DELETE("campanias/{campaignId}/")
+    Call<Void> deleteCampaign(@Path("campaignId") int campaignId);
+
     @POST("inscripciones/campanias/{campaignId}/")
     Call<ResponseBody> enrollInCampaign(@Path("campaignId") int campaignId);
 

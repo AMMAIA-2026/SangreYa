@@ -233,8 +233,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
     }
 
     private void deleteCampaign() {
-        String accessToken = SessionManager.getAccessToken(this);
-        CampaignApiRepository.deleteCampaign(editingCampaign.id, accessToken,
+        CampaignApiRepository.deleteCampaign(this, editingCampaign.id,
                 new CampaignApiRepository.Callback<Void>() {
                     @Override
                     public void onSuccess(Void value) {

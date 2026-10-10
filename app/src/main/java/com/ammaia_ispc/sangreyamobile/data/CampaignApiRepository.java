@@ -1,12 +1,8 @@
 package com.ammaia_ispc.sangreyamobile.data;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 
 import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
-import com.ammaia_ispc.sangreyamobile.helpers.ApiConfig;
 import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
@@ -21,13 +17,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -40,14 +30,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public final class CampaignApiRepository {
-    private static final String CAMPAIGNS_PATH = "campanias/";
     private static final Gson CAMPAIGN_GSON = new GsonBuilder().serializeNulls().create();
 
     private CampaignApiRepository() {
-    }
-
-    private static Handler mainHandler() {
-        return new Handler(Looper.getMainLooper());
     }
 
     public interface Callback<T> {
@@ -279,26 +264,10 @@ public final class CampaignApiRepository {
 
 
     public static void deleteCampaign(
+            Context context,
             int campaignId,
-            String accessToken,
             Callback<Void> callback) {
-        new Thread(() -> {
-            try {
-                executeDelete(
-                        CAMPAIGNS_PATH + campaignId + "/",
-                        accessToken);
-
-                mainHandler().post(() -> callback.onSuccess(null));
-
-            } catch (Exception exception) {
-                Log.e(
-                        "CampaignApiRepository",
-                        "Error al eliminar la campaña " + campaignId,
-                        exception);
-
-                mainHandler().post(() -> callback.onError(exception));
-            }
-        }).start();
+        requestVoid(ApiClient.getApiService(context).deleteCampaign(campaignId), callback);
     }
 
     private interface Parser<T> {
@@ -353,52 +322,6 @@ public final class CampaignApiRepository {
                 callback.onError(asException(throwable));
             }
         });
-    }
-
-    private static void executeDelete(String path, String accessToken) throws Exception {
-        HttpURLConnection connection = null;
-
-        try {
-            URL url = new URL(ApiConfig.BASE_URL + path);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("DELETE");
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
-            connection.setRequestProperty("Accept", "application/json");
-            if (accessToken != null && !accessToken.trim().isEmpty()) {
-                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            }
-
-            int statusCode = connection.getResponseCode();
-            InputStream stream = statusCode >= 200 && statusCode < 300
-                    ? connection.getInputStream()
-                    : connection.getErrorStream();
-            String body = readBody(stream);
-
-            if (statusCode < 200 || statusCode >= 300) {
-                throw new HttpException(statusCode, body);
-            }
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-    }
-
-    private static String readBody(InputStream stream) throws Exception {
-        if (stream == null) {
-            return "";
-        }
-
-        StringBuilder body = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(stream, StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                body.append(line);
-            }
-        }
-        return body.toString();
     }
 
     private static HttpException httpException(Response<?> response) {
