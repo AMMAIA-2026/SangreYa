@@ -2,7 +2,9 @@ package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.HealthCenterAddressAutofill;
 import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
 import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
@@ -33,6 +36,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
     private Spinner healthCenterInput;
     private final List<HealthCenter> healthCenterOptions = new ArrayList<>();
     private EditText addressInput;
+    private final HealthCenterAddressAutofill addressAutofill = new HealthCenterAddressAutofill();
+    private boolean updatingAddressAutomatically;
     private EditText startDateInput;
     private EditText endDateInput;
     private EditText capacityInput;
@@ -57,6 +62,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
         nameInput = findViewById(R.id.create_campaign_name);
         healthCenterInput = findViewById(R.id.create_campaign_health_center);
         addressInput = findViewById(R.id.create_campaign_address);
+        configureAddressAutofill();
         loadHealthCenters();
         healthCenterInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -168,13 +174,37 @@ public class CreateCampaignActivity extends AppCompatActivity {
         return healthCenterOptions.get(position);
     }
 
+    private void configureAddressAutofill() {
+        addressInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!updatingAddressAutomatically) {
+                    addressAutofill.onManualAddressChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
     private void autofillAddressFromSelectedCenter() {
-        if (!TextUtils.isEmpty(addressInput.getText())) {
+        String currentAddress = addressInput.getText().toString();
+        String nextAddress = addressAutofill.onCenterSelected(selectedHealthCenter(), currentAddress);
+        if (currentAddress.equals(nextAddress)) {
             return;
         }
-        HealthCenter selected = selectedHealthCenter();
-        if (selected != null && !TextUtils.isEmpty(selected.address)) {
-            addressInput.setText(selected.address);
+
+        updatingAddressAutomatically = true;
+        try {
+            addressInput.setText(nextAddress);
+        } finally {
+            updatingAddressAutomatically = false;
         }
     }
 
