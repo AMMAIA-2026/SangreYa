@@ -240,15 +240,17 @@
                 android:id="@+id/tvContactanos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
+                android:paddingVertical="12dp"
                 android:text="Contactanos →"
                 android:textColor="@color/primary_red"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"/>
+                android:background="?attr/selectableItemBackground" />
 
         </LinearLayout>
 
