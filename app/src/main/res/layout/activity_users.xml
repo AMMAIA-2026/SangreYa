@@ -13,39 +13,53 @@
 
         <include layout="@layout/view_campaign_header" />
 
+        <!-- HEADER UNIFICADO DE USUARIOS (FONDO BORDEAUX) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:background="@color/dark_red"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/users_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:accessibilityHeading="true"
+                android:gravity="center"
+                android:text="Usuarios"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/users_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="Administrá los usuarios registrados"
+                android:textColor="@color/header_subtitle"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <!-- CONTENIDO PRINCIPAL -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="24dp">
-
-            <TextView
-                android:id="@+id/users_title"
-                android:accessibilityHeading="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Usuarios"
-                android:textColor="@color/primary_red"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/users_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="Administrá los usuarios registrados"
-                android:textColor="@color/secondary_text"
-                android:textSize="16sp" />
+            android:paddingHorizontal="16dp"
+            android:paddingTop="14dp">
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="24dp"
-                android:layout_weight="1">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:id="@+id/users_container"
@@ -57,6 +71,7 @@
 
         </LinearLayout>
 
+        <!-- BARRA INFERIOR DE NAVEGACIÓN -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_navigation_height"
