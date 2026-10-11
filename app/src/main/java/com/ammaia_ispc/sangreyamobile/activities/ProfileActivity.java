@@ -189,11 +189,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void populateProfile(AuthUser user) {
-        usernameInput.setText(safeValue(user.getUsername()));
-        emailInput.setText(safeValue(user.getEmail()));
-        dniInput.setText(safeValue(user.getDni()));
-        nameInput.setText(safeValue(user.getName()));
-        lastNameInput.setText(safeValue(user.getLastName()));
+        UiHelper.setTextAtEnd(usernameInput, safeValue(user.getUsername()));
+        UiHelper.setTextAtEnd(emailInput, safeValue(user.getEmail()));
+        UiHelper.setTextAtEnd(dniInput, safeValue(user.getDni()));
+        UiHelper.setTextAtEnd(nameInput, safeValue(user.getName()));
+        UiHelper.setTextAtEnd(lastNameInput, safeValue(user.getLastName()));
         setBirthDate(user.getBirthDate());
         originalBirthDate = birthDate;
     }
@@ -201,9 +201,9 @@ public class ProfileActivity extends AppCompatActivity {
     private void setBirthDate(String isoDate) {
         birthDate = isoDate;
         if (isValidIsoDate(isoDate)) {
-            birthDateInput.setText(DateHelper.toDisplayDate(isoDate));
+            UiHelper.setTextAtEnd(birthDateInput, DateHelper.toDisplayDate(isoDate));
         } else {
-            birthDateInput.setText("");
+            UiHelper.setTextAtEnd(birthDateInput, "");
         }
     }
 
