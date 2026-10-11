@@ -12,73 +12,110 @@
         android:background="@color/app_background">
 
         <include layout="@layout/view_campaign_header" />
-
-    <!-- Header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/dark_red"
-        android:paddingHorizontal="@dimen/content_horizontal_padding"
-        android:paddingTop="16dp"
-        android:paddingBottom="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/manage_contacts_title"
-            android:accessibilityHeading="true"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="4dp" />
+            android:orientation="vertical"
+            android:background="@color/dark_red"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="@dimen/content_horizontal_padding"
+            android:paddingTop="16dp"
+            android:paddingBottom="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/manage_contacts_subtitle"
-            android:textColor="@color/header_subtitle"
-            android:textSize="13sp"
-            android:layout_marginTop="2dp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/manage_contacts_title"
+                android:accessibilityHeading="true"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
 
-    <!-- Filtros -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/filter_row_height"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/content_horizontal_padding">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/manage_contacts_subtitle"
+                android:textColor="@color/header_subtitle"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:layout_marginTop="2dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/admin_contact_filter_all"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/filter_height"
-            android:text="@string/filter_contact_all"
-            android:textSize="13sp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp" />
+        </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/admin_contact_filter_unanswered"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/filter_height"
-            android:layout_marginStart="@dimen/filter_spacing"
-            android:text="@string/filter_unanswered"
-            android:textSize="13sp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp" />
+        <!-- Filtros -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_row_height"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/content_horizontal_padding">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/admin_contact_filter_answered"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/filter_height"
-            android:layout_marginStart="@dimen/filter_spacing"
-            android:text="@string/filter_answered"
-            android:textSize="13sp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp" />
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/admin_contact_filter_all"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/filter_height"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="@string/filter_contact_all"
+                android:textSize="11sp"
+                android:paddingHorizontal="4dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:strokeColor="@color/primary_red"
+                app:strokeWidth="1dp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/primary_red" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/admin_contact_filter_unanswered"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/filter_height"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:text="@string/filter_unanswered"
+                android:textSize="11sp"
+                android:paddingHorizontal="4dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:strokeColor="@color/primary_red"
+                app:strokeWidth="1dp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/primary_red" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/admin_contact_filter_answered"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/filter_height"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="@string/filter_answered"
+                android:textSize="11sp"
+                android:paddingHorizontal="4dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:strokeColor="@color/primary_red"
+                app:strokeWidth="1dp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@color/primary_red"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
     <!-- Lista -->
     <ScrollView
