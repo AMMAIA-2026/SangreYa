@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center_horizontal"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
@@ -29,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/admin_campaigns_title"
                 android:accessibilityHeading="true"
+                android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -37,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
                 android:text="@string/admin_campaigns_subtitle"
                 android:textColor="@color/header_subtitle"
                 android:textSize="13sp" />

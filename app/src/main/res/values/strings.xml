@@ -1,6 +1,6 @@
 <resources>
     <!--AdminDashboard & AdminNavbar-->
-    <string name="admin_role">admin</string>
+    <string name="admin_role">Admin</string>
     <string name="dashboard_donors_title">Donantes por mes</string>
     <string name="dashboard_donors_subtitle">Personas que donaron sangre cada mes</string>
     <string name="dashboard_donors_total">%1$d donantes</string>
