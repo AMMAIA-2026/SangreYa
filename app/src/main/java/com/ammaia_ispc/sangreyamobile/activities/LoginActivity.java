@@ -3,7 +3,6 @@ package com.ammaia_ispc.sangreyamobile.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -240,16 +239,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showMessage(String message) {
-        View toastView = getLayoutInflater().inflate(R.layout.toast_enrollment, null);
-        ((TextView) toastView.findViewById(R.id.toast_message)).setText(message);
-
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        toast.setGravity(
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
-                0,
-                getResources().getDimensionPixelSize(R.dimen.toast_bottom_offset));
-        toast.setView(toastView);
-        toast.show();
+        UiHelper.showCustomToast(this, message, Toast.LENGTH_LONG);
     }
 
     private void setLoading(boolean loading) {

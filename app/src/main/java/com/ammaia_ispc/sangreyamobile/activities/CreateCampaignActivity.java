@@ -129,7 +129,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 populateHealthCenterOptions(fallback);
                 healthCenterInput.setEnabled(true);
                 publishButton.setEnabled(true);
-                Toast.makeText(CreateCampaignActivity.this, messageRes, Toast.LENGTH_LONG).show();
+                UiHelper.showToast(CreateCampaignActivity.this, messageRes, Toast.LENGTH_LONG);
             }
         });
     }
@@ -267,27 +267,27 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 new CampaignApiRepository.Callback<Void>() {
                     @Override
                     public void onSuccess(Void value) {
-                        Toast.makeText(CreateCampaignActivity.this,
-                                R.string.campaign_deleted_message, Toast.LENGTH_SHORT).show();
+                        UiHelper.showToast(CreateCampaignActivity.this,
+                                R.string.campaign_deleted_message, Toast.LENGTH_SHORT);
                         finish();
                     }
 
                     @Override
                     public void onError(Exception exception) {
                         if (CampaignApiRepository.isUnauthorized(exception)) {
-                            Toast.makeText(CreateCampaignActivity.this,
-                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG).show();
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG);
                             return;
                         }
 
                         if (CampaignApiRepository.isNetworkError(exception)) {
-                            Toast.makeText(CreateCampaignActivity.this,
-                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG).show();
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG);
                             return;
                         }
 
-                        Toast.makeText(CreateCampaignActivity.this,
-                                R.string.campaign_create_server_error, Toast.LENGTH_LONG).show();
+                        UiHelper.showToast(CreateCampaignActivity.this,
+                                R.string.campaign_create_server_error, Toast.LENGTH_LONG);
                     }
                 });
     }
@@ -319,8 +319,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
                     new CampaignApiRepository.Callback<Campaign>() {
                         @Override
                         public void onSuccess(Campaign campaign) {
-                            Toast.makeText(CreateCampaignActivity.this,
-                                    R.string.campaign_updated_message, Toast.LENGTH_SHORT).show();
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_updated_message, Toast.LENGTH_SHORT);
                             finish();
                         }
 
@@ -329,22 +329,22 @@ public class CreateCampaignActivity extends AppCompatActivity {
                             setFormEnabled(true);
 
                             if (CampaignApiRepository.isUnauthorized(exception)) {
-                                Toast.makeText(CreateCampaignActivity.this,
-                                        R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG).show();
+                                UiHelper.showToast(CreateCampaignActivity.this,
+                                        R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG);
                                 return;
                             }
 
                             if (CampaignApiRepository.isNetworkError(exception)) {
-                                Toast.makeText(CreateCampaignActivity.this,
-                                        R.string.campaign_create_network_error, Toast.LENGTH_LONG).show();
+                                UiHelper.showToast(CreateCampaignActivity.this,
+                                        R.string.campaign_create_network_error, Toast.LENGTH_LONG);
                                 return;
                             }
 
                             String friendlyMessage = extractValidationMessage(exception);
-                            Toast.makeText(CreateCampaignActivity.this,
+                            UiHelper.showToast(CreateCampaignActivity.this,
                                     friendlyMessage != null ? friendlyMessage
                                             : getString(R.string.campaign_create_server_error),
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_LONG);
                         }
                     });
             return;
@@ -365,8 +365,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 new CampaignApiRepository.Callback<Campaign>() {
                     @Override
                     public void onSuccess(Campaign campaign) {
-                        Toast.makeText(CreateCampaignActivity.this,
-                                R.string.campaign_published_message, Toast.LENGTH_SHORT).show();
+                        UiHelper.showToast(CreateCampaignActivity.this,
+                                R.string.campaign_published_message, Toast.LENGTH_SHORT);
                         finish();
                     }
 
@@ -375,22 +375,22 @@ public class CreateCampaignActivity extends AppCompatActivity {
                         setFormEnabled(true);
 
                         if (CampaignApiRepository.isUnauthorized(exception)) {
-                            Toast.makeText(CreateCampaignActivity.this,
-                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG).show();
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG);
                             return;
                         }
 
                         if (CampaignApiRepository.isNetworkError(exception)) {
-                            Toast.makeText(CreateCampaignActivity.this,
-                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG).show();
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG);
                             return;
                         }
 
                         String friendlyMessage = extractValidationMessage(exception);
-                        Toast.makeText(CreateCampaignActivity.this,
+                        UiHelper.showToast(CreateCampaignActivity.this,
                                 friendlyMessage != null ? friendlyMessage
                                         : getString(R.string.campaign_create_server_error),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                     }
                 });
     }
@@ -409,7 +409,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
     }
 
     private void saveDraft() {
-        Toast.makeText(this, R.string.campaign_draft_saved_message, Toast.LENGTH_SHORT).show();
+        UiHelper.showToast(this, R.string.campaign_draft_saved_message, Toast.LENGTH_SHORT);
         finish();
     }
 
@@ -418,7 +418,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 || TextUtils.isEmpty(addressInput.getText())
                 || TextUtils.isEmpty(startDateInput.getText())
                 || TextUtils.isEmpty(endDateInput.getText())) {
-            Toast.makeText(this, R.string.campaign_required_fields_message, Toast.LENGTH_SHORT).show();
+            UiHelper.showToast(this, R.string.campaign_required_fields_message, Toast.LENGTH_SHORT);
             return false;
         }
         return true;
