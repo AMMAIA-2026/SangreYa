@@ -197,72 +197,40 @@
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_weight="1">
-
-                    <!-- TODO(date-input): aplicar a ambos EditText de fecha.
-                         1. Quitar android:focusable="false" y android:cursorVisible="false".
-                         2. Agregar android:drawableEnd="@drawable/ic_calendar".
-                         3. En CreateCampaignActivity, reemplazar los listeners por:
-                            DateHelper.configureDateInput(this, startDateInput);
-                            DateHelper.configureDateInput(this, endDateInput); -->
-                    <EditText
-                        android:id="@+id/create_campaign_start_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_input_field"
-                        android:clickable="true"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:hint="@string/hint_date"
-                        android:inputType="none"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="36dp"
-                        android:textColor="@color/primary_text"
-                        android:textColorHint="@color/secondary_text"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center_vertical|end"
-                        android:layout_marginEnd="14dp"
-                        android:src="@drawable/ic_calendar"
-                        android:contentDescription="@string/campaign_date_description" />
-                </FrameLayout>
-
-                <FrameLayout
+                <EditText
+                    android:id="@+id/create_campaign_start_date"
                     android:layout_width="0dp"
                     android:layout_height="52dp"
                     android:layout_weight="1"
-                    android:layout_marginStart="12dp">
+                    android:background="@drawable/bg_input_field"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawablePadding="8dp"
+                    android:hint="@string/hint_date"
+                    android:inputType="date"
+                    android:maxLength="10"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/primary_text"
+                    android:textColorHint="@color/secondary_text"
+                    android:textSize="14sp" />
 
-                    <EditText
-                        android:id="@+id/create_campaign_end_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_input_field"
-                        android:clickable="true"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:hint="@string/hint_date"
-                        android:inputType="none"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="36dp"
-                        android:textColor="@color/primary_text"
-                        android:textColorHint="@color/secondary_text"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center_vertical|end"
-                        android:layout_marginEnd="14dp"
-                        android:src="@drawable/ic_calendar"
-                        android:contentDescription="@string/campaign_date_description" />
-                </FrameLayout>
+                <EditText
+                    android:id="@+id/create_campaign_end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_input_field"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawablePadding="8dp"
+                    android:hint="@string/hint_date"
+                    android:inputType="date"
+                    android:maxLength="10"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/primary_text"
+                    android:textColorHint="@color/secondary_text"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <TextView

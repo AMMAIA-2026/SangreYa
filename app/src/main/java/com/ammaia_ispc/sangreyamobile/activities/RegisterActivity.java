@@ -81,11 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         cbAceptarTerminos.setOnClickListener(v -> mostrarTerminos());
 
-        // TODO(date-input): habilitar escritura manual en etFechaNacimiento.
-        // 1. En activity_register.xml, quitar android:focusable="false" del EditText.
-        // 2. Agregar android:drawableEnd="@drawable/ic_calendar" al mismo EditText.
-        // 3. Reemplazar este setOnClickListener por:
-        //    DateHelper.configureDateInput(this, etFechaNacimiento);
+        DateHelper.configureDateInput(this, etFechaNacimiento);
 
         btnCreateAccount.setOnClickListener(v -> validarRegistro());
 

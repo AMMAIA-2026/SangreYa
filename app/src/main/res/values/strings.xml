@@ -69,6 +69,7 @@
     <string name="cancel_enrollment_title">¿Cancelar inscripción?</string>
     <string name="cancel_enrollment_message">Vas a cancelar tu inscripción a %1$s. Podrás volver a inscribirte mientras la campaña siga disponible y tenga cupo.</string>
     <string name="cancel_enrollment_confirm">Cancelar inscripción</string>
+    <string name="cancel_enrollment_keep">Mantener inscripción</string>
     <string name="cancel_enrollment_success">Inscripción cancelada. Podés volver a inscribirte si la campaña sigue disponible y tiene cupo.</string>
     <string name="cancel_enrollment_finished">La campaña ya finalizó y no se puede cancelar esta inscripción.</string>
     <string name="cancel_enrollment_error">No se pudo cancelar la inscripción. Revisá tu conexión e intentá nuevamente.</string>
@@ -229,12 +230,14 @@
     <string name="campaign_published_message">Campaña publicada</string>
     <string name="campaign_draft_saved_message">Guardado como borrador</string>
     <string name="campaign_required_fields_message">Completá los campos obligatorios</string>
+    <string name="campaign_date_invalid">Ingresá una fecha válida con formato DD/MM/AAAA.</string>
 
     <!-- Administración de campañas -->
     <string name="admin_campaigns_title">Campañas</string>
     <string name="admin_campaigns_subtitle">Gestioná todas las campañas</string>
     <string name="search_campaign_hint">Buscar campaña…</string>
     <string name="search_campaign_description">Buscar campaña</string>
+    <string name="admin_campaigns_no_matches">No se hallaron coincidencias</string>
     <string name="add_campaign_description">Agregar nueva campaña</string>
     <string name="campaign_create_network_error">No se pudo publicar la campaña. Revisá tu conexión e intentá de nuevo.</string>
     <string name="campaign_create_unauthorized_error">No tenés permisos para crear campañas.</string>

@@ -210,7 +210,7 @@ public class EnrollmentsActivity extends AppCompatActivity {
                 .setMessage(getString(
                         R.string.cancel_enrollment_message,
                         enrollment.campaign.title))
-                .setNegativeButton(R.string.dialog_cancel, null)
+                .setNegativeButton(R.string.cancel_enrollment_keep, null)
                 .setPositiveButton(
                         R.string.cancel_enrollment_confirm,
                         (dialog, which) -> cancelEnrollment(enrollment))
