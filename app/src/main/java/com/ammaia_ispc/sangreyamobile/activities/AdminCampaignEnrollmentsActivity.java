@@ -3,12 +3,14 @@ package com.ammaia_ispc.sangreyamobile.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
@@ -82,6 +84,13 @@ public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {
                 this,
                 drawerLayout,
                 navigationView);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        ImageButton backButton = findViewById(R.id.menu_button);
+        backButton.setImageResource(android.R.drawable.ic_menu_revert);
+        backButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+        backButton.setContentDescription(getString(R.string.back));
+        backButton.setOnClickListener(view -> finish());
     }
 
     private void configureBottomNavigation() {
