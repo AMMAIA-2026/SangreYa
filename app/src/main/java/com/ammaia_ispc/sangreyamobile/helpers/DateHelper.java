@@ -48,12 +48,13 @@ public final class DateHelper {
 
         new DatePickerDialog(
                 context,
-                (view, year, month, dayOfMonth) -> dateInput.setText(String.format(
-                        Locale.US,
-                        "%02d/%02d/%04d",
-                        dayOfMonth,
-                        month + 1,
-                        year)),
+                (view, year, month, dayOfMonth) -> UiHelper.setTextAtEnd(dateInput,
+                        String.format(
+                                Locale.US,
+                                "%02d/%02d/%04d",
+                                dayOfMonth,
+                                month + 1,
+                                year)),
                 selectedDate.get(Calendar.YEAR),
                 selectedDate.get(Calendar.MONTH),
                 selectedDate.get(Calendar.DAY_OF_MONTH)

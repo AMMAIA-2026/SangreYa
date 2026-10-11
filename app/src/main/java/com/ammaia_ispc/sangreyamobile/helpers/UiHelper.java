@@ -121,6 +121,11 @@ public final class UiHelper {
         });
     }
 
+    public static void setTextAtEnd(EditText field, CharSequence text) {
+        field.setText(text);
+        field.setSelection(field.length());
+    }
+
     public static void styleFilter(
             Context context,
             MaterialButton filter,

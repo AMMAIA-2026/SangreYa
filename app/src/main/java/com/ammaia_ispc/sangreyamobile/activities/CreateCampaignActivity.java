@@ -84,12 +84,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         endDateInput.setOnClickListener(
                 view -> DateHelper.showDatePicker(this, endDateInput));
         // TODO(date-input): este formulario se usa para crear y editar campañas.
-        // 1. En activity_create_campaign.xml, aplicar a ambos EditText de fecha:
-        //    quitar focusable="false", quitar cursorVisible="false" y agregar
-        //    drawableEnd="@drawable/ic_calendar".
-        // 2. Reemplazar estos listeners por:
-        // DateHelper.configureDateInput(this, startDateInput);
-        // DateHelper.configureDateInput(this, endDateInput);
 
         findViewById(R.id.create_campaign_publish).setOnClickListener(view -> publishCampaign());
 
@@ -202,7 +196,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         updatingAddressAutomatically = true;
         try {
-            addressInput.setText(nextAddress);
+            UiHelper.setTextAtEnd(addressInput, nextAddress);
         } finally {
             updatingAddressAutomatically = false;
         }
@@ -237,13 +231,13 @@ public class CreateCampaignActivity extends AppCompatActivity {
         deleteButton.setVisibility(View.VISIBLE);
         deleteButton.setOnClickListener(view -> confirmDeleteCampaign());
 
-        nameInput.setText(editingCampaign.title);
-        addressInput.setText(editingCampaign.location);
-        descriptionInput.setText(editingCampaign.description);
-        startDateInput.setText(DateHelper.toDisplayDate(editingCampaign.startDate));
-        endDateInput.setText(DateHelper.toDisplayDate(editingCampaign.endDate));
+        UiHelper.setTextAtEnd(nameInput, editingCampaign.title);
+        UiHelper.setTextAtEnd(addressInput, editingCampaign.location);
+        UiHelper.setTextAtEnd(descriptionInput, editingCampaign.description);
+        UiHelper.setTextAtEnd(startDateInput, DateHelper.toDisplayDate(editingCampaign.startDate));
+        UiHelper.setTextAtEnd(endDateInput, DateHelper.toDisplayDate(editingCampaign.endDate));
         if (editingCampaign.maximumCapacity != null) {
-            capacityInput.setText(String.valueOf(editingCampaign.maximumCapacity));
+            UiHelper.setTextAtEnd(capacityInput, String.valueOf(editingCampaign.maximumCapacity));
         }
 
         if ("Activa".equals(editingCampaign.calculatedStatus)) {
