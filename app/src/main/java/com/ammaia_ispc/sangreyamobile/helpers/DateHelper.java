@@ -29,14 +29,18 @@ public final class DateHelper {
             boolean onCalendarIcon = dateInput.getCompoundDrawables()[2] != null
                     && event.getX()
                     >= dateInput.getWidth() - dateInput.getCompoundPaddingRight();
+
             if (onCalendarIcon) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     showDatePicker(context, dateInput);
                 }
                 return true;
             }
+
             return false;
         });
+
+        dateInput.setOnClickListener(view -> showDatePicker(context, dateInput));
     }
 
     public static void showDatePicker(Context context, EditText dateInput) {
