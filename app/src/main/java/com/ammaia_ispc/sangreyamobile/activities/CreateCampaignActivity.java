@@ -79,11 +79,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
         capacityInput = findViewById(R.id.create_campaign_capacity);
         descriptionInput = findViewById(R.id.create_campaign_description);
 
-        startDateInput.setOnClickListener(
-                view -> DateHelper.showDatePicker(this, startDateInput));
-        endDateInput.setOnClickListener(
-                view -> DateHelper.showDatePicker(this, endDateInput));
-        // TODO(date-input): este formulario se usa para crear y editar campañas.
+        DateHelper.configureDateInput(this, startDateInput);
+        DateHelper.configureDateInput(this, endDateInput);
 
         findViewById(R.id.create_campaign_publish).setOnClickListener(view -> publishCampaign());
 
@@ -287,18 +284,28 @@ public class CreateCampaignActivity extends AppCompatActivity {
     }
 
     private void publishCampaign() {
+        clearFieldErrors();
         if (!validateRequiredFields()) {
             return;
         }
 
         String isoStartDate = DateHelper.toIsoDate(startDateInput.getText().toString());
         String isoEndDate = DateHelper.toIsoDate(endDateInput.getText().toString());
+        if (isoStartDate == null) {
+            startDateInput.setError(getString(R.string.campaign_date_invalid));
+            startDateInput.requestFocus();
+            return;
+        }
+        if (isoEndDate == null) {
+            endDateInput.setError(getString(R.string.campaign_date_invalid));
+            endDateInput.requestFocus();
+            return;
+        }
         HealthCenter selectedCenter = selectedHealthCenter();
         Integer selectedCenterId = selectedCenter != null ? selectedCenter.id : null;
 
         if (editingCampaign != null) {
             setFormEnabled(false);
-            clearFieldErrors();
 
             CampaignApiRepository.updateCampaign(
                     this,
@@ -345,7 +352,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         }
 
         setFormEnabled(false);
-        clearFieldErrors();
 
         CampaignApiRepository.createCampaign(
                 this,

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     private MaterialButton upcomingFilter;
     private MaterialButton finishedFilter;
     private String currentFilter = "Todas";
+    private boolean campaignsLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +65,21 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        loadCampaigns();
+        if (campaignContainer != null) {
+            loadCampaigns();
+        }
     }
 
     private void loadCampaigns() {
+        campaignsLoaded = false;
+        showCampaigns();
         CampaignApiRepository.getCampaigns(
                 this,
                 new CampaignApiRepository.Callback<List<Campaign>>() {
                     @Override
                     public void onSuccess(List<Campaign> value) {
                         campaigns = value;
+                        campaignsLoaded = true;
                         showCampaigns();
                     }
 
@@ -202,6 +209,18 @@ public class AdminCampaignListActivity extends AppCompatActivity {
             );
 
             campaignContainer.addView(card, cardParams);
+        }
+
+        if (campaignsLoaded && campaignContainer.getChildCount() == 0) {
+            TextView empty = new TextView(this);
+            empty.setText(R.string.admin_campaigns_no_matches);
+            empty.setTextSize(16);
+            empty.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
+            empty.setGravity(Gravity.CENTER);
+            int padding = getResources().getDimensionPixelSize(R.dimen.card_spacing);
+            empty.setPadding(0, padding, 0, padding);
+            empty.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+            campaignContainer.addView(empty);
         }
 
         updateFilterStyles();
