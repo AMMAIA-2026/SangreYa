@@ -275,3 +275,71 @@
                     android:layout_height="28dp"
                     android:src="@drawable/ic_blood_drop"
                     android:tint="@color/secondary_text"
+                    android:contentDescription="@string/campaigns_navigation" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:gravity="center"
+                    android:text="@string/campaigns_navigation"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/admin_users_navigation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_profile"
+                    android:contentDescription="@string/users_navigation" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:gravity="center"
+                    android:text="@string/users_navigation"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/admin_messages_navigation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_messages"
+                    android:contentDescription="@string/messages_navigation" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:gravity="center"
+                    android:text="@string/messages_navigation"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/admin_dashboard_navigation_view"
+        android:layout_width="@dimen/drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/navigation_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>
