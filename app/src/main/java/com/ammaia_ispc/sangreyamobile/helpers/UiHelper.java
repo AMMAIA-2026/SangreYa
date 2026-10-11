@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -73,6 +74,27 @@ public final class UiHelper {
         Toast.makeText(context, message, duration).show();
     }
 
+    public static void showToast(Context context, @StringRes int messageResId, int duration) {
+        showToast(context, context.getText(messageResId), duration);
+    }
+
+    public static void showCustomToast(Activity activity, CharSequence message, int duration) {
+        View toastView = activity.getLayoutInflater().inflate(R.layout.toast_enrollment, null);
+        ((TextView) toastView.findViewById(R.id.toast_message)).setText(message);
+
+        Toast toast = Toast.makeText(activity, message, duration);
+        toast.setGravity(
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
+                0,
+                activity.getResources().getDimensionPixelSize(R.dimen.toast_bottom_offset));
+        toast.setView(toastView);
+        toast.show();
+    }
+
+    public static void showCustomToast(Activity activity, @StringRes int messageResId, int duration) {
+        showCustomToast(activity, activity.getText(messageResId), duration);
+    }
+
     public static void configurePasswordToggle(
             EditText passwordInput,
             ImageButton toggleButton) {
@@ -130,13 +152,4 @@ public final class UiHelper {
         filter.announceForAccessibility(filter.getContext().getString(
                 R.string.filter_applied, filter.getText()));
     }
-
-    /*
-     * TODO: completar la centralizacion de Toast.makeText.
-     * Pendiente:
-     * 1. Utilizarlo en las llamadas marcadas.
-     * 2. Detalle: puede haber métodos que estén usando esto con R.string, que es int y no caracter. Es
-     * un identificador de recurso, y hay que castearlo con "getString(R.string.algun_mensaje)"
-     * para poder pasarle correctamente como caracter.
-     */
 }

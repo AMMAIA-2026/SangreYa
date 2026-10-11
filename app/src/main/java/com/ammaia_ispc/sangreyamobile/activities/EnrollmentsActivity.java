@@ -232,10 +232,10 @@ public class EnrollmentsActivity extends AppCompatActivity {
                         cancellationInProgress = false;
                         currentEnrollments.remove(enrollment);
                         showEnrollments();
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 EnrollmentsActivity.this,
                                 R.string.cancel_enrollment_success,
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                     }
 
                     @Override
@@ -246,12 +246,12 @@ public class EnrollmentsActivity extends AppCompatActivity {
                             return;
                         }
                         String code = CampaignApiRepository.getErrorCode(exception);
-                        Toast.makeText(
+                        UiHelper.showToast(
                                 EnrollmentsActivity.this,
                                 "campania_finalizada".equals(code)
                                         ? R.string.cancel_enrollment_finished
                                         : R.string.cancel_enrollment_error,
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                     }
                 });
     }

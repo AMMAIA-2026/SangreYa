@@ -77,10 +77,10 @@ public class CampaignListActivity extends AppCompatActivity {
             @Override
             public void onError(Exception exception) {
                 UiHelper.setLoading(loadingIndicator, campaignScroll, false);
-                Toast.makeText(
+                UiHelper.showToast(
                         CampaignListActivity.this,
                         R.string.campaigns_load_error,
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG);
             }
         });
     }

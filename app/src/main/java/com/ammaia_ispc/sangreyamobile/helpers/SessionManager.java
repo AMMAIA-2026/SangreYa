@@ -104,7 +104,7 @@ public final class SessionManager {
 
     public static boolean requireAdmin(Activity activity) {
         if (!isAdmin(activity)) {
-            Toast.makeText(activity, R.string.error_unauthorized_access, Toast.LENGTH_SHORT).show();
+            UiHelper.showToast(activity, R.string.error_unauthorized_access, Toast.LENGTH_SHORT);
             activity.finish();
             return false;
         }

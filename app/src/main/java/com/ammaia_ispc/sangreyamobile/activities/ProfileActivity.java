@@ -263,12 +263,12 @@ public class ProfileActivity extends AppCompatActivity {
                 if (userId == SessionManager.getUserId(ProfileActivity.this)) {
                     configureNavigation();
                 }
-                Toast.makeText(
+                UiHelper.showToast(
                         ProfileActivity.this,
                         adminEditMode
                                 ? R.string.admin_user_updated_message
                                 : R.string.profile_updated_message,
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
                 if (adminEditMode) {
                     setResult(RESULT_OK);
                     finish();
