@@ -15,7 +15,7 @@
         android:layout_marginTop="48dp"
         android:background="@android:color/transparent"
         android:src="@android:drawable/ic_menu_revert"
-        android:tint="@color/primary_red"
+        app:tint="@color/primary_red"
         android:contentDescription="Volver"
         android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"

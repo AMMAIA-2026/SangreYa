@@ -69,7 +69,9 @@ Metodología: **Scrum**, sin roles fijos de desarrollo — todo el equipo trabaj
 ## Entrega y release
 
 - **Backend en producción:** `https://sangreyaispc.pythonanywhere.com/`
-- **APK / release:** _pendiente de publicar (ver TK-80)_
+- **APK de prueba:** disponible en los artifacts de **Actions → Android CI** después de una compilación exitosa (retención: 14 días).
+- **APK / release:** publicación automatizada por tags en [GitHub Releases](https://github.com/AMMAIA-2026/SangreYa/releases), una vez configurados los secrets de firma y publicada la primera versión (TK-80).
+- **Compilación, firma y publicación:** [guía Android](docs/ANDROID_RELEASE.md).
 - **Video demo:** _pendiente de grabar (ver TK-79)_
 
 ---

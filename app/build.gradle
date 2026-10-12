@@ -5,6 +5,18 @@ plugins {
     id 'jacoco'
 }
 
+// Release credentials are supplied locally or by GitHub Actions, never committed.
+def releaseSigning = [
+        storeFile: System.getenv('SANGREYA_KEYSTORE_PATH'),
+        storePassword: System.getenv('SANGREYA_KEYSTORE_PASSWORD'),
+        keyAlias: System.getenv('SANGREYA_KEY_ALIAS'),
+        keyPassword: System.getenv('SANGREYA_KEY_PASSWORD')
+]
+def hasReleaseSigning = releaseSigning.values().every { it }
+if (releaseSigning.values().any { it } && !hasReleaseSigning) {
+    throw new GradleException('Incomplete release signing configuration. Set all four SANGREYA_KEYSTORE_PATH, SANGREYA_KEYSTORE_PASSWORD, SANGREYA_KEY_ALIAS and SANGREYA_KEY_PASSWORD variables.')
+}
+
 jacoco {
     toolVersion = '0.8.13'
 }
@@ -42,8 +54,22 @@ android {
 
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            release {
+                storeFile file(releaseSigning.storeFile)
+                storePassword releaseSigning.storePassword
+                keyAlias releaseSigning.keyAlias
+                keyPassword releaseSigning.keyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
