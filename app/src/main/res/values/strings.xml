@@ -300,5 +300,7 @@
     <string name="splash_checking_session">Hola, %1$s. Estamos cargando tu sesión</string>
     <string name="splash_guest_status">Ingresando a SangreYa como Invitado.</string>
     <string name="admin_contacts_empty">No hay mensajes para mostrar.</string>
+    <string name="campaigns_empty">No hay campañas para mostrar.</string>
+    <string name="filter_applied_with_message">Filtro aplicado: %1$s. %2$s</string>
 
 </resources>
