@@ -18,6 +18,7 @@ import com.ammaia_ispc.sangreyamobile.activities.LoginActivity;
 import com.ammaia_ispc.sangreyamobile.activities.RegisterActivity;
 import com.ammaia_ispc.sangreyamobile.activities.ContactActivity;
 import com.ammaia_ispc.sangreyamobile.activities.EnrollmentsActivity;
+import com.ammaia_ispc.sangreyamobile.activities.VideoActivity;
 
 public final class NavigationDrawerHelper {
     private NavigationDrawerHelper() {
@@ -56,6 +57,9 @@ public final class NavigationDrawerHelper {
             Intent intent;
             if (item.getItemId() == R.id.nav_about_us) {
                 intent = new Intent(activity, AboutUsActivity.class);
+                activity.startActivity(intent);
+            } else if (item.getItemId() == R.id.nav_video) {
+                intent = new Intent(activity, VideoActivity.class);
                 activity.startActivity(intent);
             } else if (item.getItemId() == R.id.nav_campaigns) {
                 intent = new Intent(activity, AdminCampaignListActivity.class);
