@@ -95,6 +95,8 @@ public class AdminContactListActivity extends AppCompatActivity {
 
     private void bindViews() {
         contactContainer = findViewById(R.id.admin_contact_container);
+        // BUG-011: ScrollView fuerza focusable=true en su constructor e ignora el XML
+        findViewById(R.id.admin_contact_scroll).setFocusable(false);
         allFilter = findViewById(R.id.admin_contact_filter_all);
         unansweredFilter = findViewById(R.id.admin_contact_filter_unanswered);
         answeredFilter = findViewById(R.id.admin_contact_filter_answered);
@@ -120,11 +122,12 @@ public class AdminContactListActivity extends AppCompatActivity {
             return;
         }
         currentFilter = filter;
-        showContacts();
-        UiHelper.announceFilterChange(selectedButton);
+        boolean emptyList = showContacts();
+        UiHelper.announceFilterChange(selectedButton, emptyList, R.string.admin_contacts_empty);
     }
 
-    private void showContacts() {
+    // Devuelve true si no hay mensajes para mostrar con el filtro actual.
+    private boolean showContacts() {
         contactContainer.removeAllViews();
 
         List<ContactMessage> ordered = new ArrayList<>(contacts);
@@ -154,11 +157,13 @@ public class AdminContactListActivity extends AppCompatActivity {
         }
 
         // BUG-011: avisar cuando no hay mensajes para mostrar
-        if (contactContainer.getChildCount() == 0) {
+        boolean emptyList = contactContainer.getChildCount() == 0;
+        if (emptyList) {
             showEmptyMessage();
         }
 
         updateFilterStyles();
+        return emptyList;
     }
 
     private void showEmptyMessage() {

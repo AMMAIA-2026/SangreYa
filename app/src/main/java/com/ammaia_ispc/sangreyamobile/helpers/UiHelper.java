@@ -153,6 +153,23 @@ public final class UiHelper {
         );
     }
 
+    // BUG-011: si el filtro deja la lista vacia, se anuncia junto con el cambio de filtro
+    // (un mensaje aparte quedaba pisado por "Filtro aplicado").
+    public static void announceFilterChange(
+            MaterialButton filter,
+            boolean emptyList,
+            @StringRes int emptyMessageResId) {
+        if (!emptyList) {
+            announceFilterChange(filter);
+            return;
+        }
+        Context context = filter.getContext();
+        filter.announceForAccessibility(context.getString(
+                R.string.filter_applied_with_message,
+                filter.getText(),
+                context.getString(emptyMessageResId)));
+    }
+
     public static void announceFilterChange(MaterialButton filter) {
         filter.announceForAccessibility(filter.getContext().getString(
                 R.string.filter_applied, filter.getText()));
