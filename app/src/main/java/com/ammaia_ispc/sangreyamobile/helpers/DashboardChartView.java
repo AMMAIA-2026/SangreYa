@@ -3,13 +3,19 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.customview.widget.ExploreByTouchHelper;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
@@ -25,17 +31,83 @@ public class DashboardChartView extends View {
     private String emptyMessage = "";
     private boolean donutChart;
 
+    // BUG-020: cada barra se expone como elemento propio ("Sep 2026: 3"), asi TalkBack
+    // lee los valores mes por mes y no depende de una descripcion unica larga.
+    private final ExploreByTouchHelper accessibilityHelper = new ExploreByTouchHelper(this) {
+        @Override
+        protected int getVirtualViewAt(float x, float y) {
+            if (donutChart || monthlyDonors.isEmpty()) {
+                return INVALID_ID;
+            }
+            float left = 14 * getResources().getDisplayMetrics().density;
+            float slotWidth = barSlotWidth();
+            int index = (int) ((x - left) / slotWidth);
+            return x >= left && index < monthlyDonors.size() ? index : INVALID_ID;
+        }
+
+        @Override
+        protected void getVisibleVirtualViews(List<Integer> virtualViewIds) {
+            if (donutChart) {
+                return;
+            }
+            for (int index = 0; index < monthlyDonors.size(); index++) {
+                virtualViewIds.add(index);
+            }
+        }
+
+        @Override
+        protected void onPopulateNodeForVirtualView(
+                int virtualViewId,
+                @NonNull AccessibilityNodeInfoCompat node) {
+            DashboardMonthlyDonors donor = monthlyDonors.get(virtualViewId);
+            float left = 14 * getResources().getDisplayMetrics().density;
+            float slotWidth = barSlotWidth();
+            node.setContentDescription(barDescription(donor));
+            node.setBoundsInParent(new Rect(
+                    (int) (left + slotWidth * virtualViewId),
+                    0,
+                    (int) (left + slotWidth * (virtualViewId + 1)),
+                    getHeight()));
+        }
+
+        @Override
+        protected boolean onPerformActionForVirtualView(
+                int virtualViewId,
+                int action,
+                android.os.Bundle arguments) {
+            return false;
+        }
+    };
+
     public DashboardChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
         paint.setTypeface(Typeface.create("sans", Typeface.NORMAL));
         // BUG-020: TalkBack debe poder enfocar el gráfico y leer su descripción.
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
+        ViewCompat.setAccessibilityDelegate(this, accessibilityHelper);
+        updateAccessibilityDescription();
+    }
+
+    @Override
+    public boolean dispatchHoverEvent(MotionEvent event) {
+        return accessibilityHelper.dispatchHoverEvent(event) || super.dispatchHoverEvent(event);
+    }
+
+    private float barSlotWidth() {
+        float density = getResources().getDisplayMetrics().density;
+        float width = getWidth() - 8 * density - 14 * density;
+        return monthlyDonors.isEmpty() ? width : width / monthlyDonors.size();
+    }
+
+    private String barDescription(DashboardMonthlyDonors donor) {
+        return AdminDashboardHelper.monthLabel(donor.month) + " " + donor.year + ": " + donor.count;
     }
 
     public void setMonthlyDonors(List<DashboardMonthlyDonors> monthlyDonors) {
         donutChart = false;
         this.monthlyDonors = monthlyDonors;
         updateAccessibilityDescription();
+        accessibilityHelper.invalidateRoot();
         invalidate();
     }
 
@@ -43,6 +115,7 @@ public class DashboardChartView extends View {
         donutChart = true;
         this.campaignStatuses = campaignStatuses;
         updateAccessibilityDescription();
+        accessibilityHelper.invalidateRoot();
         invalidate();
     }
 
@@ -83,6 +156,9 @@ public class DashboardChartView extends View {
                         .append(donor.count)
                         .append('.');
             }
+        }
+        if (description.length() == 0) {
+            description.append("Gráfico sin datos.");
         }
         setContentDescription(description.toString());
     }
