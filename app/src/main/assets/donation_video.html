@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>¿Por qué donar sangre?</title>
+    <style>
+        html, body { margin: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+        #player { display: block; width: 100%; height: 100%; border: 0; }
+    </style>
+</head>
+<body>
+<div id="player"></div>
+<script>
+    var player;
+    var ready = false;
+    var error = 0;
+    var stopped = false;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            width: '100%',
+            height: '100%',
+            videoId: '__VIDEO_ID__',
+            playerVars: {
+                origin: '__ORIGIN__',
+                playsinline: 1,
+                controls: 1,
+                fs: 0,
+                rel: 0,
+                hl: 'es',
+                start: __START_SECONDS__
+            },
+            events: {
+                onReady: function () { ready = true; },
+                onStateChange: function (event) {
+                    // Playback can also be started with YouTube's own controls.
+                    if (event.data === YT.PlayerState.PLAYING) stopped = false;
+                },
+                onError: function (event) { error = event.data; }
+            }
+        });
+    }
+
+    function controlVideo(action) {
+        if (!ready || error) return;
+        switch (action) {
+            case 'play':
+                if (stopped) {
+                    player.loadVideoById('__VIDEO_ID__', 0);
+                    stopped = false;
+                } else {
+                    player.playVideo();
+                }
+                break;
+            case 'pause': player.pauseVideo(); break;
+            case 'stop':
+                player.stopVideo();
+                player.cueVideoById('__VIDEO_ID__', 0);
+                stopped = true;
+                break;
+        }
+    }
+
+    function getPlaybackStatus() {
+        return {
+            ready: ready,
+            error: error,
+            playing: ready && !error && player.getPlayerState() === YT.PlayerState.PLAYING,
+            time: ready && !error && !stopped ? player.getCurrentTime() : 0
+        };
+    }
+
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) controlVideo('pause');
+    });
+</script>
+<script src="https://www.youtube.com/iframe_api" onerror="error = -1"></script>
+</body>
+</html>

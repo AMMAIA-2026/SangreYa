@@ -28,6 +28,8 @@ secrets.properties
 *.private.postman_environment.json
 *.private.json
 *.private.*
+# Local report sanitation helper and Python caches
+/tests/Sanitize-Evidence.py
 **/__pycache__/
 *.py[cod]
 node_modules/

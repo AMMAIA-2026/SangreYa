@@ -2,14 +2,18 @@ package com.ammaia_ispc.sangreyamobile.helpers;
 
 import android.content.Context;
 
+import androidx.annotation.VisibleForTesting;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.CallAdapter;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiClient {
 
     private static Retrofit retrofit;
     private static Retrofit plainRetrofit;
+    private static CallAdapter.Factory testCallAdapterFactory;
 
     private ApiClient() {
     }
@@ -36,11 +40,21 @@ public final class ApiClient {
         return createRetrofit(baseUrl, client).create(ApiService.class);
     }
 
+    @VisibleForTesting
+    public static void setTestCallAdapterFactory(CallAdapter.Factory factory) {
+        testCallAdapterFactory = factory;
+        retrofit = null;
+        plainRetrofit = null;
+    }
+
     private static Retrofit createRetrofit(String baseUrl, OkHttpClient client) {
-        return new Retrofit.Builder()
+        Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+                .addConverterFactory(GsonConverterFactory.create());
+        if (testCallAdapterFactory != null) {
+            builder.addCallAdapterFactory(testCallAdapterFactory);
+        }
+        return builder.build();
     }
 }
