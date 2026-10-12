@@ -89,6 +89,8 @@ public class CampaignListActivity extends AppCompatActivity {
         campaignContainer = findViewById(R.id.campaign_container);
         loadingIndicator = findViewById(R.id.campaign_loading);
         campaignScroll = findViewById(R.id.campaign_scroll);
+        // BUG-011: ScrollView fuerza focusable=true en su constructor e ignora el XML
+        campaignScroll.setFocusable(false);
         allFilter = findViewById(R.id.filter_all);
         activeFilter = findViewById(R.id.filter_active);
         upcomingFilter = findViewById(R.id.filter_upcoming);
@@ -140,11 +142,12 @@ public class CampaignListActivity extends AppCompatActivity {
             return;
         }
         currentFilter = filter;
-        showCampaigns(currentFilter);
-        UiHelper.announceFilterChange(selectedButton);
+        boolean emptyList = showCampaigns(currentFilter);
+        UiHelper.announceFilterChange(selectedButton, emptyList, R.string.campaigns_empty);
     }
 
-    private void showCampaigns(String filter) {
+    // Devuelve true si no hay campañas para mostrar con el filtro y la busqueda actuales.
+    private boolean showCampaigns(String filter) {
         campaignContainer.removeAllViews();
         Date today = new Date();
         String query = UiHelper.normalized(
@@ -174,7 +177,22 @@ public class CampaignListActivity extends AppCompatActivity {
             cardParams.setMargins(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.card_spacing));
             campaignContainer.addView(card, cardParams);
         }
+        // BUG-011: avisar cuando no hay campañas para mostrar
+        boolean emptyList = campaignContainer.getChildCount() == 0;
+        if (emptyList) {
+            showEmptyMessage();
+        }
         updateFilterStyles(filter);
+        return emptyList;
+    }
+
+    private void showEmptyMessage() {
+        TextView empty = new TextView(this);
+        empty.setText(R.string.campaigns_empty);
+        empty.setTextSize(16);
+        empty.setPadding(0, 32, 0, 32);
+        empty.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        campaignContainer.addView(empty);
     }
 
     private int campaignStatusOrder(String status) {
