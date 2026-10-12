@@ -216,7 +216,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_dashboard"
-                    android:tint="@color/secondary_text"
+                    app:tint="@color/secondary_text"
                     android:contentDescription="@string/dashboard_navigation" />
 
                 <TextView
@@ -240,7 +240,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_blood_drop"
-                    android:tint="@color/primary_red"
+                    app:tint="@color/primary_red"
                     android:contentDescription="@string/campaigns_navigation" />
 
                 <TextView
