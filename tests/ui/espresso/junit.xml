@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.ammaia_ispc.sangreyamobile.tests.CriticalFlowsTest" tests="3" failures="0" errors="0" skipped="0" time="77762.0" timestamp="2026-10-12T15:49:10">
+  <properties>
+    <property name="device" value="Pixel_3a_API_36_extension_level_17_x86_64(AVD) - 16" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="tcUI01_registerAndLogin" classname="com.ammaia_ispc.sangreyamobile.tests.CriticalFlowsTest" time="25.535" />
+  <testcase name="tcUI02_adminCampaignCrud" classname="com.ammaia_ispc.sangreyamobile.tests.CriticalFlowsTest" time="28.997" />
+  <testcase name="tcUI03_consultAndEnroll" classname="com.ammaia_ispc.sangreyamobile.tests.CriticalFlowsTest" time="22.972" />
+</testsuite>

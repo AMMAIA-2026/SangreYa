@@ -31,6 +31,17 @@
     <string name="notifications">Notificaciones</string>
     <string name="open_menu">Abrir menú</string>
     <string name="menu_about_us">Sobre nosotros</string>
+    <string name="menu_video">Video</string>
+    <string name="video_title">¿Por qué donar sangre?</string>
+    <string name="video_loading">Cargando video…</string>
+    <string name="video_play">Reproducir</string>
+    <string name="video_pause">Pausar</string>
+    <string name="video_stop">Detener</string>
+    <string name="video_fullscreen">Pantalla completa</string>
+    <string name="video_exit_fullscreen">Salir de pantalla completa</string>
+    <string name="video_load_error">No se pudo cargar el video. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="video_unavailable">Este video no está disponible para reproducir dentro de la app.</string>
+    <string name="video_retry">Reintentar</string>
     <string name="menu_login">Iniciar sesión</string>
     <string name="menu_register">Registrarse</string>
     <string name="menu_logout">Cerrar sesión</string>
