@@ -50,6 +50,8 @@ Metodología: **Scrum**, sin roles fijos de desarrollo — todo el equipo trabaj
 - Listado y detalle de campañas
 - Inscripción a campañas
 - Sección "Sobre nosotros"
+- Video "¿Por qué donar sangre?", accesible desde el menú con o sin sesión,
+  con reproducción integrada y controles de reproducir, pausar, detener y pantalla completa
 - Formulario de contacto
 - Panel administrativo: campañas, usuarios, mensajes, dashboard
 
