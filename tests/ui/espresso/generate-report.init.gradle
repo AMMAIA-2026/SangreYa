@@ -1,0 +1,37 @@
+// Generate AGP's native HTML report from the recorded Espresso XML.
+gradle.projectsEvaluated {
+    def app = gradle.rootProject.project(':app')
+    app.tasks.register('reportRecordedEspresso') {
+        group = 'verification'
+        description = 'Generate the native Android Gradle HTML report for the recorded Espresso run.'
+        def source = gradle.rootProject.file('tests/ui/espresso/junit.xml')
+        def destination = gradle.rootProject.file('tests/ui/espresso/html')
+        inputs.file(source)
+        outputs.dir(destination)
+        doLast {
+            if (!source.isFile()) {
+                throw new GradleException('The recorded Espresso junit.xml is missing.')
+            }
+            def inputDirectory = new File(temporaryDir, 'recorded-results')
+            app.delete(inputDirectory)
+            app.copy {
+                from source
+                into inputDirectory
+                rename { 'TEST-CriticalFlowsTest.xml' }
+            }
+            def loader = app.plugins.getPlugin('com.android.application').class.classLoader
+            def reportType = loader.loadClass('com.android.build.gradle.internal.test.report.ReportType')
+            def singleFlavor = reportType.getField('SINGLE_FLAVOR').get(null)
+            def reportClass = loader.loadClass('com.android.build.gradle.internal.test.report.TestReport')
+            def report = reportClass.getConstructor(reportType, File, File)
+                    .newInstance(singleFlavor, inputDirectory, destination)
+            report.generateReport()
+            app.fileTree(destination) {
+                include '**/*.html'
+            }.each { html ->
+                html.setText(html.getText('UTF-8').replaceAll(/(?m)[\t ]+$/, ''), 'UTF-8')
+            }
+            logger.lifecycle('Recorded Espresso HTML report: tests/ui/espresso/html/index.html')
+        }
+    }
+}
