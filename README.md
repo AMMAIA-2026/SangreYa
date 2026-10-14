@@ -202,8 +202,8 @@ Los tests instrumentados (`app/src/androidTest`) requieren un emulador o disposi
 - **Release firmado:** se publica automáticamente al subir un tag `v*` (por ejemplo `v1.0`, que debe coincidir con `versionName`) en [GitHub Releases](https://github.com/AMMAIA-2026/SangreYa/releases), con el APK `SangreYa-<tag>.apk` y su checksum SHA-256.
 - **Guía de compilación, firma y publicación:** [`docs/ANDROID_RELEASE.md`](docs/ANDROID_RELEASE.md)
 - **Versión actual:** `1.0` (`versionCode 1`)
-- **Video demo (hasta 3 min):** [`drive.google.com/file/video-demo`](https://drive.google.com/file/d/1c3HokjB2sjgMhZpe_izRJyHWojE5q-rJ/view?usp=sharing)
-- **Video de autenticación y autorización:** [`drive.google.com/file/video-ciberseguridad`](https://drive.google.com/file/d/1vTYDOogKuKMu6-whr_sas_hBbZr8Y1b_/view?usp=sharing)
+- **Video demo (hasta 3 min):** [drive.google.com/file/video-demo](https://drive.google.com/file/d/1c3HokjB2sjgMhZpe_izRJyHWojE5q-rJ/view?usp=sharing)
+- **Video de autenticación y autorización:** [drive.google.com/file/video-ciberseguridad](https://drive.google.com/file/d/1vTYDOogKuKMu6-whr_sas_hBbZr8Y1b_/view?usp=sharing)
 
 Instalación manual del APK en un teléfono Android 7.0+: descargarlo desde Releases y permitir la instalación desde esa fuente, o con `adb install -r app-release.apk`.
 
