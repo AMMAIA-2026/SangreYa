@@ -8,9 +8,9 @@ SangreYa centraliza la información sobre campañas de donación de sangre: fech
 
 Está dirigida a donantes potenciales y a instituciones de salud que organizan campañas.
 
-Es la continuación mobile del [Proyecto Integrador II (SPA Angular + Django)](https://github.com/AMMAIA-2026/Proyecto2026), desarrollado por el mismo equipo. La app reutiliza el backend Django REST existente (misma API, misma autenticación JWT) con una interfaz 100 % nativa nueva.
+Es la continuación mobile del [Proyecto Web (SPA Angular + Django)](https://github.com/AMMAIA-2026/Proyecto2026), desarrollado por el mismo equipo. La app reutiliza el backend Django REST existente (misma API, misma autenticación JWT) con una interfaz 100 % nativa nueva.
 
-Se desarrolla en el marco del espacio curricular **Aplicaciones para Móviles** (Programador de Aplicaciones para Móviles) del ISPC — Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales. Docente: Mario Gonzalez.
+Se desarrolla en el marco del espacio curricular **Módulo Programador de Aplicaciones Móviles** del ISPC — Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales. Docentes: Mario González, Viviana Guillen y María Paz Santangelo.
 
 ---
 
@@ -43,9 +43,9 @@ Se desarrolla en el marco del espacio curricular **Aplicaciones para Móviles** 
 
 | Integrante | Rol |
 |---|---|
-| Abigail Picone | Scrum Master + Desarrollo |
-| Astrid Luppi | Desarrollo |
-| Marcela Villanueva | Desarrollo |
+| Abigail Yazmin Picone Ambrosioni | Scrum Master + Desarrollo |
+| Astrid Ana Luppi | Desarrollo |
+| Vanessa Marcela Villanueva Casini | Desarrollo |
 | Irina Pirles | Desarrollo |
 | Melina Belén Bruvera | Desarrollo |
 | Guillermo Mauricio Diván | Desarrollo |
@@ -202,8 +202,8 @@ Los tests instrumentados (`app/src/androidTest`) requieren un emulador o disposi
 - **Release firmado:** se publica automáticamente al subir un tag `v*` (por ejemplo `v1.0`, que debe coincidir con `versionName`) en [GitHub Releases](https://github.com/AMMAIA-2026/SangreYa/releases), con el APK `SangreYa-<tag>.apk` y su checksum SHA-256.
 - **Guía de compilación, firma y publicación:** [`docs/ANDROID_RELEASE.md`](docs/ANDROID_RELEASE.md)
 - **Versión actual:** `1.0` (`versionCode 1`)
-- **Video demo (hasta 3 min):** _completar con el enlace_
-- **Video de autenticación y autorización:** _completar con el enlace_
+- **Video demo:** [drive.google.com/file/video-demo](https://drive.google.com/file/d/1c3HokjB2sjgMhZpe_izRJyHWojE5q-rJ/view?usp=sharing)
+- **Video de autenticación y autorización:** [drive.google.com/file/video-ciberseguridad](https://drive.google.com/file/d/1vTYDOogKuKMu6-whr_sas_hBbZr8Y1b_/view?usp=sharing)
 
 Instalación manual del APK en un teléfono Android 7.0+: descargarlo desde Releases y permitir la instalación desde esa fuente, o con `adb install -r app-release.apk`.
 
@@ -223,5 +223,7 @@ Requerimientos (IEEE 830), historias de usuario, diagramas, plan de pruebas, seg
 ---
 
 > Grupo AMMAIA - 2026
+> 
 > Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales. Cohorte 2025
-> ISPC
+> 
+> Instituto Superior Politécnico Córdoba
