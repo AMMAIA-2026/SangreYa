@@ -1,17 +1,57 @@
 package com.ammaia_ispc.sangreyamobile.model;
 
-public class ContactMessage {
-    public String name;
-    public String time;
-    public String reason;
-    public String message;
-    public boolean tracked;
+import com.google.gson.annotations.SerializedName;
 
-    public ContactMessage(String name, String time, String reason, String message, boolean tracked) {
-        this.name = name;
-        this.time = time;
-        this.reason = reason;
-        this.message = message;
+public class ContactMessage {
+
+    private int id;
+
+    @SerializedName("nombre_completo")
+    private String name;
+
+    @SerializedName("correo_electronico")
+    private String email;
+
+    @SerializedName("motivo")
+    private String reason;
+
+    @SerializedName("mensaje")
+    private String message;
+
+    private boolean tracked;
+
+    @SerializedName("fecha_creacion")
+    private String createdAt;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public boolean isTracked() {
+        return tracked;
+    }
+
+    public void setTracked(boolean tracked) {
         this.tracked = tracked;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
     }
 }

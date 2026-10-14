@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DashboardApiRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.data</a> &gt; <span class="el_source">DashboardApiRepository.java</span></div><h1>DashboardApiRepository.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.data;
+
+import android.content.Context;
+
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.model.AdminDashboardData;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
+import com.ammaia_ispc.sangreyamobile.model.DashboardMonthlyDonors;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
+
+public final class DashboardApiRepository {
+    private DashboardApiRepository() {
+    }
+
+    public static void getDashboard(
+            Context context,
+            CampaignApiRepository.Callback&lt;AdminDashboardData&gt; callback) {
+<span class="nc" id="L29">        ApiClient.getApiService(context).getDashboard().enqueue(</span>
+<span class="nc" id="L30">                new retrofit2.Callback&lt;ResponseBody&gt;() {</span>
+                    @Override
+                    public void onResponse(
+                            Call&lt;ResponseBody&gt; call,
+                            Response&lt;ResponseBody&gt; response) {
+<span class="nc bnc" id="L35" title="All 2 branches missed.">                        if (!response.isSuccessful()) {</span>
+<span class="nc" id="L36">                            callback.onError(httpException(response));</span>
+<span class="nc" id="L37">                            return;</span>
+                        }
+
+<span class="nc" id="L40">                        ResponseBody body = response.body();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">                        if (body == null) {</span>
+<span class="nc" id="L42">                            callback.onError(new IOException(&quot;Respuesta vacía del servidor&quot;));</span>
+<span class="nc" id="L43">                            return;</span>
+                        }
+
+                        try {
+<span class="nc" id="L47">                            callback.onSuccess(fromJson(new JSONObject(body.string())));</span>
+<span class="nc" id="L48">                        } catch (Exception exception) {</span>
+<span class="nc" id="L49">                            callback.onError(exception);</span>
+<span class="nc" id="L50">                        }</span>
+<span class="nc" id="L51">                    }</span>
+
+                    @Override
+                    public void onFailure(Call&lt;ResponseBody&gt; call, Throwable throwable) {
+<span class="nc" id="L55">                        callback.onError(asException(throwable));</span>
+<span class="nc" id="L56">                    }</span>
+                });
+<span class="nc" id="L58">    }</span>
+
+    private static CampaignApiRepository.HttpException httpException(
+            Response&lt;?&gt; response) {
+<span class="nc" id="L62">        String body = &quot;&quot;;</span>
+<span class="nc" id="L63">        ResponseBody errorBody = response.errorBody();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (errorBody != null) {</span>
+            try {
+<span class="nc" id="L66">                body = errorBody.string();</span>
+<span class="nc" id="L67">            } catch (IOException ignored) {</span>
+                // Keep the status code when the error body cannot be read.
+<span class="nc" id="L69">            }</span>
+        }
+<span class="nc" id="L71">        return new CampaignApiRepository.HttpException(response.code(), body);</span>
+    }
+
+    private static Exception asException(Throwable throwable) {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        return throwable instanceof Exception</span>
+<span class="nc" id="L76">                ? (Exception) throwable</span>
+<span class="nc" id="L77">                : new IOException(throwable);</span>
+    }
+
+    private static AdminDashboardData fromJson(JSONObject json) {
+<span class="nc" id="L81">        return new AdminDashboardData(</span>
+<span class="nc" id="L82">                json.optInt(&quot;total_campanias&quot;),</span>
+<span class="nc" id="L83">                json.optInt(&quot;total_inscripciones&quot;),</span>
+<span class="nc" id="L84">                json.optInt(&quot;total_donantes&quot;),</span>
+<span class="nc" id="L85">                parseMonthlySeries(json.optJSONArray(&quot;donantes_por_mes&quot;)),</span>
+<span class="nc" id="L86">                parseMonthlySeries(json.optJSONArray(&quot;inscripciones_por_mes&quot;)),</span>
+<span class="nc" id="L87">                parseCampaignStatuses(json.optJSONArray(&quot;campanias_por_estado&quot;)),</span>
+<span class="nc" id="L88">                parseCampaigns(json.optJSONArray(&quot;campanias_recientes&quot;)));</span>
+    }
+
+    private static List&lt;DashboardMonthlyDonors&gt; parseMonthlySeries(JSONArray jsonArray) {
+<span class="nc" id="L92">        List&lt;DashboardMonthlyDonors&gt; series = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (jsonArray == null) {</span>
+<span class="nc" id="L94">            return series;</span>
+        }
+
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        for (int index = 0; index &lt; jsonArray.length(); index++) {</span>
+<span class="nc" id="L98">            JSONObject item = jsonArray.optJSONObject(index);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (item != null) {</span>
+<span class="nc" id="L100">                series.add(new DashboardMonthlyDonors(</span>
+<span class="nc" id="L101">                        item.optInt(&quot;anio&quot;),</span>
+<span class="nc" id="L102">                        item.optInt(&quot;mes&quot;),</span>
+<span class="nc" id="L103">                        item.optInt(&quot;cantidad&quot;)));</span>
+            }
+        }
+<span class="nc" id="L106">        return series;</span>
+    }
+
+    private static List&lt;DashboardCampaignStatus&gt; parseCampaignStatuses(JSONArray jsonArray) {
+<span class="nc" id="L110">        List&lt;DashboardCampaignStatus&gt; statuses = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (jsonArray == null) {</span>
+<span class="nc" id="L112">            return statuses;</span>
+        }
+
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        for (int index = 0; index &lt; jsonArray.length(); index++) {</span>
+<span class="nc" id="L116">            JSONObject item = jsonArray.optJSONObject(index);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            if (item != null) {</span>
+<span class="nc" id="L118">                statuses.add(new DashboardCampaignStatus(</span>
+<span class="nc" id="L119">                        normalizeStatus(item.optString(&quot;estado&quot;, &quot;&quot;)),</span>
+<span class="nc" id="L120">                        item.optInt(&quot;cantidad&quot;)));</span>
+            }
+        }
+<span class="nc" id="L123">        return statuses;</span>
+    }
+
+    private static List&lt;Campaign&gt; parseCampaigns(JSONArray jsonArray) {
+<span class="nc" id="L127">        List&lt;Campaign&gt; campaigns = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (jsonArray == null) {</span>
+<span class="nc" id="L129">            return campaigns;</span>
+        }
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        for (int index = 0; index &lt; jsonArray.length(); index++) {</span>
+<span class="nc" id="L133">            JSONObject item = jsonArray.optJSONObject(index);</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">            if (item != null) {</span>
+<span class="nc" id="L135">                campaigns.add(CampaignApiRepository.fromJson(item));</span>
+            }
+        }
+<span class="nc" id="L138">        return campaigns;</span>
+    }
+
+    private static String normalizeStatus(String status) {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (&quot;Próximamente&quot;.equalsIgnoreCase(status)</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                || &quot;Proximamente&quot;.equalsIgnoreCase(status)) {</span>
+<span class="nc" id="L144">            return &quot;Proximamente&quot;;</span>
+        }
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (&quot;En curso&quot;.equalsIgnoreCase(status)) {</span>
+<span class="nc" id="L147">            return &quot;Activa&quot;;</span>
+        }
+<span class="nc" id="L149">        return status;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

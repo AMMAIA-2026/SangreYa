@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminCampaignEnrollmentsActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">AdminCampaignEnrollmentsActivity.java</span></div><h1>AdminCampaignEnrollmentsActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.ammaia_ispc.sangreyamobile.model.CampaignEnrollments;
+import com.ammaia_ispc.sangreyamobile.model.EnrollmentUser;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+<span class="nc" id="L31">public class AdminCampaignEnrollmentsActivity extends AppCompatActivity {</span>
+    private Campaign campaign;
+    private LinearLayout usersContainer;
+    private ProgressBar loadingIndicator;
+    private ScrollView usersScroll;
+    private TextView messageView;
+    private TextView emptyView;
+    private TextView campaignView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L42">        super.onCreate(savedInstanceState);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (!SessionManager.requireAdmin(this)) {</span>
+<span class="nc" id="L44">            return;</span>
+        }
+
+<span class="nc" id="L47">        campaign = (Campaign) getIntent().getSerializableExtra(ExtraKeys.EXTRA_CAMPAIGN);</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (campaign == null) {</span>
+<span class="nc" id="L49">            finish();</span>
+<span class="nc" id="L50">            return;</span>
+        }
+
+<span class="nc" id="L53">        UiHelper.configureSystemBars(this);</span>
+<span class="nc" id="L54">        setContentView(R.layout.activity_admin_campaign_enrollments);</span>
+<span class="nc" id="L55">        bindViews();</span>
+<span class="nc" id="L56">        configureNavigation();</span>
+<span class="nc" id="L57">        configureBottomNavigation();</span>
+<span class="nc" id="L58">        showCampaign();</span>
+<span class="nc" id="L59">    }</span>
+
+    @Override
+    protected void onResume() {
+<span class="nc" id="L63">        super.onResume();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (usersContainer != null) {</span>
+<span class="nc" id="L65">            loadUsers();</span>
+        }
+<span class="nc" id="L67">    }</span>
+
+    private void bindViews() {
+<span class="nc" id="L70">        usersContainer = findViewById(R.id.admin_enrollments_container);</span>
+<span class="nc" id="L71">        loadingIndicator = findViewById(R.id.admin_enrollments_loading);</span>
+<span class="nc" id="L72">        usersScroll = findViewById(R.id.admin_enrollments_scroll);</span>
+<span class="nc" id="L73">        messageView = findViewById(R.id.admin_enrollments_message);</span>
+<span class="nc" id="L74">        emptyView = findViewById(R.id.admin_enrollments_empty);</span>
+<span class="nc" id="L75">        campaignView = findViewById(R.id.admin_enrollments_campaign);</span>
+<span class="nc" id="L76">    }</span>
+
+    private void configureNavigation() {
+<span class="nc" id="L79">        DrawerLayout drawerLayout = findViewById(R.id.admin_enrollments_drawer);</span>
+<span class="nc" id="L80">        NavigationView navigationView = findViewById(R.id.admin_enrollments_navigation_view);</span>
+<span class="nc" id="L81">        NavigationDrawerHelper.configure(</span>
+                this,
+                drawerLayout,
+                navigationView);
+<span class="nc" id="L85">    }</span>
+
+    private void configureBottomNavigation() {
+<span class="nc" id="L88">        findViewById(R.id.admin_enrollments_nav_dashboard)</span>
+<span class="nc" id="L89">                .setOnClickListener(view -&gt; startActivity(</span>
+                        new Intent(this, AdminDashboardActivity.class)));
+<span class="nc" id="L91">        findViewById(R.id.admin_enrollments_nav_campaigns)</span>
+<span class="nc" id="L92">                .setOnClickListener(view -&gt; startActivity(</span>
+                        new Intent(this, AdminCampaignListActivity.class)));
+<span class="nc" id="L94">        findViewById(R.id.admin_enrollments_nav_users)</span>
+<span class="nc" id="L95">                .setOnClickListener(view -&gt; startActivity(</span>
+                        new Intent(this, UsersActivity.class)));
+<span class="nc" id="L97">        findViewById(R.id.admin_enrollments_nav_messages)</span>
+<span class="nc" id="L98">                .setOnClickListener(view -&gt; startActivity(</span>
+                        new Intent(this, AdminContactListActivity.class)));
+<span class="nc" id="L100">    }</span>
+
+    private void showCampaign() {
+<span class="nc" id="L103">        campaignView.setText(getString(</span>
+                R.string.admin_enrollments_campaign_name,
+                campaign.title));
+<span class="nc" id="L106">    }</span>
+
+    private void loadUsers() {
+<span class="nc" id="L109">        UiHelper.clearMessage(messageView);</span>
+<span class="nc" id="L110">        UiHelper.setLoading(loadingIndicator, usersScroll, true);</span>
+<span class="nc" id="L111">        CampaignApiRepository.getCampaignEnrollments(</span>
+                this,
+                campaign.id,
+<span class="nc" id="L114">                new CampaignApiRepository.Callback&lt;CampaignEnrollments&gt;() {</span>
+                    @Override
+                    public void onSuccess(CampaignEnrollments value) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                        if (value.campaign != null) {</span>
+<span class="nc" id="L118">                            campaign = value.campaign;</span>
+<span class="nc" id="L119">                            showCampaign();</span>
+                        }
+<span class="nc" id="L121">                        showUsers(value.users);</span>
+<span class="nc" id="L122">                        UiHelper.setLoading(loadingIndicator, usersScroll, false);</span>
+<span class="nc" id="L123">                    }</span>
+
+                    @Override
+                    public void onError(Exception exception) {
+<span class="nc" id="L127">                        UiHelper.setLoading(loadingIndicator, usersScroll, false);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                        if (exception instanceof CampaignApiRepository.HttpException</span>
+                                &amp;&amp; ((CampaignApiRepository.HttpException) exception)
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                                .getStatusCode() == 401) {</span>
+<span class="nc" id="L131">                            SessionManager.expireSession(AdminCampaignEnrollmentsActivity.this);</span>
+<span class="nc" id="L132">                            return;</span>
+                        }
+<span class="nc bnc" id="L134" title="All 2 branches missed.">                        if (exception instanceof CampaignApiRepository.HttpException</span>
+                                &amp;&amp; ((CampaignApiRepository.HttpException) exception)
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                                .getStatusCode() == 403) {</span>
+<span class="nc" id="L137">                            UiHelper.showMessage(</span>
+<span class="nc" id="L138">                                    messageView,</span>
+                                    R.string.admin_enrollments_unauthorized);
+<span class="nc" id="L140">                            return;</span>
+                        }
+<span class="nc" id="L142">                        UiHelper.showMessage(messageView, R.string.admin_enrollments_error);</span>
+<span class="nc" id="L143">                    }</span>
+                });
+<span class="nc" id="L145">    }</span>
+
+    private void showUsers(List&lt;EnrollmentUser&gt; users) {
+<span class="nc" id="L148">        usersContainer.removeAllViews();</span>
+<span class="nc bnc" id="L149" title="All 4 branches missed.">        boolean empty = users == null || users.isEmpty();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (empty) {</span>
+<span class="nc" id="L152">            return;</span>
+        }
+
+<span class="nc" id="L155">        List&lt;EnrollmentUser&gt; orderedUsers = new ArrayList&lt;&gt;(users);</span>
+<span class="nc" id="L156">        orderedUsers.sort(Comparator</span>
+<span class="nc" id="L157">                .comparing((EnrollmentUser user) -&gt; UiHelper.normalized(user.lastName, Locale.getDefault()))</span>
+<span class="nc" id="L158">                .thenComparing(user -&gt; UiHelper.normalized(user.firstName, Locale.getDefault())));</span>
+
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        for (EnrollmentUser user : orderedUsers) {</span>
+<span class="nc" id="L161">            View row = getLayoutInflater().inflate(</span>
+                    R.layout.item_admin_enrollment_user,
+                    usersContainer,
+                    false);
+<span class="nc" id="L165">            ((TextView) row.findViewById(R.id.admin_enrollment_user_name))</span>
+<span class="nc" id="L166">                    .setText(getString(</span>
+                            R.string.admin_enrollments_user_name,
+                            user.lastName,
+                            user.firstName));
+
+<span class="nc" id="L171">            LinearLayout.LayoutParams rowParams = (LinearLayout.LayoutParams) row.getLayoutParams();</span>
+<span class="nc" id="L172">            rowParams.setMargins(</span>
+                    0,
+                    0,
+                    0,
+<span class="nc" id="L176">                    getResources().getDimensionPixelSize(R.dimen.card_spacing));</span>
+<span class="nc" id="L177">            usersContainer.addView(row, rowParams);</span>
+<span class="nc" id="L178">        }</span>
+<span class="nc" id="L179">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

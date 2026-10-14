@@ -1,4 +1,27 @@
 <resources>
+    <!--AdminDashboard & AdminNavbar-->
+    <string name="admin_role">Admin</string>
+    <string name="dashboard_donors_title">Donantes por mes</string>
+    <string name="dashboard_donors_subtitle">Personas que donaron sangre cada mes</string>
+    <string name="dashboard_donors_total">%1$d donantes</string>
+    <string name="dashboard_no_donors">Todavía no hay donantes registrados.</string>
+    <string name="dashboard_no_enrollments">Todavía no hay inscripciones registradas.</string>
+    <string name="dashboard_campaigns_total">%1$d campañas</string>
+    <string name="dashboard_enrollments_total">%1$d inscripciones</string>
+    <string name="dashboard_enrollments_title">Inscripciones por mes</string>
+    <string name="dashboard_status_title">Campañas por estado</string>
+    <string name="dashboard_status_legend">%1$s    %2$d%%</string>
+    <string name="dashboard_campaigns_label">campañas</string>
+    <string name="dashboard_recent_title">Campañas recientes</string>
+    <string name="dashboard_campaign_registered">%1$d inscriptos</string>
+    <string name="dashboard_token_required">No se pudo verificar tu acceso al panel. Iniciá sesión nuevamente.</string>
+    <string name="dashboard_unauthorized_error">No tenés permisos para consultar la información de administración.</string>
+    <string name="dashboard_load_error">No se pudo cargar el dashboard. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="dashboard_navigation">Dashboard</string>
+    <string name="users_navigation">Usuarios</string>
+    <string name="messages_navigation">Mensajes</string>
+
+    <!--CampaignList-->
     <string name="app_name">SangreYa</string>
     <string name="greeting">Hola, María</string>
     <string name="campaign_subtitle">Elegí una campaña para donar</string>
@@ -8,25 +31,114 @@
     <string name="notifications">Notificaciones</string>
     <string name="open_menu">Abrir menú</string>
     <string name="menu_about_us">Sobre nosotros</string>
+    <string name="menu_video">Video</string>
+    <string name="video_title">¿Por qué donar sangre?</string>
+    <string name="video_loading">Cargando video…</string>
+    <string name="video_play">Reproducir</string>
+    <string name="video_pause">Pausar</string>
+    <string name="video_stop">Detener</string>
+    <string name="video_fullscreen">Pantalla completa</string>
+    <string name="video_exit_fullscreen">Salir de pantalla completa</string>
+    <string name="video_load_error">No se pudo cargar el video. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="video_unavailable">Este video no está disponible para reproducir dentro de la app.</string>
+    <string name="video_retry">Reintentar</string>
     <string name="menu_login">Iniciar sesión</string>
     <string name="menu_register">Registrarse</string>
     <string name="menu_logout">Cerrar sesión</string>
-    <string name="admin_role">admin</string>
-    <string name="dashboard_donors_title">Donantes por mes</string>
-    <string name="dashboard_donors_subtitle">Personas que donaron sangre cada mes</string>
-    <string name="dashboard_donors_total">%1$d donantes</string>
-    <string name="dashboard_status_title">Campañas por estado</string>
-    <string name="dashboard_status_legend">%1$s    %2$d%%</string>
-    <string name="dashboard_campaigns_label">campañas</string>
-    <string name="dashboard_recent_title">Campañas recientes</string>
-    <string name="dashboard_campaign_registered">%1$d inscriptos</string>
-    <string name="dashboard_navigation">Dashboard</string>
-    <string name="users_navigation">Usuarios</string>
-    <string name="messages_navigation">Mensajes</string>
     <string name="filter_all">Todas</string>
     <string name="filter_active">Activas</string>
     <string name="filter_upcoming">Próximas</string>
+    <string name="filter_selected">Seleccionado</string>
+    <string name="filter_not_selected">No seleccionado</string>
+    <string name="filter_applied">Filtro aplicado: %1$s</string>
     <string name="registered_count">%1$d inscriptos</string>
+    <string name="maximum_capacity">Cupo máximo: %1$d</string>
+    <string name="unlimited_capacity">Cupo máximo: Sin límite</string>
+    <string name="campaigns_navigation">Campañas</string>
+    <string name="enrollments_navigation">Inscripciones</string>
+    <string name="profile_navigation">Perfil</string>
+    <string name="show_password">Mostrar contraseña</string>
+    <string name="hide_password">Ocultar contraseña</string>
+    <string name="show_confirm_password">Mostrar confirmación de contraseña</string>
+    <string name="hide_confirm_password">Ocultar confirmación de contraseña</string>
+    <string name="campaign_location_description">Ubicación de la campaña</string>
+    <string name="campaign_date_description">Fecha de la campaña</string>
+    <string name="campaign_loading">Cargando campañas</string>
+    <string name="campaigns_load_error">No se pudieron cargar las campañas. Revisá tu conexión e intentá nuevamente.</string>
+
+    <!--Enrollments-->
+    <string name="enrollments_title">Mis inscripciones</string>
+    <string name="enrollments_subtitle">Consultá las campañas en las que participás o participaste</string>
+    <string name="enrollments_current_filter">Actuales y próximas</string>
+    <string name="enrollments_history_filter">Historial</string>
+    <string name="enrollment_badge">Inscripto</string>
+    <string name="enrollments_loading">Cargando tus inscripciones</string>
+    <string name="enrollments_empty_current">No tenés inscripciones actuales o próximas.</string>
+    <string name="enrollments_empty_history">Todavía no tenés inscripciones históricas.</string>
+    <string name="enrollments_load_error">No se pudieron cargar tus inscripciones. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="cancel_enrollment">Cancelar inscripción</string>
+    <string name="cancel_enrollment_title">¿Cancelar inscripción?</string>
+    <string name="cancel_enrollment_message">Vas a cancelar tu inscripción a %1$s. Podrás volver a inscribirte mientras la campaña siga disponible y tenga cupo.</string>
+    <string name="cancel_enrollment_confirm">Cancelar inscripción</string>
+    <string name="cancel_enrollment_keep">Mantener inscripción</string>
+    <string name="cancel_enrollment_success">Inscripción cancelada. Podés volver a inscribirte si la campaña sigue disponible y tiene cupo.</string>
+    <string name="cancel_enrollment_finished">La campaña ya finalizó y no se puede cancelar esta inscripción.</string>
+    <string name="cancel_enrollment_error">No se pudo cancelar la inscripción. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="admin_view_enrollments">Ver inscripciones</string>
+    <string name="admin_enrollments_title">Inscripciones</string>
+    <string name="admin_enrollments_subtitle">Personas inscriptas en esta campaña</string>
+    <string name="admin_enrollments_campaign_name">Campaña: %1$s</string>
+    <string name="admin_enrollments_user_name">%1$s, %2$s</string>
+    <string name="admin_enrollments_loading">Cargando inscriptos</string>
+    <string name="admin_enrollments_empty">No hay usuarios inscriptos en esta campaña.</string>
+    <string name="admin_enrollments_error">No se pudieron cargar los inscriptos. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="admin_enrollments_unauthorized">No tenés permisos para consultar las inscripciones.</string>
+    <string name="admin_campaigns_session_error">No se pudo verificar tu acceso. Iniciá sesión nuevamente.</string>
+    <string name="admin_campaigns_unauthorized">No tenés permisos para consultar las campañas.</string>
+
+    <!--ProfileActivity-->
+    <string name="profile_title">Mi perfil</string>
+    <string name="profile_subtitle">Mantené actualizados tus datos personales</string>
+    <string name="profile_loading">Cargando perfil</string>
+    <string name="profile_username_label">Nombre de usuario</string>
+    <string name="profile_email_label">Correo electrónico</string>
+    <string name="profile_dni_label">DNI</string>
+    <string name="profile_name_label">Nombre</string>
+    <string name="profile_last_name_label">Apellido</string>
+    <string name="profile_birth_date_label">Fecha de nacimiento</string>
+    <string name="profile_birth_date_hint">DD/MM/AAAA</string>
+    <string name="profile_save_button">Guardar cambios</string>
+    <string name="profile_updated_message">Perfil actualizado correctamente.</string>
+    <string name="profile_load_error">No se pudo cargar tu perfil. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="profile_update_error">No se pudieron guardar los cambios. Revisá los datos e intentá nuevamente.</string>
+    <string name="profile_session_error">Tu sesión no está disponible. Iniciá sesión nuevamente.</string>
+    <string name="profile_unauthorized_error">No tenés permisos para modificar este perfil.</string>
+    <string name="profile_not_found_error">No encontramos tu perfil.</string>
+    <string name="profile_required_field">Completá este campo.</string>
+    <string name="profile_username_invalid">Usá hasta 150 caracteres válidos para el nombre de usuario.</string>
+    <string name="profile_username_taken">Ese nombre de usuario ya está en uso.</string>
+    <string name="profile_email_invalid">Ingresá un correo electrónico válido.</string>
+    <string name="profile_email_taken">Ese correo electrónico ya está registrado.</string>
+    <string name="profile_dni_invalid">El DNI debe tener 7 u 8 dígitos.</string>
+    <string name="profile_dni_taken">Ese DNI ya está registrado.</string>
+    <string name="profile_name_invalid">Usá sólo letras, tildes y espacios, con hasta 25 caracteres.</string>
+    <string name="profile_birth_date_invalid">Ingresá una fecha válida con formato DD/MM/AAAA.</string>
+    <string name="profile_generic_validation_error">Revisá los datos ingresados.</string>
+    <string name="profile_age_warning_title">Edad fuera del rango de donación</string>
+    <string name="profile_age_warning_message">La fecha elegida te deja fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrás inscribirte en nuevas campañas. Las inscripciones que ya tenés no se cancelan automáticamente. ¿Querés guardar el cambio?</string>
+    <string name="profile_age_warning_cancel">Cancelar</string>
+    <string name="profile_age_warning_confirm">Guardar de todos modos</string>
+    <string name="admin_edit_user_title">Editar usuario</string>
+    <string name="admin_edit_user_subtitle">Actualizá los datos personales del usuario</string>
+    <string name="admin_user_updated_message">Usuario actualizado correctamente.</string>
+    <string name="admin_user_load_error">No se pudo cargar el usuario. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="admin_user_update_error">No se pudieron guardar los cambios del usuario. Revisá los datos e intentá nuevamente.</string>
+    <string name="admin_user_unauthorized_error">No tenés permisos para modificar este usuario.</string>
+    <string name="admin_user_not_found_error">No encontramos el usuario seleccionado.</string>
+    <string name="admin_user_age_warning_title">Edad fuera del rango de donación</string>
+    <string name="admin_user_age_warning_message">La fecha elegida deja al usuario fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrá inscribirse en nuevas campañas. ¿Querés guardar el cambio?</string>
+
+    <!--CampaignDetail-->
     <string name="registered_detail">%1$d personas ya se inscribieron</string>
     <string name="capacity">Cupo %1$d</string>
     <string name="description_title">Descripción</string>
@@ -38,37 +150,45 @@
     <string name="coordinates">Coordenadas: %1$s, %2$s</string>
     <string name="back_to_campaigns">Volver a campañas</string>
     <string name="enroll">Inscribirme</string>
-    <string name="offline_enrollment_message">La inscripción estará disponible cuando conectemos el backend.</string>
+    <string name="enrollment_loading">Inscribiendo...</string>
+    <string name="enrollment_success">Inscripción confirmada. Ya hay %1$d personas inscriptas.</string>
+    <string name="enrollment_age_error">Para inscribirte tenés que tener entre 18 y 64 años.</string>
+    <string name="enrollment_duplicate_error">Ya estás inscripto en esta campaña.</string>
+    <string name="enrollment_capacity_error">La campaña ya no tiene cupos disponibles.</string>
+    <string name="enrollment_forbidden_error">No tenés permisos para inscribirte en esta campaña.</string>
+    <string name="enrollment_finished_error">La campaña ya finalizó y no acepta inscripciones.</string>
+    <string name="enrollment_network_error">No se pudo completar la inscripción. Revisá tu conexión e intentá nuevamente.</string>
     <string name="login_required_enrollment">Iniciá sesión para inscribirte a la donación.</string>
-    <string name="campaigns_navigation">Campañas</string>
-    <string name="enrollments_navigation">Inscripciones</string>
-    <string name="profile_navigation">Perfil</string>
-    <string name="campaign_location_description">Ubicación de la campaña</string>
-    <string name="campaign_date_description">Fecha de la campaña</string>
+    <string name="campaign_not_found_error">La campaña solicitada no existe o ya no está disponible.</string>
+    <string name="campaign_unauthorized_error">No tenés permisos para consultar esta campaña.</string>
+    <string name="campaign_network_error">No se pudo cargar la campaña. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="campaign_detail_error">No se pudo cargar el detalle de la campaña.</string>
 
     <!-- Login -->
-    <string name="titulo_login">iniciar sesion</string>
-    <string name="subtitulo_login">ingresa a tu cuenta</string>
+    <string name="titulo_login">Iniciar sesión</string>
+    <string name="subtitulo_login">Ingresá a tu cuenta</string>
     <string name="hint_email">nombre@correo.com</string>
-    <string name="hint_password">********</string>
-    <string name="btn_ingresar">iniciar sesion</string>
-    <string name="invalid_admin_credentials">Credenciales de administrador incorrectas.</string>
-    <string name="texto_no_tenes_cuenta">¿no tenes cuenta? </string>
-    <string name="link_registrate">registrate</string>
+    <string name="hint_password">Tu contraseña</string>
+    <string name="btn_ingresar">Iniciar sesión</string>
+    <string name="ingresando">Ingresando...</string>
+    <string name="error_connection">No se pudo conectar. Intentá nuevamente.</string>
+    <string name="error_login_generico">No pudimos iniciar sesión. Intentá nuevamente.</string>
+    <string name="session_expired_message">Tu sesión expiró. Iniciá sesión nuevamente.</string>
+    <string name="texto_no_tenes_cuenta">¿No tenés cuenta?</string>
+    <string name="link_registrate">Registrate</string>
 
     <!-- Registro -->
-    <string name="RegisterTitle">crear cuenta</string>
-    <string name="hint_nombre">ana gomez</string>
+    <string name="RegisterTitle">Crear cuenta</string>
+    <string name="hint_nombre">Ana Gómez</string>
     <string name="hint_grupo">Seleccionar</string>
-    <string name="btn_crear_cuenta">crear cuenta</string>
-    <string name="texto_ya_tenes_cuenta">¿ya tenes cuenta? </string>
-    <string name="link_iniciar_sesion">iniciar sesion</string>
+    <string name="btn_crear_cuenta">Crear cuenta</string>
+    <string name="texto_ya_tenes_cuenta">¿Ya tenés cuenta?</string>
+    <string name="link_iniciar_sesion">Iniciar sesión</string>
 
     <!-- Labels compartidos -->
-    <string name="label_nombre_completo">nombre completo</string>
-    <string name="label_email">email</string>
-    <string name="label_password">contrasena</string>
-    <string name="label_grupo">grupo sanguineo</string>
+    <string name="label_nombre_completo">Nombre completo</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Contraseña</string>
 
     <string name="back">Volver</string>
 
@@ -83,15 +203,17 @@
 
     <string name="reset_password_title">Nueva contraseña</string>
     <string name="reset_password_subtitle">Elegí una nueva contraseña para tu cuenta</string>
-    <string name="identity_verified">Identidad verificada</string>
     <string name="new_password_label">Nueva contraseña</string>
-    <string name="password_policy_hint">Mínimo 8 caracteres, con una mayúscula y un número</string>
+    <string name="identity_verified">Identidad verificada</string>
+    <string name="password_policy_hint">Mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo</string>
     <string name="confirm_password_label">Confirmar contraseña</string>
     <string name="save_password_button">Guardar contraseña</string>
 
     <string name="error_invalid_email">Ingresá un email válido</string>
+    <string name="error_required_field">Completá este campo</string>
+    <string name="error_terms_required">Tenés que aceptar los Términos y Condiciones para continuar</string>
     <string name="error_invalid_dni">Ingresá un DNI válido (7 u 8 dígitos)</string>
-    <string name="error_weak_password">Mínimo 8 caracteres, con una mayúscula y un número</string>
+    <string name="error_weak_password">Mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
 
     <string name="link_olvidaste_contrasena">¿Olvidaste tu contraseña?</string>
@@ -102,17 +224,15 @@
     <string name="label_campaign_name">Nombre de la campaña</string>
     <string name="hint_campaign_name">Ej: Colecta Solidaria Centro</string>
     <string name="label_health_center">Centro de salud</string>
+    <string name="health_center_load_error_network">No se pudo conectar con el servidor. Revisá tu conexión e intentá de nuevo.</string>
+    <string name="health_center_load_error_server">No se pudieron cargar los centros de salud. Intentá más tarde.</string>
     <string name="health_center_none_option">Sin centro asignado</string>
     <string name="label_address">Dirección</string>
     <string name="hint_address">Calle y número</string>
     <string name="label_start_date">Fecha de inicio</string>
     <string name="label_end_date">Fecha de fin</string>
     <string name="hint_date">DD/MM/AAAA</string>
-    <string name="label_start_time">Desde</string>
-    <string name="label_end_time">Hasta</string>
-    <string name="hint_start_time">09:00</string>
-    <string name="hint_end_time">17:00</string>
-    <string name="label_max_donors">Cupo máximo de donantes</string>
+    <string name="label_max_donors">Cupo máximo de donantes (opcional)</string>
     <string name="hint_max_donors">Ej: 60</string>
     <string name="label_description">Descripción</string>
     <string name="hint_campaign_description">Contá de qué se trata la campaña…</string>
@@ -121,14 +241,21 @@
     <string name="campaign_published_message">Campaña publicada</string>
     <string name="campaign_draft_saved_message">Guardado como borrador</string>
     <string name="campaign_required_fields_message">Completá los campos obligatorios</string>
+    <string name="campaign_date_invalid">Ingresá una fecha válida con formato DD/MM/AAAA.</string>
 
     <!-- Administración de campañas -->
     <string name="admin_campaigns_title">Campañas</string>
     <string name="admin_campaigns_subtitle">Gestioná todas las campañas</string>
     <string name="search_campaign_hint">Buscar campaña…</string>
     <string name="search_campaign_description">Buscar campaña</string>
+    <string name="admin_campaigns_no_matches">No se hallaron coincidencias</string>
     <string name="add_campaign_description">Agregar nueva campaña</string>
+    <string name="campaign_create_network_error">No se pudo publicar la campaña. Revisá tu conexión e intentá de nuevo.</string>
+    <string name="campaign_create_unauthorized_error">No tenés permisos para crear campañas.</string>
+    <string name="campaign_create_server_error">No se pudo publicar la campaña. Intentá más tarde.</string>
     <string name="edit_campaign_description">Editar campaña</string>
+    <string name="edit_campaign_named_description">Editar campaña %1$s</string>
+    <string name="delete_campaign_named_description">Eliminar campaña %1$s</string>
     <string name="filter_finished">Finalizadas</string>
     <string name="capacity_occupied">%1$d de %2$d cupos ocupados</string>
     <string name="campaign_updated_message">Campaña actualizada</string>
@@ -146,6 +273,7 @@
     <!-- Contacto -->
     <string name="menu_contact">Contacto</string>
     <string name="contact_title">Contacto</string>
+    <string name="contact_detail_title">Detalle del mensaje</string>
     <string name="contact_subtitle">¿Tenés dudas o sugerencias? Escribinos</string>
     <string name="label_full_name">Nombre completo</string>
     <string name="hint_full_name">Tu nombre y apellido</string>
@@ -156,6 +284,10 @@
     <string name="contact_response_note">Te responderemos a la brevedad a tu correo.</string>
     <string name="error_required_fields">Completá todos los campos</string>
     <string name="contact_sent_message">¡Mensaje enviado!</string>
+    <string name="contact_send_error_server">No se pudo enviar el mensaje. Inténtalo nuevamente.</string>
+    <string name="contact_send_error_network">No se pudo conectar con el servidor. Verifica tu conexión.</string>
+    <string name="register_error_server">Ocurrió un error en el servidor.</string>
+    <string name="register_error_network">No se pudo conectar con el servidor. Revisá tu conexión e intentá nuevamente.</string>
 
     <!-- Administración de mensajes/contacto -->
     <string name="manage_contacts_title">Mensajes de contacto</string>
@@ -165,5 +297,10 @@
     <string name="filter_answered">Respondidos</string>
     <string name="error_unauthorized_access">Acceso no autorizado</string>
     <string name="splash_tagline">Cada gota cuenta</string>
-    <string name="splash_checking_session">Verificando tu sesión...</string>
+    <string name="splash_checking_session">Hola, %1$s. Estamos cargando tu sesión</string>
+    <string name="splash_guest_status">Ingresando a SangreYa como Invitado.</string>
+    <string name="admin_contacts_empty">No hay mensajes para mostrar.</string>
+    <string name="campaigns_empty">No hay campañas para mostrar.</string>
+    <string name="filter_applied_with_message">Filtro aplicado: %1$s. %2$s</string>
+
 </resources>

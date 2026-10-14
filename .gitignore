@@ -21,6 +21,23 @@ captures/
 !.env.example
 !.env.template
 secrets.properties
+# Only credential-free Postman templates belong in the repository.
+*.postman_environment.json
+!*.template.postman_environment.json
+# Private protections come after template exceptions and always take priority.
+*.private.postman_environment.json
+*.private.json
+*.private.*
+# Local report sanitation helper and Python caches
+/tests/Sanitize-Evidence.py
+**/__pycache__/
+*.py[cod]
+node_modules/
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
 keystore.properties
 *.jks
 *.keystore
@@ -29,11 +46,16 @@ keystore.properties
 *.pem
 *.key
 
-# Generated Android packages and reports
+# Generated Android packages
 *.apk
 *.aab
 *.aar
-reports/
+*.class
+
+# Raw coverage and generated copies; public HTML/XML/JSON evidence is kept.
+*.exec
+*.ec
+*.runtime.postman_collection.json
 
 # Other IDEs and editor temporary files
 .vscode/
@@ -41,6 +63,10 @@ reports/
 *.swp
 *.swo
 *~
+*.bak
+*.tmp
+*.orig
+*.rej
 
 # Operating system files
 .DS_Store
@@ -49,3 +75,6 @@ Thumbs.db
 # Logs and crash dumps
 *.log
 *.hprof
+
+# Do not ignore reportes/ or reports/: sanitized reports are delivery evidence.
+# Do not add blanket exceptions for their contents: secrets/logs stay ignored.

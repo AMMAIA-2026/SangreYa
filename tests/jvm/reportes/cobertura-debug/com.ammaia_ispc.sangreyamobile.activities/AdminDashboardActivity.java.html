@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminDashboardActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">AdminDashboardActivity.java</span></div><h1>AdminDashboardActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
+import com.ammaia_ispc.sangreyamobile.data.DashboardApiRepository;
+import com.ammaia_ispc.sangreyamobile.model.AdminDashboardData;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
+import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.DashboardChartView;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.google.android.material.navigation.NavigationView;
+
+import android.widget.Toast;
+
+<span class="nc" id="L30">public class AdminDashboardActivity extends AppCompatActivity {</span>
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L33">        super.onCreate(savedInstanceState);</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (!SessionManager.requireAdmin(this)) {</span>
+<span class="nc" id="L35">            return;</span>
+        }
+<span class="nc" id="L37">        UiHelper.configureSystemBars(this);</span>
+<span class="nc" id="L38">        setContentView(R.layout.activity_admin_dashboard);</span>
+<span class="nc" id="L39">        bindViews();</span>
+<span class="nc" id="L40">    }</span>
+
+    private void bindViews() {
+<span class="nc" id="L43">        DrawerLayout drawerLayout = findViewById(R.id.admin_dashboard_drawer);</span>
+<span class="nc" id="L44">        NavigationView navigationView = findViewById(R.id.admin_dashboard_navigation_view);</span>
+<span class="nc" id="L45">        NavigationDrawerHelper.configure(</span>
+                this,
+                drawerLayout,
+                navigationView);
+<span class="nc" id="L49">        findViewById(R.id.admin_campaigns_navigation).setOnClickListener(view -&gt; openAllCampaigns());</span>
+
+<span class="nc" id="L51">        findViewById(R.id.admin_users_navigation).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L52">            Intent intent = new Intent(this, UsersActivity.class);</span>
+<span class="nc" id="L53">            startActivity(intent);</span>
+<span class="nc" id="L54">        });</span>
+
+<span class="nc" id="L56">        findViewById(R.id.admin_messages_navigation).setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L57">            Intent intent = new Intent(this, AdminContactListActivity.class);</span>
+<span class="nc" id="L58">            startActivity(intent);</span>
+<span class="nc" id="L59">        });</span>
+
+<span class="nc" id="L61">        DashboardApiRepository.getDashboard(</span>
+                this,
+<span class="nc" id="L63">                new CampaignApiRepository.Callback&lt;AdminDashboardData&gt;() {</span>
+                    @Override
+                    public void onSuccess(AdminDashboardData dashboard) {
+<span class="nc" id="L66">                        bindDashboardMetrics(dashboard);</span>
+<span class="nc" id="L67">                        bindStatusChart(dashboard);</span>
+<span class="nc" id="L68">                        bindRecentCampaigns(dashboard);</span>
+<span class="nc" id="L69">                    }</span>
+
+                    @Override
+                    public void onError(Exception exception) {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                        String message = CampaignApiRepository.isUnauthorized(exception)</span>
+<span class="nc" id="L74">                                ? getString(R.string.dashboard_unauthorized_error)</span>
+<span class="nc" id="L75">                                : getString(R.string.dashboard_load_error);</span>
+<span class="nc" id="L76">                        UiHelper.showToast(</span>
+                                AdminDashboardActivity.this,
+                                message,
+                                Toast.LENGTH_LONG);
+<span class="nc" id="L80">                    }</span>
+                });
+<span class="nc" id="L82">    }</span>
+
+    private void bindDashboardMetrics(AdminDashboardData dashboard) {
+<span class="nc" id="L85">        ((TextView) findViewById(R.id.dashboard_campaigns_total))</span>
+<span class="nc" id="L86">                .setText(getString(R.string.dashboard_campaigns_total, dashboard.totalCampaigns));</span>
+<span class="nc" id="L87">        ((TextView) findViewById(R.id.dashboard_enrollments_total))</span>
+<span class="nc" id="L88">                .setText(getString(R.string.dashboard_enrollments_total, dashboard.totalEnrollments));</span>
+<span class="nc" id="L89">        ((TextView) findViewById(R.id.dashboard_donors_total))</span>
+<span class="nc" id="L90">                .setText(getString(R.string.dashboard_donors_total, dashboard.totalDonors));</span>
+
+<span class="nc" id="L92">        DashboardChartView donorsChart = findViewById(R.id.dashboard_donors_chart);</span>
+<span class="nc" id="L93">        donorsChart.setMonthlyDonors(dashboard.monthlyDonors);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        donorsChart.setEmptyMessage(dashboard.monthlyDonors.isEmpty()</span>
+<span class="nc" id="L95">                ? getString(R.string.dashboard_no_donors)</span>
+<span class="nc" id="L96">                : &quot;&quot;);</span>
+
+<span class="nc" id="L98">        DashboardChartView enrollmentsChart = findViewById(R.id.dashboard_enrollments_chart);</span>
+<span class="nc" id="L99">        enrollmentsChart.setMonthlyDonors(dashboard.monthlyEnrollments);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        enrollmentsChart.setEmptyMessage(dashboard.monthlyEnrollments.isEmpty()</span>
+<span class="nc" id="L101">                ? getString(R.string.dashboard_no_enrollments)</span>
+<span class="nc" id="L102">                : &quot;&quot;);</span>
+<span class="nc" id="L103">    }</span>
+
+    private void bindStatusChart(AdminDashboardData dashboard) {
+<span class="nc" id="L106">        DashboardChartView chart = findViewById(R.id.dashboard_status_chart);</span>
+<span class="nc" id="L107">        chart.setCampaignStatuses(dashboard.campaignsByStatus);</span>
+
+<span class="nc" id="L109">        LinearLayout legend = findViewById(R.id.dashboard_status_legend);</span>
+<span class="nc" id="L110">        legend.removeAllViews();</span>
+<span class="nc" id="L111">        int total = AdminDashboardHelper.totalCampaigns(dashboard.campaignsByStatus);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        for (DashboardCampaignStatus status : dashboard.campaignsByStatus) {</span>
+<span class="nc" id="L113">            TextView item = new TextView(this);</span>
+<span class="nc" id="L114">            item.setText(getString(</span>
+                    R.string.dashboard_status_legend,
+                    status.status,
+<span class="nc" id="L117">                    AdminDashboardHelper.percentage(status.count, total)));</span>
+<span class="nc" id="L118">            item.setTextColor(ContextCompat.getColor(</span>
+                    this,
+<span class="nc" id="L120">                    CampaignHelper.statusColor(status.status)));</span>
+<span class="nc" id="L121">            item.setTextSize(10);</span>
+<span class="nc" id="L122">            item.setTypeface(item.getTypeface(), android.graphics.Typeface.BOLD);</span>
+<span class="nc" id="L123">            item.setPadding(0, 8, 0, 8);</span>
+<span class="nc" id="L124">            legend.addView(item);</span>
+<span class="nc" id="L125">        }</span>
+<span class="nc" id="L126">    }</span>
+
+    private void bindRecentCampaigns(AdminDashboardData dashboard) {
+<span class="nc" id="L129">        LinearLayout container = findViewById(R.id.dashboard_recent_container);</span>
+<span class="nc" id="L130">        container.removeAllViews();</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        for (Campaign campaign : AdminDashboardHelper.orderRecentCampaigns(dashboard.recentCampaigns)) {</span>
+<span class="nc" id="L132">            View item = getLayoutInflater().inflate(</span>
+                    R.layout.item_admin_recent_campaign,
+                    container,
+                    false);
+<span class="nc" id="L136">            ((TextView) item.findViewById(R.id.admin_campaign_title)).setText(campaign.title);</span>
+<span class="nc" id="L137">            ((TextView) item.findViewById(R.id.admin_campaign_location)).setText(campaign.location);</span>
+<span class="nc" id="L138">            ((TextView) item.findViewById(R.id.admin_campaign_dates)).setText(</span>
+<span class="nc" id="L139">                    CampaignHelper.formatShortDate(campaign.startDate, campaign.endDate));</span>
+<span class="nc" id="L140">            ((TextView) item.findViewById(R.id.admin_campaign_registered)).setText(</span>
+<span class="nc" id="L141">                    getString(R.string.dashboard_campaign_registered, campaign.totalRegistered));</span>
+
+<span class="nc" id="L143">            TextView status = item.findViewById(R.id.admin_campaign_status);</span>
+<span class="nc" id="L144">            status.setText(CampaignHelper.statusText(campaign.calculatedStatus));</span>
+<span class="nc" id="L145">            status.setTextColor(ContextCompat.getColor(</span>
+                    this,
+<span class="nc" id="L147">                    CampaignHelper.statusColor(campaign.calculatedStatus)));</span>
+<span class="nc" id="L148">            status.setBackgroundResource(CampaignHelper.statusBackground(campaign.calculatedStatus));</span>
+
+<span class="nc" id="L150">            item.setOnClickListener(view -&gt; openCampaign(campaign));</span>
+<span class="nc" id="L151">            container.addView(item);</span>
+<span class="nc" id="L152">        }</span>
+<span class="nc" id="L153">    }</span>
+
+    private void openCampaign(Campaign campaign) {
+<span class="nc" id="L156">        Intent intent = new Intent(this, CampaignDetailActivity.class);</span>
+<span class="nc" id="L157">        intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);</span>
+<span class="nc" id="L158">        intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);</span>
+<span class="nc" id="L159">        startActivity(intent);</span>
+<span class="nc" id="L160">    }</span>
+
+    private void openAllCampaigns() {
+<span class="nc" id="L163">        Intent intent = new Intent(this, AdminCampaignListActivity.class);</span>
+<span class="nc" id="L164">        startActivity(intent);</span>
+<span class="nc" id="L165">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

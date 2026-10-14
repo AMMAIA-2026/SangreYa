@@ -1,5 +1,40 @@
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
 plugins {
     id 'com.android.application'
+    id 'jacoco'
+}
+
+// Release credentials are supplied locally or by GitHub Actions, never committed.
+def releaseSigning = [
+        storeFile: System.getenv('SANGREYA_KEYSTORE_PATH'),
+        storePassword: System.getenv('SANGREYA_KEYSTORE_PASSWORD'),
+        keyAlias: System.getenv('SANGREYA_KEY_ALIAS'),
+        keyPassword: System.getenv('SANGREYA_KEY_PASSWORD')
+]
+def hasReleaseSigning = releaseSigning.values().every { it }
+if (releaseSigning.values().any { it } && !hasReleaseSigning) {
+    throw new GradleException('Incomplete release signing configuration. Set all four SANGREYA_KEYSTORE_PATH, SANGREYA_KEYSTORE_PASSWORD, SANGREYA_KEY_ALIAS and SANGREYA_KEY_PASSWORD variables.')
+}
+
+jacoco {
+    toolVersion = '0.8.13'
+}
+
+tasks.register('jacocoDebugReport', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+    executionData.setFrom(files("$buildDir/jacoco/testDebugUnitTest.exec"))
+    sourceDirectories.setFrom(files('src/main/java'))
+    classDirectories.setFrom(fileTree("$buildDir/intermediates/javac/debug/classes") {
+        exclude '**/R.class', '**/R$*.class', '**/BuildConfig.class', '**/Manifest*.class'
+    })
+    reports {
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/coverage/debug')
+        xml.required = true
+        xml.outputLocation = layout.buildDirectory.file('reports/coverage/debug/coverage.xml')
+        csv.required = false
+    }
 }
 
 android {
@@ -14,10 +49,27 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments adminEmail: (System.getenv('SANGREYA_UI_ADMIN_EMAIL') ?: ''),
+                adminPassword: (System.getenv('SANGREYA_UI_ADMIN_PASSWORD') ?: '')
+
+    }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            release {
+                storeFile file(releaseSigning.storeFile)
+                storePassword releaseSigning.storePassword
+                keyAlias releaseSigning.keyAlias
+                keyPassword releaseSigning.keyPassword
+            }
+        }
     }
 
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -30,11 +82,24 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
+    testImplementation 'org.json:json:20231013'
+
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.5.1'
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 }

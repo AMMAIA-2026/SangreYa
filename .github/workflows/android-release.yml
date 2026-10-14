@@ -1,0 +1,104 @@
+name: Android Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ github.ref_name }}
+      SANGREYA_KEYSTORE_PASSWORD: ${{ secrets.SANGREYA_KEYSTORE_PASSWORD }}
+      SANGREYA_KEY_ALIAS: ${{ secrets.SANGREYA_KEY_ALIAS }}
+      SANGREYA_KEY_PASSWORD: ${{ secrets.SANGREYA_KEY_PASSWORD }}
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Configurar Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+
+      - name: Instalar plataforma y herramientas Android
+        run: sdkmanager 'platforms;android-33' 'build-tools;33.0.1'
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Recuperar clave de firma
+        env:
+          SANGREYA_KEYSTORE_PATH: ${{ runner.temp }}/sangreya-release.jks
+          SANGREYA_KEYSTORE_BASE64: ${{ secrets.SANGREYA_KEYSTORE_BASE64 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in SANGREYA_KEYSTORE_BASE64 SANGREYA_KEYSTORE_PASSWORD SANGREYA_KEY_ALIAS SANGREYA_KEY_PASSWORD; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Falta configurar el secret $name. Consultá docs/ANDROID_RELEASE.md."
+              exit 1
+            fi
+          done
+          umask 077
+          printf '%s' "$SANGREYA_KEYSTORE_BASE64" | base64 --decode > "$SANGREYA_KEYSTORE_PATH"
+
+      - name: Habilitar Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: Verificar y compilar APK firmado
+        env:
+          SANGREYA_KEYSTORE_PATH: ${{ runner.temp }}/sangreya-release.jks
+        run: ./gradlew :app:testDebugUnitTest :app:testReleaseUnitTest :app:lintRelease :app:assembleRelease --no-daemon --console=plain
+
+      - name: Validar firma y versión; preparar archivos
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk='app/build/outputs/apk/release/app-release.apk'
+          "$ANDROID_HOME/build-tools/33.0.1/apksigner" verify --verbose "$apk"
+          version=$(apkanalyzer manifest version-name "$apk")
+          if [[ "$RELEASE_TAG" != "v$version" ]]; then
+            echo "::error::El tag debe ser v$version para coincidir con versionName del APK."
+            exit 1
+          fi
+          mkdir -p release-assets
+          cp "$apk" "release-assets/SangreYa-$RELEASE_TAG.apk"
+          cd release-assets
+          sha256sum "SangreYa-$RELEASE_TAG.apk" > "SangreYa-$RELEASE_TAG.apk.sha256"
+
+      - name: Crear GitHub Release y adjuntar APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          gh release create "$RELEASE_TAG" \
+            "release-assets/SangreYa-$RELEASE_TAG.apk" \
+            "release-assets/SangreYa-$RELEASE_TAG.apk.sha256" \
+            --verify-tag --title "SangreYa $RELEASE_TAG" --generate-notes
+
+      - name: Eliminar copia temporal de la clave
+        if: always()
+        env:
+          SANGREYA_KEYSTORE_PATH: ${{ runner.temp }}/sangreya-release.jks
+        shell: bash
+        run: rm -f "$SANGREYA_KEYSTORE_PATH"

@@ -1,9 +1,11 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,9 +14,12 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
 import com.google.android.material.navigation.NavigationView;
@@ -22,32 +27,67 @@ import com.google.android.material.navigation.NavigationView;
 public class CampaignDetailActivity extends AppCompatActivity {
     private Campaign campaign;
     private boolean standardUser;
-    private String user;
-    private String role;
+    private Button enrollButton;
+    private Button adminEnrollmentsButton;
+    private View actionArea;
+    private boolean enrollmentInProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
+        UiHelper.configureSystemBars(this);
         campaign = (Campaign) getIntent().getSerializableExtra(ExtraKeys.EXTRA_CAMPAIGN);
         if (campaign == null) {
             finish();
             return;
         }
-        standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
-        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-        role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
+        standardUser = SessionManager.isStandardUser(this);
         setContentView(R.layout.activity_campaign_detail);
         bindViews();
+
+        if (getIntent().getBooleanExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, false)) {
+            loadCampaignDetails();
+        }
+    }
+
+    private void loadCampaignDetails() {
+        CampaignApiRepository.getCampaign(
+                this,
+                campaign.id,
+                new CampaignApiRepository.Callback<Campaign>() {
+                    @Override
+                    public void onSuccess(Campaign value) {
+                        campaign = value;
+                        bindViews();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        int messageRes = CampaignApiRepository.isNotFound(exception)
+                                ? R.string.campaign_not_found_error
+                                : CampaignApiRepository.isUnauthorized(exception)
+                                ? R.string.campaign_unauthorized_error
+                                : CampaignApiRepository.isNetworkError(exception)
+                                ? R.string.campaign_network_error
+                                : R.string.campaign_detail_error;
+                        UiHelper.showToast(
+                                CampaignDetailActivity.this,
+                                messageRes,
+                                Toast.LENGTH_LONG);
+                    }
+                });
     }
 
     private void bindViews() {
         DrawerLayout drawerLayout = findViewById(R.id.detail_root);
         NavigationView navigationView = findViewById(R.id.detail_navigation_view);
-        NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user, role);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        View backButton = findViewById(R.id.detail_back_button);
-        backButton.setVisibility(View.VISIBLE);
+        ImageButton backButton = findViewById(R.id.menu_button);
+        backButton.setImageResource(android.R.drawable.ic_menu_revert);
+        backButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+        backButton.setContentDescription(getString(R.string.back));
         backButton.setOnClickListener(view -> finish());
 
         TextView status = findViewById(R.id.detail_status);
@@ -65,11 +105,12 @@ public class CampaignDetailActivity extends AppCompatActivity {
         if (campaign.maximumCapacity == null) {
             capacity.setVisibility(View.GONE);
         } else {
-            capacity.setText(getString(R.string.capacity, campaign.maximumCapacity));
+            capacity.setText(getString(R.string.maximum_capacity, campaign.maximumCapacity));
         }
 
         bindHealthCenter();
         bindEnrollmentAction();
+        bindAdminEnrollmentsAction();
     }
 
     private void bindHealthCenter() {
@@ -88,35 +129,122 @@ public class CampaignDetailActivity extends AppCompatActivity {
     }
 
     private void bindEnrollmentAction() {
-        if (campaign.calculatedStatus.equals("Finalizada") || ExtraKeys.ROLE_ADMIN.equals(role)) {
+        actionArea = findViewById(R.id.action_area);
+        enrollButton = findViewById(R.id.enroll_button);
+        actionArea.setVisibility(View.GONE);
+        boolean adminUser = SessionManager.isAdmin(this);
+        if ("Finalizada".equals(campaign.calculatedStatus) || adminUser) {
             return;
         }
 
-        View actionArea = findViewById(R.id.action_area);
-        Button enrollButton = findViewById(R.id.enroll_button);
         actionArea.setVisibility(View.VISIBLE);
-        View.OnClickListener enrollmentListener = view -> showEnrollmentMessage();
+        View.OnClickListener enrollmentListener = view -> {
+            if (standardUser) {
+                enroll();
+            } else {
+                showEnrollmentMessage();
+            }
+        };
         actionArea.setOnClickListener(enrollmentListener);
         enrollButton.setOnClickListener(enrollmentListener);
     }
 
-    private void showEnrollmentMessage() {
-        int messageRes = standardUser
-                ? R.string.offline_enrollment_message
-                : R.string.login_required_enrollment;
-        View toastView = getLayoutInflater().inflate(R.layout.toast_enrollment, null);
-        ((TextView) toastView.findViewById(R.id.toast_message))
-                .setText(messageRes);
+    private void bindAdminEnrollmentsAction() {
+        adminEnrollmentsButton = findViewById(R.id.admin_enrollments_button);
+        boolean adminUser = SessionManager.isAdmin(this);
+        adminEnrollmentsButton.setVisibility(adminUser ? View.VISIBLE : View.GONE);
+        if (adminUser) {
+            adminEnrollmentsButton.setOnClickListener(view -> {
+                Intent intent = new Intent(this, AdminCampaignEnrollmentsActivity.class);
+                intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
+                startActivity(intent);
+            });
+        }
+    }
 
-        Toast toast = Toast.makeText(
+    private void enroll() {
+        if (enrollmentInProgress) {
+            return;
+        }
+
+        String accessToken = SessionManager.getAccessToken(this);
+        if (TextUtils.isEmpty(accessToken)) {
+            showEnrollmentMessage();
+            return;
+        }
+
+        setEnrollmentInProgress(true);
+        CampaignApiRepository.enrollInCampaign(
                 this,
-                messageRes,
-                Toast.LENGTH_LONG);
-        toast.setGravity(
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
-                0,
-                getResources().getDimensionPixelSize(R.dimen.toast_bottom_offset));
-        toast.setView(toastView);
-        toast.show();
+                campaign.id,
+                new CampaignApiRepository.Callback<Integer>() {
+                    @Override
+                    public void onSuccess(Integer totalInscriptos) {
+                        setEnrollmentInProgress(false);
+                        ((TextView) findViewById(R.id.detail_registered)).setText(
+                                getString(R.string.registered_detail, totalInscriptos));
+                        showEnrollmentToast(
+                                getString(R.string.enrollment_success, totalInscriptos));
+                        loadCampaignDetails();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        setEnrollmentInProgress(false);
+                        showEnrollmentToast(enrollmentErrorMessage(exception));
+                    }
+                });
+    }
+
+    private void setEnrollmentInProgress(boolean inProgress) {
+        enrollmentInProgress = inProgress;
+        if (actionArea != null) {
+            actionArea.setEnabled(!inProgress);
+        }
+        if (enrollButton != null) {
+            enrollButton.setEnabled(!inProgress);
+            enrollButton.setText(inProgress ? R.string.enrollment_loading : R.string.enroll);
+        }
+    }
+
+    private int enrollmentErrorMessage(Exception exception) {
+        String code = CampaignApiRepository.getErrorCode(exception);
+        if ("edad_no_permitida".equals(code)) {
+            return R.string.enrollment_age_error;
+        }
+        if ("inscripcion_duplicada".equals(code)) {
+            return R.string.enrollment_duplicate_error;
+        }
+        if ("cupo_completo".equals(code)) {
+            return R.string.enrollment_capacity_error;
+        }
+        if ("campania_finalizada".equals(code)) {
+            return R.string.enrollment_finished_error;
+        }
+        if (exception instanceof CampaignApiRepository.HttpException) {
+            int statusCode = ((CampaignApiRepository.HttpException) exception).getStatusCode();
+            if (statusCode == 403) {
+                return R.string.enrollment_forbidden_error;
+            }
+            if (statusCode == 401) {
+                return R.string.session_expired_message;
+            }
+            if (statusCode == 404) {
+                return R.string.campaign_not_found_error;
+            }
+        }
+        return R.string.enrollment_network_error;
+    }
+
+    private void showEnrollmentMessage() {
+        showEnrollmentToast(R.string.login_required_enrollment);
+    }
+
+    private void showEnrollmentToast(int messageRes) {
+        UiHelper.showCustomToast(this, messageRes, Toast.LENGTH_LONG);
+    }
+
+    private void showEnrollmentToast(String message) {
+        UiHelper.showCustomToast(this, message, Toast.LENGTH_LONG);
     }
 }

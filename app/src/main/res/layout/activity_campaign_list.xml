@@ -13,6 +13,56 @@
 
     <include layout="@layout/view_campaign_header" />
 
+    <TextView
+        android:id="@+id/campaign_list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityHeading="true"
+        android:paddingStart="@dimen/content_horizontal_padding"
+        android:paddingTop="20dp"
+        android:paddingEnd="@dimen/content_horizontal_padding"
+        android:text="@string/campaigns_navigation"
+        android:textColor="@color/primary_text"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/content_horizontal_padding"
+        android:paddingTop="14dp"
+        android:paddingEnd="@dimen/content_horizontal_padding"
+        android:paddingBottom="10dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_bar_height">
+
+            <EditText
+                android:id="@+id/campaign_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_input_field"
+                android:hint="@string/search_campaign_hint"
+                android:inputType="text"
+                android:paddingStart="42dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/secondary_text"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="14dp"
+                android:src="@drawable/ic_search"
+                android:contentDescription="@string/search_campaign_description" />
+        </FrameLayout>
+    </LinearLayout>
 
 
     <HorizontalScrollView
@@ -76,8 +126,18 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <ScrollView
-        android:layout_width="match_parent"
+     <ProgressBar
+         android:id="@+id/campaign_loading"
+         style="?android:attr/progressBarStyleLarge"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_horizontal"
+         android:contentDescription="@string/campaign_loading"
+         android:visibility="gone" />
+
+     <ScrollView
+         android:id="@+id/campaign_scroll"
+         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true"
@@ -112,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_blood_drop"
-                android:tint="@color/primary_red"
+                app:tint="@color/primary_red"
                 android:contentDescription="@string/campaigns_navigation" />
             <TextView
                 android:layout_width="match_parent"
@@ -125,6 +185,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/enrollments_navigation_item"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -145,6 +206,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/profile_navigation_item"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

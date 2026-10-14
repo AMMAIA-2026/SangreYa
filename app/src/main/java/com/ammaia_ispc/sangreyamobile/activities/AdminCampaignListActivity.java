@@ -1,34 +1,41 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
-import com.ammaia_ispc.sangreyamobile.helpers.AdminDashboardHelper;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
-import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.appcompat.app.AlertDialog;
+
 public class AdminCampaignListActivity extends AppCompatActivity {
 
-    private List<Campaign> campaigns;
+    private List<Campaign> campaigns = new ArrayList<>();
     private LinearLayout campaignContainer;
     private EditText searchInput;
     private MaterialButton allFilter;
@@ -36,19 +43,16 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     private MaterialButton upcomingFilter;
     private MaterialButton finishedFilter;
     private String currentFilter = "Todas";
-    private String user;
+    private boolean campaignsLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        CampaignHelper.configureSystemBars(this);
-
-        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-
-        if (user == null) {
-            user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
+        if (!SessionManager.requireAdmin(this)) {
+            return;
         }
+
+        UiHelper.configureSystemBars(this);
 
         setContentView(R.layout.activity_admin_campaign_list);
 
@@ -61,8 +65,36 @@ public class AdminCampaignListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        campaigns = MockCampaignRepository.getCampaigns();
+        if (campaignContainer != null) {
+            loadCampaigns();
+        }
+    }
+
+    private void loadCampaigns() {
+        campaignsLoaded = false;
         showCampaigns();
+        CampaignApiRepository.getCampaigns(
+                this,
+                new CampaignApiRepository.Callback<List<Campaign>>() {
+                    @Override
+                    public void onSuccess(List<Campaign> value) {
+                        campaigns = value;
+                        campaignsLoaded = true;
+                        showCampaigns();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        showCampaignError(exception);
+                    }
+                });
+    }
+
+    private void showCampaignError(Exception exception) {
+        String message = CampaignApiRepository.isUnauthorized(exception)
+                ? getString(R.string.admin_campaigns_unauthorized)
+                : getString(R.string.campaigns_load_error);
+        UiHelper.showToast(this, message, Toast.LENGTH_LONG);
     }
 
     private void bindViews() {
@@ -74,6 +106,13 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         upcomingFilter = findViewById(R.id.admin_filter_upcoming);
         finishedFilter = findViewById(R.id.admin_filter_finished);
 
+        DrawerLayout drawerLayout = findViewById(R.id.admin_campaign_drawer);
+        NavigationView navigationView = findViewById(R.id.admin_campaign_navigation_view);
+        NavigationDrawerHelper.configure(
+                this,
+                drawerLayout,
+                navigationView);
+
         findViewById(R.id.admin_campaign_add)
                 .setOnClickListener(view -> openCreateCampaign());
 
@@ -83,26 +122,22 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         findViewById(R.id.admin_nav_users)
                 .setOnClickListener(view -> {
                     Intent intent = new Intent(this, UsersActivity.class);
-                    intent.putExtra(ExtraKeys.EXTRA_USER, user);
                     startActivity(intent);
                 });
 
         findViewById(R.id.admin_messages_navigation).setOnClickListener(view -> {
             Intent intent = new Intent(this, AdminContactListActivity.class);
-            intent.putExtra(ExtraKeys.EXTRA_USER, user);
-            intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
             startActivity(intent);
         });
 
-        // Flecha reutilizable
-        NavigationHelper.configureBackButton(this, R.id.btnBack);
     }
 
     private void configureFilters() {
-        allFilter.setOnClickListener(view -> selectFilter("Todas"));
-        activeFilter.setOnClickListener(view -> selectFilter("Activa"));
-        upcomingFilter.setOnClickListener(view -> selectFilter("Proximamente"));
-        finishedFilter.setOnClickListener(view -> selectFilter("Finalizada"));
+        updateFilterStyles();
+        allFilter.setOnClickListener(view -> selectFilter("Todas", allFilter));
+        activeFilter.setOnClickListener(view -> selectFilter("Activa", activeFilter));
+        upcomingFilter.setOnClickListener(view -> selectFilter("Proximamente", upcomingFilter));
+        finishedFilter.setOnClickListener(view -> selectFilter("Finalizada", finishedFilter));
     }
 
     private void configureSearch() {
@@ -131,18 +166,19 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         });
     }
 
-    private void selectFilter(String filter) {
+    private void selectFilter(String filter, MaterialButton selectedButton) {
+        if (currentFilter.equals(filter)) {
+            return;
+        }
         currentFilter = filter;
         showCampaigns();
+        UiHelper.announceFilterChange(selectedButton);
     }
 
     private void showCampaigns() {
 
-        String query = searchInput
-                .getText()
-                .toString()
-                .trim()
-                .toLowerCase(Locale.getDefault());
+        String query = UiHelper.normalized(
+                searchInput.getText().toString(), Locale.getDefault());
 
         campaignContainer.removeAllViews();
 
@@ -175,37 +211,26 @@ public class AdminCampaignListActivity extends AppCompatActivity {
             campaignContainer.addView(card, cardParams);
         }
 
+        if (campaignsLoaded && campaignContainer.getChildCount() == 0) {
+            TextView empty = new TextView(this);
+            empty.setText(R.string.admin_campaigns_no_matches);
+            empty.setTextSize(16);
+            empty.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
+            empty.setGravity(Gravity.CENTER);
+            int padding = getResources().getDimensionPixelSize(R.dimen.card_spacing);
+            empty.setPadding(0, padding, 0, padding);
+            empty.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+            campaignContainer.addView(empty);
+        }
+
         updateFilterStyles();
     }
 
     private void updateFilterStyles() {
-        styleFilter(allFilter, currentFilter.equals("Todas"));
-        styleFilter(activeFilter, currentFilter.equals("Activa"));
-        styleFilter(upcomingFilter, currentFilter.equals("Proximamente"));
-        styleFilter(finishedFilter, currentFilter.equals("Finalizada"));
-    }
-
-    private void styleFilter(MaterialButton filter, boolean selected) {
-
-        filter.setTextColor(
-                ContextCompat.getColor(
-                        this,
-                        selected
-                                ? R.color.white
-                                : R.color.secondary_text
-                )
-        );
-
-        filter.setBackgroundTintList(
-                ColorStateList.valueOf(
-                        ContextCompat.getColor(
-                                this,
-                                selected
-                                        ? R.color.primary_red
-                                        : R.color.surface
-                        )
-                )
-        );
+        UiHelper.styleFilter(this, allFilter, currentFilter.equals("Todas"));
+        UiHelper.styleFilter(this, activeFilter, currentFilter.equals("Activa"));
+        UiHelper.styleFilter(this, upcomingFilter, currentFilter.equals("Proximamente"));
+        UiHelper.styleFilter(this, finishedFilter, currentFilter.equals("Finalizada"));
     }
 
     private View createCampaignCard(Campaign campaign) {
@@ -284,32 +309,86 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         ImageView editButton =
                 card.findViewById(R.id.admin_campaign_edit);
 
+        editButton.setContentDescription(
+                getString(R.string.edit_campaign_named_description, campaign.title));
         editButton.setOnClickListener(
                 view -> openCampaignEdit(campaign)
         );
 
+        ImageView deleteButton =
+                card.findViewById(R.id.admin_campaign_delete);
+
+        deleteButton.setContentDescription(
+                getString(R.string.delete_campaign_named_description, campaign.title));
+        deleteButton.setOnClickListener(
+                view -> confirmDeleteCampaign(campaign)
+        );
+
         return card;
+    }
+
+    private void confirmDeleteCampaign(Campaign campaign) {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar campaña")
+                .setMessage(
+                        "¿Estás seguro de que querés eliminar la campaña \""
+                                + campaign.title
+                                + "\"?"
+                )
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Eliminar", (dialog, which) ->
+                        deleteCampaign(campaign)
+                )
+                .show();
+    }
+
+    private void deleteCampaign(Campaign campaign) {
+        CampaignApiRepository.deleteCampaign(
+                this,
+                campaign.id,
+                new CampaignApiRepository.Callback<Void>() {
+
+                    @Override
+                    public void onSuccess(Void value) {
+                        UiHelper.showToast(
+                                AdminCampaignListActivity.this,
+                                "Campaña eliminada correctamente.",
+                                Toast.LENGTH_SHORT
+                        );
+
+                        loadCampaigns();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+
+                        String message;
+
+                        if (CampaignApiRepository.isUnauthorized(exception)) {
+                            message = "No tenés permisos para eliminar esta campaña.";
+                        } else if (CampaignApiRepository.isNotFound(exception)) {
+                            message = "La campaña no existe o ya fue eliminada.";
+                        } else if (CampaignApiRepository.isNetworkError(exception)) {
+                            message = "No se pudo conectar con el servidor. Revisá tu conexión.";
+                        } else {
+                            message = "No se pudo eliminar la campaña. Intentá nuevamente.";
+                        }
+
+                        UiHelper.showToast(
+                                AdminCampaignListActivity.this,
+                                message,
+                                Toast.LENGTH_LONG
+                        );
+                    }
+                }
+        );
     }
 
     private void openCreateCampaign() {
 
         Intent intent =
                 new Intent(this, CreateCampaignActivity.class);
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_STANDARD_USER,
-                false
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER_ROLE,
-                ExtraKeys.ROLE_ADMIN
-        );
 
         startActivity(intent);
     }
@@ -325,18 +404,8 @@ public class AdminCampaignListActivity extends AppCompatActivity {
         );
 
         intent.putExtra(
-                ExtraKeys.EXTRA_STANDARD_USER,
-                false
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER_ROLE,
-                ExtraKeys.ROLE_ADMIN
+                ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL,
+                true
         );
 
         startActivity(intent);
@@ -352,21 +421,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
                 campaign
         );
 
-        intent.putExtra(
-                ExtraKeys.EXTRA_STANDARD_USER,
-                false
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER_ROLE,
-                ExtraKeys.ROLE_ADMIN
-        );
-
         startActivity(intent);
     }
 
@@ -374,11 +428,6 @@ public class AdminCampaignListActivity extends AppCompatActivity {
 
         Intent intent =
                 new Intent(this, AdminDashboardActivity.class);
-
-        intent.putExtra(
-                ExtraKeys.EXTRA_USER,
-                user
-        );
 
         intent.addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TOP

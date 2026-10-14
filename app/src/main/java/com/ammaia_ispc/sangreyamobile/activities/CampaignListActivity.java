@@ -1,83 +1,175 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CampaignListActivity extends AppCompatActivity {
-    private List<Campaign> campaigns;
+    private List<Campaign> campaigns = new ArrayList<>();
     private LinearLayout campaignContainer;
+    private ProgressBar loadingIndicator;
+    private ScrollView campaignScroll;
     private MaterialButton allFilter;
     private MaterialButton activeFilter;
     private MaterialButton upcomingFilter;
+    private EditText searchInput;
     private boolean standardUser;
-    private String user;
-    private String role;
+    private String currentFilter = "Todas";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
-        standardUser = getIntent().getBooleanExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
-        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-        role = getIntent().getStringExtra(ExtraKeys.EXTRA_USER_ROLE);
+        UiHelper.configureSystemBars(this);
+        standardUser = SessionManager.isStandardUser(this);
         setContentView(R.layout.activity_campaign_list);
         bindViews();
         configureFilters();
+        configureSearch();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        campaigns = MockCampaignRepository.getCampaigns();
-        showCampaigns("Todas");
+        refreshNavigation();
+        loadCampaigns();
+    }
+
+    private void loadCampaigns() {
+        UiHelper.setLoading(loadingIndicator, campaignScroll, true);
+        CampaignApiRepository.getCampaigns(this, new CampaignApiRepository.Callback<List<Campaign>>() {
+            @Override
+            public void onSuccess(List<Campaign> value) {
+                campaigns = value;
+                showCampaigns(currentFilter);
+                UiHelper.setLoading(loadingIndicator, campaignScroll, false);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                UiHelper.setLoading(loadingIndicator, campaignScroll, false);
+                UiHelper.showToast(
+                        CampaignListActivity.this,
+                        R.string.campaigns_load_error,
+                        Toast.LENGTH_LONG);
+            }
+        });
     }
 
     private void bindViews() {
         campaignContainer = findViewById(R.id.campaign_container);
+        loadingIndicator = findViewById(R.id.campaign_loading);
+        campaignScroll = findViewById(R.id.campaign_scroll);
+        // BUG-011: ScrollView fuerza focusable=true en su constructor e ignora el XML
+        campaignScroll.setFocusable(false);
         allFilter = findViewById(R.id.filter_all);
         activeFilter = findViewById(R.id.filter_active);
         upcomingFilter = findViewById(R.id.filter_upcoming);
-        DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);
-        NavigationView navigationView = findViewById(R.id.campaign_navigation_view);
-        NavigationDrawerHelper.configure(this, drawerLayout, navigationView, standardUser, user, role);
+        searchInput = findViewById(R.id.campaign_search);
+        refreshNavigation();
         if (!standardUser) {
             findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.enrollments_navigation_item).setOnClickListener(view ->
+                    startActivity(new Intent(this, EnrollmentsActivity.class)));
+            findViewById(R.id.profile_navigation_item).setOnClickListener(view ->
+                    startActivity(new Intent(this, ProfileActivity.class)));
         }
     }
 
-    private void configureFilters() {
-        allFilter.setOnClickListener(view -> showCampaigns("Todas"));
-        activeFilter.setOnClickListener(view -> showCampaigns("Activas"));
-        upcomingFilter.setOnClickListener(view -> showCampaigns("Próximas"));
+    private void refreshNavigation() {
+        standardUser = SessionManager.isStandardUser(this);
+        DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);
+        NavigationView navigationView = findViewById(R.id.campaign_navigation_view);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
     }
 
-    private void showCampaigns(String filter) {
+    private void configureFilters() {
+        updateFilterStyles(currentFilter);
+        allFilter.setOnClickListener(view -> selectFilter("Todas", allFilter));
+        activeFilter.setOnClickListener(view -> selectFilter("Activas", activeFilter));
+        upcomingFilter.setOnClickListener(view -> selectFilter("Próximas", upcomingFilter));
+    }
+
+    private void configureSearch() {
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                showCampaigns(currentFilter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private void selectFilter(String filter, MaterialButton selectedButton) {
+        if (currentFilter.equals(filter)) {
+            return;
+        }
+        currentFilter = filter;
+        boolean emptyList = showCampaigns(currentFilter);
+        UiHelper.announceFilterChange(selectedButton, emptyList, R.string.campaigns_empty);
+    }
+
+    // Devuelve true si no hay campañas para mostrar con el filtro y la busqueda actuales.
+    private boolean showCampaigns(String filter) {
         campaignContainer.removeAllViews();
-        for (Campaign campaign : campaigns) {
-            if (filter.equals("Activas") && !campaign.calculatedStatus.equals("Activa")) {
+        Date today = new Date();
+        String query = UiHelper.normalized(
+                searchInput.getText().toString(),
+                Locale.getDefault());
+        List<Campaign> orderedCampaigns = new ArrayList<>(campaigns);
+        orderedCampaigns.sort(Comparator
+                .comparingInt((Campaign campaign) -> campaignStatusOrder(campaign.calculatedStatus))
+                .thenComparing(campaign -> campaign.startDate));
+
+        for (Campaign campaign : orderedCampaigns) {
+            if ("Finalizada".equals(campaign.calculatedStatus)) {
+                continue;
+            }
+            if (filter.equals("Activas") && !CampaignHelper.isActiveOn(campaign, today)) {
                 continue;
             }
             if (filter.equals("Próximas") && !campaign.calculatedStatus.equals("Proximamente")) {
+                continue;
+            }
+            if (!query.isEmpty()
+                    && !UiHelper.normalized(campaign.title, Locale.getDefault()).contains(query)) {
                 continue;
             }
             View card = createCampaignCard(campaign);
@@ -85,19 +177,38 @@ public class CampaignListActivity extends AppCompatActivity {
             cardParams.setMargins(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.card_spacing));
             campaignContainer.addView(card, cardParams);
         }
+        // BUG-011: avisar cuando no hay campañas para mostrar
+        boolean emptyList = campaignContainer.getChildCount() == 0;
+        if (emptyList) {
+            showEmptyMessage();
+        }
         updateFilterStyles(filter);
+        return emptyList;
+    }
+
+    private void showEmptyMessage() {
+        TextView empty = new TextView(this);
+        empty.setText(R.string.campaigns_empty);
+        empty.setTextSize(16);
+        empty.setPadding(0, 32, 0, 32);
+        empty.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        campaignContainer.addView(empty);
+    }
+
+    private int campaignStatusOrder(String status) {
+        if ("Activa".equals(status)) {
+            return 0;
+        }
+        if ("Proximamente".equals(status)) {
+            return 1;
+        }
+        return 2;
     }
 
     private void updateFilterStyles(String selectedFilter) {
-        styleFilter(allFilter, selectedFilter.equals("Todas"));
-        styleFilter(activeFilter, selectedFilter.equals("Activas"));
-        styleFilter(upcomingFilter, selectedFilter.equals("Próximas"));
-    }
-
-    private void styleFilter(MaterialButton filter, boolean selected) {
-        filter.setTextColor(ContextCompat.getColor(this, selected ? R.color.white : R.color.secondary_text));
-        filter.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(this, selected ? R.color.primary_red : R.color.surface)));
+        UiHelper.styleFilter(this, allFilter, selectedFilter.equals("Todas"));
+        UiHelper.styleFilter(this, activeFilter, selectedFilter.equals("Activas"));
+        UiHelper.styleFilter(this, upcomingFilter, selectedFilter.equals("Próximas"));
     }
 
     private View createCampaignCard(Campaign campaign) {
@@ -111,15 +222,20 @@ public class CampaignListActivity extends AppCompatActivity {
         ((TextView) card.findViewById(R.id.campaign_location)).setText(campaign.location);
         ((TextView) card.findViewById(R.id.campaign_dates)).setText(CampaignHelper.formatShortDate(campaign.startDate, campaign.endDate));
         ((TextView) card.findViewById(R.id.campaign_registered)).setText(getString(R.string.registered_count, campaign.totalRegistered));
+        TextView capacity = card.findViewById(R.id.campaign_capacity);
+        if (campaign.maximumCapacity == null) {
+            capacity.setText(R.string.unlimited_capacity);
+        } else {
+            capacity.setText(getString(R.string.maximum_capacity, campaign.maximumCapacity));
+        }
         return card;
     }
 
     private void openDetails(Campaign campaign) {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
-        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, standardUser);
-        intent.putExtra(ExtraKeys.EXTRA_USER, user);
-        intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, role);
+        intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);
         startActivity(intent);
     }
+
 }

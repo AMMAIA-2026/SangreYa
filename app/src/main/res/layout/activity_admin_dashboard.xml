@@ -13,17 +13,52 @@
 
         <include layout="@layout/view_campaign_header" />
 
+        <!-- HEADER DE DASHBOARD (FONDO BORDEAUX UNIFICADO Y CENTRADO) -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
             android:background="@color/dark_red"
-            android:gravity="center_vertical"
-            android:paddingStart="14dp">
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/dashboard_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:accessibilityHeading="true"
+                android:gravity="center"
+                android:text="@string/dashboard_navigation"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dashboard_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="Resumen general de estadísticas"
+                android:textColor="@color/header_subtitle"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <!-- INSIGNIA DE ROL ORIGINAL -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@color/dark_red"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/admin_role_badge"
                 android:layout_width="wrap_content"
-                android:layout_height="26dp"
+                android:layout_height="24dp"
                 android:background="@drawable/bg_admin_role"
                 android:gravity="center"
                 android:paddingStart="10dp"
@@ -61,6 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dashboard_donors_title"
+                        android:accessibilityHeading="true"
                         android:textColor="@color/primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -74,10 +110,28 @@
                         android:textSize="9sp" />
 
                     <TextView
-                        android:id="@+id/dashboard_donors_total"
+                        android:id="@+id/dashboard_campaigns_total"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/dashboard_enrollments_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/dashboard_donors_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:textColor="@color/primary_text"
                         android:textSize="22sp"
                         android:textStyle="bold" />
@@ -99,7 +153,32 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@string/dashboard_enrollments_title"
+                        android:accessibilityHeading="true"
+                        android:textColor="@color/primary_text"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.ammaia_ispc.sangreyamobile.helpers.DashboardChartView
+                        android:id="@+id/dashboard_enrollments_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_dashboard_card"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/dashboard_status_title"
+                        android:accessibilityHeading="true"
                         android:textColor="@color/primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -137,6 +216,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dashboard_recent_title"
+                        android:accessibilityHeading="true"
                         android:textColor="@color/primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -150,7 +230,7 @@
             </LinearLayout>
         </ScrollView>
 
-        <!-- BARRA INFERIOR CORREGIDA -->
+        <!-- BARRA INFERIOR DE NAVEGACIÓN -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_navigation_height"
@@ -159,7 +239,6 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <!-- 1. DASHBOARD -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -170,7 +249,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_dashboard"
-                    android:tint="@color/primary_red"
+                    app:tint="@color/primary_red"
                     android:contentDescription="@string/dashboard_navigation" />
                 <TextView
                     android:layout_width="match_parent"
@@ -182,7 +261,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- 2. CAMPAÑAS -->
             <LinearLayout
                 android:id="@+id/admin_campaigns_navigation"
                 android:layout_width="0dp"
@@ -196,7 +274,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_blood_drop"
-                    android:tint="@color/secondary_text"
+                    app:tint="@color/secondary_text"
                     android:contentDescription="@string/campaigns_navigation" />
                 <TextView
                     android:layout_width="match_parent"
@@ -207,7 +285,6 @@
                     android:textSize="9sp" />
             </LinearLayout>
 
-            <!-- 3. USUARIOS (Con ID y Clickable) -->
             <LinearLayout
                 android:id="@+id/admin_users_navigation"
                 android:layout_width="0dp"
@@ -231,7 +308,6 @@
                     android:textSize="9sp" />
             </LinearLayout>
 
-            <!-- 4. MENSAJES -->
             <LinearLayout
                 android:id="@+id/admin_messages_navigation"
                 android:layout_width="0dp"

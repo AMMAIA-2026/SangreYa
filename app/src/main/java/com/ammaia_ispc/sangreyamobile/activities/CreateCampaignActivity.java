@@ -1,10 +1,10 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,31 +12,34 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockCampaignRepository;
-import com.ammaia_ispc.sangreyamobile.data.MockHealthCenterRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
 import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.HealthCenterAddressAutofill;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
+import com.ammaia_ispc.sangreyamobile.data.HealthCenterApiRepository;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class CreateCampaignActivity extends AppCompatActivity {
     private EditText nameInput;
     private Spinner healthCenterInput;
     private final List<HealthCenter> healthCenterOptions = new ArrayList<>();
     private EditText addressInput;
+    private final HealthCenterAddressAutofill addressAutofill = new HealthCenterAddressAutofill();
+    private boolean updatingAddressAutomatically;
     private EditText startDateInput;
     private EditText endDateInput;
-    private EditText startTimeInput;
-    private EditText endTimeInput;
     private EditText capacityInput;
     private EditText descriptionInput;
     private Campaign editingCampaign;
@@ -44,7 +47,10 @@ public class CreateCampaignActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
+        if (!SessionManager.requireAdmin(this)) {
+            return;
+        }
+        UiHelper.configureSystemBars(this);
         editingCampaign = (Campaign) getIntent().getSerializableExtra(ExtraKeys.EXTRA_CAMPAIGN);
         setContentView(R.layout.activity_create_campaign);
         bindViews();
@@ -55,19 +61,26 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         nameInput = findViewById(R.id.create_campaign_name);
         healthCenterInput = findViewById(R.id.create_campaign_health_center);
-        setupHealthCenterOptions();
         addressInput = findViewById(R.id.create_campaign_address);
+        configureAddressAutofill();
+        loadHealthCenters();
+        healthCenterInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                autofillAddressFromSelectedCenter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         startDateInput = findViewById(R.id.create_campaign_start_date);
         endDateInput = findViewById(R.id.create_campaign_end_date);
-        startTimeInput = findViewById(R.id.create_campaign_start_time);
-        endTimeInput = findViewById(R.id.create_campaign_end_time);
         capacityInput = findViewById(R.id.create_campaign_capacity);
         descriptionInput = findViewById(R.id.create_campaign_description);
 
-        startDateInput.setOnClickListener(view -> showDatePicker(startDateInput));
-        endDateInput.setOnClickListener(view -> showDatePicker(endDateInput));
-        startTimeInput.setOnClickListener(view -> showTimePicker(startTimeInput));
-        endTimeInput.setOnClickListener(view -> showTimePicker(endTimeInput));
+        DateHelper.configureDateInput(this, startDateInput);
+        DateHelper.configureDateInput(this, endDateInput);
 
         findViewById(R.id.create_campaign_publish).setOnClickListener(view -> publishCampaign());
 
@@ -76,14 +89,50 @@ public class CreateCampaignActivity extends AppCompatActivity {
         }
     }
 
-    private void setupHealthCenterOptions() {
+    private void loadHealthCenters() {
+        View publishButton = findViewById(R.id.create_campaign_publish);
+
+        populateHealthCenterOptions(new ArrayList<>());
+        healthCenterInput.setEnabled(false);
+        publishButton.setEnabled(false);
+
+        HealthCenterApiRepository.loadHealthCenters(this, new HealthCenterApiRepository.HealthCentersCallback() {
+            @Override
+            public void onSuccess(List<HealthCenter> centers) {
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+                populateHealthCenterOptions(centers);
+                healthCenterInput.setEnabled(true);
+                publishButton.setEnabled(true);
+            }
+
+            @Override
+            public void onError(int messageRes) {
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+
+                List<HealthCenter> fallback = new ArrayList<>();
+                if (editingCampaign != null && editingCampaign.healthCenter != null) {
+                    fallback.add(editingCampaign.healthCenter);
+                }
+                populateHealthCenterOptions(fallback);
+                healthCenterInput.setEnabled(true);
+                publishButton.setEnabled(true);
+                UiHelper.showToast(CreateCampaignActivity.this, messageRes, Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+    private void populateHealthCenterOptions(List<HealthCenter> centers) {
         healthCenterOptions.clear();
         healthCenterOptions.add(null);
 
         List<String> labels = new ArrayList<>();
         labels.add(getString(R.string.health_center_none_option));
 
-        for (HealthCenter center : MockHealthCenterRepository.getHealthCenters()) {
+        for (HealthCenter center : centers) {
             healthCenterOptions.add(center);
             labels.add(center.name + " — " + center.neighborhood + ", " + center.city);
         }
@@ -91,6 +140,21 @@ public class CreateCampaignActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, labels);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         healthCenterInput.setAdapter(adapter);
+
+        selectEditingCampaignCenter();
+    }
+
+    private void selectEditingCampaignCenter() {
+        if (editingCampaign == null || editingCampaign.healthCenter == null) {
+            return;
+        }
+        for (int index = 0; index < healthCenterOptions.size(); index++) {
+            HealthCenter option = healthCenterOptions.get(index);
+            if (option != null && option.id == editingCampaign.healthCenter.id) {
+                healthCenterInput.setSelection(index);
+                break;
+            }
+        }
     }
 
     private HealthCenter selectedHealthCenter() {
@@ -99,6 +163,60 @@ public class CreateCampaignActivity extends AppCompatActivity {
             return null;
         }
         return healthCenterOptions.get(position);
+    }
+
+    private void configureAddressAutofill() {
+        addressInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!updatingAddressAutomatically) {
+                    addressAutofill.onManualAddressChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private void autofillAddressFromSelectedCenter() {
+        String currentAddress = addressInput.getText().toString();
+        String nextAddress = addressAutofill.onCenterSelected(selectedHealthCenter(), currentAddress);
+        if (currentAddress.equals(nextAddress)) {
+            return;
+        }
+
+        updatingAddressAutomatically = true;
+        try {
+            UiHelper.setTextAtEnd(addressInput, nextAddress);
+        } finally {
+            updatingAddressAutomatically = false;
+        }
+    }
+
+    private String extractValidationMessage(Exception exception) {
+        if (!(exception instanceof CampaignApiRepository.HttpException)) {
+            return null;
+        }
+        try {
+            String body = ((CampaignApiRepository.HttpException) exception).getBody();
+            org.json.JSONObject json = new org.json.JSONObject(body);
+            java.util.Iterator<String> keys = json.keys();
+            if (keys.hasNext()) {
+                String firstKey = keys.next();
+                Object value = json.get(firstKey);
+                if (value instanceof org.json.JSONArray && ((org.json.JSONArray) value).length() > 0) {
+                    return ((org.json.JSONArray) value).getString(0);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     private void prefillForEdit() {
@@ -110,23 +228,13 @@ public class CreateCampaignActivity extends AppCompatActivity {
         deleteButton.setVisibility(View.VISIBLE);
         deleteButton.setOnClickListener(view -> confirmDeleteCampaign());
 
-        nameInput.setText(editingCampaign.title);
-        addressInput.setText(editingCampaign.location);
-        descriptionInput.setText(editingCampaign.description);
-        startDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.startDate));
-        endDateInput.setText(CampaignHelper.toDisplayDate(editingCampaign.endDate));
+        UiHelper.setTextAtEnd(nameInput, editingCampaign.title);
+        UiHelper.setTextAtEnd(addressInput, editingCampaign.location);
+        UiHelper.setTextAtEnd(descriptionInput, editingCampaign.description);
+        UiHelper.setTextAtEnd(startDateInput, DateHelper.toDisplayDate(editingCampaign.startDate));
+        UiHelper.setTextAtEnd(endDateInput, DateHelper.toDisplayDate(editingCampaign.endDate));
         if (editingCampaign.maximumCapacity != null) {
-            capacityInput.setText(String.valueOf(editingCampaign.maximumCapacity));
-        }
-
-        if (editingCampaign.healthCenter != null) {
-            for (int index = 0; index < healthCenterOptions.size(); index++) {
-                HealthCenter option = healthCenterOptions.get(index);
-                if (option != null && option.id == editingCampaign.healthCenter.id) {
-                    healthCenterInput.setSelection(index);
-                    break;
-                }
-            }
+            UiHelper.setTextAtEnd(capacityInput, String.valueOf(editingCampaign.maximumCapacity));
         }
 
         if ("Activa".equals(editingCampaign.calculatedStatus)) {
@@ -146,85 +254,162 @@ public class CreateCampaignActivity extends AppCompatActivity {
     }
 
     private void deleteCampaign() {
-        MockCampaignRepository.deleteCampaign(editingCampaign.id);
-        Toast.makeText(this, R.string.campaign_deleted_message, Toast.LENGTH_SHORT).show();
-        finish();
-    }
+        CampaignApiRepository.deleteCampaign(this, editingCampaign.id,
+                new CampaignApiRepository.Callback<Void>() {
+                    @Override
+                    public void onSuccess(Void value) {
+                        UiHelper.showToast(CreateCampaignActivity.this,
+                                R.string.campaign_deleted_message, Toast.LENGTH_SHORT);
+                        finish();
+                    }
 
-    private void showDatePicker(EditText target) {
-        Calendar calendar = Calendar.getInstance();
-        new DatePickerDialog(
-                this,
-                (picker, year, month, dayOfMonth) -> target.setText(
-                        String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, month + 1, year)),
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        ).show();
-    }
+                    @Override
+                    public void onError(Exception exception) {
+                        if (CampaignApiRepository.isUnauthorized(exception)) {
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG);
+                            return;
+                        }
 
-    private void showTimePicker(EditText target) {
-        Calendar calendar = Calendar.getInstance();
-        new TimePickerDialog(
-                this,
-                (picker, hourOfDay, minute) -> target.setText(
-                        String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)),
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                true
-        ).show();
+                        if (CampaignApiRepository.isNetworkError(exception)) {
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG);
+                            return;
+                        }
+
+                        UiHelper.showToast(CreateCampaignActivity.this,
+                                R.string.campaign_create_server_error, Toast.LENGTH_LONG);
+                    }
+                });
     }
 
     private void publishCampaign() {
+        clearFieldErrors();
         if (!validateRequiredFields()) {
             return;
         }
 
-        String isoStartDate = CampaignHelper.toIsoDate(startDateInput.getText().toString());
-        String isoEndDate = CampaignHelper.toIsoDate(endDateInput.getText().toString());
+        String isoStartDate = DateHelper.toIsoDate(startDateInput.getText().toString());
+        String isoEndDate = DateHelper.toIsoDate(endDateInput.getText().toString());
+        if (isoStartDate == null) {
+            startDateInput.setError(getString(R.string.campaign_date_invalid));
+            startDateInput.requestFocus();
+            return;
+        }
+        if (isoEndDate == null) {
+            endDateInput.setError(getString(R.string.campaign_date_invalid));
+            endDateInput.requestFocus();
+            return;
+        }
         HealthCenter selectedCenter = selectedHealthCenter();
         Integer selectedCenterId = selectedCenter != null ? selectedCenter.id : null;
 
         if (editingCampaign != null) {
-            Campaign updated = new Campaign(
+            setFormEnabled(false);
+
+            CampaignApiRepository.updateCampaign(
+                    this,
                     editingCampaign.id,
                     nameInput.getText().toString().trim(),
                     descriptionInput.getText().toString().trim(),
                     addressInput.getText().toString().trim(),
                     selectedCenterId,
-                    selectedCenter,
                     isoStartDate,
                     isoEndDate,
                     parseCapacity(),
-                    editingCampaign.totalRegistered,
-                    editingCampaign.campaignStatus,
-                    editingCampaign.calculatedStatus);
-            MockCampaignRepository.updateCampaign(updated);
-            Toast.makeText(this, R.string.campaign_updated_message, Toast.LENGTH_SHORT).show();
-            finish();
+                    new CampaignApiRepository.Callback<Campaign>() {
+                        @Override
+                        public void onSuccess(Campaign campaign) {
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_updated_message, Toast.LENGTH_SHORT);
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(Exception exception) {
+                            setFormEnabled(true);
+
+                            if (CampaignApiRepository.isUnauthorized(exception)) {
+                                UiHelper.showToast(CreateCampaignActivity.this,
+                                        R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG);
+                                return;
+                            }
+
+                            if (CampaignApiRepository.isNetworkError(exception)) {
+                                UiHelper.showToast(CreateCampaignActivity.this,
+                                        R.string.campaign_create_network_error, Toast.LENGTH_LONG);
+                                return;
+                            }
+
+                            String friendlyMessage = extractValidationMessage(exception);
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    friendlyMessage != null ? friendlyMessage
+                                            : getString(R.string.campaign_create_server_error),
+                                    Toast.LENGTH_LONG);
+                        }
+                    });
             return;
         }
 
-        Campaign campaign = new Campaign(
-                MockCampaignRepository.nextId(),
+        setFormEnabled(false);
+
+        CampaignApiRepository.createCampaign(
+                this,
                 nameInput.getText().toString().trim(),
                 descriptionInput.getText().toString().trim(),
                 addressInput.getText().toString().trim(),
                 selectedCenterId,
-                selectedCenter,
                 isoStartDate,
                 isoEndDate,
                 parseCapacity(),
-                0,
-                "Proximamente",
-                "Proximamente");
-        MockCampaignRepository.addCampaign(campaign);
-        Toast.makeText(this, R.string.campaign_published_message, Toast.LENGTH_SHORT).show();
-        finish();
+                new CampaignApiRepository.Callback<Campaign>() {
+                    @Override
+                    public void onSuccess(Campaign campaign) {
+                        UiHelper.showToast(CreateCampaignActivity.this,
+                                R.string.campaign_published_message, Toast.LENGTH_SHORT);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        setFormEnabled(true);
+
+                        if (CampaignApiRepository.isUnauthorized(exception)) {
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_unauthorized_error, Toast.LENGTH_LONG);
+                            return;
+                        }
+
+                        if (CampaignApiRepository.isNetworkError(exception)) {
+                            UiHelper.showToast(CreateCampaignActivity.this,
+                                    R.string.campaign_create_network_error, Toast.LENGTH_LONG);
+                            return;
+                        }
+
+                        String friendlyMessage = extractValidationMessage(exception);
+                        UiHelper.showToast(CreateCampaignActivity.this,
+                                friendlyMessage != null ? friendlyMessage
+                                        : getString(R.string.campaign_create_server_error),
+                                Toast.LENGTH_LONG);
+                    }
+                });
+    }
+
+    private void setFormEnabled(boolean enabled) {
+        findViewById(R.id.create_campaign_publish).setEnabled(enabled);
+    }
+
+    private void clearFieldErrors() {
+        nameInput.setError(null);
+        descriptionInput.setError(null);
+        addressInput.setError(null);
+        startDateInput.setError(null);
+        endDateInput.setError(null);
+        capacityInput.setError(null);
     }
 
     private void saveDraft() {
-        Toast.makeText(this, R.string.campaign_draft_saved_message, Toast.LENGTH_SHORT).show();
+        UiHelper.showToast(this, R.string.campaign_draft_saved_message, Toast.LENGTH_SHORT);
         finish();
     }
 
@@ -232,9 +417,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(nameInput.getText())
                 || TextUtils.isEmpty(addressInput.getText())
                 || TextUtils.isEmpty(startDateInput.getText())
-                || TextUtils.isEmpty(endDateInput.getText())
-                || TextUtils.isEmpty(capacityInput.getText())) {
-            Toast.makeText(this, R.string.campaign_required_fields_message, Toast.LENGTH_SHORT).show();
+                || TextUtils.isEmpty(endDateInput.getText())) {
+            UiHelper.showToast(this, R.string.campaign_required_fields_message, Toast.LENGTH_SHORT);
             return false;
         }
         return true;

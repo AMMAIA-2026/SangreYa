@@ -14,15 +14,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ammaia_ispc.sangreyamobile.R;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 
+import com.ammaia_ispc.sangreyamobile.data.ContactApiRepository;
+import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
 
 public class ContactActivity extends AppCompatActivity {
 
-    private static final int MAX_NOMBRE_LENGTH = 20;
-    private static final int MAX_MENSAJE_LENGTH = 500;
+    private static final int MAX_NOMBRE_LENGTH = ContactRequest.MAX_NOMBRE_LENGTH;
+    private static final int MAX_MENSAJE_LENGTH = ContactRequest.MAX_MENSAJE_LENGTH;
 
     private EditText etNombre, etEmail, etMensaje;
     private Spinner spinnerMotivo;
+    private Button btnEnviar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,7 @@ public class ContactActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etMensaje = findViewById(R.id.etMensaje);
         spinnerMotivo = findViewById(R.id.spinnerMotivo);
-        Button btnEnviar = findViewById(R.id.btnEnviar);
+        btnEnviar = findViewById(R.id.btnEnviar);
 
         etNombre.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_NOMBRE_LENGTH)});
         etMensaje.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_MENSAJE_LENGTH)});
@@ -52,6 +56,7 @@ public class ContactActivity extends AppCompatActivity {
         String nombre = etNombre.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String mensaje = etMensaje.getText().toString().trim();
+        String motivo = spinnerMotivo.getSelectedItem().toString();
 
         boolean valido = true;
 
@@ -77,9 +82,67 @@ public class ContactActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO Sprint 2: POST real a /contacto/ (CA-31: se registra con tracked=false)
-        Toast.makeText(this, getString(R.string.contact_sent_message), Toast.LENGTH_SHORT).show();
-        finish();
+        btnEnviar.setEnabled(false);
+
+        ContactRequest request = new ContactRequest(
+                nombre,
+                email,
+                motivo,
+                mensaje
+        );
+
+        ContactApiRepository.sendContact(this, request, new ContactApiRepository.ContactCallback() {
+            @Override
+            public void onSuccess() {
+
+                UiHelper.showToast(
+                        ContactActivity.this,
+                        getString(R.string.contact_sent_message),
+                        Toast.LENGTH_SHORT
+                );
+                finish();
+            }
+
+            @Override
+            public void onValidationError(String field, String message) {
+                switch (field) {
+                    case "correo_electronico":
+                        etEmail.setError(message);
+                        break;
+
+                    case "nombre_completo":
+                        etNombre.setError(message);
+                        break;
+
+                    case "mensaje":
+                        etMensaje.setError(message);
+                        break;
+
+                    default:
+
+                        UiHelper.showToast(
+                                ContactActivity.this,
+                                message,
+                                Toast.LENGTH_SHORT
+                        );
+                        break;
+                }
+
+                btnEnviar.setEnabled(true);
+            }
+
+            @Override
+            public void onError(int messageRes) {
+
+                UiHelper.showToast(
+                        ContactActivity.this,
+                        getString(messageRes),
+                        Toast.LENGTH_SHORT
+                );
+
+                btnEnviar.setEnabled(true);
+            }
+        });
     }
 }
 

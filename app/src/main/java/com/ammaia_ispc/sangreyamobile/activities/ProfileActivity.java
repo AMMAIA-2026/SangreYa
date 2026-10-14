@@ -1,0 +1,508 @@
+package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.UserApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.DateHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ProfileValidator;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.AuthUser;
+import com.ammaia_ispc.sangreyamobile.model.UserUpdateRequest;
+import com.ammaia_ispc.sangreyamobile.model.ProfileViewModel;
+import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ProfileActivity extends AppCompatActivity {
+    private static final Pattern USERNAME_PATTERN = Pattern.compile(
+            "^[\\p{L}\\p{N}_.@+\\-]+$");
+    private static final Pattern NAME_PATTERN = Pattern.compile(
+            "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$");
+    private static final String API_DATE_FORMAT = "yyyy-MM-dd";
+
+    private EditText usernameInput;
+    private EditText emailInput;
+    private EditText dniInput;
+    private EditText nameInput;
+    private EditText lastNameInput;
+    private EditText birthDateInput;
+    private Button saveButton;
+    private ProgressBar loadingIndicator;
+    private LinearLayout profileForm;
+    private TextView messageView;
+    private String birthDate;
+    private String originalBirthDate;
+    private int userId;
+    private boolean adminEditMode;
+    private ProfileViewModel profileViewModel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        adminEditMode = getIntent().hasExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID);
+        if (adminEditMode) {
+            if (!SessionManager.requireAdmin(this)) {
+                return;
+            }
+            userId = getIntent().getIntExtra(ExtraKeys.EXTRA_ADMIN_EDIT_USER_ID, -1);
+            if (userId < 1) {
+                finish();
+                return;
+            }
+        }
+
+        UiHelper.configureSystemBars(this);
+        setContentView(R.layout.activity_profile);
+
+        bindViews();
+        configureNavigation();
+        if (adminEditMode) {
+            configureAdminEditMode();
+        } else {
+            configureBottomNavigation();
+        }
+        DateHelper.configureDateInput(this, birthDateInput);
+        saveButton.setOnClickListener(view -> saveProfile());
+        loadProfile();
+    }
+
+    private void bindViews() {
+        usernameInput = findViewById(R.id.profile_username);
+        emailInput = findViewById(R.id.profile_email);
+        dniInput = findViewById(R.id.profile_dni);
+        nameInput = findViewById(R.id.profile_name);
+        lastNameInput = findViewById(R.id.profile_last_name);
+        birthDateInput = findViewById(R.id.profile_birth_date);
+        saveButton = findViewById(R.id.profile_save);
+        loadingIndicator = findViewById(R.id.profile_loading);
+        profileForm = findViewById(R.id.profile_form);
+        messageView = findViewById(R.id.profile_message);
+    }
+
+    private void configureNavigation() {
+        DrawerLayout drawerLayout = findViewById(R.id.profile_drawer);
+        NavigationView navigationView = findViewById(R.id.profile_navigation_view);
+        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);
+    }
+
+    private void configureAdminEditMode() {
+        ((TextView) findViewById(R.id.profile_title_view))
+                .setText(R.string.admin_edit_user_title);
+        ((TextView) findViewById(R.id.profile_subtitle_view))
+                .setText(R.string.admin_edit_user_subtitle);
+        findViewById(R.id.profile_bottom_navigation).setVisibility(View.GONE);
+    }
+
+    private void configureBottomNavigation() {
+        findViewById(R.id.profile_campaigns_navigation_item)
+                .setOnClickListener(view -> {
+                    startActivity(new Intent(this, CampaignListActivity.class));
+                    finish();
+                });
+        findViewById(R.id.profile_enrollments_navigation_item)
+                .setOnClickListener(view -> {
+                    startActivity(new Intent(this, EnrollmentsActivity.class));
+                    finish();
+                });
+    }
+
+    private void loadProfile() {
+        if (!adminEditMode) {
+            userId = SessionManager.getUserId(this);
+        }
+        if (userId < 1) {
+            UiHelper.showMessage(messageView, R.string.profile_session_error);
+            return;
+        }
+
+        UserApiRepository repository = new UserApiRepository(ApiClient.getApiService(this));
+        ProfileViewModel.SessionStore sessionStore = new ProfileViewModel.SessionStore() {
+            @Override
+            public int getUserId() {
+                return SessionManager.getUserId(ProfileActivity.this);
+            }
+
+            @Override
+            public void updateUserName(String name) {
+                SessionManager.updateUserName(ProfileActivity.this, name);
+            }
+        };
+        profileViewModel = adminEditMode
+                ? new ProfileViewModel(repository, sessionStore, userId)
+                : new ProfileViewModel(repository, sessionStore);
+
+        UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);
+        ApiClient.getApiService(this).getUserProfile(userId).enqueue(new Callback<AuthUser>() {
+            @Override
+            public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
+                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                if (response.isSuccessful() && response.body() != null) {
+                    populateProfile(response.body());
+                    UiHelper.clearMessage(messageView);
+                } else {
+                    handleResponseError(response, false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AuthUser> call, Throwable throwable) {
+                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                UiHelper.showMessage(
+                        messageView,
+                        adminEditMode
+                                ? R.string.admin_user_load_error
+                                : R.string.profile_load_error);
+            }
+        });
+    }
+
+    private void populateProfile(AuthUser user) {
+        UiHelper.setTextAtEnd(usernameInput, safeValue(user.getUsername()));
+        UiHelper.setTextAtEnd(emailInput, safeValue(user.getEmail()));
+        UiHelper.setTextAtEnd(dniInput, safeValue(user.getDni()));
+        UiHelper.setTextAtEnd(nameInput, safeValue(user.getName()));
+        UiHelper.setTextAtEnd(lastNameInput, safeValue(user.getLastName()));
+        setBirthDate(user.getBirthDate());
+        originalBirthDate = birthDate;
+    }
+
+    private void setBirthDate(String isoDate) {
+        birthDate = isoDate;
+        if (isValidIsoDate(isoDate)) {
+            UiHelper.setTextAtEnd(birthDateInput, DateHelper.toDisplayDate(isoDate));
+        } else {
+            UiHelper.setTextAtEnd(birthDateInput, "");
+        }
+    }
+
+    private void saveProfile() {
+        syncBirthDateFromInput();
+        clearFieldErrors();
+        UiHelper.clearMessage(messageView);
+
+        if (!validateForm()) {
+            return;
+        }
+
+        UserUpdateRequest request = new UserUpdateRequest(
+                valueOf(usernameInput),
+                valueOf(emailInput),
+                valueOf(dniInput),
+                valueOf(nameInput),
+                valueOf(lastNameInput),
+                birthDate);
+
+        if (!TextUtils.equals(birthDate, originalBirthDate)
+                && !isEnrollmentAgeAllowed(birthDate)) {
+            showAgeWarning(request);
+            return;
+        }
+
+        submitProfile(request);
+    }
+
+    private void showAgeWarning(UserUpdateRequest request) {
+        new AlertDialog.Builder(this)
+                .setTitle(adminEditMode
+                        ? R.string.admin_user_age_warning_title
+                        : R.string.profile_age_warning_title)
+                .setMessage(adminEditMode
+                        ? R.string.admin_user_age_warning_message
+                        : R.string.profile_age_warning_message)
+                .setNegativeButton(R.string.profile_age_warning_cancel, null)
+                .setPositiveButton(
+                        R.string.profile_age_warning_confirm,
+                        (dialog, which) -> submitProfile(request))
+                .show();
+    }
+
+    private void submitProfile(UserUpdateRequest request) {
+        if (profileViewModel == null) {
+            UiHelper.showMessage(messageView, R.string.profile_session_error);
+            return;
+        }
+        profileViewModel.save(request, state -> {
+            UiHelper.setLoading(loadingIndicator, profileForm, state.loading, saveButton);
+            if (state.loading) {
+                return;
+            }
+            if (state.isSuccess()) {
+                populateProfile(state.response.body());
+                if (userId == SessionManager.getUserId(ProfileActivity.this)) {
+                    configureNavigation();
+                }
+                UiHelper.showToast(
+                        ProfileActivity.this,
+                        adminEditMode
+                                ? R.string.admin_user_updated_message
+                                : R.string.profile_updated_message,
+                        Toast.LENGTH_SHORT);
+                if (adminEditMode) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            } else if (state.response != null) {
+                handleResponseError(state.response, true);
+            } else {
+                UiHelper.showMessage(
+                        messageView,
+                        adminEditMode
+                                ? R.string.admin_user_update_error
+                                : R.string.profile_update_error);
+            }
+        });
+    }
+
+    private boolean validateForm() {
+        String username = valueOf(usernameInput);
+        if (TextUtils.isEmpty(username)) {
+            return showFieldError(usernameInput, R.string.profile_required_field);
+        }
+        if (username.length() > 150 || !USERNAME_PATTERN.matcher(username).matches()) {
+            return showFieldError(usernameInput, R.string.profile_username_invalid);
+        }
+
+        String email = valueOf(emailInput);
+        if (TextUtils.isEmpty(email)) {
+            return showFieldError(emailInput, R.string.profile_required_field);
+        }
+        if (!ProfileValidator.isValidEmail(email)) {
+            return showFieldError(emailInput, R.string.profile_email_invalid);
+        }
+
+        String dni = valueOf(dniInput);
+        if (TextUtils.isEmpty(dni)) {
+            return showFieldError(dniInput, R.string.profile_required_field);
+        }
+        if (!ProfileValidator.isValidDni(dni)) {
+            return showFieldError(dniInput, R.string.profile_dni_invalid);
+        }
+
+        String name = valueOf(nameInput);
+        if (TextUtils.isEmpty(name)) {
+            return showFieldError(nameInput, R.string.profile_required_field);
+        }
+        if (name.length() > 25 || !NAME_PATTERN.matcher(name).matches()) {
+            return showFieldError(nameInput, R.string.profile_name_invalid);
+        }
+
+        String lastName = valueOf(lastNameInput);
+        if (TextUtils.isEmpty(lastName)) {
+            return showFieldError(lastNameInput, R.string.profile_required_field);
+        }
+        if (lastName.length() > 25 || !NAME_PATTERN.matcher(lastName).matches()) {
+            return showFieldError(lastNameInput, R.string.profile_name_invalid);
+        }
+
+        if (!isValidIsoDate(birthDate)) {
+            return showFieldError(birthDateInput, R.string.profile_birth_date_invalid);
+        }
+        return true;
+    }
+
+    private boolean showFieldError(EditText field, int messageResId) {
+        field.setError(getString(messageResId));
+        field.requestFocus();
+        return false;
+    }
+
+    private void handleResponseError(Response<?> response, boolean update) {
+        int statusCode = response.code();
+        if (statusCode == 401) {
+            SessionManager.expireSession(this);
+            return;
+        }
+        if (statusCode == 403) {
+            UiHelper.showMessage(
+                    messageView,
+                    adminEditMode
+                            ? R.string.admin_user_unauthorized_error
+                            : R.string.profile_unauthorized_error);
+            return;
+        }
+        if (statusCode == 404) {
+            UiHelper.showMessage(
+                    messageView,
+                    adminEditMode
+                            ? R.string.admin_user_not_found_error
+                            : R.string.profile_not_found_error);
+            return;
+        }
+        if (statusCode == 400 && applyServerErrors(response.errorBody())) {
+            UiHelper.showMessage(messageView, R.string.profile_generic_validation_error);
+            return;
+        }
+        UiHelper.showMessage(
+                messageView,
+                update
+                        ? (adminEditMode
+                        ? R.string.admin_user_update_error
+                        : R.string.profile_update_error)
+                        : (adminEditMode
+                        ? R.string.admin_user_load_error
+                        : R.string.profile_load_error));
+    }
+
+    private boolean applyServerErrors(ResponseBody errorBody) {
+        if (errorBody == null) {
+            return false;
+        }
+
+        try {
+            JSONObject errors = new JSONObject(errorBody.string());
+            boolean handled = false;
+            handled |= applyServerError(errors, "username", usernameInput);
+            handled |= applyServerError(errors, "email", emailInput);
+            handled |= applyServerError(errors, "dni", dniInput);
+            handled |= applyServerError(errors, "nombre", nameInput);
+            handled |= applyServerError(errors, "apellido", lastNameInput);
+            handled |= applyServerError(errors, "fecha_nacimiento", birthDateInput);
+            return handled;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    private boolean applyServerError(JSONObject errors, String key, EditText field) {
+        if (!errors.has(key)) {
+            return false;
+        }
+
+        String detail = firstError(errors.opt(key));
+        int messageResId = serverMessageFor(key, detail);
+        field.setError(getString(messageResId));
+        field.requestFocus();
+        return true;
+    }
+
+    private int serverMessageFor(String key, String detail) {
+        String normalized = UiHelper.normalized(detail, Locale.ROOT);
+        if (normalized.contains("required")
+                || normalized.contains("blank")
+                || normalized.contains("obligatorio")) {
+            return R.string.profile_required_field;
+        }
+        if ("username".equals(key)) {
+            return normalized.contains("unique") || normalized.contains("exist")
+                    ? R.string.profile_username_taken
+                    : R.string.profile_username_invalid;
+        }
+        if ("email".equals(key)) {
+            return normalized.contains("unique") || normalized.contains("exist")
+                    ? R.string.profile_email_taken
+                    : R.string.profile_email_invalid;
+        }
+        if ("dni".equals(key)) {
+            return normalized.contains("unique") || normalized.contains("exist")
+                    ? R.string.profile_dni_taken
+                    : R.string.profile_dni_invalid;
+        }
+        if ("nombre".equals(key) || "apellido".equals(key)) {
+            return R.string.profile_name_invalid;
+        }
+        return R.string.profile_birth_date_invalid;
+    }
+
+    private String firstError(Object value) {
+        if (value instanceof JSONArray) {
+            JSONArray errors = (JSONArray) value;
+            return errors.length() == 0 ? "" : errors.optString(0, "");
+        }
+        return value == null ? "" : String.valueOf(value);
+    }
+
+    private void clearFieldErrors() {
+        usernameInput.setError(null);
+        emailInput.setError(null);
+        dniInput.setError(null);
+        nameInput.setError(null);
+        lastNameInput.setError(null);
+        birthDateInput.setError(null);
+    }
+
+    private String valueOf(EditText field) {
+        return field.getText().toString().trim();
+    }
+
+    private String safeValue(String value) {
+        return value == null ? "" : value;
+    }
+
+    private boolean isValidIsoDate(String value) {
+        return DateHelper.isValidIsoDate(value);
+    }
+
+    private void syncBirthDateFromInput() {
+        String displayDate = valueOf(birthDateInput);
+        if (TextUtils.isEmpty(displayDate)) {
+            birthDate = null;
+            return;
+        }
+
+        birthDate = DateHelper.toIsoDate(displayDate);
+    }
+
+    private boolean isEnrollmentAgeAllowed(String value) {
+        Date birth = parseDate(value, API_DATE_FORMAT);
+        if (birth == null) {
+            return true;
+        }
+
+        Calendar birthCalendar = Calendar.getInstance();
+        birthCalendar.setTime(birth);
+        Calendar today = Calendar.getInstance();
+        int age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
+        if (today.get(Calendar.MONTH) < birthCalendar.get(Calendar.MONTH)
+                || (today.get(Calendar.MONTH) == birthCalendar.get(Calendar.MONTH)
+                && today.get(Calendar.DAY_OF_MONTH) < birthCalendar.get(Calendar.DAY_OF_MONTH))) {
+            age--;
+        }
+        return age >= 18 && age < 65;
+    }
+
+    private Date parseDate(String value, String pattern) {
+        if (TextUtils.isEmpty(value)) {
+            return null;
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.US);
+        formatter.setLenient(false);
+        try {
+            return formatter.parse(value);
+        } catch (ParseException ignored) {
+            return null;
+        }
+    }
+
+}

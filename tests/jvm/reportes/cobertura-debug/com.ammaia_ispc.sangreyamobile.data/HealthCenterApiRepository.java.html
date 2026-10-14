@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HealthCenterApiRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.data</a> &gt; <span class="el_source">HealthCenterApiRepository.java</span></div><h1>HealthCenterApiRepository.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.data;
+
+import android.content.Context;
+
+import androidx.annotation.StringRes;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
+import com.ammaia_ispc.sangreyamobile.model.HealthCenter;
+import com.ammaia_ispc.sangreyamobile.model.HealthCenterResponse;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+
+public final class HealthCenterApiRepository {
+
+    public interface HealthCentersCallback {
+        void onSuccess(List&lt;HealthCenter&gt; centers);
+
+        void onError(@StringRes int messageRes);
+    }
+
+    private HealthCenterApiRepository() {
+    }
+
+    public static void loadHealthCenters(Context context, HealthCentersCallback callback) {
+<span class="nc" id="L33">        ApiService api = ApiClient.getApiService(context);</span>
+
+<span class="nc" id="L35">        api.getHealthCenters().enqueue(new retrofit2.Callback&lt;List&lt;HealthCenterResponse&gt;&gt;() {</span>
+            @Override
+            public void onResponse(Call&lt;List&lt;HealthCenterResponse&gt;&gt; call,
+                                   Response&lt;List&lt;HealthCenterResponse&gt;&gt; response) {
+<span class="nc bnc" id="L39" title="All 4 branches missed.">                if (!response.isSuccessful() || response.body() == null) {</span>
+<span class="nc" id="L40">                    callback.onError(R.string.health_center_load_error_server);</span>
+<span class="nc" id="L41">                    return;</span>
+                }
+<span class="nc" id="L43">                callback.onSuccess(toSortedCenters(response.body()));</span>
+<span class="nc" id="L44">            }</span>
+
+            @Override
+            public void onFailure(Call&lt;List&lt;HealthCenterResponse&gt;&gt; call, Throwable throwable) {
+<span class="nc" id="L48">                callback.onError(R.string.health_center_load_error_network);</span>
+<span class="nc" id="L49">            }</span>
+        });
+<span class="nc" id="L51">    }</span>
+
+    private static List&lt;HealthCenter&gt; toSortedCenters(List&lt;HealthCenterResponse&gt; responses) {
+<span class="nc" id="L54">        List&lt;HealthCenter&gt; centers = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        for (HealthCenterResponse item : responses) {</span>
+<span class="nc" id="L56">            centers.add(new HealthCenter(</span>
+                    item.id,
+                    item.name,
+                    item.address,
+                    item.neighborhood,
+                    item.city,
+                    item.phone,
+                    item.website,
+                    item.latitude,
+                    item.longitude));
+<span class="nc" id="L66">        }</span>
+<span class="nc" id="L67">        Collections.sort(centers, Comparator</span>
+<span class="nc" id="L68">                .comparing((HealthCenter center) -&gt; center.neighborhood, String.CASE_INSENSITIVE_ORDER)</span>
+<span class="nc" id="L69">                .thenComparing(center -&gt; center.name, String.CASE_INSENSITIVE_ORDER));</span>
+<span class="nc" id="L70">        return centers;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

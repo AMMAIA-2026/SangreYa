@@ -1,0 +1,8 @@
+{
+  "apiHost": "https://www.pythonanywhere.com",
+  "username": "sangreyaispc",
+  "apiToken": "",
+  "consoleId": "",
+  "databasePath": "/home/sangreyaispc/Proyecto2026/backend/ProyectoMain/db.sqlite3",
+  "pythonCommand": "python3"
+}

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CampaignListActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">CampaignListActivity.java</span></div><h1>CampaignListActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
+import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.model.Campaign;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
+
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+<span class="nc" id="L38">public class CampaignListActivity extends AppCompatActivity {</span>
+<span class="nc" id="L39">    private List&lt;Campaign&gt; campaigns = new ArrayList&lt;&gt;();</span>
+    private LinearLayout campaignContainer;
+    private ProgressBar loadingIndicator;
+    private ScrollView campaignScroll;
+    private MaterialButton allFilter;
+    private MaterialButton activeFilter;
+    private MaterialButton upcomingFilter;
+    private EditText searchInput;
+    private boolean standardUser;
+<span class="nc" id="L48">    private String currentFilter = &quot;Todas&quot;;</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L52">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L53">        UiHelper.configureSystemBars(this);</span>
+<span class="nc" id="L54">        standardUser = SessionManager.isStandardUser(this);</span>
+<span class="nc" id="L55">        setContentView(R.layout.activity_campaign_list);</span>
+<span class="nc" id="L56">        bindViews();</span>
+<span class="nc" id="L57">        configureFilters();</span>
+<span class="nc" id="L58">        configureSearch();</span>
+<span class="nc" id="L59">    }</span>
+
+    @Override
+    protected void onResume() {
+<span class="nc" id="L63">        super.onResume();</span>
+<span class="nc" id="L64">        refreshNavigation();</span>
+<span class="nc" id="L65">        loadCampaigns();</span>
+<span class="nc" id="L66">    }</span>
+
+    private void loadCampaigns() {
+<span class="nc" id="L69">        UiHelper.setLoading(loadingIndicator, campaignScroll, true);</span>
+<span class="nc" id="L70">        CampaignApiRepository.getCampaigns(this, new CampaignApiRepository.Callback&lt;List&lt;Campaign&gt;&gt;() {</span>
+            @Override
+            public void onSuccess(List&lt;Campaign&gt; value) {
+<span class="nc" id="L73">                campaigns = value;</span>
+<span class="nc" id="L74">                showCampaigns(currentFilter);</span>
+<span class="nc" id="L75">                UiHelper.setLoading(loadingIndicator, campaignScroll, false);</span>
+<span class="nc" id="L76">            }</span>
+
+            @Override
+            public void onError(Exception exception) {
+<span class="nc" id="L80">                UiHelper.setLoading(loadingIndicator, campaignScroll, false);</span>
+<span class="nc" id="L81">                Toast.makeText(</span>
+                        CampaignListActivity.this,
+                        R.string.campaigns_load_error,
+<span class="nc" id="L84">                        Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L85">            }</span>
+        });
+<span class="nc" id="L87">    }</span>
+
+    private void bindViews() {
+<span class="nc" id="L90">        campaignContainer = findViewById(R.id.campaign_container);</span>
+<span class="nc" id="L91">        loadingIndicator = findViewById(R.id.campaign_loading);</span>
+<span class="nc" id="L92">        campaignScroll = findViewById(R.id.campaign_scroll);</span>
+<span class="nc" id="L93">        allFilter = findViewById(R.id.filter_all);</span>
+<span class="nc" id="L94">        activeFilter = findViewById(R.id.filter_active);</span>
+<span class="nc" id="L95">        upcomingFilter = findViewById(R.id.filter_upcoming);</span>
+<span class="nc" id="L96">        searchInput = findViewById(R.id.campaign_search);</span>
+<span class="nc" id="L97">        refreshNavigation();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (!standardUser) {</span>
+<span class="nc" id="L99">            findViewById(R.id.bottom_navigation).setVisibility(View.GONE);</span>
+        } else {
+<span class="nc" id="L101">            findViewById(R.id.enrollments_navigation_item).setOnClickListener(view -&gt;</span>
+<span class="nc" id="L102">                    startActivity(new Intent(this, EnrollmentsActivity.class)));</span>
+<span class="nc" id="L103">            findViewById(R.id.profile_navigation_item).setOnClickListener(view -&gt;</span>
+<span class="nc" id="L104">                    startActivity(new Intent(this, ProfileActivity.class)));</span>
+        }
+<span class="nc" id="L106">    }</span>
+
+    private void refreshNavigation() {
+<span class="nc" id="L109">        standardUser = SessionManager.isStandardUser(this);</span>
+<span class="nc" id="L110">        DrawerLayout drawerLayout = findViewById(R.id.campaign_drawer);</span>
+<span class="nc" id="L111">        NavigationView navigationView = findViewById(R.id.campaign_navigation_view);</span>
+<span class="nc" id="L112">        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);</span>
+<span class="nc" id="L113">    }</span>
+
+    private void configureFilters() {
+<span class="nc" id="L116">        allFilter.setOnClickListener(view -&gt; selectFilter(&quot;Todas&quot;));</span>
+<span class="nc" id="L117">        activeFilter.setOnClickListener(view -&gt; selectFilter(&quot;Activas&quot;));</span>
+<span class="nc" id="L118">        upcomingFilter.setOnClickListener(view -&gt; selectFilter(&quot;Próximas&quot;));</span>
+<span class="nc" id="L119">    }</span>
+
+    private void configureSearch() {
+<span class="nc" id="L122">        searchInput.addTextChangedListener(new TextWatcher() {</span>
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+<span class="nc" id="L125">            }</span>
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+<span class="nc" id="L129">                showCampaigns(currentFilter);</span>
+<span class="nc" id="L130">            }</span>
+
+            @Override
+            public void afterTextChanged(Editable s) {
+<span class="nc" id="L134">            }</span>
+        });
+<span class="nc" id="L136">    }</span>
+
+    private void selectFilter(String filter) {
+<span class="nc" id="L139">        currentFilter = filter;</span>
+<span class="nc" id="L140">        showCampaigns(currentFilter);</span>
+<span class="nc" id="L141">    }</span>
+
+    private void showCampaigns(String filter) {
+<span class="nc" id="L144">        campaignContainer.removeAllViews();</span>
+<span class="nc" id="L145">        Date today = new Date();</span>
+<span class="nc" id="L146">        String query = UiHelper.normalized(</span>
+<span class="nc" id="L147">                searchInput.getText().toString(),</span>
+<span class="nc" id="L148">                Locale.getDefault());</span>
+<span class="nc" id="L149">        List&lt;Campaign&gt; orderedCampaigns = new ArrayList&lt;&gt;(campaigns);</span>
+<span class="nc" id="L150">        orderedCampaigns.sort(Comparator</span>
+<span class="nc" id="L151">                .comparingInt((Campaign campaign) -&gt; campaignStatusOrder(campaign.calculatedStatus))</span>
+<span class="nc" id="L152">                .thenComparing(campaign -&gt; campaign.startDate));</span>
+
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for (Campaign campaign : orderedCampaigns) {</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (&quot;Finalizada&quot;.equals(campaign.calculatedStatus)) {</span>
+<span class="nc" id="L156">                continue;</span>
+            }
+<span class="nc bnc" id="L158" title="All 4 branches missed.">            if (filter.equals(&quot;Activas&quot;) &amp;&amp; !CampaignHelper.isActiveOn(campaign, today)) {</span>
+<span class="nc" id="L159">                continue;</span>
+            }
+<span class="nc bnc" id="L161" title="All 4 branches missed.">            if (filter.equals(&quot;Próximas&quot;) &amp;&amp; !campaign.calculatedStatus.equals(&quot;Proximamente&quot;)) {</span>
+<span class="nc" id="L162">                continue;</span>
+            }
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            if (!query.isEmpty()</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                    &amp;&amp; !UiHelper.normalized(campaign.title, Locale.getDefault()).contains(query)) {</span>
+<span class="nc" id="L166">                continue;</span>
+            }
+<span class="nc" id="L168">            View card = createCampaignCard(campaign);</span>
+<span class="nc" id="L169">            LinearLayout.LayoutParams cardParams = (LinearLayout.LayoutParams) card.getLayoutParams();</span>
+<span class="nc" id="L170">            cardParams.setMargins(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.card_spacing));</span>
+<span class="nc" id="L171">            campaignContainer.addView(card, cardParams);</span>
+<span class="nc" id="L172">        }</span>
+<span class="nc" id="L173">        updateFilterStyles(filter);</span>
+<span class="nc" id="L174">    }</span>
+
+    private int campaignStatusOrder(String status) {
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        if (&quot;Activa&quot;.equals(status)) {</span>
+<span class="nc" id="L178">            return 0;</span>
+        }
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        if (&quot;Proximamente&quot;.equals(status)) {</span>
+<span class="nc" id="L181">            return 1;</span>
+        }
+<span class="nc" id="L183">        return 2;</span>
+    }
+
+    private void updateFilterStyles(String selectedFilter) {
+<span class="nc" id="L187">        styleFilter(allFilter, selectedFilter.equals(&quot;Todas&quot;));</span>
+<span class="nc" id="L188">        styleFilter(activeFilter, selectedFilter.equals(&quot;Activas&quot;));</span>
+<span class="nc" id="L189">        styleFilter(upcomingFilter, selectedFilter.equals(&quot;Próximas&quot;));</span>
+<span class="nc" id="L190">    }</span>
+
+    private void styleFilter(MaterialButton filter, boolean selected) {
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        filter.setTextColor(ContextCompat.getColor(this, selected ? R.color.white : R.color.secondary_text));</span>
+<span class="nc" id="L194">        filter.setBackgroundTintList(ColorStateList.valueOf(</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                ContextCompat.getColor(this, selected ? R.color.primary_red : R.color.surface)));</span>
+<span class="nc" id="L196">    }</span>
+
+    private View createCampaignCard(Campaign campaign) {
+<span class="nc" id="L199">        View card = getLayoutInflater().inflate(R.layout.item_campaign, campaignContainer, false);</span>
+<span class="nc" id="L200">        card.setOnClickListener(view -&gt; openDetails(campaign));</span>
+<span class="nc" id="L201">        ((TextView) card.findViewById(R.id.campaign_title)).setText(campaign.title);</span>
+<span class="nc" id="L202">        TextView status = card.findViewById(R.id.campaign_status);</span>
+<span class="nc" id="L203">        status.setText(CampaignHelper.statusText(campaign.calculatedStatus));</span>
+<span class="nc" id="L204">        status.setTextColor(ContextCompat.getColor(this, CampaignHelper.statusColor(campaign.calculatedStatus)));</span>
+<span class="nc" id="L205">        status.setBackgroundResource(CampaignHelper.statusBackground(campaign.calculatedStatus));</span>
+<span class="nc" id="L206">        ((TextView) card.findViewById(R.id.campaign_location)).setText(campaign.location);</span>
+<span class="nc" id="L207">        ((TextView) card.findViewById(R.id.campaign_dates)).setText(CampaignHelper.formatShortDate(campaign.startDate, campaign.endDate));</span>
+<span class="nc" id="L208">        ((TextView) card.findViewById(R.id.campaign_registered)).setText(getString(R.string.registered_count, campaign.totalRegistered));</span>
+<span class="nc" id="L209">        TextView capacity = card.findViewById(R.id.campaign_capacity);</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (campaign.maximumCapacity == null) {</span>
+<span class="nc" id="L211">            capacity.setText(R.string.unlimited_capacity);</span>
+        } else {
+<span class="nc" id="L213">            capacity.setText(getString(R.string.maximum_capacity, campaign.maximumCapacity));</span>
+        }
+<span class="nc" id="L215">        return card;</span>
+    }
+
+    private void openDetails(Campaign campaign) {
+<span class="nc" id="L219">        Intent intent = new Intent(this, CampaignDetailActivity.class);</span>
+<span class="nc" id="L220">        intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);</span>
+<span class="nc" id="L221">        intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);</span>
+<span class="nc" id="L222">        startActivity(intent);</span>
+<span class="nc" id="L223">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminContactListActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">AdminContactListActivity.java</span></div><h1>AdminContactListActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import android.widget.Toast;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.ContactDateTimeHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.model.ContactMessage;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.navigation.NavigationView;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+<span class="nc" id="L31">public class AdminContactListActivity extends AppCompatActivity {</span>
+
+<span class="nc" id="L33">    private List&lt;ContactMessage&gt; contacts = new ArrayList&lt;&gt;();</span>
+    private LinearLayout contactContainer;
+    private MaterialButton allFilter;
+    private MaterialButton unansweredFilter;
+    private MaterialButton answeredFilter;
+<span class="nc" id="L38">    private String currentFilter = &quot;Todos&quot;;</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L42">        super.onCreate(savedInstanceState);</span>
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (!SessionManager.requireAdmin(this)) {</span>
+<span class="nc" id="L45">            return;</span>
+        }
+
+<span class="nc" id="L48">        setContentView(R.layout.activity_admin_contact_list);</span>
+
+<span class="nc" id="L50">        bindViews();</span>
+<span class="nc" id="L51">        configureFilters();</span>
+<span class="nc" id="L52">    }</span>
+
+    @Override
+    protected void onResume() {
+<span class="nc" id="L56">        super.onResume();</span>
+<span class="nc" id="L57">        loadContacts();</span>
+<span class="nc" id="L58">    }</span>
+
+    private void loadContacts() {
+<span class="nc" id="L61">        ApiClient.getApiService(this)</span>
+<span class="nc" id="L62">                .getContacts()</span>
+<span class="nc" id="L63">                .enqueue(new Callback&lt;List&lt;ContactMessage&gt;&gt;() {</span>
+
+                    @Override
+                    public void onResponse(
+                            Call&lt;List&lt;ContactMessage&gt;&gt; call,
+                            Response&lt;List&lt;ContactMessage&gt;&gt; response) {
+
+<span class="nc bnc" id="L70" title="All 4 branches missed.">                        if (response.isSuccessful() &amp;&amp; response.body() != null) {</span>
+<span class="nc" id="L71">                            contacts = response.body();</span>
+<span class="nc" id="L72">                            showContacts();</span>
+                        } else {
+<span class="nc" id="L74">                            UiHelper.showToast(</span>
+                                    AdminContactListActivity.this,
+                                    &quot;No se pudieron cargar los contactos.&quot;,
+                                    Toast.LENGTH_SHORT);
+                        }
+<span class="nc" id="L79">                    }</span>
+
+                    @Override
+                    public void onFailure(
+                            Call&lt;List&lt;ContactMessage&gt;&gt; call,
+                            Throwable t) {
+
+<span class="nc" id="L86">                        UiHelper.showToast(</span>
+                                AdminContactListActivity.this,
+                                &quot;No se pudo conectar con el servidor.&quot;,
+                                Toast.LENGTH_SHORT);
+<span class="nc" id="L90">                    }</span>
+                });
+<span class="nc" id="L92">    }</span>
+
+
+
+    private void bindViews() {
+<span class="nc" id="L97">        contactContainer = findViewById(R.id.admin_contact_container);</span>
+<span class="nc" id="L98">        allFilter = findViewById(R.id.admin_contact_filter_all);</span>
+<span class="nc" id="L99">        unansweredFilter = findViewById(R.id.admin_contact_filter_unanswered);</span>
+<span class="nc" id="L100">        answeredFilter = findViewById(R.id.admin_contact_filter_answered);</span>
+
+<span class="nc" id="L102">        DrawerLayout drawerLayout = findViewById(R.id.admin_contact_drawer);</span>
+<span class="nc" id="L103">        NavigationView navigationView = findViewById(R.id.admin_contact_navigation_view);</span>
+<span class="nc" id="L104">        NavigationDrawerHelper.configure(this, drawerLayout, navigationView);</span>
+
+<span class="nc" id="L106">        findViewById(R.id.admin_nav_dashboard).setOnClickListener(view -&gt; openDashboard());</span>
+<span class="nc" id="L107">        findViewById(R.id.admin_nav_campaigns).setOnClickListener(view -&gt; openCampaigns());</span>
+<span class="nc" id="L108">        findViewById(R.id.admin_nav_users).setOnClickListener(view -&gt; openUsers());</span>
+<span class="nc" id="L109">    }</span>
+
+    private void configureFilters() {
+<span class="nc" id="L112">        allFilter.setOnClickListener(view -&gt; selectFilter(&quot;Todos&quot;));</span>
+<span class="nc" id="L113">        unansweredFilter.setOnClickListener(view -&gt; selectFilter(&quot;Sin responder&quot;));</span>
+<span class="nc" id="L114">        answeredFilter.setOnClickListener(view -&gt; selectFilter(&quot;Respondidos&quot;));</span>
+<span class="nc" id="L115">    }</span>
+
+    private void selectFilter(String filter) {
+<span class="nc" id="L118">        currentFilter = filter;</span>
+<span class="nc" id="L119">        showContacts();</span>
+<span class="nc" id="L120">    }</span>
+
+    private void showContacts() {
+<span class="nc" id="L123">        contactContainer.removeAllViews();</span>
+
+<span class="nc" id="L125">        List&lt;ContactMessage&gt; ordered = new ArrayList&lt;&gt;(contacts);</span>
+        // CA-33: pendientes (sin seguimiento) primero
+<span class="nc" id="L127">        ordered.sort(Comparator.comparing(ContactMessage::isTracked));</span>
+
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        for (ContactMessage contact : ordered) {</span>
+<span class="nc bnc" id="L130" title="All 4 branches missed.">            if (currentFilter.equals(&quot;Sin responder&quot;) &amp;&amp; contact.isTracked()) {</span>
+<span class="nc" id="L131">                continue;</span>
+            }
+<span class="nc bnc" id="L133" title="All 4 branches missed.">            if (currentFilter.equals(&quot;Respondidos&quot;) &amp;&amp; !contact.isTracked()) {</span>
+<span class="nc" id="L134">                continue;</span>
+            }
+
+<span class="nc" id="L137">            View card = createContactCard(contact);</span>
+<span class="nc" id="L138">            LinearLayout.LayoutParams cardParams =</span>
+<span class="nc" id="L139">                    (LinearLayout.LayoutParams) card.getLayoutParams();</span>
+
+<span class="nc" id="L141">            cardParams.setMargins(</span>
+                    0,
+                    0,
+                    0,
+<span class="nc" id="L145">                    getResources().getDimensionPixelSize(R.dimen.card_spacing)</span>
+            );
+
+<span class="nc" id="L148">            contactContainer.addView(card, cardParams);</span>
+<span class="nc" id="L149">        }</span>
+
+<span class="nc" id="L151">        updateFilterStyles();</span>
+<span class="nc" id="L152">    }</span>
+
+    private void updateFilterStyles() {
+<span class="nc" id="L155">        UiHelper.styleFilter(this, allFilter, currentFilter.equals(&quot;Todos&quot;));</span>
+<span class="nc" id="L156">        UiHelper.styleFilter(this, unansweredFilter, currentFilter.equals(&quot;Sin responder&quot;));</span>
+<span class="nc" id="L157">        UiHelper.styleFilter(this, answeredFilter, currentFilter.equals(&quot;Respondidos&quot;));</span>
+<span class="nc" id="L158">    }</span>
+
+
+    private View createContactCard(ContactMessage contact) {
+<span class="nc" id="L162">        View card = getLayoutInflater().inflate(</span>
+                R.layout.item_admin_contact,
+                contactContainer,
+                false
+        );
+
+<span class="nc" id="L168">        card.findViewById(R.id.contact_dot).setVisibility(</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                contact.isTracked() ? View.INVISIBLE : View.VISIBLE</span>
+        );
+
+<span class="nc" id="L172">        ((TextView) card.findViewById(R.id.contact_name))</span>
+<span class="nc" id="L173">                .setText(contact.getName());</span>
+
+<span class="nc" id="L175">        ((TextView) card.findViewById(R.id.contact_time))</span>
+<span class="nc" id="L176">                .setText(ContactDateTimeHelper.formatForAdmin(contact.getCreatedAt()));</span>
+
+<span class="nc" id="L178">        ((TextView) card.findViewById(R.id.contact_reason))</span>
+<span class="nc" id="L179">                .setText(contact.getReason());</span>
+
+<span class="nc" id="L181">        ((TextView) card.findViewById(R.id.contact_message))</span>
+<span class="nc" id="L182">                .setText(contact.getMessage());</span>
+
+<span class="nc" id="L184">        card.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L185">            Intent intent = new Intent(this, ContactDetailActivity.class);</span>
+<span class="nc" id="L186">            intent.putExtra(&quot;contact_id&quot;, contact.getId());</span>
+<span class="nc" id="L187">            startActivity(intent);</span>
+<span class="nc" id="L188">        });</span>
+
+<span class="nc" id="L190">        return card;</span>
+    }
+
+
+
+    private void openDashboard() {
+<span class="nc" id="L196">        Intent intent = new Intent(this, AdminDashboardActivity.class);</span>
+<span class="nc" id="L197">        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);</span>
+<span class="nc" id="L198">        startActivity(intent);</span>
+<span class="nc" id="L199">        finish();</span>
+<span class="nc" id="L200">    }</span>
+
+    private void openCampaigns() {
+<span class="nc" id="L203">        Intent intent = new Intent(this, AdminCampaignListActivity.class);</span>
+<span class="nc" id="L204">        startActivity(intent);</span>
+<span class="nc" id="L205">    }</span>
+
+    private void openUsers() {
+<span class="nc" id="L208">        Intent intent = new Intent(this, UsersActivity.class);</span>
+<span class="nc" id="L209">        startActivity(intent);</span>
+<span class="nc" id="L210">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

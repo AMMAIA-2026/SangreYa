@@ -11,7 +11,8 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ammaia_ispc.sangreyamobile.R;
-import com.ammaia_ispc.sangreyamobile.data.MockAdminDashboardRepository;
+import com.ammaia_ispc.sangreyamobile.data.CampaignApiRepository;
+import com.ammaia_ispc.sangreyamobile.data.DashboardApiRepository;
 import com.ammaia_ispc.sangreyamobile.model.AdminDashboardData;
 import com.ammaia_ispc.sangreyamobile.model.Campaign;
 import com.ammaia_ispc.sangreyamobile.model.DashboardCampaignStatus;
@@ -20,19 +21,20 @@ import com.ammaia_ispc.sangreyamobile.helpers.CampaignHelper;
 import com.ammaia_ispc.sangreyamobile.helpers.DashboardChartView;
 import com.ammaia_ispc.sangreyamobile.helpers.ExtraKeys;
 import com.ammaia_ispc.sangreyamobile.helpers.NavigationDrawerHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.SessionManager;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
 import com.google.android.material.navigation.NavigationView;
 
-public class AdminDashboardActivity extends AppCompatActivity {
-    private String user;
+import android.widget.Toast;
 
+public class AdminDashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CampaignHelper.configureSystemBars(this);
-        user = getIntent().getStringExtra(ExtraKeys.EXTRA_USER);
-        if (user == null) {
-            user = AdminDashboardHelper.MOCK_ADMIN_EMAIL;
+        if (!SessionManager.requireAdmin(this)) {
+            return;
         }
+        UiHelper.configureSystemBars(this);
         setContentView(R.layout.activity_admin_dashboard);
         bindViews();
     }
@@ -43,58 +45,79 @@ public class AdminDashboardActivity extends AppCompatActivity {
         NavigationDrawerHelper.configure(
                 this,
                 drawerLayout,
-                navigationView,
-                false,
-                user,
-                ExtraKeys.ROLE_ADMIN);
+                navigationView);
         findViewById(R.id.admin_campaigns_navigation).setOnClickListener(view -> openAllCampaigns());
 
         findViewById(R.id.admin_users_navigation).setOnClickListener(view -> {
             Intent intent = new Intent(this, UsersActivity.class);
-            intent.putExtra(ExtraKeys.EXTRA_USER, user);
             startActivity(intent);
         });
 
         findViewById(R.id.admin_messages_navigation).setOnClickListener(view -> {
             Intent intent = new Intent(this, AdminContactListActivity.class);
-            intent.putExtra(ExtraKeys.EXTRA_USER, user);
-            intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
             startActivity(intent);
         });
 
-        AdminDashboardData dashboard = MockAdminDashboardRepository.getDashboard();
-        bindDonorsChart(dashboard);
-        bindStatusChart(dashboard);
-        bindRecentCampaigns(dashboard);
+        DashboardApiRepository.getDashboard(
+                this,
+                new CampaignApiRepository.Callback<AdminDashboardData>() {
+                    @Override
+                    public void onSuccess(AdminDashboardData dashboard) {
+                        bindDashboardMetrics(dashboard);
+                        bindStatusChart(dashboard);
+                        bindRecentCampaigns(dashboard);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        String message = CampaignApiRepository.isUnauthorized(exception)
+                                ? getString(R.string.dashboard_unauthorized_error)
+                                : getString(R.string.dashboard_load_error);
+                        UiHelper.showToast(
+                                AdminDashboardActivity.this,
+                                message,
+                                Toast.LENGTH_LONG);
+                    }
+                });
     }
 
-    private void bindDonorsChart(AdminDashboardData dashboard) {
-        int totalDonors = 0;
-        for (int index = 0; index < dashboard.donantesPorMes.size(); index++) {
-            totalDonors += dashboard.donantesPorMes.get(index).cantidad;
-        }
+    private void bindDashboardMetrics(AdminDashboardData dashboard) {
+        ((TextView) findViewById(R.id.dashboard_campaigns_total))
+                .setText(getString(R.string.dashboard_campaigns_total, dashboard.totalCampaigns));
+        ((TextView) findViewById(R.id.dashboard_enrollments_total))
+                .setText(getString(R.string.dashboard_enrollments_total, dashboard.totalEnrollments));
         ((TextView) findViewById(R.id.dashboard_donors_total))
-                .setText(getString(R.string.dashboard_donors_total, totalDonors));
+                .setText(getString(R.string.dashboard_donors_total, dashboard.totalDonors));
 
-        DashboardChartView chart = findViewById(R.id.dashboard_donors_chart);
-        chart.setMonthlyDonors(dashboard.donantesPorMes);
+        DashboardChartView donorsChart = findViewById(R.id.dashboard_donors_chart);
+        donorsChart.setMonthlyDonors(dashboard.monthlyDonors);
+        donorsChart.setEmptyMessage(dashboard.monthlyDonors.isEmpty()
+                ? getString(R.string.dashboard_no_donors)
+                : "");
+
+        DashboardChartView enrollmentsChart = findViewById(R.id.dashboard_enrollments_chart);
+        enrollmentsChart.setMonthlyDonors(dashboard.monthlyEnrollments);
+        enrollmentsChart.setEmptyMessage(dashboard.monthlyEnrollments.isEmpty()
+                ? getString(R.string.dashboard_no_enrollments)
+                : "");
     }
 
     private void bindStatusChart(AdminDashboardData dashboard) {
         DashboardChartView chart = findViewById(R.id.dashboard_status_chart);
-        chart.setCampaignStatuses(dashboard.campaniasPorEstado);
+        chart.setCampaignStatuses(dashboard.campaignsByStatus);
 
         LinearLayout legend = findViewById(R.id.dashboard_status_legend);
-        int total = AdminDashboardHelper.totalCampaigns(dashboard.campaniasPorEstado);
-        for (DashboardCampaignStatus status : dashboard.campaniasPorEstado) {
+        legend.removeAllViews();
+        int total = AdminDashboardHelper.totalCampaigns(dashboard.campaignsByStatus);
+        for (DashboardCampaignStatus status : dashboard.campaignsByStatus) {
             TextView item = new TextView(this);
             item.setText(getString(
                     R.string.dashboard_status_legend,
-                    status.estado,
-                    AdminDashboardHelper.percentage(status.cantidad, total)));
+                    status.status,
+                    AdminDashboardHelper.percentage(status.count, total)));
             item.setTextColor(ContextCompat.getColor(
                     this,
-                    CampaignHelper.statusColor(status.estado)));
+                    CampaignHelper.statusColor(status.status)));
             item.setTextSize(10);
             item.setTypeface(item.getTypeface(), android.graphics.Typeface.BOLD);
             item.setPadding(0, 8, 0, 8);
@@ -104,7 +127,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     private void bindRecentCampaigns(AdminDashboardData dashboard) {
         LinearLayout container = findViewById(R.id.dashboard_recent_container);
-        for (Campaign campaign : AdminDashboardHelper.orderRecentCampaigns(dashboard.campaniasRecientes)) {
+        container.removeAllViews();
+        for (Campaign campaign : AdminDashboardHelper.orderRecentCampaigns(dashboard.recentCampaigns)) {
             View item = getLayoutInflater().inflate(
                     R.layout.item_admin_recent_campaign,
                     container,
@@ -131,15 +155,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private void openCampaign(Campaign campaign) {
         Intent intent = new Intent(this, CampaignDetailActivity.class);
         intent.putExtra(ExtraKeys.EXTRA_CAMPAIGN, campaign);
-        intent.putExtra(ExtraKeys.EXTRA_STANDARD_USER, false);
-        intent.putExtra(ExtraKeys.EXTRA_USER, user);
-        intent.putExtra(ExtraKeys.EXTRA_USER_ROLE, ExtraKeys.ROLE_ADMIN);
+        intent.putExtra(ExtraKeys.EXTRA_REMOTE_CAMPAIGN_DETAIL, true);
         startActivity(intent);
     }
 
     private void openAllCampaigns() {
         Intent intent = new Intent(this, AdminCampaignListActivity.class);
-        intent.putExtra(ExtraKeys.EXTRA_USER, user);
         startActivity(intent);
     }
 

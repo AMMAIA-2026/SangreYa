@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactApiRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.data</a> &gt; <span class="el_source">ContactApiRepository.java</span></div><h1>ContactApiRepository.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.data;
+
+import android.content.Context;
+
+import androidx.annotation.StringRes;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiClient;
+import com.ammaia_ispc.sangreyamobile.helpers.ApiService;
+import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import okhttp3.ResponseBody;
+import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
+
+public final class ContactApiRepository {
+
+    public interface ContactCallback {
+        void onSuccess();
+
+        void onValidationError(String field, String message);
+
+        void onError(@StringRes int messageRes);
+    }
+
+    private ContactApiRepository() {
+    }
+
+    public static void sendContact(
+            Context context,
+            ContactRequest request,
+            ContactCallback callback) {
+
+<span class="nc" id="L38">        sendContact(ApiClient.getApiService(context), request, callback);</span>
+<span class="nc" id="L39">    }</span>
+
+    static boolean sendContact(ApiService api, ContactRequest request, ContactCallback callback) {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (!request.isValid()) {</span>
+<span class="fc" id="L43">            return false;</span>
+        }
+
+<span class="fc" id="L46">        api.sendContact(request).enqueue(new retrofit2.Callback&lt;Void&gt;() {</span>
+            @Override
+            public void onResponse(Call&lt;Void&gt; call, Response&lt;Void&gt; response) {
+<span class="nc bnc" id="L49" title="All 2 branches missed.">                if (response.code() == 400) {</span>
+<span class="nc" id="L50">                    ResponseBody errorBody = response.errorBody();</span>
+
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                    if (errorBody != null) {</span>
+                        try {
+<span class="nc" id="L54">                            JSONObject json = new JSONObject(errorBody.string());</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                            if (json.has(&quot;correo_electronico&quot;)) {</span>
+<span class="nc" id="L57">                                JSONArray errores = json.getJSONArray(&quot;correo_electronico&quot;);</span>
+<span class="nc" id="L58">                                callback.onValidationError(</span>
+                                        &quot;correo_electronico&quot;,
+<span class="nc" id="L60">                                        errores.getString(0)</span>
+                                );
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                            } else if (json.has(&quot;nombre_completo&quot;)) {</span>
+<span class="nc" id="L63">                                JSONArray errores = json.getJSONArray(&quot;nombre_completo&quot;);</span>
+<span class="nc" id="L64">                                callback.onValidationError(</span>
+                                        &quot;nombre_completo&quot;,
+<span class="nc" id="L66">                                        errores.getString(0)</span>
+                                );
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                            } else if (json.has(&quot;motivo&quot;)) {</span>
+<span class="nc" id="L69">                                JSONArray errores = json.getJSONArray(&quot;motivo&quot;);</span>
+<span class="nc" id="L70">                                callback.onValidationError(</span>
+                                        &quot;motivo&quot;,
+<span class="nc" id="L72">                                        errores.getString(0)</span>
+                                );
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                            } else if (json.has(&quot;mensaje&quot;)) {</span>
+<span class="nc" id="L75">                                JSONArray errores = json.getJSONArray(&quot;mensaje&quot;);</span>
+<span class="nc" id="L76">                                callback.onValidationError(</span>
+                                        &quot;mensaje&quot;,
+<span class="nc" id="L78">                                        errores.getString(0)</span>
+                                );
+<span class="nc" id="L80">                            } else {</span>
+<span class="nc" id="L81">                                callback.onValidationError(</span>
+                                        &quot;&quot;,
+                                        &quot;Los datos ingresados no son válidos.&quot;
+                                );
+                            }
+
+<span class="nc" id="L87">                        } catch (IOException | JSONException e) {</span>
+<span class="nc" id="L88">                            callback.onValidationError(</span>
+                                    &quot;&quot;,
+                                    &quot;Los datos ingresados no son válidos.&quot;
+                            );
+<span class="nc" id="L92">                        }</span>
+                    } else {
+<span class="nc" id="L94">                        callback.onValidationError(</span>
+                                &quot;&quot;,
+                                &quot;Los datos ingresados no son válidos.&quot;
+                        );
+                    }
+
+<span class="nc" id="L100">                    return;</span>
+                }
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                if (!response.isSuccessful()) {</span>
+<span class="nc" id="L104">                    callback.onError(R.string.contact_send_error_server);</span>
+<span class="nc" id="L105">                    return;</span>
+                }
+
+<span class="nc" id="L108">                callback.onSuccess();</span>
+<span class="nc" id="L109">            }</span>
+
+
+            @Override
+            public void onFailure(Call&lt;Void&gt; call, Throwable throwable) {
+<span class="nc" id="L114">                call.clone().enqueue(new retrofit2.Callback&lt;Void&gt;() {</span>
+
+                    @Override
+                    public void onResponse(Call&lt;Void&gt; retryCall, Response&lt;Void&gt; retryResponse) {
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                        if (!retryResponse.isSuccessful()) {</span>
+<span class="nc" id="L119">                            callback.onError(R.string.contact_send_error_network);</span>
+<span class="nc" id="L120">                            return;</span>
+                        }
+
+<span class="nc" id="L123">                        callback.onSuccess();</span>
+<span class="nc" id="L124">                    }</span>
+
+                    @Override
+                    public void onFailure(Call&lt;Void&gt; retryCall, Throwable retryThrowable) {
+<span class="nc" id="L128">                        callback.onError(R.string.contact_send_error_network);</span>
+<span class="nc" id="L129">                    }</span>
+                });
+<span class="nc" id="L131">            }</span>
+        });
+<span class="fc" id="L133">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

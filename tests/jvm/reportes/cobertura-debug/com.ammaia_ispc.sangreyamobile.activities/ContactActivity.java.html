@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.ammaia_ispc.sangreyamobile.activities</a> &gt; <span class="el_source">ContactActivity.java</span></div><h1>ContactActivity.java</h1><pre class="source lang-java linenums">package com.ammaia_ispc.sangreyamobile.activities;
+
+import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.TextUtils;
+import android.util.Patterns;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.ammaia_ispc.sangreyamobile.R;
+import com.ammaia_ispc.sangreyamobile.helpers.NavigationHelper;
+import com.ammaia_ispc.sangreyamobile.helpers.UiHelper;
+
+import com.ammaia_ispc.sangreyamobile.data.ContactApiRepository;
+import com.ammaia_ispc.sangreyamobile.model.ContactRequest;
+
+<span class="nc" id="L22">public class ContactActivity extends AppCompatActivity {</span>
+
+    private static final int MAX_NOMBRE_LENGTH = ContactRequest.MAX_NOMBRE_LENGTH;
+    private static final int MAX_MENSAJE_LENGTH = ContactRequest.MAX_MENSAJE_LENGTH;
+
+    private EditText etNombre, etEmail, etMensaje;
+    private Spinner spinnerMotivo;
+    private Button btnEnviar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L33">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L34">        setContentView(R.layout.activity_contact);</span>
+
+<span class="nc" id="L36">        NavigationHelper.configureBackButton(this, R.id.btnBack);</span>
+
+<span class="nc" id="L38">        etNombre = findViewById(R.id.etNombre);</span>
+<span class="nc" id="L39">        etEmail = findViewById(R.id.etEmail);</span>
+<span class="nc" id="L40">        etMensaje = findViewById(R.id.etMensaje);</span>
+<span class="nc" id="L41">        spinnerMotivo = findViewById(R.id.spinnerMotivo);</span>
+<span class="nc" id="L42">        btnEnviar = findViewById(R.id.btnEnviar);</span>
+
+<span class="nc" id="L44">        etNombre.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_NOMBRE_LENGTH)});</span>
+<span class="nc" id="L45">        etMensaje.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_MENSAJE_LENGTH)});</span>
+
+<span class="nc" id="L47">        String[] motivos = {&quot;Consulta general&quot;, &quot;Problema técnico&quot;, &quot;Sugerencia&quot;, &quot;Otro&quot;};</span>
+<span class="nc" id="L48">        ArrayAdapter&lt;String&gt; adapter = new ArrayAdapter&lt;&gt;(</span>
+                this, android.R.layout.simple_spinner_dropdown_item, motivos);
+<span class="nc" id="L50">        spinnerMotivo.setAdapter(adapter);</span>
+
+<span class="nc" id="L52">        btnEnviar.setOnClickListener(v -&gt; enviarMensaje());</span>
+<span class="nc" id="L53">    }</span>
+
+    private void enviarMensaje() {
+<span class="nc" id="L56">        String nombre = etNombre.getText().toString().trim();</span>
+<span class="nc" id="L57">        String email = etEmail.getText().toString().trim();</span>
+<span class="nc" id="L58">        String mensaje = etMensaje.getText().toString().trim();</span>
+<span class="nc" id="L59">        String motivo = spinnerMotivo.getSelectedItem().toString();</span>
+
+<span class="nc" id="L61">        boolean valido = true;</span>
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (TextUtils.isEmpty(nombre)) {</span>
+<span class="nc" id="L64">            etNombre.setError(getString(R.string.error_required_fields));</span>
+<span class="nc" id="L65">            valido = false;</span>
+        }
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (TextUtils.isEmpty(email)) {</span>
+<span class="nc" id="L69">            etEmail.setError(getString(R.string.error_required_fields));</span>
+<span class="nc" id="L70">            valido = false;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {</span>
+<span class="nc" id="L72">            etEmail.setError(getString(R.string.error_invalid_email));</span>
+<span class="nc" id="L73">            valido = false;</span>
+        }
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (TextUtils.isEmpty(mensaje)) {</span>
+<span class="nc" id="L77">            etMensaje.setError(getString(R.string.error_required_fields));</span>
+<span class="nc" id="L78">            valido = false;</span>
+        }
+
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (!valido) {</span>
+<span class="nc" id="L82">            return;</span>
+        }
+
+<span class="nc" id="L85">        btnEnviar.setEnabled(false);</span>
+
+<span class="nc" id="L87">        ContactRequest request = new ContactRequest(</span>
+                nombre,
+                email,
+                motivo,
+                mensaje
+        );
+
+<span class="nc" id="L94">        ContactApiRepository.sendContact(this, request, new ContactApiRepository.ContactCallback() {</span>
+            @Override
+            public void onSuccess() {
+
+<span class="nc" id="L98">                UiHelper.showToast(</span>
+                        ContactActivity.this,
+<span class="nc" id="L100">                        getString(R.string.contact_sent_message),</span>
+                        Toast.LENGTH_SHORT
+                );
+<span class="nc" id="L103">                finish();</span>
+<span class="nc" id="L104">            }</span>
+
+            @Override
+            public void onValidationError(String field, String message) {
+<span class="nc bnc" id="L108" title="All 4 branches missed.">                switch (field) {</span>
+                    case &quot;correo_electronico&quot;:
+<span class="nc" id="L110">                        etEmail.setError(message);</span>
+<span class="nc" id="L111">                        break;</span>
+
+                    case &quot;nombre_completo&quot;:
+<span class="nc" id="L114">                        etNombre.setError(message);</span>
+<span class="nc" id="L115">                        break;</span>
+
+                    case &quot;mensaje&quot;:
+<span class="nc" id="L118">                        etMensaje.setError(message);</span>
+<span class="nc" id="L119">                        break;</span>
+
+                    default:
+
+<span class="nc" id="L123">                        UiHelper.showToast(</span>
+                                ContactActivity.this,
+                                message,
+                                Toast.LENGTH_SHORT
+                        );
+                        break;
+                }
+
+<span class="nc" id="L131">                btnEnviar.setEnabled(true);</span>
+<span class="nc" id="L132">            }</span>
+
+            @Override
+            public void onError(int messageRes) {
+
+<span class="nc" id="L137">                UiHelper.showToast(</span>
+                        ContactActivity.this,
+<span class="nc" id="L139">                        getString(messageRes),</span>
+                        Toast.LENGTH_SHORT
+                );
+
+<span class="nc" id="L143">                btnEnviar.setEnabled(true);</span>
+<span class="nc" id="L144">            }</span>
+        });
+<span class="nc" id="L146">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
