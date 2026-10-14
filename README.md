@@ -115,6 +115,92 @@ Todas las pantallas consumen la API real del backend desplegado (no hay datos si
 
 ---
 
+## Flujo de navegación
+ 
+```text
+                      ┌──────────┐
+                      │  Splash  │  (2 s) intenta restaurar la sesión guardada
+                      └────┬─────┘
+          sin sesión / ────┤──── sesión válida
+          refresh inválido │
+                           │            ┌─ rol Usuario estándar ─▶ Listado de campañas
+                           └────────────┤
+                                        └─ rol Administrador ────▶ Dashboard
+```
+ 
+**Visitante** (entra al Listado de campañas, que es la pantalla principal)
+- Menú lateral: Sobre nosotros, Video, Contacto, Iniciar sesión y Registrarse.
+- Listado de campañas → Detalle de campaña. Si intenta inscribirse sin sesión, la app le avisa que debe iniciar sesión.
+- Iniciar sesión → enlaces a Registro y a Recuperar contraseña.
+- Recuperar contraseña (email) → Restablecer contraseña (nueva contraseña) → vuelve a Iniciar sesión.
+- Sobre nosotros → botón "Contactanos" → Formulario de contacto.
+**Usuario estándar** (después de iniciar sesión)
+- Login → Listado de campañas.
+- Menú lateral: Sobre nosotros, Video, Contacto, **Mis inscripciones** y Cerrar sesión.
+- Listado → Detalle → Inscribirse → Mis inscripciones (donde también puede cancelar).
+**Administrador** (después de iniciar sesión)
+- Login → Dashboard.
+- Menú lateral: además de las secciones comunes, aparece **Campañas** (gestión) y desaparecen Iniciar sesión y Registrarse.
+- Dashboard ⇄ Gestión de campañas ⇄ Usuarios ⇄ Mensajes de contacto.
+- Gestión de campañas → Crear / Editar campaña, o Detalle de campaña → Inscriptos de esa campaña.
+- Usuarios → Editar usuario (se reutiliza la pantalla de Perfil).
+- Mensajes de contacto → Detalle del mensaje.
+**Sesión vencida:** si el servidor rechaza la renovación del token, la app borra la sesión y abre el Login con un aviso de sesión expirada.
+ 
+---
+ 
+## Cómo funciona por dentro
+ 
+La app separa la pantalla, el acceso a datos y la comunicación con el servidor:
+ 
+```text
+ Activity (pantalla + validaciones de formulario)
+      │  llama a
+      ▼
+ Repository (data/)  ── traduce respuestas y errores en resultados para la pantalla
+      │  usa
+      ▼
+ ApiService (Retrofit) ── define cada endpoint de la API
+      │  pasa por
+      ▼
+ OkHttp: AuthInterceptor (agrega "Authorization: Bearer <token>")
+         TokenAuthenticator (ante un 401, renueva el token y reintenta una vez)
+      │
+      ▼
+ Backend Django REST (https://sangreyaispc.pythonanywhere.com/)
+```
+ 
+| Capa | Paquete | Responsabilidad |
+|---|---|---|
+| Pantallas | `activities/` | Muestran la interfaz, validan los formularios (`setError` por campo, límites de longitud) y reaccionan al resultado. |
+| Repositorios | `data/` | `AuthApiRepository`, `RegisterApiRepository`, `CampaignApiRepository`, `UserApiRepository`, `ContactApiRepository`, `DashboardApiRepository` y `HealthCenterApiRepository`. Ejecutan las llamadas y mapean los errores HTTP a mensajes. |
+| Modelos | `model/` | Clases de datos para requests y responses JSON (Gson), por ejemplo `Campaign`, `Enrollment`, `LoginRequest` y `AdminDashboardData`. |
+| Helpers | `helpers/` | `ApiClient` y `ApiConfig` (cliente Retrofit y URL base), `SessionManager` (sesión y rol), `NavigationDrawerHelper` (menú según el rol), validadores de contraseña, campañas y perfil, y `DashboardChartView` (gráficos del dashboard). |
+ 
+**Cómo se decide qué ve cada perfil:** al iniciar sesión, el backend devuelve el rol. `SessionManager` lo guarda y el menú y las pantallas lo consultan para mostrar u ocultar opciones. Además, el backend valida el rol en cada operación protegida, así que aunque alguien llegara a una pantalla que no le corresponde, la API respondería 401/403.
+ 
+**Ejemplo: inscribirse a una campaña**
+1. En el Detalle, el usuario toca "Inscribirse".
+2. `CampaignDetailActivity` llama a `CampaignApiRepository`, que hace `POST /inscripciones/campanias/{id}/`.
+3. `AuthInterceptor` agrega el token del usuario. Si el token venció, `TokenAuthenticator` lo renueva y reintenta una vez.
+4. El backend valida edad, duplicado, cupo y estado de la campaña, y responde 201 o un error (400/409).
+5. La pantalla muestra el mensaje correspondiente y actualiza el cupo y el estado.
+---
+ 
+## Recorrido de prueba
+ 
+Para ver todo el funcionamiento sin conocer el código:
+ 
+1. **Como visitante:** abrí la app, mirá el listado de campañas, usá el buscador y el filtro por estado, y entrá al detalle de una. Probá "Inscribirse": te pide iniciar sesión. Abrí el menú y mirá el video y Sobre nosotros.
+2. **Registro:** en el menú tocá *Registrarse* y completá el formulario. Probá primero una contraseña débil para ver los mensajes de error.
+3. **Inicio de sesión:** ingresá con la cuenta creada. El menú ahora muestra *Mis inscripciones* y *Cerrar sesión*.
+4. **Inscripción:** abrí una campaña activa o próxima con cupo e inscribite. Después entrá a *Mis inscripciones* para verla y cancelarla.
+5. **Contacto:** enviá un mensaje desde el formulario de contacto (con o sin sesión).
+6. **Como administrador** (con las credenciales que te da el equipo): cerrá sesión e ingresá con la cuenta admin. Vas a ver el Dashboard; desde ahí creá una campaña, editala, mirá sus inscriptos, revisá los mensajes de contacto (el que enviaste antes aparece como pendiente) y marcalo como seguido, y editá un usuario.
+7. **Sesión persistente:** cerrá la app por completo y volvé a abrirla; el Splash restaura tu sesión.
+
+---
+
 ## Arquitectura del proyecto
 
 ```text
