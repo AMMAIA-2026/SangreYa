@@ -78,7 +78,7 @@ Todas las pantallas consumen la API real del backend desplegado (no hay datos si
 |---|---|
 | **Inscripción a campañas** | Desde el detalle, inscribirse a una campaña. La app informa el resultado: edad no permitida, inscripción duplicada, cupo completo, campaña finalizada o inscripción exitosa con el total actualizado. |
 | **Mis inscripciones** | Lista separada entre inscripciones actuales/próximas e historial. Cada tarjeta muestra la etiqueta "Inscripto" y permite cancelar la inscripción con confirmación previa. |
-| **Perfil** | Consulta y edición de los datos propios permitidos (el rol no se puede modificar y no se accede a perfiles ajenos). |
+| **Perfil** | Consulta y edición de los datos propios permitidos (el rol no se puede modificar y no se accede a perfiles ajenos). Al guardar correctamente, cierra el formulario y vuelve al listado de campañas; si hay un error, conserva los datos para corregirlos o reintentar. |
 | **Cerrar sesión** | Borra la sesión local y revoca el acceso; vuelve a una pantalla pública. |
 
 ### Administrador

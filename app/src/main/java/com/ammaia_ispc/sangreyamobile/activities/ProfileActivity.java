@@ -242,8 +242,12 @@ public class ProfileActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT);
                 if (adminEditMode) {
                     setResult(RESULT_OK);
-                    finish();
+                } else {
+                    Intent intent = new Intent(this, CampaignListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
+                finish();
             } else if (state.response != null) {
                 handleResponseError(state.response, true);
             } else {
