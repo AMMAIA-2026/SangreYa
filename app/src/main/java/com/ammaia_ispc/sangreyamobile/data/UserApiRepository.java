@@ -16,4 +16,8 @@ public class UserApiRepository {
     public void updateProfile(int userId, UserUpdateRequest request, Callback<AuthUser> callback) {
         api.updateUserProfile(userId, request).enqueue(callback);
     }
+
+    public void deleteAccount(int userId, Callback<Void> callback) {
+        api.deleteUser(userId).enqueue(callback);
+    }
 }

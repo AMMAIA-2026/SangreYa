@@ -109,6 +109,14 @@
     <string name="profile_birth_date_hint">DD/MM/AAAA</string>
     <string name="profile_save_button">Guardar cambios</string>
     <string name="profile_updated_message">Perfil actualizado correctamente.</string>
+    <string name="profile_delete_account">Eliminar cuenta</string>
+    <string name="profile_delete_account_title">¿Eliminar tu cuenta?</string>
+    <string name="profile_delete_account_message">Tu cuenta se eliminará definitivamente junto con tus inscripciones, liberando los cupos de las campañas que sigan vigentes. Esta acción no se puede deshacer.</string>
+    <string name="profile_delete_account_keep">Mantener mi cuenta</string>
+    <string name="profile_delete_account_loading">Eliminando tu cuenta</string>
+    <string name="profile_delete_account_success">Tu cuenta fue eliminada.</string>
+    <string name="profile_delete_account_error">No se pudo eliminar tu cuenta. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="profile_delete_account_forbidden">No tenés permisos para eliminar esta cuenta.</string>
     <string name="profile_load_error">No se pudo cargar tu perfil. Revisá tu conexión e intentá nuevamente.</string>
     <string name="profile_update_error">No se pudieron guardar los cambios. Revisá los datos e intentá nuevamente.</string>
     <string name="profile_session_error">Tu sesión no está disponible. Iniciá sesión nuevamente.</string>
