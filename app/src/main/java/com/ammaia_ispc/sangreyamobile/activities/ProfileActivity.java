@@ -1,5 +1,6 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -52,12 +53,15 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText lastNameInput;
     private EditText birthDateInput;
     private Button saveButton;
+    private Button deleteAccountButton;
     private ProgressBar loadingIndicator;
     private LinearLayout profileForm;
     private TextView messageView;
     private String birthDate;
     private int userId;
     private boolean adminEditMode;
+    private boolean requestInProgress;
+    private AlertDialog deleteAccountDialog;
     private ProfileViewModel profileViewModel;
 
     @Override
@@ -88,6 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         DateHelper.configureDateInput(this, birthDateInput);
         saveButton.setOnClickListener(view -> saveProfile());
+        deleteAccountButton.setOnClickListener(view -> confirmAccountDeletion());
         loadProfile();
     }
 
@@ -99,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         lastNameInput = findViewById(R.id.profile_last_name);
         birthDateInput = findViewById(R.id.profile_birth_date);
         saveButton = findViewById(R.id.profile_save);
+        deleteAccountButton = findViewById(R.id.profile_delete_account);
         loadingIndicator = findViewById(R.id.profile_loading);
         profileForm = findViewById(R.id.profile_form);
         messageView = findViewById(R.id.profile_message);
@@ -135,6 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (!adminEditMode) {
             userId = SessionManager.getUserId(this);
         }
+        deleteAccountButton.setVisibility(isOwnProfile() ? View.VISIBLE : View.GONE);
         if (userId < 1) {
             UiHelper.showMessage(messageView, R.string.profile_session_error);
             return;
@@ -156,11 +163,11 @@ public class ProfileActivity extends AppCompatActivity {
                 ? new ProfileViewModel(repository, sessionStore, userId)
                 : new ProfileViewModel(repository, sessionStore);
 
-        UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);
+        setProfileLoading(true);
         ApiClient.getApiService(this).getUserProfile(userId).enqueue(new Callback<AuthUser>() {
             @Override
             public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
-                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                setProfileLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
                     populateProfile(response.body());
                     UiHelper.clearMessage(messageView);
@@ -171,7 +178,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AuthUser> call, Throwable throwable) {
-                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                setProfileLoading(false);
                 UiHelper.showMessage(
                         messageView,
                         adminEditMode
@@ -200,6 +207,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveProfile() {
+        if (requestInProgress) {
+            return;
+        }
         syncBirthDateFromInput();
         clearFieldErrors();
         UiHelper.clearMessage(messageView);
@@ -225,7 +235,7 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
         profileViewModel.save(request, state -> {
-            UiHelper.setLoading(loadingIndicator, profileForm, state.loading, saveButton);
+            setProfileLoading(state.loading);
             if (state.loading) {
                 return;
             }
@@ -258,6 +268,82 @@ public class ProfileActivity extends AppCompatActivity {
                                 : R.string.profile_update_error);
             }
         });
+    }
+
+    private boolean isOwnProfile() {
+        return !adminEditMode && userId > 0
+                && userId == SessionManager.getUserId(this)
+                && !TextUtils.isEmpty(SessionManager.getAccessToken(this));
+    }
+
+    private void setProfileLoading(boolean loading) {
+        requestInProgress = loading;
+        UiHelper.setLoading(loadingIndicator, profileForm, loading,
+                saveButton, deleteAccountButton);
+        loadingIndicator.setContentDescription(getString(R.string.profile_loading));
+    }
+
+    private void confirmAccountDeletion() {
+        if (requestInProgress || !isOwnProfile()
+                || (deleteAccountDialog != null && deleteAccountDialog.isShowing())) {
+            return;
+        }
+        deleteAccountDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.profile_delete_account_title)
+                .setMessage(R.string.profile_delete_account_message)
+                .setNegativeButton(R.string.profile_delete_account_keep, null)
+                .setPositiveButton(R.string.profile_delete_account,
+                        (dialog, which) -> deleteOwnAccount())
+                .show();
+    }
+
+    private void deleteOwnAccount() {
+        if (requestInProgress || !isOwnProfile()) {
+            return;
+        }
+        UiHelper.clearMessage(messageView);
+        setProfileLoading(true);
+        loadingIndicator.setContentDescription(getString(R.string.profile_delete_account_loading));
+        // Never use an ID supplied by an Intent or editable profile field for self-deletion.
+        int ownUserId = SessionManager.getUserId(this);
+        UserApiRepository repository = new UserApiRepository(ApiClient.getApiService(this));
+        repository.deleteAccount(ownUserId, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    SessionManager.clearSession(ProfileActivity.this);
+                    UiHelper.showToast(ProfileActivity.this,
+                            R.string.profile_delete_account_success, Toast.LENGTH_LONG);
+                    Intent intent = new Intent(ProfileActivity.this, CampaignListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+                setProfileLoading(false);
+                if (response.code() == 401) {
+                    SessionManager.expireSession(ProfileActivity.this);
+                } else {
+                    UiHelper.showMessage(messageView, response.code() == 403
+                            ? R.string.profile_delete_account_forbidden
+                            : R.string.profile_delete_account_error);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                setProfileLoading(false);
+                UiHelper.showMessage(messageView, R.string.profile_delete_account_error);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (deleteAccountDialog != null) {
+            deleteAccountDialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     private boolean validateForm() {
