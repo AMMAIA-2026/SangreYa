@@ -1,6 +1,5 @@
 package com.ammaia_ispc.sangreyamobile.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,10 +31,6 @@ import com.google.android.material.navigation.NavigationView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -49,7 +44,6 @@ public class ProfileActivity extends AppCompatActivity {
             "^[\\p{L}\\p{N}_.@+\\-]+$");
     private static final Pattern NAME_PATTERN = Pattern.compile(
             "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$");
-    private static final String API_DATE_FORMAT = "yyyy-MM-dd";
 
     private EditText usernameInput;
     private EditText emailInput;
@@ -62,7 +56,6 @@ public class ProfileActivity extends AppCompatActivity {
     private LinearLayout profileForm;
     private TextView messageView;
     private String birthDate;
-    private String originalBirthDate;
     private int userId;
     private boolean adminEditMode;
     private ProfileViewModel profileViewModel;
@@ -195,7 +188,6 @@ public class ProfileActivity extends AppCompatActivity {
         UiHelper.setTextAtEnd(nameInput, safeValue(user.getName()));
         UiHelper.setTextAtEnd(lastNameInput, safeValue(user.getLastName()));
         setBirthDate(user.getBirthDate());
-        originalBirthDate = birthDate;
     }
 
     private void setBirthDate(String isoDate) {
@@ -224,28 +216,7 @@ public class ProfileActivity extends AppCompatActivity {
                 valueOf(lastNameInput),
                 birthDate);
 
-        if (!TextUtils.equals(birthDate, originalBirthDate)
-                && !isEnrollmentAgeAllowed(birthDate)) {
-            showAgeWarning(request);
-            return;
-        }
-
         submitProfile(request);
-    }
-
-    private void showAgeWarning(UserUpdateRequest request) {
-        new AlertDialog.Builder(this)
-                .setTitle(adminEditMode
-                        ? R.string.admin_user_age_warning_title
-                        : R.string.profile_age_warning_title)
-                .setMessage(adminEditMode
-                        ? R.string.admin_user_age_warning_message
-                        : R.string.profile_age_warning_message)
-                .setNegativeButton(R.string.profile_age_warning_cancel, null)
-                .setPositiveButton(
-                        R.string.profile_age_warning_confirm,
-                        (dialog, which) -> submitProfile(request))
-                .show();
     }
 
     private void submitProfile(UserUpdateRequest request) {
@@ -326,8 +297,9 @@ public class ProfileActivity extends AppCompatActivity {
             return showFieldError(lastNameInput, R.string.profile_name_invalid);
         }
 
-        if (!isValidIsoDate(birthDate)) {
-            return showFieldError(birthDateInput, R.string.profile_birth_date_invalid);
+        int birthDateError = DateHelper.getBirthDateError(birthDate);
+        if (birthDateError != 0) {
+            return showFieldError(birthDateInput, birthDateError);
         }
         return true;
     }
@@ -472,37 +444,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         birthDate = DateHelper.toIsoDate(displayDate);
-    }
-
-    private boolean isEnrollmentAgeAllowed(String value) {
-        Date birth = parseDate(value, API_DATE_FORMAT);
-        if (birth == null) {
-            return true;
-        }
-
-        Calendar birthCalendar = Calendar.getInstance();
-        birthCalendar.setTime(birth);
-        Calendar today = Calendar.getInstance();
-        int age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
-        if (today.get(Calendar.MONTH) < birthCalendar.get(Calendar.MONTH)
-                || (today.get(Calendar.MONTH) == birthCalendar.get(Calendar.MONTH)
-                && today.get(Calendar.DAY_OF_MONTH) < birthCalendar.get(Calendar.DAY_OF_MONTH))) {
-            age--;
-        }
-        return age >= 18 && age < 65;
-    }
-
-    private Date parseDate(String value, String pattern) {
-        if (TextUtils.isEmpty(value)) {
-            return null;
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.US);
-        formatter.setLenient(false);
-        try {
-            return formatter.parse(value);
-        } catch (ParseException ignored) {
-            return null;
-        }
     }
 
 }
