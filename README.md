@@ -94,6 +94,7 @@ Todas las pantallas consumen la API real del backend desplegado (no hay datos si
 ### Reglas de negocio que aplica la app
 
 - **Contraseña:** mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo.
+- **Fecha de nacimiento y edad:** tanto el registro como la edición de perfil (propia o administrativa) bloquean fechas futuras y edades fuera de **18 a 64 años inclusive**, calculadas al día actual. No se permite guardar de todos modos.
 - **Inscripción:** solo usuarios estándar de **18 a 64 años** (calculado al día de la inscripción), sin inscripción previa a esa campaña, con campaña no finalizada y cupo disponible.
 - **Cupo:** entero mínimo 1; si no se define, la campaña no tiene límite. Al alcanzar el cupo, el estado pasa a **Finalizada**.
 - **Fechas de campaña:** el inicio no puede ser anterior a hoy y el fin no puede ser anterior al inicio ni a hoy.

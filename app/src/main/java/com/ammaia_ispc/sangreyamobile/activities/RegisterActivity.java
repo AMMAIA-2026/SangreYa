@@ -142,8 +142,11 @@ public class RegisterActivity extends AppCompatActivity {
         String confirmPassword = ((EditText) findViewById(R.id.etConfirmPassword))
                 .getText().toString();
 
-        if (!TextUtils.isEmpty(fechaNacimientoDisplay) && TextUtils.isEmpty(fechaNacimiento)) {
-            etFechaNacimiento.setError(getString(R.string.profile_birth_date_invalid));
+        if (!TextUtils.isEmpty(fechaNacimientoDisplay)) {
+            int birthDateError = DateHelper.getBirthDateError(fechaNacimiento);
+            if (birthDateError != 0) {
+                etFechaNacimiento.setError(getString(birthDateError));
+            }
         }
 
         // DNI válido: exactamente 7 u 8 dígitos
