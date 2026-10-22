@@ -176,6 +176,25 @@ public class TokenAuthenticatorTest {
         assertTrue(networkFailures.isEmpty());
     }
 
+    // TC-AUTH-40: modela un token actualizado por otra petición antes de procesar este 401.
+    @Test
+    public void reutilizaAccessYaActualizadoSinOtroRefresh() throws Exception {
+        session.access = "access-actualizado";
+        server.enqueue(json(401, "{}"));
+        server.enqueue(json(200, "{\"id\":7}"));
+
+        try (Response response = client.newCall(protectedRequest("access-vencido")).execute()) {
+            assertEquals(200, response.code());
+        }
+
+        assertProtectedRequest("access-vencido");
+        assertProtectedRequest("access-actualizado");
+        assertEquals(2, server.getRequestCount());
+        assertEquals(0, session.updates);
+        assertEquals(0, session.expirations);
+        assertTrue(networkFailures.isEmpty());
+    }
+
     private void assertRefreshRejected(int status) throws Exception {
         server.enqueue(json(401, "{}"));
         server.enqueue(json(status, "{\"detail\":\"Refresh inválido.\"}"));
