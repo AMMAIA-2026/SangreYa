@@ -1,10 +1,15 @@
 # JUnit y MockWebServer
 
-El reporte de la corrida final del 09/10/2026 está disponible en
+El reporte histórico de la corrida de cierre del 09/10/2026 está disponible en
 [reportes/indice.html](reportes/indice.html). Abrilo en un navegador para consultar
 los casos, los métodos ejecutados y los resultados de debug y release.
 
 ## Resultado
+
+Esta sección describe exclusivamente la corrida del **09/10/2026**, no el inventario
+actual. El código contiene **46 métodos** (29 unitarios y 17 con MockWebServer).
+La [validación JVM del 22/10/2026](REVISION-AUTH-2026-10-22.md) aprobó los 46 en
+debug y release. La evidencia histórica se conserva por separado.
 
 - **Debug:** 29/29 tests aprobados, sin fallos ni omitidos.
 - **Release:** 29/29 tests aprobados, sin fallos ni omitidos.
