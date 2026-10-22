@@ -24,6 +24,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class TokenAuthenticatorTest {
@@ -131,6 +132,31 @@ public class TokenAuthenticatorTest {
     @Test
     public void refresh400SolicitaExpiracionSinReintentarRecurso() throws Exception {
         assertRefreshRejected(400);
+    }
+
+    // TC-AUTH-40/41: un fallo de transporte no equivale a un rechazo del refresh.
+    @Test
+    public void errorDeRedEnRefreshConservaSesion() throws Exception {
+        server.enqueue(json(401, "{}"));
+        IOException failure = new IOException("Fallo de red controlado");
+        OkHttpClient failingClient = plainClient.newBuilder()
+                .addInterceptor(chain -> { throw failure; }).build();
+        ApiService failingApi = ApiClient.createApiService(server.url("/").toString(), failingClient);
+        client = client.newBuilder().authenticator(new TokenAuthenticator(
+                session, () -> failingApi, networkFailures::add)).build();
+
+        try (Response response = client.newCall(protectedRequest(session.access)).execute()) {
+            assertEquals(401, response.code());
+        }
+
+        assertProtectedRequest("access-vencido");
+        assertEquals(1, server.getRequestCount());
+        assertEquals(1, networkFailures.size());
+        assertSame(failure, networkFailures.get(0));
+        assertEquals("access-vencido", session.access);
+        assertEquals("refresh-vigente", session.refresh);
+        assertEquals(0, session.expirations);
+        assertEquals(0, session.updates);
     }
 
     private void assertRefreshRejected(int status) throws Exception {
