@@ -127,6 +127,12 @@ public class TokenAuthenticatorTest {
         assertRefreshRejected(401);
     }
 
+    // TC-AUTH-41: 400 del endpoint de refresh, no 400 de validación del recurso protegido.
+    @Test
+    public void refresh400SolicitaExpiracionSinReintentarRecurso() throws Exception {
+        assertRefreshRejected(400);
+    }
+
     private void assertRefreshRejected(int status) throws Exception {
         server.enqueue(json(401, "{}"));
         server.enqueue(json(status, "{\"detail\":\"Refresh inválido.\"}"));
