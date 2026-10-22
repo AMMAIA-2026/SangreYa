@@ -159,6 +159,23 @@ public class TokenAuthenticatorTest {
         assertEquals(0, session.updates);
     }
 
+    // TC-AUTH-40: sin refresh no se envía una renovación vacía ni se repite la petición.
+    @Test
+    public void sinRefreshDevuelve401SinRenovar() throws Exception {
+        session.refresh = null;
+        server.enqueue(json(401, "{}"));
+
+        try (Response response = client.newCall(protectedRequest(session.access)).execute()) {
+            assertEquals(401, response.code());
+        }
+
+        assertProtectedRequest("access-vencido");
+        assertEquals(1, server.getRequestCount());
+        assertEquals(0, session.updates);
+        assertEquals(0, session.expirations);
+        assertTrue(networkFailures.isEmpty());
+    }
+
     private void assertRefreshRejected(int status) throws Exception {
         server.enqueue(json(401, "{}"));
         server.enqueue(json(status, "{\"detail\":\"Refresh inválido.\"}"));
