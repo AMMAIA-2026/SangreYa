@@ -101,6 +101,26 @@ public class TokenAuthenticatorTest {
         assertEquals(1, session.updates);
     }
 
+    // TC-AUTH-40: un segundo 401 corta el ciclo, sin otro refresh ni tercera petición protegida.
+    @Test
+    public void segundo401DetieneReintentos() throws Exception {
+        server.enqueue(json(401, "{}"));
+        server.enqueue(json(200, "{\"access\":\"access-nuevo\",\"refresh\":\"refresh-nuevo\"}"));
+        server.enqueue(json(401, "{\"detail\":\"Token rechazado.\"}"));
+
+        try (Response response = client.newCall(protectedRequest(session.access)).execute()) {
+            assertEquals(401, response.code());
+        }
+
+        assertProtectedRequest("access-vencido");
+        assertRefreshRequest();
+        assertProtectedRequest("access-nuevo");
+        assertEquals(3, server.getRequestCount());
+        assertEquals(1, session.updates);
+        assertEquals(0, session.expirations);
+        assertTrue(networkFailures.isEmpty());
+    }
+
     private Request protectedRequest(String access) {
         return new Request.Builder().url(server.url("/usuarios/7/"))
                 .header("Authorization", "Bearer " + access).build();
