@@ -6,6 +6,9 @@ import com.ammaia_ispc.sangreyamobile.model.LoginRequest;
 import com.ammaia_ispc.sangreyamobile.model.LoginResponse;
 import com.google.gson.Gson;
 
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -23,6 +26,32 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginViewModelTest {
+    // TC-UNIT-12; RF-02 / HU-02 / CA-06 / RNF-04.
+    @Test
+    @SuppressWarnings("unchecked")
+    public void login401LimpiaSesionYNotificaErrorHttp() {
+        ApiService api = mock(ApiService.class);
+        Call<LoginResponse> call = mock(Call.class);
+        AuthApiRepository.SessionStore session = mock(AuthApiRepository.SessionStore.class);
+        AuthApiRepository.LoginCallback callback = mock(AuthApiRepository.LoginCallback.class);
+        ResponseBody error = ResponseBody.create("{\"detail\":\"Credenciales inválidas.\"}",
+                MediaType.get("application/json"));
+        when(api.login(any(LoginRequest.class))).thenReturn(call);
+        doAnswer(invocation -> {
+            Callback<LoginResponse> result = invocation.getArgument(0);
+            result.onResponse(call, Response.error(401, error));
+            return null;
+        }).when(call).enqueue(any());
+        LoginViewModel viewModel = new LoginViewModel(new AuthApiRepository(api, session));
+
+        assertTrue(viewModel.login("donante@example.test", "ClaveDePrueba-123", callback));
+
+        verify(session).clear();
+        verify(callback).onHttpError(401, error);
+        verifyNoMoreInteractions(session, callback);
+        error.close();
+    }
+
     // TC-UNIT-12; RF-02 / HU-02 / CA-05 / RNF-04.
     @Test
     @SuppressWarnings("unchecked")
