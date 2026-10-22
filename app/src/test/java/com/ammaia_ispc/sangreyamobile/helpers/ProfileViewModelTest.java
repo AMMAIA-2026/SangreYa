@@ -31,7 +31,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 public class ProfileViewModelTest {
-    // TC-UNIT-05; RF-15 / HU-11; no sustituye el retest UI de TC-PERF-21.
+    // TC-UNIT-05; RF-15 / HU-11; estados de carga, fallo de transporte y reintento.
     @Test
     public void errorDeRedConservaFormularioYPermiteReintentar() {
         UserApiRepository repository = mock(UserApiRepository.class);
