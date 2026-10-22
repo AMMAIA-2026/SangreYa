@@ -121,6 +121,30 @@ public class TokenAuthenticatorTest {
         assertTrue(networkFailures.isEmpty());
     }
 
+    // TC-AUTH-41; RF-03 / HU-03 / CA-10 / RNF-04. Verifica la orden de expiración.
+    @Test
+    public void refresh401SolicitaExpiracionSinReintentarRecurso() throws Exception {
+        assertRefreshRejected(401);
+    }
+
+    private void assertRefreshRejected(int status) throws Exception {
+        server.enqueue(json(401, "{}"));
+        server.enqueue(json(status, "{\"detail\":\"Refresh inválido.\"}"));
+
+        try (Response response = client.newCall(protectedRequest(session.access)).execute()) {
+            assertEquals(401, response.code());
+        }
+
+        assertProtectedRequest("access-vencido");
+        assertRefreshRequest();
+        assertEquals(2, server.getRequestCount());
+        assertEquals(1, session.expirations);
+        assertEquals(0, session.updates);
+        assertNull(session.access);
+        assertNull(session.refresh);
+        assertTrue(networkFailures.isEmpty());
+    }
+
     private Request protectedRequest(String access) {
         return new Request.Builder().url(server.url("/usuarios/7/"))
                 .header("Authorization", "Bearer " + access).build();
