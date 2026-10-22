@@ -269,7 +269,7 @@ public static final String BASE_URL = "https://sangreyaispc.pythonanywhere.com/"
 
 | Tipo | Herramienta | Ubicación / evidencia |
 |---|---|---|
-| Unitarias y de red | JUnit 4 + Mockito + MockWebServer | `app/src/test` · reporte en [`tests/jvm`](tests/jvm/README.md): 29/29 aprobados en debug y release |
+| Unitarias y de red | JUnit 4 + Mockito + MockWebServer | `app/src/test`: 46 métodos · [validación JVM del 22/10](tests/jvm/REVISION-AUTH-2026-10-22.md): 46/46 en debug y release · [evidencia histórica del 09/10](tests/jvm/README.md): 29/29 por variante |
 | API | Postman / Newman contra el deploy | [`tests/api/Newman`](tests/api/Newman/README.md) |
 | UI (flujos críticos) | Espresso | [`tests/ui/espresso`](tests/ui/espresso/README.md): 3/3 aprobados (registro y login, CRUD de campañas, consulta e inscripción) |
 | Accesibilidad | TalkBack + Espresso Accessibility | [`tests/ui`](tests/ui) (Informe de Accesibilidad, Sprint 2) |
@@ -280,7 +280,7 @@ Ejecutar los tests unitarios:
 ./gradlew :app:testDebugUnitTest :app:testReleaseUnitTest
 ```
 
-Los tests instrumentados (`app/src/androidTest`) requieren un emulador o dispositivo conectado. El plan de pruebas, los casos y el reporte de bugs están en la [Wiki](https://github.com/AMMAIA-2026/SangreYa/wiki).
+Los tests instrumentados (`app/src/androidTest`) requieren un emulador o dispositivo conectado. La configuración de credenciales QA, los comandos Espresso y la regeneración del HTML están en [Wiki → Testing → Reproducibilidad y criterios de verificación](https://github.com/AMMAIA-2026/SangreYa/wiki/Testing#7-reproducibilidad-y-criterios-de-verificación). El plan de pruebas, los casos y el reporte de bugs están en la [Wiki](https://github.com/AMMAIA-2026/SangreYa/wiki).
 
 ---
 
