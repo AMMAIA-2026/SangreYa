@@ -195,6 +195,24 @@ public class TokenAuthenticatorTest {
         assertTrue(networkFailures.isEmpty());
     }
 
+    // Oráculo 400/401: un 400 del recurso NO dispara el Authenticator ni borra la sesión.
+    @Test
+    public void recurso400NoRenuevaNiExpiraSesion() throws Exception {
+        server.enqueue(json(400, "{\"detail\":\"Solicitud inválida.\"}"));
+
+        try (Response response = client.newCall(protectedRequest(session.access)).execute()) {
+            assertEquals(400, response.code());
+        }
+
+        assertProtectedRequest("access-vencido");
+        assertEquals(1, server.getRequestCount());
+        assertEquals("access-vencido", session.access);
+        assertEquals("refresh-vigente", session.refresh);
+        assertEquals(0, session.updates);
+        assertEquals(0, session.expirations);
+        assertTrue(networkFailures.isEmpty());
+    }
+
     private void assertRefreshRejected(int status) throws Exception {
         server.enqueue(json(401, "{}"));
         server.enqueue(json(status, "{\"detail\":\"Refresh inválido.\"}"));
