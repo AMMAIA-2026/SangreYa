@@ -109,6 +109,14 @@
     <string name="profile_birth_date_hint">DD/MM/AAAA</string>
     <string name="profile_save_button">Guardar cambios</string>
     <string name="profile_updated_message">Perfil actualizado correctamente.</string>
+    <string name="profile_delete_account">Eliminar cuenta</string>
+    <string name="profile_delete_account_title">¿Eliminar tu cuenta?</string>
+    <string name="profile_delete_account_message">Tu cuenta se eliminará definitivamente junto con tus inscripciones, liberando los cupos de las campañas que sigan vigentes. Esta acción no se puede deshacer.</string>
+    <string name="profile_delete_account_keep">Mantener mi cuenta</string>
+    <string name="profile_delete_account_loading">Eliminando tu cuenta</string>
+    <string name="profile_delete_account_success">Tu cuenta fue eliminada.</string>
+    <string name="profile_delete_account_error">No se pudo eliminar tu cuenta. Revisá tu conexión e intentá nuevamente.</string>
+    <string name="profile_delete_account_forbidden">No tenés permisos para eliminar esta cuenta.</string>
     <string name="profile_load_error">No se pudo cargar tu perfil. Revisá tu conexión e intentá nuevamente.</string>
     <string name="profile_update_error">No se pudieron guardar los cambios. Revisá los datos e intentá nuevamente.</string>
     <string name="profile_session_error">Tu sesión no está disponible. Iniciá sesión nuevamente.</string>
@@ -123,11 +131,9 @@
     <string name="profile_dni_taken">Ese DNI ya está registrado.</string>
     <string name="profile_name_invalid">Usá sólo letras, tildes y espacios, con hasta 25 caracteres.</string>
     <string name="profile_birth_date_invalid">Ingresá una fecha válida con formato DD/MM/AAAA.</string>
+    <string name="error_birth_date_future">La fecha de nacimiento no puede ser posterior a la fecha actual.</string>
+    <string name="error_birth_date_age_range">La edad permitida es de 18 a 64 años, inclusive.</string>
     <string name="profile_generic_validation_error">Revisá los datos ingresados.</string>
-    <string name="profile_age_warning_title">Edad fuera del rango de donación</string>
-    <string name="profile_age_warning_message">La fecha elegida te deja fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrás inscribirte en nuevas campañas. Las inscripciones que ya tenés no se cancelan automáticamente. ¿Querés guardar el cambio?</string>
-    <string name="profile_age_warning_cancel">Cancelar</string>
-    <string name="profile_age_warning_confirm">Guardar de todos modos</string>
     <string name="admin_edit_user_title">Editar usuario</string>
     <string name="admin_edit_user_subtitle">Actualizá los datos personales del usuario</string>
     <string name="admin_user_updated_message">Usuario actualizado correctamente.</string>
@@ -135,8 +141,6 @@
     <string name="admin_user_update_error">No se pudieron guardar los cambios del usuario. Revisá los datos e intentá nuevamente.</string>
     <string name="admin_user_unauthorized_error">No tenés permisos para modificar este usuario.</string>
     <string name="admin_user_not_found_error">No encontramos el usuario seleccionado.</string>
-    <string name="admin_user_age_warning_title">Edad fuera del rango de donación</string>
-    <string name="admin_user_age_warning_message">La fecha elegida deja al usuario fuera del rango permitido para nuevas inscripciones (de 18 a 64 años). No podrá inscribirse en nuevas campañas. ¿Querés guardar el cambio?</string>
 
     <!--CampaignDetail-->
     <string name="registered_detail">%1$d personas ya se inscribieron</string>
@@ -213,7 +217,7 @@
     <string name="error_required_field">Completá este campo</string>
     <string name="error_terms_required">Tenés que aceptar los Términos y Condiciones para continuar</string>
     <string name="error_invalid_dni">Ingresá un DNI válido (7 u 8 dígitos)</string>
-    <string name="error_weak_password">Mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo</string>
+    <string name="error_weak_password">@string/password_policy_hint</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
 
     <string name="link_olvidaste_contrasena">¿Olvidaste tu contraseña?</string>

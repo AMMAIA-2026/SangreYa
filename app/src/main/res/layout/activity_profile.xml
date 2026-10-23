@@ -236,6 +236,17 @@
                         android:text="@string/profile_save_button"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/profile_delete_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/action_button_height"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_button_primary"
+                        android:text="@string/profile_delete_account"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

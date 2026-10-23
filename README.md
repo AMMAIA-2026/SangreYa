@@ -78,7 +78,8 @@ Todas las pantallas consumen la API real del backend desplegado (no hay datos si
 |---|---|
 | **Inscripción a campañas** | Desde el detalle, inscribirse a una campaña. La app informa el resultado: edad no permitida, inscripción duplicada, cupo completo, campaña finalizada o inscripción exitosa con el total actualizado. |
 | **Mis inscripciones** | Lista separada entre inscripciones actuales/próximas e historial. Cada tarjeta muestra la etiqueta "Inscripto" y permite cancelar la inscripción con confirmación previa. |
-| **Perfil** | Consulta y edición de los datos propios permitidos (el rol no se puede modificar y no se accede a perfiles ajenos). |
+| **Perfil** | Consulta y edición de los datos propios permitidos (el rol no se puede modificar y no se accede a perfiles ajenos). Al guardar correctamente, cierra el formulario y vuelve al listado de campañas; si hay un error, conserva los datos para corregirlos o reintentar. |
+| **Eliminar mi cuenta** | Desde el perfil propio, solicita confirmación (sin contraseña) y elimina la cuenta mediante `DELETE usuarios/{id}/`. Tras la baja exitosa, borra la sesión y vuelve al listado de campañas como visitante, sin permitir volver al perfil con Atrás. No se muestra en la edición administrativa. |
 | **Cerrar sesión** | Borra la sesión local y revoca el acceso; vuelve a una pantalla pública. |
 
 ### Administrador
@@ -94,7 +95,9 @@ Todas las pantallas consumen la API real del backend desplegado (no hay datos si
 ### Reglas de negocio que aplica la app
 
 - **Contraseña:** mínimo 10 caracteres, con mayúscula, minúscula, número y símbolo.
+- **Fecha de nacimiento y edad:** tanto el registro como la edición de perfil (propia o administrativa) bloquean fechas futuras y edades fuera de **18 a 64 años inclusive**, calculadas al día actual. No se permite guardar de todos modos.
 - **Inscripción:** solo usuarios estándar de **18 a 64 años** (calculado al día de la inscripción), sin inscripción previa a esa campaña, con campaña no finalizada y cupo disponible.
+- **Baja de cuenta:** el backend elimina las inscripciones en cascada (`Inscripcion.usuario`, `on_delete=CASCADE`); el total de inscriptos y el estado calculado se obtienen de las inscripciones restantes. Así se liberan cupos y vuelven a estar disponibles las campañas vigentes que habían alcanzado el cupo, sin reabrir campañas vencidas. La app no cancela inscripciones una por una ni modifica campañas.
 - **Cupo:** entero mínimo 1; si no se define, la campaña no tiene límite. Al alcanzar el cupo, el estado pasa a **Finalizada**.
 - **Fechas de campaña:** el inicio no puede ser anterior a hoy y el fin no puede ser anterior al inicio ni a hoy.
 - **Permisos por rol:** las operaciones administrativas están restringidas a administradores; el backend responde 401/403 si un usuario sin permisos intenta usarlas.
@@ -266,7 +269,7 @@ public static final String BASE_URL = "https://sangreyaispc.pythonanywhere.com/"
 
 | Tipo | Herramienta | Ubicación / evidencia |
 |---|---|---|
-| Unitarias y de red | JUnit 4 + Mockito + MockWebServer | `app/src/test` · reporte en [`tests/jvm`](tests/jvm/README.md): 29/29 aprobados en debug y release |
+| Unitarias y de red | JUnit 4 + Mockito + MockWebServer | `app/src/test`: 46 métodos · [validación JVM del 22/10](tests/jvm/REVISION-AUTH-2026-10-22.md): 46/46 en debug y release · [evidencia histórica del 09/10](tests/jvm/README.md): 29/29 por variante |
 | API | Postman / Newman contra el deploy | [`tests/api/Newman`](tests/api/Newman/README.md) |
 | UI (flujos críticos) | Espresso | [`tests/ui/espresso`](tests/ui/espresso/README.md): 3/3 aprobados (registro y login, CRUD de campañas, consulta e inscripción) |
 | Accesibilidad | TalkBack + Espresso Accessibility | [`tests/ui`](tests/ui) (Informe de Accesibilidad, Sprint 2) |
@@ -277,7 +280,7 @@ Ejecutar los tests unitarios:
 ./gradlew :app:testDebugUnitTest :app:testReleaseUnitTest
 ```
 
-Los tests instrumentados (`app/src/androidTest`) requieren un emulador o dispositivo conectado. El plan de pruebas, los casos y el reporte de bugs están en la [Wiki](https://github.com/AMMAIA-2026/SangreYa/wiki).
+Los tests instrumentados (`app/src/androidTest`) requieren un emulador o dispositivo conectado. La configuración de credenciales QA, los comandos Espresso y la regeneración del HTML están en [Wiki → Testing → Reproducibilidad y criterios de verificación](https://github.com/AMMAIA-2026/SangreYa/wiki/Testing#7-reproducibilidad-y-criterios-de-verificación). El plan de pruebas, los casos y el reporte de bugs están en la [Wiki](https://github.com/AMMAIA-2026/SangreYa/wiki).
 
 ---
 

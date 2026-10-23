@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.EditText;
 
+import com.ammaia_ispc.sangreyamobile.R;
+
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -92,6 +94,35 @@ public final class DateHelper {
 
     public static boolean isValidIsoDate(String isoDate) {
         return parseDate(isoDate, API_DATE_PATTERN) != null;
+    }
+
+    /** Returns the birth date error message resource, or 0 when valid. */
+    public static int getBirthDateError(String isoDate) {
+        return getBirthDateError(isoDate, Calendar.getInstance());
+    }
+
+    static int getBirthDateError(String isoDate, Calendar today) {
+        Date birth = parseDate(isoDate, API_DATE_PATTERN);
+        if (birth == null) {
+            return R.string.profile_birth_date_invalid;
+        }
+
+        Calendar birthCalendar = Calendar.getInstance();
+        birthCalendar.setTime(birth);
+        int age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
+        if (today.get(Calendar.MONTH) < birthCalendar.get(Calendar.MONTH)
+                || (today.get(Calendar.MONTH) == birthCalendar.get(Calendar.MONTH)
+                && today.get(Calendar.DAY_OF_MONTH) < birthCalendar.get(Calendar.DAY_OF_MONTH))) {
+            age--;
+        }
+        // A future birth date always yields a negative age, even later this year.
+        if (age < 0) {
+            return R.string.error_birth_date_future;
+        }
+        if (age < 18 || age > 64) {
+            return R.string.error_birth_date_age_range;
+        }
+        return 0;
     }
 
     private static Date parseDate(String value, String pattern) {

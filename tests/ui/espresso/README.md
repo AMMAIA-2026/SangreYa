@@ -23,6 +23,13 @@ la generación del informe; la ejecución de las pruebas es la del 12/10/2026.
 
 ## Regenerar el informe
 
+Para preparar el emulador, configurar `SANGREYA_UI_ADMIN_EMAIL` y
+`SANGREYA_UI_ADMIN_PASSWORD` y ejecutar nuevamente los flujos con
+`:app:connectedDebugAndroidTest`, consultar
+[Wiki → Testing → Reproducibilidad y criterios de verificación](https://github.com/AMMAIA-2026/SangreYa/wiki/Testing#7-reproducibilidad-y-criterios-de-verificación).
+La regeneración siguiente se conserva como procedimiento independiente: permite
+publicar el HTML requerido a partir del XML existente, sin necesitar una nueva corrida.
+
 Con JDK 17 y las dependencias de Gradle disponibles, desde la raíz del proyecto:
 
 ```powershell

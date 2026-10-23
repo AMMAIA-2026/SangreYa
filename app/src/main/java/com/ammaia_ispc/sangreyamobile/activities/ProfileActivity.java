@@ -32,10 +32,6 @@ import com.google.android.material.navigation.NavigationView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -49,7 +45,6 @@ public class ProfileActivity extends AppCompatActivity {
             "^[\\p{L}\\p{N}_.@+\\-]+$");
     private static final Pattern NAME_PATTERN = Pattern.compile(
             "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$");
-    private static final String API_DATE_FORMAT = "yyyy-MM-dd";
 
     private EditText usernameInput;
     private EditText emailInput;
@@ -58,13 +53,15 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText lastNameInput;
     private EditText birthDateInput;
     private Button saveButton;
+    private Button deleteAccountButton;
     private ProgressBar loadingIndicator;
     private LinearLayout profileForm;
     private TextView messageView;
     private String birthDate;
-    private String originalBirthDate;
     private int userId;
     private boolean adminEditMode;
+    private boolean requestInProgress;
+    private AlertDialog deleteAccountDialog;
     private ProfileViewModel profileViewModel;
 
     @Override
@@ -95,6 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         DateHelper.configureDateInput(this, birthDateInput);
         saveButton.setOnClickListener(view -> saveProfile());
+        deleteAccountButton.setOnClickListener(view -> confirmAccountDeletion());
         loadProfile();
     }
 
@@ -106,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         lastNameInput = findViewById(R.id.profile_last_name);
         birthDateInput = findViewById(R.id.profile_birth_date);
         saveButton = findViewById(R.id.profile_save);
+        deleteAccountButton = findViewById(R.id.profile_delete_account);
         loadingIndicator = findViewById(R.id.profile_loading);
         profileForm = findViewById(R.id.profile_form);
         messageView = findViewById(R.id.profile_message);
@@ -142,6 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (!adminEditMode) {
             userId = SessionManager.getUserId(this);
         }
+        deleteAccountButton.setVisibility(isOwnProfile() ? View.VISIBLE : View.GONE);
         if (userId < 1) {
             UiHelper.showMessage(messageView, R.string.profile_session_error);
             return;
@@ -163,11 +163,11 @@ public class ProfileActivity extends AppCompatActivity {
                 ? new ProfileViewModel(repository, sessionStore, userId)
                 : new ProfileViewModel(repository, sessionStore);
 
-        UiHelper.setLoading(loadingIndicator, profileForm, true, saveButton);
+        setProfileLoading(true);
         ApiClient.getApiService(this).getUserProfile(userId).enqueue(new Callback<AuthUser>() {
             @Override
             public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
-                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                setProfileLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
                     populateProfile(response.body());
                     UiHelper.clearMessage(messageView);
@@ -178,7 +178,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AuthUser> call, Throwable throwable) {
-                UiHelper.setLoading(loadingIndicator, profileForm, false, saveButton);
+                setProfileLoading(false);
                 UiHelper.showMessage(
                         messageView,
                         adminEditMode
@@ -195,7 +195,6 @@ public class ProfileActivity extends AppCompatActivity {
         UiHelper.setTextAtEnd(nameInput, safeValue(user.getName()));
         UiHelper.setTextAtEnd(lastNameInput, safeValue(user.getLastName()));
         setBirthDate(user.getBirthDate());
-        originalBirthDate = birthDate;
     }
 
     private void setBirthDate(String isoDate) {
@@ -208,6 +207,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveProfile() {
+        if (requestInProgress) {
+            return;
+        }
         syncBirthDateFromInput();
         clearFieldErrors();
         UiHelper.clearMessage(messageView);
@@ -224,28 +226,7 @@ public class ProfileActivity extends AppCompatActivity {
                 valueOf(lastNameInput),
                 birthDate);
 
-        if (!TextUtils.equals(birthDate, originalBirthDate)
-                && !isEnrollmentAgeAllowed(birthDate)) {
-            showAgeWarning(request);
-            return;
-        }
-
         submitProfile(request);
-    }
-
-    private void showAgeWarning(UserUpdateRequest request) {
-        new AlertDialog.Builder(this)
-                .setTitle(adminEditMode
-                        ? R.string.admin_user_age_warning_title
-                        : R.string.profile_age_warning_title)
-                .setMessage(adminEditMode
-                        ? R.string.admin_user_age_warning_message
-                        : R.string.profile_age_warning_message)
-                .setNegativeButton(R.string.profile_age_warning_cancel, null)
-                .setPositiveButton(
-                        R.string.profile_age_warning_confirm,
-                        (dialog, which) -> submitProfile(request))
-                .show();
     }
 
     private void submitProfile(UserUpdateRequest request) {
@@ -254,7 +235,7 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
         profileViewModel.save(request, state -> {
-            UiHelper.setLoading(loadingIndicator, profileForm, state.loading, saveButton);
+            setProfileLoading(state.loading);
             if (state.loading) {
                 return;
             }
@@ -271,8 +252,12 @@ public class ProfileActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT);
                 if (adminEditMode) {
                     setResult(RESULT_OK);
-                    finish();
+                } else {
+                    Intent intent = new Intent(this, CampaignListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
+                finish();
             } else if (state.response != null) {
                 handleResponseError(state.response, true);
             } else {
@@ -283,6 +268,82 @@ public class ProfileActivity extends AppCompatActivity {
                                 : R.string.profile_update_error);
             }
         });
+    }
+
+    private boolean isOwnProfile() {
+        return !adminEditMode && userId > 0
+                && userId == SessionManager.getUserId(this)
+                && !TextUtils.isEmpty(SessionManager.getAccessToken(this));
+    }
+
+    private void setProfileLoading(boolean loading) {
+        requestInProgress = loading;
+        UiHelper.setLoading(loadingIndicator, profileForm, loading,
+                saveButton, deleteAccountButton);
+        loadingIndicator.setContentDescription(getString(R.string.profile_loading));
+    }
+
+    private void confirmAccountDeletion() {
+        if (requestInProgress || !isOwnProfile()
+                || (deleteAccountDialog != null && deleteAccountDialog.isShowing())) {
+            return;
+        }
+        deleteAccountDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.profile_delete_account_title)
+                .setMessage(R.string.profile_delete_account_message)
+                .setNegativeButton(R.string.profile_delete_account_keep, null)
+                .setPositiveButton(R.string.profile_delete_account,
+                        (dialog, which) -> deleteOwnAccount())
+                .show();
+    }
+
+    private void deleteOwnAccount() {
+        if (requestInProgress || !isOwnProfile()) {
+            return;
+        }
+        UiHelper.clearMessage(messageView);
+        setProfileLoading(true);
+        loadingIndicator.setContentDescription(getString(R.string.profile_delete_account_loading));
+        // Never use an ID supplied by an Intent or editable profile field for self-deletion.
+        int ownUserId = SessionManager.getUserId(this);
+        UserApiRepository repository = new UserApiRepository(ApiClient.getApiService(this));
+        repository.deleteAccount(ownUserId, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    SessionManager.clearSession(ProfileActivity.this);
+                    UiHelper.showToast(ProfileActivity.this,
+                            R.string.profile_delete_account_success, Toast.LENGTH_LONG);
+                    Intent intent = new Intent(ProfileActivity.this, CampaignListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+                setProfileLoading(false);
+                if (response.code() == 401) {
+                    SessionManager.expireSession(ProfileActivity.this);
+                } else {
+                    UiHelper.showMessage(messageView, response.code() == 403
+                            ? R.string.profile_delete_account_forbidden
+                            : R.string.profile_delete_account_error);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                setProfileLoading(false);
+                UiHelper.showMessage(messageView, R.string.profile_delete_account_error);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (deleteAccountDialog != null) {
+            deleteAccountDialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     private boolean validateForm() {
@@ -326,8 +387,9 @@ public class ProfileActivity extends AppCompatActivity {
             return showFieldError(lastNameInput, R.string.profile_name_invalid);
         }
 
-        if (!isValidIsoDate(birthDate)) {
-            return showFieldError(birthDateInput, R.string.profile_birth_date_invalid);
+        int birthDateError = DateHelper.getBirthDateError(birthDate);
+        if (birthDateError != 0) {
+            return showFieldError(birthDateInput, birthDateError);
         }
         return true;
     }
@@ -472,37 +534,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         birthDate = DateHelper.toIsoDate(displayDate);
-    }
-
-    private boolean isEnrollmentAgeAllowed(String value) {
-        Date birth = parseDate(value, API_DATE_FORMAT);
-        if (birth == null) {
-            return true;
-        }
-
-        Calendar birthCalendar = Calendar.getInstance();
-        birthCalendar.setTime(birth);
-        Calendar today = Calendar.getInstance();
-        int age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
-        if (today.get(Calendar.MONTH) < birthCalendar.get(Calendar.MONTH)
-                || (today.get(Calendar.MONTH) == birthCalendar.get(Calendar.MONTH)
-                && today.get(Calendar.DAY_OF_MONTH) < birthCalendar.get(Calendar.DAY_OF_MONTH))) {
-            age--;
-        }
-        return age >= 18 && age < 65;
-    }
-
-    private Date parseDate(String value, String pattern) {
-        if (TextUtils.isEmpty(value)) {
-            return null;
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.US);
-        formatter.setLenient(false);
-        try {
-            return formatter.parse(value);
-        } catch (ParseException ignored) {
-            return null;
-        }
     }
 
 }

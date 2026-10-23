@@ -268,6 +268,16 @@
             app:layout_constraintTop_toTopOf="@id/etRegisterPassword"
             app:layout_constraintBottom_toBottomOf="@id/etRegisterPassword" />
 
+        <include
+            android:id="@+id/passwordHelpText"
+            layout="@layout/view_password_requirements"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="@id/etRegisterPassword"
+            app:layout_constraintEnd_toEndOf="@id/etRegisterPassword"
+            app:layout_constraintTop_toBottomOf="@id/etRegisterPassword" />
+
         <TextView
             android:id="@+id/tvConfirmPasswordLabel"
             android:layout_width="wrap_content"
@@ -278,7 +288,7 @@
             android:textColor="@color/secondary_text"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etRegisterPassword" />
+            app:layout_constraintTop_toBottomOf="@id/passwordHelpText" />
 
         <EditText
             android:id="@+id/etConfirmPassword"
